@@ -1,5 +1,5 @@
 import os
-from settings.py import *
+from .settings import *
 from .settings import BASE_DIR
 
 
@@ -22,6 +22,8 @@ MIDDLEWARE = [
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'core\\static'),)
+
 connection_string = os.environ['AZURE_POSTGRESQL_CONNECTIONSTRING']
 parameters = {}
 for pair in connection_string.split(' '):
@@ -41,19 +43,3 @@ DATABASE = {
         'PASSWORD': parameters['password'],
     }
 }
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['core\\templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
