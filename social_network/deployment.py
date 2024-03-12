@@ -2,6 +2,8 @@ import os
 from settings.py import *
 from .settings import BASE_DIR
 
+
+SECRET_KEY = os.environ['SECRET']
 ALLOWED_HOST = [os.environ['WEBSITE_HOSTNAME']]
 CSRF_TRUSTED_ORIGINS = ['https://' + os.environ['WEBSITE_HOSTNAME']]
 DEBUG = False
@@ -30,7 +32,6 @@ for pair in connection_string.split(' '):
         # Handle malformed pairs here if necessary
         pass
 
-
 DATABASE = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -40,3 +41,19 @@ DATABASE = {
         'PASSWORD': parameters['password'],
     }
 }
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['core\\templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
