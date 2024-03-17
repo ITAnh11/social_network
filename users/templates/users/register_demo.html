@@ -10,7 +10,7 @@
         <p>{{ error }}</p>
     {% endif %}
 
-    <form action="{% url 'core:register' %}" method="POST">
+    <form action="{% url 'users:register' %}" method="POST">
         {% csrf_token %}
         <label for="first_name">First Name:</label>
         <input type="text" id="first_name" name="first_name" required><br><br>
@@ -39,7 +39,7 @@
         <input type="submit" value="Register">
     </form>
 
-    <a href="{% url 'core:login' %}">LOGIN</a>
+    <a href="{% url 'users:login' %}">LOGIN</a>
 
     <script>
         document.querySelector('form').addEventListener('submit', function(event) {
@@ -67,9 +67,5 @@
         });
     </script>
 
-    {% if success %}
-        <p>{{ success }}</p>
-        <a href="{% url 'core:login' %}"> CLICK TO LOGIN</a>
-    {% endif %}
 </body>
 </html>

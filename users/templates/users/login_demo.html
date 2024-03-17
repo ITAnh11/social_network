@@ -9,7 +9,7 @@
 <body>
     <h1>Login</h1>
 
-    <form action="{% url 'core:login' %}" method="POST">
+    <form action="{% url 'users:login' %}" method="POST">
         {% csrf_token %}
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required><br><br>
