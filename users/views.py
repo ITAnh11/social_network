@@ -15,11 +15,7 @@ import jwt, datetime
 
 # Create your views here.
 class LoginView(APIView):
-    def get(self, request):
-        # token = request.COOKIES.get('jwt')
-        # if token:
-        #     return redirect('users:index')
-        
+    def get(self, request):     
         return render(request, 'users/login_demo.html')
     
     def post(self, request):
@@ -30,11 +26,9 @@ class LoginView(APIView):
 
         if user is None:
             return Response({'warning': 'User not found!'})
-            raise AuthenticationFailed('User not found!')
 
         if not user.check_password(password):
             return Response({'warning': 'Incorrect password!'})
-            raise AuthenticationFailed('Incorrect password!')
         
         payload = {
             'id': user.id,
@@ -49,9 +43,9 @@ class LoginView(APIView):
         response.data = {
             'success': 'login success',
             'jwt': token,
-            'redirect_url': '/'
+            'redirect_url': '/users/profile/'
         }
-               
+        
         return response
   
 class RegisterView(APIView):
@@ -84,26 +78,6 @@ class RegisterView(APIView):
         except Exception as e:
             return Response({'error': 'Something went wrong. Please try again.'})
 
-class index(APIView):
-    def get(self, request):
-        token = request.COOKIES.get('jwt')
-
-        if not token:
-            return HttpResponseRedirect(reverse('users:login'))
-            raise AuthenticationFailed('Unauthenticated!')
-
-        try:
-            payload = jwt.decode(jwt=token, key='secret', algorithms=['HS256'])  
-        except jwt.ExpiredSignatureError:
-            return HttpResponseRedirect(reverse('users:login'))
-            raise AuthenticationFailed('Unauthenticated!')
-
-        user = User.objects.filter(id=payload['id']).first()
-
-        serializer = UserSerializer(user)
-
-        return render(request, 'users/index.html', {"user": serializer.data})
-
 class LogoutView(APIView):
     def post(self, request):
         response = HttpResponseRedirect(reverse('users:login'))
@@ -112,3 +86,21 @@ class LogoutView(APIView):
             'message': 'logout success'
         }
         return response
+
+class ProfileView(APIView):
+    def get(self, request):
+        token = request.COOKIES.get('jwt')
+
+        if not token:
+            return HttpResponseRedirect(reverse('users:login'))
+
+        try:
+            payload = jwt.decode(jwt=token, key='secret', algorithms=['HS256'])  
+        except jwt.ExpiredSignatureError:
+            return HttpResponseRedirect(reverse('users:login'))
+
+        user = User.objects.filter(id=payload['id']).first()
+
+        serializer = UserSerializer(user)
+
+        return render(request, 'users/profile_demo.html', {"user": serializer.data})
