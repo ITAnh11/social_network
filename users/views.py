@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -16,11 +16,11 @@ import jwt, datetime
 # Create your views here.
 class LoginView(APIView):
     def get(self, request):
-        token = request.COOKIES.get('jwt')
-        if token:
-            return HttpResponseRedirect('/')
+        # token = request.COOKIES.get('jwt')
+        # if token:
+        #     return redirect('users:index')
         
-        return render(request, 'core/login_demo.html')
+        return render(request, 'users/login_demo.html')
     
     def post(self, request):
         email = request.data.get('email')
@@ -56,7 +56,7 @@ class LoginView(APIView):
   
 class RegisterView(APIView):
     def get(self, request):
-        return render(request, 'core/register_demo.html')
+        return render(request, 'users/register_demo.html')
     
     def createProfile(self, request, user_id):
         user_profile = UserProfile()
@@ -89,24 +89,24 @@ class index(APIView):
         token = request.COOKIES.get('jwt')
 
         if not token:
-            return HttpResponseRedirect(reverse('core:login'))
+            return HttpResponseRedirect(reverse('users:login'))
             raise AuthenticationFailed('Unauthenticated!')
 
         try:
             payload = jwt.decode(jwt=token, key='secret', algorithms=['HS256'])  
         except jwt.ExpiredSignatureError:
-            return HttpResponseRedirect(reverse('core:login'))
+            return HttpResponseRedirect(reverse('users:login'))
             raise AuthenticationFailed('Unauthenticated!')
 
         user = User.objects.filter(id=payload['id']).first()
 
         serializer = UserSerializer(user)
 
-        return render(request, 'core/index.html', {"user": serializer.data})
+        return render(request, 'users/index.html', {"user": serializer.data})
 
 class LogoutView(APIView):
     def post(self, request):
-        response = HttpResponseRedirect(reverse('core:login'))
+        response = HttpResponseRedirect(reverse('users:login'))
         response.delete_cookie('jwt')
         response.data = {
             'message': 'logout success'

@@ -13,7 +13,7 @@
         You are logged in as {{ user.email }}
     </p>
     
-    <form action="{% url 'core:logout' %}" method="post">
+    <form action="{% url 'users:logout' %}" method="post">
         <button type="submit">Logout</button>
     </form>
 </body>
