@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from rest_framework.views import APIView
-from users.views import LoginView
 
 # Create your views here.
 class HomePageView(APIView):
