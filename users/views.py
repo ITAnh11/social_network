@@ -1,3 +1,7 @@
+from .serializers import UserSerializer
+from .models import UserProfile, User
+
+import jwt, datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -7,20 +11,16 @@ from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.exceptions import AuthenticationFailed
 
-from .serializers import UserSerializer
-from .models import UserProfile, User
-
-import jwt, datetime
-
-
 # Create your views here.
 class LoginView(APIView):
     def get(self, request):     
-        return render(request, 'users/login_demo.html')
+        return render(request, 'users/login.html')
     
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
+        
+        print(email, password)
 
         user = User.objects.filter(email=email).first()
 
@@ -50,27 +50,36 @@ class LoginView(APIView):
   
 class RegisterView(APIView):
     def get(self, request):
-        return render(request, 'users/register_demo.html')
+        return render(request, 'users/register.html')
     
     def createProfile(self, request, user_id):
-        user_profile = UserProfile()
-        user_profile.user_id = user_id
-        user_profile.first_name = request.data['first_name']
-        user_profile.last_name = request.data['last_name']
-        user_profile.birth_date = request.data['birth_date']
-        user_profile.gender = request.data['gender']
+        try:
+            user_profile = UserProfile()
+            user_profile.user_id = user_id
+            user_profile.first_name = request.data['first_name']
+            user_profile.last_name = request.data['last_name']
+            user_profile.gender = request.data['gender']
+            
+            user_profile.save()
+        except Exception as e:
+            print(e)
+            return False
         
-        user_profile.save()
+        return True
             
     def post(self, request):
+        print(request.data)
         try:
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 user = serializer.save()
                 
-                self.createProfile(request, user)
+                if not self.createProfile(request, user):
+                    # delete user if profile creation fails
+                    user.delete()                    
             
-                return Response({'success': 'User registered successfully. Please Login.'})
+                return Response({'success': 'User registered successfully. Please Login.',
+                                 'redirect_url': '/users/login/'})
         except ValidationError as e:
             if e.detail.get('email'):
                 return Response({'warning': 'Email already exists.'})
