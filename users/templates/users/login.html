@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facebook Login Page</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'users/css/login.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/users/css/login.css' %}">
   </head>
   <body>
     <div class="container flex">
@@ -31,6 +31,8 @@
         </form>
       </div>
     </div>
+
+    <a href="{% url 'users:login' %}">LOGIN</a>
 
     <script>
       document.querySelector('form').addEventListener('submit', function(event) {

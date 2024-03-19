@@ -16,6 +16,10 @@
   </head>
 <body>
   <div class="form_wrapper">
+    {% if error %}
+      <p>{{ error }}</p>
+    {% endif %}
+
     <div class="form_container">
       <div class="title_container">
         <h2>Register Your Account</h2>
@@ -45,6 +49,13 @@
               <input type="text" name="phone" placeholder="Phone"/>
             </div>
 
+            <div class="input_field datepicker">
+              <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                  <input type="text" name="birthdate" id="birthdate" placeholder="Birthdate" required readonly />
+              </div>
+            </div>
+      
             <div class="input_field"> <span><i aria-hidden="true" class="fa fa-lock"></i></span>
               <input type="password" name="password" placeholder="Password" required />
             </div>
@@ -79,6 +90,7 @@
         </div>
       </div>
     </div>
+    <a href="{% url 'users:login' %}">LOGIN</a>
   </div>
 
   <script>
@@ -107,6 +119,15 @@
             console.error('Error:', error);
         });
     });
+    // sinh nhat
+    $(document).ready(function() {
+      $('#birthdate').datepicker({
+          uiLibrary: 'bootstrap4',
+          format: 'yyyy-mm-dd',
+          maxDate: new Date(),
+          showRightIcon: false
+      });
+  });
   </script>
   
 </body>
