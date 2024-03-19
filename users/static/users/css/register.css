@@ -128,21 +128,22 @@ body {
 		-ms-transition: all 0.30s ease-in-out;
 		transition: all 0.30s ease-in-out;
 		&:hover {
-			background: darken(yellow,7%);
+			background: darken(yellow, 10%);
 		}
 		&:focus {
-			background: darken(yellow,7%);
+			background: darken(yellow, 10%);
 		}
 	}    
     &[type="checkbox"], &[type="radio"] {
       border: 0;
-      clip: rect(0 0 0 0);
-      height: 1px;
+      clip: rect(1 1 1 1);
+      
       margin: -1px;
       overflow: hidden;
       padding: 0;
       position: absolute;
-      width: 1px;
+      width: 5px;
+      height: 5px;
     }
   }
 }
@@ -284,7 +285,7 @@ body {
 	padding: 15px;
 	color: yellow;
 	a {
-		color: darken(yellow,7%);
+		color: darken(yellow, 10%);
 	}
 }
 @-webkit-keyframes check {
@@ -355,3 +356,4 @@ body {
 		padding-bottom: 20px;
 	}
 }
+
