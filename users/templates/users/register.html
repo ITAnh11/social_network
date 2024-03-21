@@ -12,10 +12,13 @@
     <script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.js" integrity="sha512-Zt7blzhYHCLHjU0c+e4ldn5kGAbwLKTSOTERgqSNyTB50wWSI21z0q6bn/dEIuqf6HiFzKJ6cfj2osRhklb4Og==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <link rel="stylesheet" type="text/css" href="{% static 'users/css/register.css' %}">
   </head>
 <body>
-  <div class="form_wrapper">
+  <div class="form_wrapper" style="float: left;">
     <div class="form_container">
       <div class="title_container">
         <h2>Register Your Account</h2>
@@ -81,13 +84,28 @@
     </div>
   </div>
 
+
+  <form action="" method="" id="upload-box" style="margin: auto; max-width: 500px; max-height: 500px; display: grid; grid-row: 2; float: right;">
+    {% csrf_token %}
+    {{form.as_p}}
+    <!-- <div id="upload-avatar-box">
+      <p>Avatar</p>
+      <img id="avatar" src="http://127.0.0.1:8000/media/users/userprofile_1/966314.jpg " alt="Picture" style="width: 300px;">
+    </div>
+    
+    <div id="upload-background-box">
+      <p>Background</p>
+      <img id="background" src="http://127.0.0.1:8000/media/users/userprofile_1/stretched-1920-1080-1267107.jpg " alt="Picture" style="width: 400px;">
+    </div>    -->
+  </form>
+
   <script>
     document.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault(); // prevent form submission
 
         // collect form data
         const formData = new FormData(event.target);
-
+        
         // make a POST request to the server
         fetch(event.target.action, {
             method: 'POST',
@@ -109,5 +127,38 @@
     });
   </script>
   
+  <script>
+    const avatar = document.getElementById('avatar');
+    const cropper_avatar = new Cropper(avatar, {
+      aspectRatio: 1,
+      minCropBoxWidth: 200,
+      crop(event) {
+        console.log(event.detail.x);
+        console.log(event.detail.y);
+        console.log(event.detail.width);
+        console.log(event.detail.height);
+        console.log(event.detail.rotate);
+        console.log(event.detail.scaleX);
+        console.log(event.detail.scaleY);
+      },
+    });
+
+
+    const background = document.getElementById('background');
+    const croppe_background = new Cropper(background, {
+      aspectRatio: 16 / 9,
+      minCropBoxWidth: 300,
+      minCropBoxHeight: 300,
+      crop(event) {
+        console.log(event.detail.x);
+        console.log(event.detail.y);
+        console.log(event.detail.width);
+        console.log(event.detail.height);
+        console.log(event.detail.rotate);
+        console.log(event.detail.scaleX);
+        console.log(event.detail.scaleY);
+      },
+    });
+  </script>
 </body>
 </html>

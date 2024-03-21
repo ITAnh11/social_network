@@ -1,5 +1,6 @@
 from .serializers import UserSerializer
-from .models import UserProfile, User
+from .models import UserProfile, User, MediaProfile
+from .forms import MediaProfileForm
 
 import jwt, datetime
 from django.shortcuts import render, redirect
@@ -10,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.exceptions import AuthenticationFailed
+
 
 # Create your views here.
 class LoginView(APIView):
@@ -50,7 +52,11 @@ class LoginView(APIView):
   
 class RegisterView(APIView):
     def get(self, request):
-        return render(request, 'users/register.html')
+        form = MediaProfileForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+
+        return render(request, 'users/register.html', {'form': form})
     
     def createProfile(self, request, user_id):
         try:
@@ -109,7 +115,12 @@ class ProfileView(APIView):
             return HttpResponseRedirect(reverse('users:login'))
 
         user = User.objects.filter(id=payload['id']).first()
+        user_profile = UserProfile.objects.filter(user_id=user).first()
+        user_profile_media = MediaProfile.objects.filter(user_id=user).first()
 
         serializer = UserSerializer(user)
 
-        return render(request, 'users/profile_demo.html', {"user": serializer.data})
+        return render(request, 'users/profile_demo.html', {"user": serializer.data,
+                                                           "user_profile": user_profile,
+                                                           "user_profile_media": user_profile_media
+                                                           })
