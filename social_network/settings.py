@@ -42,6 +42,10 @@ INSTALLED_APPS = [
     'corsheaders', # pip install django-cors-headers
     'homepage',
     'users',
+    'posts',
+    'comments',
+    'reactions',
+    'friends',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +141,6 @@ AUTH_USER_MODEL = 'users.User'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
