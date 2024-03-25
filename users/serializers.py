@@ -16,6 +16,6 @@ class UserSerializer(serializers.ModelSerializer):
             if password != confirm_password:
                 raise serializers.ValidationError({'warning': 'Passwords must match.'})
             user.set_password(password)
-            user.confirm_password = confirm_password
+            user.confirm_password = user.password
             user.save()
             return user
