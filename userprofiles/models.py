@@ -22,3 +22,4 @@ class ImageProfile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     avatar= models.ImageField(upload_to=media_directory_path, blank=True)
     background = models.ImageField(upload_to=media_directory_path, blank=True)
+    

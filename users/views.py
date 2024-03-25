@@ -56,12 +56,13 @@ class RegisterView(APIView):
             
     def post(self, request):
         print(request.data)
+        print(request.FILES)
         try:
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 user = serializer.save()
-                SetUserProfileView().post(request, user)
-                # SetImageProfileView().post(request, user)
+                print(SetUserProfileView().post(request, user))
+                print(SetImageProfileView().post(request, user))
 
                 return Response({'success': 'User registered successfully. Please Login.',
                                  'redirect_url': '/users/login/'})
