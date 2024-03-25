@@ -1,5 +1,6 @@
 from .serializers import UserSerializer
 from .models import User
+from userprofiles.views import SetUserProfileView, SetImageProfileView
 
 import jwt, datetime
 from django.shortcuts import render, redirect
@@ -11,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.exceptions import AuthenticationFailed
 
+from userprofiles.forms import ImageProfileForm
 
 # Create your views here.
 class LoginView(APIView):
@@ -20,8 +22,6 @@ class LoginView(APIView):
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
-        
-        print(email, password)
 
         user = User.objects.filter(email=email).first()
 
@@ -51,7 +51,8 @@ class LoginView(APIView):
   
 class RegisterView(APIView):
     def get(self, request):
-        return render(request, 'users/register.html')
+        imageProfileForm = ImageProfileForm()
+        return render(request, 'users/register.html', {'imageProfileForm': imageProfileForm})
             
     def post(self, request):
         print(request.data)
@@ -59,6 +60,8 @@ class RegisterView(APIView):
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 user = serializer.save()
+                SetUserProfileView().post(request, user)
+                # SetImageProfileView().post(request, user)
 
                 return Response({'success': 'User registered successfully. Please Login.',
                                  'redirect_url': '/users/login/'})

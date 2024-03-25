@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,14 +11,16 @@
     <h1>
         Welcome to the profile
     </h1>
-    <p>
-        You are logged in as {{ user.email }}
-    </p>
+
+    <div id="profile">
+    </div>
     
     <form action="{% url 'users:logout' %}" method="post">
         {% csrf_token %}
         <button type="submit">Logout</button>
     </form>
+
+    <script src="{% static 'userprofiles/js/profile.js' %}"></script>
 
 </body>
 </html>
