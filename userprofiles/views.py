@@ -12,6 +12,7 @@ from users.serializers import UserSerializer
 
 from .models import UserProfile, ImageProfile
 from .serializers import UserProfileSerializer, ImageProfileSerializer
+from .forms import ImageProfileForm
 
 def getUser(request):
     token = request.COOKIES.get('jwt')
@@ -112,9 +113,8 @@ class SetImageProfileView(APIView):
         return HttpResponseRedirect(reverse('userprofiles:profile'))
     
     def post(self, request, user):
-        imageprofile = ImageProfile.objects.create( user_id=user,
-                                                    avatar=request.data.get('avatar') or None,
-                                                    background=request.data.get('background') or None
-                                                )
-
+        imageProfileForm = ImageProfileForm(request.POST or None, request.FILES or None)
+        if imageProfileForm.is_valid():
+            imageProfileForm.save(user)
+        
         return "Image profile created successfully!"
