@@ -13,26 +13,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='userprofile',
-            name='avatar_url',
-        ),
-        migrations.RemoveField(
-            model_name='userprofile',
-            name='background_url',
-        ),
-        migrations.AlterField(
-            model_name='userprofile',
-            name='user_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.CreateModel(
-            name='MediaProfile',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('avatar', models.ImageField(blank=True, upload_to=users.models.media_directory_path)),
-                ('background', models.ImageField(blank=True, upload_to=users.models.media_directory_path)),
-                ('user_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-            ],
-        ),
     ]

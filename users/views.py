@@ -1,6 +1,5 @@
 from .serializers import UserSerializer
-from .models import UserProfile, User, MediaProfile
-from .forms import MediaProfileForm
+from .models import User
 
 import jwt, datetime
 from django.shortcuts import render, redirect
@@ -45,33 +44,14 @@ class LoginView(APIView):
         response.data = {
             'success': 'login success',
             'jwt': token,
-            'redirect_url': '/users/profile/'
+            'redirect_url': '/userprofiles/'
         }
         
         return response
   
 class RegisterView(APIView):
     def get(self, request):
-        form = MediaProfileForm(request.POST or None, request.FILES or None)
-        if form.is_valid():
-            form.save()
-
-        return render(request, 'users/register.html', {'form': form})
-    
-    def createProfile(self, request, user_id):
-        try:
-            user_profile = UserProfile()
-            user_profile.user_id = user_id
-            user_profile.first_name = request.data['first_name']
-            user_profile.last_name = request.data['last_name']
-            user_profile.gender = request.data['gender']
-            
-            user_profile.save()
-        except Exception as e:
-            print(e)
-            return False
-        
-        return True
+        return render(request, 'users/register.html')
             
     def post(self, request):
         print(request.data)
@@ -79,11 +59,7 @@ class RegisterView(APIView):
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 user = serializer.save()
-                
-                if not self.createProfile(request, user):
-                    # delete user if profile creation fails
-                    user.delete()                    
-            
+
                 return Response({'success': 'User registered successfully. Please Login.',
                                  'redirect_url': '/users/login/'})
         except ValidationError as e:
@@ -101,26 +77,3 @@ class LogoutView(APIView):
             'message': 'logout success'
         }
         return response
-
-class ProfileView(APIView):
-    def get(self, request):
-        token = request.COOKIES.get('jwt')
-
-        if not token:
-            return HttpResponseRedirect(reverse('users:login'))
-
-        try:
-            payload = jwt.decode(jwt=token, key='secret', algorithms=['HS256'])  
-        except jwt.ExpiredSignatureError:
-            return HttpResponseRedirect(reverse('users:login'))
-
-        user = User.objects.filter(id=payload['id']).first()
-        user_profile = UserProfile.objects.filter(user_id=user).first()
-        user_profile_media = MediaProfile.objects.filter(user_id=user).first()
-
-        serializer = UserSerializer(user)
-
-        return render(request, 'users/profile_demo.html', {"user": serializer.data,
-                                                           "user_profile": user_profile,
-                                                           "user_profile_media": user_profile_media
-                                                           })

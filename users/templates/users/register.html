@@ -16,6 +16,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.js" integrity="sha512-Zt7blzhYHCLHjU0c+e4ldn5kGAbwLKTSOTERgqSNyTB50wWSI21z0q6bn/dEIuqf6HiFzKJ6cfj2osRhklb4Og==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <link rel="stylesheet" type="text/css" href="{% static 'users/css/register.css' %}">
+
   </head>
 <body>
   <div class="form_wrapper" style="float: left;">
@@ -25,7 +26,7 @@
       </div>
       <div class="row clearfix">
         <div class="">
-          <form action="{% url 'users:register' %}" method="post">
+          <form id="form-register" action="{% url 'users:register' %}" method="post">
             {% csrf_token %}
             <div class="row clearfix">
               <div class="col_half">
@@ -61,22 +62,10 @@
               <input type="radio" name="gender" id="rd2" value="Female">
               <label for="rd2">Female</label>
             </div>
-                <!-- <div class="input_field select_option">
-                  <select>
-                    <option>Select a country</option>
-                    <option>VietNam</option>
-                    <option>Campuchino</option>
-                  </select>
-                  <div class="select_arrow"></div>
-                </div> -->
             <div class="input_field checkbox_option">
                 <input type="checkbox" id="cb1" required>
                 <label for="cb1">I agree with terms and conditions</label>
             </div>
-              <!-- <div class="input_field checkbox_option">
-                <input type="checkbox" id="cb2">
-            <label for="cb2">I want to receive the newsletter</label>
-              </div> -->
             <input class="button" type="submit" value="Register" />
           </form>
         </div>
@@ -84,81 +73,7 @@
     </div>
   </div>
 
+  <script src="{% static 'users/js/register.js' %}"></script>
 
-  <form action="" method="" id="upload-box" style="margin: auto; max-width: 500px; max-height: 500px; display: grid; grid-row: 2; float: right;">
-    {% csrf_token %}
-    {{form.as_p}}
-    <!-- <div id="upload-avatar-box">
-      <p>Avatar</p>
-      <img id="avatar" src="http://127.0.0.1:8000/media/users/userprofile_1/966314.jpg " alt="Picture" style="width: 300px;">
-    </div>
-    
-    <div id="upload-background-box">
-      <p>Background</p>
-      <img id="background" src="http://127.0.0.1:8000/media/users/userprofile_1/stretched-1920-1080-1267107.jpg " alt="Picture" style="width: 400px;">
-    </div>    -->
-  </form>
-
-  <script>
-    document.querySelector('form').addEventListener('submit', function(event) {
-        event.preventDefault(); // prevent form submission
-
-        // collect form data
-        const formData = new FormData(event.target);
-        
-        // make a POST request to the server
-        fetch(event.target.action, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data['success']) {
-                console.log(data);
-                alert(data['success']);
-                window.location.href = data['redirect_url'];
-            } else {
-                alert(data['warning'])
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-  </script>
-  
-  <script>
-    const avatar = document.getElementById('avatar');
-    const cropper_avatar = new Cropper(avatar, {
-      aspectRatio: 1,
-      minCropBoxWidth: 200,
-      crop(event) {
-        console.log(event.detail.x);
-        console.log(event.detail.y);
-        console.log(event.detail.width);
-        console.log(event.detail.height);
-        console.log(event.detail.rotate);
-        console.log(event.detail.scaleX);
-        console.log(event.detail.scaleY);
-      },
-    });
-
-
-    const background = document.getElementById('background');
-    const croppe_background = new Cropper(background, {
-      aspectRatio: 16 / 9,
-      minCropBoxWidth: 300,
-      minCropBoxHeight: 300,
-      crop(event) {
-        console.log(event.detail.x);
-        console.log(event.detail.y);
-        console.log(event.detail.width);
-        console.log(event.detail.height);
-        console.log(event.detail.rotate);
-        console.log(event.detail.scaleX);
-        console.log(event.detail.scaleY);
-      },
-    });
-  </script>
 </body>
 </html>

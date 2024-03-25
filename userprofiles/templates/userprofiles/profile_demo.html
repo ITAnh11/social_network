@@ -7,12 +7,16 @@
 </head>
 <body>
     <h1>
-        Welcome to the home page
+        Welcome to the profile
     </h1>
+    <p>
+        You are logged in as {{ user.email }}
+    </p>
     
     <form action="{% url 'users:logout' %}" method="post">
         {% csrf_token %}
         <button type="submit">Logout</button>
     </form>
+
 </body>
 </html>
