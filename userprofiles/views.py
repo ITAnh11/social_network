@@ -57,7 +57,7 @@ class GetProfileView(APIView):
             'enable_edit': enable_edit
         }
         
-        print(context)
+        # print(context)
         
         return Response(context)        
 class SetUserProfileView(APIView):
@@ -93,7 +93,7 @@ class SetUserProfileView(APIView):
                                                     birth_date=request.data.get('birth_date') or None,
                                                 )
 
-        return "User profile created successfully!"
+        return Response({'message': 'User profile created successfully!'})
 
 class SetImageProfileView(APIView):
     # update user profile
@@ -106,8 +106,8 @@ class SetImageProfileView(APIView):
         imageprofile = ImageProfile.objects.filter(user_id=user).first()
 
         if imageprofile:
-            imageprofile.avatar = request.data.get('avatar') or None
-            imageprofile.background = request.data.get('background') or None
+            imageprofile.avatar = request.FILES['avatar'] or None
+            imageprofile.background = request.FILES['background'] or None
             imageprofile.save()
 
         return HttpResponseRedirect(reverse('userprofiles:profile'))
@@ -117,4 +117,4 @@ class SetImageProfileView(APIView):
         if imageProfileForm.is_valid():
             imageProfileForm.save(user)
         
-        return "Image profile created successfully!"
+        return Response({'message': 'Image profile created successfully!'})
