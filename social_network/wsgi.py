@@ -11,7 +11,9 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-settings_module = 'social_network.deployment' if 'WEBSITE_HOSTNAME' in os.environ else 'social_network.settings'
+# settings_module = 'social_network.deployment' if 'WEBSITE_HOSTNAME' in os.environ else 'social_network.settings'
+
+settings_module = 'social_network.settings'
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_module)
 
