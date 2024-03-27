@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/userprofiles/css/style.css">
+    <title>Profle - Socialbook</title>
+    <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="/templates/homepage/homepage_demo.html">
+                <img class="logo" src="media/users/userprofiles/logo3.png" alt="">
+            </a>
+            <div class="search-box">
+                <img src="media/users/userprofiles/search.png" alt="">
+                <input type="text" placeholder="Search">
+            </div>
+        </div>
+        <div class="nav-right">
+            <ul class="navlogo">
+                <li><a href="/templates/homepage/homepage_demo.html"><img src="media/users/userprofiles/home.png"></a></li>
+                <li><a href="#"><img src="media/users/userprofiles/notif.png"></a></li>
+                <li><a href="#"><img src="media/users/userprofiles/mess2.png"></a></li>
+            </ul>                        
+            <div class="profile-image online" onclick="UserSettingToggle()">
+                <img src="media/users/userprofiles/avatar.png" alt="avt-icon">
+            </div>
+        </div>
+        <div class="user-settings">
+            <div class="profile-darkButton">
+                <div class="user-profile">
+                    <img src="media/users/userprofiles/avatar.png" alt="avt-icon">
+                    <div>
+                        <p> dep trai lanh lung Tuan </p>
+                    </div>
+                </div>
+                <div id="dark-button" onclick="darkModeON()">
+                    <span></span>
+                </div>
+            </div>
+            <hr>
+            <div class="user-profile">
+                <img src="media/users/userprofiles/change-profile.png" alt="">
+                <div>
+                    <p> View all personal content</p>
+                </div>
+            </div>
+            <hr>
+            <div class="settings-links">
+                <img src="media/users/userprofiles/setting.png" alt="" class="settings-icon">
+                <a href="#">Settings - Privary <img src="media/users/userprofiles/arrow.png" alt=""></a>
+            </div>
+
+            <div class="settings-links">
+                <img src="media/users/userprofiles/help.png" alt="" class="settings-icon">
+                <a href="#">Help - Support <img src="media/users/userprofiles/arrow.png" alt=""></a>
+            </div>
+
+            <div class="settings-links">
+                <img src="media/users/userprofiles/display.png" alt="" class="settings-icon">
+                <a href="#">Display - Accessibility <img src="media/users/userprofiles/arrow.png" alt=""></a>
+            </div>
+
+            <div class="settings-links">
+                <img src="media/users/userprofiles/logout.png" alt="" class="settings-icon">
+                <a href="#">Logout <img src="media/users/userprofiles/arrow.png" alt=""></a>
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!-- profile-page -->
+
+
+    <div class="profile-container">
+        <div class="cover">
+            <img src="media/users/userprofiles/cover.jpg" class="coverImage" alt="">
+            <div class="edit-coverImage">
+                <img src="media/users/userprofiles/camera.png" alt="">
+                <a href="#" style="color: black;">Change your coverImage </a>
+            </div>
+        </div>
+        <div class="dashboard">
+            <div class="left-dashboard">
+                <div class="avatar-container" id="avatarContainer">
+                    <img src="media/users/userprofiles/avatar.png" class="dashboard-img" alt="Avatar" id="avatarImage">
+                </div>
+                
+                <!-- Popup hoặc menu chứa các lựa chọn -->
+                <div id="avatarOptions" class="avatar-options">
+                    <button onclick="viewAvatar()">View Avatar</button>
+                    <button onclick="chooseAvatar()">Choose Avatar</button>
+                </div>                                
+                <div class="left-dashboard-info">
+                    <h3>Minh Tuann</h3>
+                    <p>446 Friends</p>
+                    <div class="mutual-friend-images">
+                        <img src="media/users/userprofiles/avtVuong.png" alt="">
+                        <img src="media/users/userprofiles/avtVuong.png" alt="">
+                        <img src="media/users/userprofiles/avtVuong.png" alt="">
+                        <img src="media/users/userprofiles/avtVuong.png" alt="">
+                        <img src="media/users/userprofiles/avtVuong.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="right-dashboard-info">
+                <div class="right-dashboard-info-top">
+
+                    <button type="button"><span class="plus-sign">+</span> Add to your story</button>
+                    <a href="editProfile.html" class="editProfile">
+                        <button type="button"><i class="far fa-edit"></i> Edit your profile</button>
+                    </a>                    
+                </div>
+                <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
+            </div>
+            <div class="list-choose">
+                <ul class="profile-menu">
+                    <li><a href="#">Bài viết</a></li>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Bạn bè</a></li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="container content-profile-container">
+            <div class="left-sidebar profile-left-sidebar">
+                <div class="left-profile-sidebar-top">
+                    <div class="intro-bio">
+                        <h4>Story</h4>
+                        <p>Em co nho anh khong <i class="far fa-smile-beam"></i></p>
+                        <hr>
+                    </div>
+                    <div class="background-details">
+                        <a href="#"><i class="fas fa-briefcase"></i>
+                            <p>College Student</p>
+                        </a>
+                        <a href="#"><i class="fas fa-graduation-cap"></i>
+                            <p>Studied at University of Technology - Hanoi National University</p>
+                        </a>
+                        <a href="#"><i class="fas fa-home"></i>
+                            <p>Lives in Cau Giay, Ha Noi</p>
+                        </a>
+                        <a href="#"><i class="fas fa-map-marker-alt"></i>
+                            <p>From Y Yen, Nam Dinh</p>
+                        </a>
+                        <a href="https://www.instagram.com/_minhtuann_201/" target="_blank">
+                            <i class="fab fa-instagram"></i>
+                            <p style="color: blue">_minhtuann_201</p>
+                        </a>
+                    </div>
+                    <div class="edit-story-wrapper">
+                        <a href="editStory.html" class="editStory">
+                            <button type="button" class="edit-story-btn">
+                                <i class="far fa-edit"></i> Edit your Story
+                            </button>
+                        </a>
+                    </div>                    
+                </div>
+
+                <div class="left-profile-sidebar-top gallery">
+                    <div class="heading-link profile-heading-link">
+                        <h4>Photos</h4>
+                        <a href="">All Photos</a>
+                    </div>
+
+                    <div class="gallery-photos">
+                        <div class="gallery-photos-rowFirst">
+                            <img src="media/users/userprofiles/avtVuong.png" alt="">
+                            <img src="media/users/userprofiles/avtVuong.png" alt="">
+                            <img src="media/users/userprofiles/avtVuong.png" alt="">
+                            <img src="media/users/userprofiles/avtVuong.png" alt="">
+                            <img src="media/users/userprofiles/avtVuong.png" alt="">
+                            <img src="media/users/userprofiles/avtVuong.png" alt="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="left-profile-sidebar-top gallery">
+                    <div class="heading-link profile-heading-link">
+                        <h4>Friends</h4>
+                        <a href="">All Friends</a>
+                    </div>
+
+                    <div class="gallery-photos">
+                        <div class="gallery-photos-rowFirst">
+                            <div class="first-friend">
+                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <p>Vuong1</p>
+                            </div>
+                            <div class="second-friend">
+                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <p>Vuong2</p>
+                            </div>
+                            <div class="third-friend">
+                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <p>Vuong3</p>
+                            </div>
+                            <div class="forth-friend">
+                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <p>Vuong4</p>
+                            </div>
+                            <div class="fifth-friend">
+                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <p>Vuong5</p>
+                            </div>
+                            <div class="sixth-friend">
+                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <p>Vuong6</p>
+                            </div>
+                            <div class="seventh-friend">
+                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <p>Vuong7</p>
+                            </div>
+                            <div class="eighth-friend">
+                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <p>Vuong8</p>
+                            </div>
+                            <div class="ninth-friend">
+                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <p>Vuong9</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- main-content- -->
+
+            <div class="content-area profile-content-area">
+                <div class="write-post-container">
+                    <div class="user-profile">
+                        <img src="media/users/userprofiles/avatar.png" alt="">
+                        <div>
+                            <p> Minh Tuann</p>
+                            <small>Public <i class="fas fa-caret-down"></i></small>
+                        </div>
+                    </div>
+
+                    <div class="post-upload-textarea">
+                        <textarea name="" placeholder="Hom nay cua em the nao?" id="" cols="30" rows="3"></textarea>
+                        <div class="add-post-links">
+                            <a href="#"><img src="media/users/userprofiles/live-video.png" alt="">Live Video</a>
+                            <a href="#"><img src="media/users/userprofiles/photo.png" alt="">Photo/Video</a>
+                            <a href="#"><img src="media/users/userprofiles/feeling.png" alt="">Feeling Activity</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-field-container write-post-container">
+                    <div class="user-profile-box">
+                        <div class="user-profile">
+                            <img src="media/users/userprofiles/khabanh2.jpg" alt="">
+                            <div>
+                                <p> Nhat ky cua Banh</p>
+                                <small>March 01 2024, 09.18 pm</small>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="#"><i class="fas fa-ellipsis-v"></i></a>
+                        </div>
+                    </div>
+                    <div class="status-field">
+                        <p>Mấy ông lắm tiền mà làm lãnh đạo có khi là yêu nước thương dân
+                        </p>
+                        <img src="media/users/userprofiles/khabanh.jpg" alt="">
+
+                    </div>
+                    <div class="post-reaction">
+                        <div class="activity-icons">
+                            <div><img src="media/users/userprofiles/like-blue.png" alt="">120</div>
+                            <div><img src="media/users/userprofiles/comments.png" alt="">52</div>
+                            <div><img src="media/users/userprofiles/share.png" alt="">35</div>
+                        </div>
+                        <div class="post-profile-picture">
+                            <img src="images/khabanh2.jpg" alt=""> <i class=" fas fa-caret-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn-LoadMore" onclick="LoadMoreToggle()">Load More</button>
+            </div>
+        </div>
+    </div>
+    <footer id="footer">
+        
+    </footer>
+
+    <script src="/static/userprofiles/js/function.js"></script>
+    <script src="/static/userprofiles/js/editAvt.js"></script>
+</body>
+
+</html>

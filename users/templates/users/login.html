@@ -1,0 +1,65 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Login Page</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/users/css/login.css' %}">
+  </head>
+  <body>
+    <div class="container flex">
+      <div class="facebook-page flex">
+        <div class="text">
+          <h1>facebook</h1>
+          <p>Connect with friends and the world </p>
+          <p> around you on Facebook.</p>
+        </div>
+        <form action="{% url 'users:login' %}" method="post">
+          {% csrf_token %}
+          <input name="email" id="email" type="email" placeholder="Email or phone number" required>
+          <input name="password" id="password" type="password" placeholder="Password" required>
+          <div class="link">
+            <button type="submit" class="login">Login</button>
+            <a href="#" class="forgot">Forgot password?</a>
+          </div>
+          <hr>
+          <div class="button">
+            <a href="{% url 'users:register' %}">Create new account</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <a href="{% url 'users:login' %}">LOGIN</a>
+
+    <script>
+      document.querySelector('form').addEventListener('submit', function(event) {
+          event.preventDefault(); // prevent form submission
+
+          // collect form data
+          const formData = new FormData(event.target);
+
+          // make a POST request to the server
+          fetch(event.target.action, {
+              method: 'POST',
+              body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data['success']) {
+                  alert(data['success']);
+                  window.location.href = data['redirect_url'];
+              } else {
+                  alert(data['warning']);
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+      });
+  </script>
+  
+  </body>
+</html>
