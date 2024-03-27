@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -8,7 +10,10 @@ import jwt, datetime
 from users.models import User
 from .models import Posts, MediaOfPosts
 
+from .serializers import PostsSerializer, MediaOfPostsSerializer
+
 # Create your views here.
+
 
 def get_user(request):
     token = request.COOKIES.get('jwt')
@@ -26,6 +31,15 @@ def get_user(request):
     
     return user
 
+class PostsPageView(APIView):
+    def get(self, request):
+        user = get_user(request)
+        
+        if not user:
+            return HttpResponseRedirect(reverse('users:login'))
+        
+        return render(request, 'posts/posts.html')
+
 class PostsView(APIView):
     def get(self, request):
         user = get_user(request)
@@ -33,16 +47,12 @@ class PostsView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        posts = Posts.objects.filter(user=user).all()
+        posts = Posts.objects.filter(user_id=user).all()
         
         data = []
         
         for post in posts:
-            data.append({
-                'content': post.content,
-                'user': post.user.username,
-                'media': [media.url for media in post.media.all()]
-            })
+            data.append(PostsSerializer(post).data)
         
         return Response({'posts': data})
     
@@ -53,10 +63,33 @@ class PostsView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         print(request.data)
-        Posts.objects.create(
-            user=user,
-            content=request.data['content']
-        )
+        print(request.FILES)
+        
+        post = self.createPost(user, request)
+        self.createMediaOfPost(post, request)     
         
         return Response({'success': 'Post created!'})
+
+    def createPost(self, user, request):
+        post = Posts.objects.create(
+            user_id=user,
+            content="content",
+            status='public'
+        )
+        
+        post.save()
+        
+        return post
+    
+    def createMediaOfPost(self, post, request):
+        media = request.FILES.getlist('media')
+        if not media:
+            return None
+        for file in media:
+            media = MediaOfPosts.objects.create(
+                post_id=post,
+                media=file
+            )
+            
+            media.save()
 

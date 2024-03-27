@@ -71,12 +71,20 @@ document.getElementById('form-register').addEventListener('submit', function(eve
 
     Promise.all([
         new Promise(resolve => {
+            if (cropper_avatar === undefined) {
+                resolve();
+                return;
+            }
             cropper_avatar.getCroppedCanvas().toBlob((blob) => {
                 formData.append('avatar', blob, 'avatar.png');
                 resolve();
             });
         }),
         new Promise(resolve => {
+            if (cropper_background === undefined) {
+                resolve();
+                return;
+            }
             cropper_background.getCroppedCanvas().toBlob((blob) => {
                 formData.append('background', blob, 'background.png');
                 resolve();

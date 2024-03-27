@@ -20,6 +20,6 @@ class UserProfile(models.Model):
 
 class ImageProfile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    avatar= models.ImageField(upload_to=media_directory_path, blank=True, default="media/users/default/avatar_default.png")
-    background = models.ImageField(upload_to=media_directory_path, blank=True, default="media/users/default/background_default.jpg")
+    avatar= models.ImageField(upload_to=media_directory_path, blank=True, default="users/default/avatar_default.png")
+    background = models.ImageField(upload_to=media_directory_path, blank=True, default="users/default/background_default.jpg")
     
