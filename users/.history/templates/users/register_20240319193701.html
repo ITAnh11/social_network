@@ -1,0 +1,113 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Signup Page</title>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'templates/users/css/register.css' %}">
+  </head>
+<body>
+  <div class="form_wrapper">
+    <div class="form_container">
+      <div class="title_container">
+        <h2>Register Your Account</h2>
+      </div>
+      <div class="row clearfix">
+        <div class="">
+          <form action="{% url 'users:register' %}" method="post">
+            {% csrf_token %}
+            <div class="row clearfix">
+              <div class="col_half">
+                <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+                  <input type="text" name="first_name" placeholder="First Name" />
+                </div>
+              </div>
+              <div class="col_half">
+                <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+                  <input type="text" name="last_name" placeholder="Last Name" required />
+                </div>
+              </div>
+            </div>
+
+            <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
+              <input type="email" name="email" placeholder="Email" required />
+            </div>
+
+            <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
+              <input type="text" name="phone" placeholder="Phone"/>
+            </div>
+
+            <div class="input_field"> <span><i aria-hidden="true" class="fa fa-lock"></i></span>
+              <input type="password" name="password" placeholder="Password" required />
+            </div>
+            <div class="input_field"> <span><i aria-hidden="true" class="fa fa-lock"></i></span>
+              <input type="password" name="confirm_password" placeholder="Confirm Password" required />
+            </div>
+        
+            <div class="input_field radio_option">
+              <input type="radio" name="gender" id="rd1" value="Male">
+              <label for="rd1">Male</label>
+              <input type="radio" name="gender" id="rd2" value="Female">
+              <label for="rd2">Female</label>
+            </div>
+                <!-- <div class="input_field select_option">
+                  <select>
+                    <option>Select a country</option>
+                    <option>VietNam</option>
+                    <option>Campuchino</option>
+                  </select>
+                  <div class="select_arrow"></div>
+                </div> -->
+            <div class="input_field checkbox_option">
+                <input type="checkbox" id="cb1" required>
+                <label for="cb1">I agree with terms and conditions</label>
+            </div>
+              <!-- <div class="input_field checkbox_option">
+                <input type="checkbox" id="cb2">
+            <label for="cb2">I want to receive the newsletter</label>
+              </div> -->
+            <input class="button" type="submit" value="Register" />
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault(); // prevent form submission
+
+        // collect form data
+        const formData = new FormData(event.target);
+
+        // make a POST request to the server
+        fetch(event.target.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data['success']) {
+                console.log(data);
+                alert(data['success']);
+                window.location.href = data['redirect_url'];
+            } else {
+                alert(data['warning'])
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+  </script>
+  
+</body>
+</html>
