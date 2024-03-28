@@ -55,9 +55,11 @@ document.addEventListener('DOMContentLoaded', function() {
         var number = 0;
         var promises = [];
         images.forEach(function(image) {
+            // console.log(image.src);
             var promise = fetch(image.src)
             .then(response => response.blob())
             .then(blob => {
+                console.log(blob);
                 number += 1;
                 formData.append(`media`, blob, `images_${number}.png`);
             })
