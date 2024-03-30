@@ -35,7 +35,7 @@ class ProfileView(APIView):
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
 
-        return render(request, 'userprofiles/profile_demo.html')
+        return render(request, 'userprofiles/profile.html')
 
 class GetProfileView(APIView):
     def get(self, request):
