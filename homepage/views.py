@@ -30,7 +30,7 @@ class HomePageView(APIView):
         if not token:
             return HttpResponseRedirect('/users/login/')
             
-        return render(request, 'homepage/homepage_demo.html')
+        return render(request, 'homepage/index.html')
 
 class getPostsView(APIView):
     def get(self, request):
