@@ -26,8 +26,12 @@ def getUser(request):
     
 class HomePageView(APIView):
     def get(self, request):
+<<<<<<< HEAD
         token = request.COOKIES.get('jwt')  
 
+=======
+        token = request.COOKIES.get('jwt')
+>>>>>>> b1fe0668ed6cc27ae242694dcacfec6d10e6d287
         if not token:
             return HttpResponseRedirect('/users/login/')
             
