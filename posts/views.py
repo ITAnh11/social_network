@@ -40,22 +40,7 @@ class PostsPageView(APIView):
         
         return render(request, 'posts/posts.html')
 
-class PostsView(APIView):
-    def get(self, request):
-        user = get_user(request)
-        
-        if not user:
-            return Response({'error': 'Unauthorized'}, status=401)
-        
-        posts = Posts.objects.filter(user_id=user).all()
-        
-        data = []
-        
-        for post in posts:
-            data.append(PostsSerializer(post).data)
-        
-        return Response({'posts': data})
-    
+class CreatePostsView(APIView):
     def post(self, request):
         user = get_user(request)
         
@@ -73,7 +58,7 @@ class PostsView(APIView):
     def createPost(self, user, request):
         post = Posts.objects.create(
             user_id=user,
-            content="content",
+            content=request.data['content'],
             status='public'
         )
         

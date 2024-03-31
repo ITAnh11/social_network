@@ -1,4 +1,4 @@
-var api_get_profile = '/userprofiles/getprofile/'
+var api_get_profile = '/userprofiles/get_profile/'
 
 fetch(api_get_profile)
     .then(response => response.json())
