@@ -14,13 +14,17 @@
 
     <div id="profile">
     </div>
+
+    <div id="block-up-post">
+        {% include 'posts/posts.html' %}
+    </div>
     
     <form action="{% url 'users:logout' %}" method="post">
         {% csrf_token %}
         <button type="submit">Logout</button>
     </form>
 
-    <script src="{% static 'userprofiles/js/profile.js' %}"></script>
+    <script src="{% static 'userprofiles/js/profile_t.js' %}"></script>
 
 </body>
 </html>
