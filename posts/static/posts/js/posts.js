@@ -1,3 +1,21 @@
+var post = document.querySelector(".write-post-container");
+var posting = document.querySelector(".overlay");
+var img_upload = document.querySelector('.img_upload');
+var post_content = posting.querySelector('textArea');
+
+post.addEventListener("click",function() {
+    posting.style.display = 'flex';
+})
+
+// ẩn chức năng đăng bài
+var escBtn = posting.querySelector("#escBtn");
+escBtn.addEventListener("click",function(){
+    posting.style.display = 'none';
+    post_content.value = '';
+})
+
+
+
 const uploadArea = document.querySelector('.upload-area');
 const uploadInput = document.querySelector('#upload-input');
 const uploadImg = document.querySelector('.upload-img');
@@ -84,5 +102,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     });
 });
+
+
+
 
 
