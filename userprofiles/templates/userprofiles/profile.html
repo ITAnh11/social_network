@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link type="text/css" href="{%static 'userprofiles/css/style.css' %}" rel="stylesheet" />
+    <link type="text/css" href="{%static 'userprofiles/css/profile.css' %}" rel="stylesheet" />
     <title>Profle - Socialbook</title>
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 </head>
@@ -114,7 +114,7 @@
                 <div class="right-dashboard-info-top">
 
                     <button type="button"><span class="plus-sign">+</span> Add to your story</button>
-                    <a href="editProfile.html" class="editProfile">
+                    <a href="{% url 'userprofiles:editProfile' %}" class="editProfile">
                         <button type="button"><i class="far fa-edit"></i> Edit your profile</button>
                     </a>                    
                 </div>
@@ -122,9 +122,9 @@
             </div>
             <div class="list-choose">
                 <ul class="profile-menu">
-                    <li><a href="#">Bài viết</a></li>
-                    <li><a href="about.html">Giới thiệu</a></li>
-                    <li><a href="listFriends.html">Bạn bè</a></li>
+                    <li><a href="{% url 'userprofiles:profile' %}">Bài viết</a></li>
+                    {% comment %} <li><a href="{% url 'userprofiles:about' %}">Giới thiệu</a></li> {% endcomment %}
+                    <li><a href="{% url 'userprofiles:listFriends' %}">Bạn bè</a></li>
                 </ul>
             </div>
         </div>
@@ -157,9 +157,9 @@
                         </a>
                     </div>
                     <div class="edit-story-wrapper">
-                        <a href="editStory.html" class="editStory">
+                        <a href="{% url 'userprofiles:editProfile' %}" class="editStory">
                             <button type="button" class="edit-story-btn">
-                                <i class="far fa-edit"></i> Edit your Story
+                                <i class="far fa-edit"></i> Edit your Profile
                             </button>
                         </a>
                     </div>                    
@@ -295,7 +295,7 @@
     
     <script src="{%static 'userprofiles/js/function.js' %}" ></script>
     <script src="{%static 'userprofiles/js/editAvt.js' %}" ></script>
-    <script src="{%static 'userprofiles/js/profile.js' %}" ></script>
+    <script src="{%static 'userprofiles/js/profile_t.js' %}" ></script>
 </body>
 
 </html>
