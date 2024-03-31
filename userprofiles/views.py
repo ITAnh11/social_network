@@ -148,6 +148,7 @@ class GetPostsView(APIView):
             media_data = MediaOfPostsSerializer(media, many=True).data
             
             posts_data['media'] = media_data
+            posts_data['user'] = UserSerializer(user).data
 
             posts_data['created_at'] = self.getTimeDuration(post.get('created_at'))
         
