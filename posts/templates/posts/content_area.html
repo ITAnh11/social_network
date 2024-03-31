@@ -6,14 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>
-        Welcome to the home page
-    </h1>
     
-    <form action="{% url 'users:logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
-
 </body>
 </html>
