@@ -1,0 +1,221 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" href="{%static 'userprofiles/css/style.css' %}" rel="stylesheet" />
+    <title>Profle - Socialbook</title>
+    <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="/templates/homepage/homepage_demo.html">
+                <img class="logo" src="{%static 'userprofiles/media/logo3.png' %}" alt="">
+            </a>
+            <div class="search-box">
+                <img src="{%static 'userprofiles/media/search.png' %}" alt="">
+                <input type="text" placeholder="Search">
+            </div>
+        </div>
+        <div class="nav-right">
+            <ul class="navlogo">
+                <li><a href="/templates/homepage/homepage_demo.html"> <img src="{%static 'userprofiles/media/home.png' %}" alt=""> </a></li>
+                <li><a href="#"><img src="{%static 'userprofiles/media/notif.png' %}"></a></li>
+                <li><a href="#"><img src="{%static 'userprofiles/media/mess2.png' %}"></a></li>
+            </ul>                        
+            <div class="profile-image online" onclick="UserSettingToggle()">
+                <img src="{%static 'userprofiles/media/avatar.png' %}" alt="avt-icon">
+            </div>
+        </div>
+        <div class="user-settings">
+            <div class="profile-darkButton">
+                <div class="user-profile">
+                    <img src="{%static 'userprofiles/media/avatar.png' %}" alt="avt-icon">
+                    <div>
+                        <p> dep trai lanh lung Tuan </p>
+                    </div>
+                </div>
+                <div id="dark-button" onclick="darkModeON()">
+                    <span></span>
+                </div>
+            </div>
+            <hr>
+            <div class="user-profile">
+                <img src="{%static 'userprofiles/media/change-profile.png' %}" alt="">
+                <div>
+                    <p> View all personal content</p>
+                </div>
+            </div>
+            <hr>
+            <div class="settings-links">
+                <img src="{%static 'userprofiles/media/setting.png' %}" alt="" class="settings-icon">
+                <a href="#">Settings - Privary <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
+            </div>
+
+            <div class="settings-links">
+                <img src="{%static 'userprofiles/media/help.png' %}" alt="" class="settings-icon">
+                <a href="#">Help - Support <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
+            </div>
+
+            <div class="settings-links">
+                <img src="{%static 'userprofiles/media/display.png' %}" alt="" class="settings-icon">
+                <a href="#">Display - Accessibility <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
+            </div>
+
+            <div class="settings-links">
+                <img src="{%static 'userprofiles/media/logout.png' %}" alt="" class="settings-icon">
+                <a href="#">Logout <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!-- profile-page -->
+
+
+    <div class="profile-container">
+        <div class="cover">
+            <img src="{%static 'userprofiles/media/cover.jpg' %}" class="coverImage" alt="">
+            <div class="edit-coverImage">
+                <img src="{%static 'userprofiles/media/camera.png' %}" alt="">
+                <a href="#" style="color: black;">Change your coverImage </a>
+            </div>
+        </div>
+        <div class="dashboard">
+            <div class="left-dashboard">
+                <div class="avatar-container" id="avatarContainer">
+                    <img src="{%static 'userprofiles/media/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage">
+                </div>
+                
+                <!-- Popup hoặc menu chứa các lựa chọn -->
+                <div id="avatarOptions" class="avatar-options">
+                    <button onclick="viewAvatar()">View Avatar</button>
+                    <button onclick="chooseAvatar()">Choose Avatar</button>
+                </div>                                
+                <div class="left-dashboard-info">
+                    <h3>Minh Tuann</h3>
+                    <p>446 Friends</p>
+                    <div class="mutual-friend-images">
+                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="right-dashboard-info">
+                <div class="right-dashboard-info-top">
+
+                    <button type="button"><span class="plus-sign">+</span> Add to your story</button>
+                    <a href="editProfile.html" class="editProfile">
+                        <button type="button"><i class="far fa-edit"></i> Edit your profile</button>
+                    </a>                    
+                </div>
+                <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
+            </div>
+            <div class="list-choose">
+                <ul class="profile-menu">
+                    <li><a href="#">Bài viết</a></li>
+                    <li><a href="about.html">Giới thiệu</a></li>
+                    <li><a href="listFriends.html">Bạn bè</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- list friends-->
+        <div class="list-friends">
+          <div class="first-row">
+            <p>Bạn bè</p>
+            <div class="right-align">
+              <p>Lời mời kết bạn</p>
+              <p>Tìm bạn bè</p>
+              <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
+            </div>
+          </div>
+          <div class="second-row">
+            <div class="someFriends">
+              <div class="friend">
+                <div class="imgFriend">
+                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                </div>
+                <div class="in4Friend">
+                  <h4>Quoc Vuong</h4>
+                  <p>100 mutuals friends</p>
+                </div>  
+              </div>
+  
+              <div class="friend">
+                <div class="imgFriend">
+                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                </div>
+                <div class="in4Friend">
+                  <h4>Quoc Vuong</h4>
+                  <p>100 mutuals friends</p>
+                </div>  
+              </div>
+  
+              <div class="friend">
+                <div class="imgFriend">
+                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                </div>
+                <div class="in4Friend">
+                  <h4>Quoc Vuong</h4>
+                  <p>100 mutuals friends</p>
+                </div>  
+              </div>
+  
+              <div class="friend">
+                <div class="imgFriend">
+                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                </div>
+                <div class="in4Friend">
+                  <h4>Quoc Vuong</h4>
+                  <p>100 mutuals friends</p>
+                </div>  
+              </div>
+  
+              <div class="friend">
+                <div class="imgFriend">
+                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                </div>
+                <div class="in4Friend">
+                  <h4>Quoc Vuong</h4>
+                  <p>100 mutuals friends</p>
+                </div>  
+              </div>
+  
+              <div class="friend">
+                <div class="imgFriend">
+                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                </div>
+                <div class="in4Friend">
+                  <h4>Quoc Vuong</h4>
+                  <p>100 mutuals friends</p>
+                </div>  
+              </div>
+            </div>
+            <div class="moreFriends">
+              <button>
+                <p>More Friends</p>
+              </button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <footer id="footer">
+        
+    </footer>
+    
+    <script src="{%static 'userprofiles/js/function.js' %}" ></script>
+    <script src="{%static 'userprofiles/js/editAvt.js' %}" ></script>
+    <script src="{%static 'userprofiles/js/profile.js' %}" ></script>
+</body>
+
+</html>
