@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.utils import timezone
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-import jwt
+import jwt 
 
 from users.models import User
 from users.serializers import UserSerializer
@@ -13,6 +14,11 @@ from users.serializers import UserSerializer
 from .models import UserProfile, ImageProfile
 from .serializers import UserProfileSerializer, ImageProfileSerializer
 from .forms import ImageProfileForm
+
+from posts.models import Posts, MediaOfPosts
+from posts.serializers import PostsSerializer, MediaOfPostsSerializer
+
+from datetime import datetime, timedelta
 
 def getUser(request):
     token = request.COOKIES.get('jwt')
@@ -26,8 +32,6 @@ def getUser(request):
         return None
     
     return User.objects.filter(id=payload['id']).first()
-    
-
 class ProfileView(APIView):
     def get(self, request):
         user = getUser(request)
@@ -36,7 +40,6 @@ class ProfileView(APIView):
             return HttpResponseRedirect(reverse('users:login'))
 
         return render(request, 'userprofiles/profile_demo.html')
-
 class GetProfileView(APIView):
     def get(self, request):
         user = getUser(request)
@@ -56,9 +59,7 @@ class GetProfileView(APIView):
             'imageprofile': ImageProfileSerializer(imageprofile).data,
             'enable_edit': enable_edit
         }
-        
-        # print(context)
-        
+                
         return Response(context)        
 class SetUserProfileView(APIView):
     # update user profile
@@ -94,7 +95,6 @@ class SetUserProfileView(APIView):
                                                 )
 
         return Response({'message': 'User profile created successfully!'})
-
 class SetImageProfileView(APIView):
     # update user profile
     def post(self, request):
@@ -118,3 +118,43 @@ class SetImageProfileView(APIView):
             imageProfileForm.save(user)
         
         return Response({'message': 'Image profile created successfully!'})
+class GetPostsView(APIView):
+    
+    def getTimeDuration(self, created_at):
+        time_duration = timezone.now() - created_at
+        if time_duration < timedelta(minutes=1):
+            return f'{time_duration.seconds} seconds ago'
+        elif time_duration < timedelta(hours=1):
+            return f'{time_duration.seconds//60} minutes ago'
+        elif time_duration < timedelta(days=1):
+            return f'{time_duration.seconds//3600} hours ago'
+        else:
+            return f'{time_duration.days} days ago'
+    
+    def get(self, request):
+        user = getUser(request)
+        
+        if not user:
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        reponse = Response()
+        
+        data = []
+        
+        posts = Posts.objects.filter(user_id=user).values('id', 'content', 'status', 'created_at').all().order_by('-created_at')    
+        for post in posts:
+            posts_data = PostsSerializer(post).data
+            media = MediaOfPosts.objects.filter(post_id=post.get('id')).all()
+            media_data = MediaOfPostsSerializer(media, many=True).data
+            
+            posts_data['media'] = media_data
+
+            posts_data['created_at'] = self.getTimeDuration(post.get('created_at'))
+        
+            data.append(posts_data)
+            
+        reponse.data = {
+            'posts': data
+        }
+
+        return reponse

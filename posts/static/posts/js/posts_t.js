@@ -8,10 +8,20 @@ var currentNumberFiles = 0;
 
 function removeImg(event) {
     // Remove the node parent element of the button
-    event.target.parentNode.parentNode.remove();
+    // console.log(event.target.parentNode);
+
+    if (event.target.parentNode.classList.contains('uploaded-img')) { 
+        event.target.parentNode.remove(); 
+    } else if (event.target.parentNode.parentNode.classList.contains('uploaded-img')) { 
+        event.target.parentNode.parentNode.remove(); 
+    }
+
     currentNumberFiles -= 1;
     uploadInfoValue.textContent = currentNumberFiles.toString();
-    console.log(uploadInput.files);
+
+    if (currentNumberFiles == 0) {
+        uploadInput.value = '';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -21,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     uploadInput.addEventListener('change', function(event) {
-        console.log(event.target.files);
+        // console.log(event.target.files);
 
         filesAmount = event.target.files.length;
 
@@ -55,9 +65,11 @@ document.addEventListener('DOMContentLoaded', function() {
         var number = 0;
         var promises = [];
         images.forEach(function(image) {
+            // console.log(image.src);
             var promise = fetch(image.src)
             .then(response => response.blob())
             .then(blob => {
+                console.log(blob);
                 number += 1;
                 formData.append(`media`, blob, `images_${number}.png`);
             })

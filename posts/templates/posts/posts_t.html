@@ -8,7 +8,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="{% static 'posts/css/posts.css' %}">
+        <link rel="stylesheet" href="{% static 'posts/css/posts_t.css' %}">
     </head>
     <body>
 
@@ -33,8 +33,9 @@
                 </div>
             </div>
 
-            <form id="form-submit" action="{% url 'posts:posts' %}" method="post" >
+            <form id="form-submit" action="{% url 'posts:create_posts' %}" method="post" >
                 {% csrf_token %}
+                <input type="text" name="content" id="content" placeholder="What í thá" width="100" height="200" style="height: 200px; word-wrap: break-word;">
                 <input type="submit" value="Up" style="width: 100px; height: 100px;">
             </form>
         </div>
@@ -42,6 +43,6 @@
 
 
         <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
-        <script src = "{% static 'posts/js/posts.js' %}"></script>
+        <script src = "{% static 'posts/js/posts_t.js' %}"></script>
     </body>
 </html>

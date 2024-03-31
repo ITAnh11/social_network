@@ -4,9 +4,9 @@ from .models import Posts, MediaOfPosts
 class PostsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Posts
-        fields = '__all__'
+        fields = ['id', 'content', 'status', 'created_at']
 
 class MediaOfPostsSerializer(serializers.ModelSerializer):
     class Meta:
         model = MediaOfPosts
-        fields = '__all__'
+        fields = ['id', 'media']
