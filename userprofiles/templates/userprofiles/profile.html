@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/userprofiles/css/style.css">
+    <link type="text/css" href="{%static 'userprofiles/css/style.css' %}" rel="stylesheet" />
     <title>Profle - Socialbook</title>
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 </head>
@@ -14,27 +15,27 @@
     <nav class="navbar">
         <div class="nav-left">
             <a href="/templates/homepage/homepage_demo.html">
-                <img class="logo" src="media/users/userprofiles/logo3.png" alt="">
+                <img class="logo" src="{%static 'userprofiles/media/logo3.png' %}" alt="">
             </a>
             <div class="search-box">
-                <img src="media/users/userprofiles/search.png" alt="">
+                <img src="{%static 'userprofiles/media/search.png' %}" alt="">
                 <input type="text" placeholder="Search">
             </div>
         </div>
         <div class="nav-right">
             <ul class="navlogo">
-                <li><a href="/templates/homepage/homepage_demo.html"><img src="media/users/userprofiles/home.png"></a></li>
-                <li><a href="#"><img src="media/users/userprofiles/notif.png"></a></li>
-                <li><a href="#"><img src="media/users/userprofiles/mess2.png"></a></li>
+                <li><a href="/templates/homepage/homepage_demo.html"> <img src="{%static 'userprofiles/media/home.png' %}" alt=""> </a></li>
+                <li><a href="#"><img src="{%static 'userprofiles/media/notif.png' %}"></a></li>
+                <li><a href="#"><img src="{%static 'userprofiles/media/mess2.png' %}"></a></li>
             </ul>                        
             <div class="profile-image online" onclick="UserSettingToggle()">
-                <img src="media/users/userprofiles/avatar.png" alt="avt-icon">
+                <img src="{%static 'userprofiles/media/avatar.png' %}" alt="avt-icon">
             </div>
         </div>
         <div class="user-settings">
             <div class="profile-darkButton">
                 <div class="user-profile">
-                    <img src="media/users/userprofiles/avatar.png" alt="avt-icon">
+                    <img src="{%static 'userprofiles/media/avatar.png' %}" alt="avt-icon">
                     <div>
                         <p> dep trai lanh lung Tuan </p>
                     </div>
@@ -45,30 +46,30 @@
             </div>
             <hr>
             <div class="user-profile">
-                <img src="media/users/userprofiles/change-profile.png" alt="">
+                <img src="{%static 'userprofiles/media/change-profile.png' %}" alt="">
                 <div>
                     <p> View all personal content</p>
                 </div>
             </div>
             <hr>
             <div class="settings-links">
-                <img src="media/users/userprofiles/setting.png" alt="" class="settings-icon">
-                <a href="#">Settings - Privary <img src="media/users/userprofiles/arrow.png" alt=""></a>
+                <img src="{%static 'userprofiles/media/setting.png' %}" alt="" class="settings-icon">
+                <a href="#">Settings - Privary <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
             </div>
 
             <div class="settings-links">
-                <img src="media/users/userprofiles/help.png" alt="" class="settings-icon">
-                <a href="#">Help - Support <img src="media/users/userprofiles/arrow.png" alt=""></a>
+                <img src="{%static 'userprofiles/media/help.png' %}" alt="" class="settings-icon">
+                <a href="#">Help - Support <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
             </div>
 
             <div class="settings-links">
-                <img src="media/users/userprofiles/display.png" alt="" class="settings-icon">
-                <a href="#">Display - Accessibility <img src="media/users/userprofiles/arrow.png" alt=""></a>
+                <img src="{%static 'userprofiles/media/display.png' %}" alt="" class="settings-icon">
+                <a href="#">Display - Accessibility <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
             </div>
 
             <div class="settings-links">
-                <img src="media/users/userprofiles/logout.png" alt="" class="settings-icon">
-                <a href="#">Logout <img src="media/users/userprofiles/arrow.png" alt=""></a>
+                <img src="{%static 'userprofiles/media/logout.png' %}" alt="" class="settings-icon">
+                <a href="#">Logout <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
             </div>
 
         </div>
@@ -80,16 +81,16 @@
 
     <div class="profile-container">
         <div class="cover">
-            <img src="media/users/userprofiles/cover.jpg" class="coverImage" alt="">
+            <img src="{%static 'userprofiles/media/cover.jpg' %}" class="coverImage" alt="">
             <div class="edit-coverImage">
-                <img src="media/users/userprofiles/camera.png" alt="">
+                <img src="{%static 'userprofiles/media/camera.png' %}" alt="">
                 <a href="#" style="color: black;">Change your coverImage </a>
             </div>
         </div>
         <div class="dashboard">
             <div class="left-dashboard">
                 <div class="avatar-container" id="avatarContainer">
-                    <img src="media/users/userprofiles/avatar.png" class="dashboard-img" alt="Avatar" id="avatarImage">
+                    <img src="{%static 'userprofiles/media/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage">
                 </div>
                 
                 <!-- Popup hoặc menu chứa các lựa chọn -->
@@ -101,11 +102,11 @@
                     <h3>Minh Tuann</h3>
                     <p>446 Friends</p>
                     <div class="mutual-friend-images">
-                        <img src="media/users/userprofiles/avtVuong.png" alt="">
-                        <img src="media/users/userprofiles/avtVuong.png" alt="">
-                        <img src="media/users/userprofiles/avtVuong.png" alt="">
-                        <img src="media/users/userprofiles/avtVuong.png" alt="">
-                        <img src="media/users/userprofiles/avtVuong.png" alt="">
+                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
                     </div>
                 </div>
             </div>
@@ -122,8 +123,8 @@
             <div class="list-choose">
                 <ul class="profile-menu">
                     <li><a href="#">Bài viết</a></li>
-                    <li><a href="#">Giới thiệu</a></li>
-                    <li><a href="#">Bạn bè</a></li>
+                    <li><a href="about.html">Giới thiệu</a></li>
+                    <li><a href="listFriends.html">Bạn bè</a></li>
                 </ul>
             </div>
         </div>
@@ -172,12 +173,12 @@
 
                     <div class="gallery-photos">
                         <div class="gallery-photos-rowFirst">
-                            <img src="media/users/userprofiles/avtVuong.png" alt="">
-                            <img src="media/users/userprofiles/avtVuong.png" alt="">
-                            <img src="media/users/userprofiles/avtVuong.png" alt="">
-                            <img src="media/users/userprofiles/avtVuong.png" alt="">
-                            <img src="media/users/userprofiles/avtVuong.png" alt="">
-                            <img src="media/users/userprofiles/avtVuong.png" alt="">
+                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
                         </div>
                     </div>
                 </div>
@@ -191,39 +192,39 @@
                     <div class="gallery-photos">
                         <div class="gallery-photos-rowFirst">
                             <div class="first-friend">
-                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
                                 <p>Vuong1</p>
                             </div>
                             <div class="second-friend">
-                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
                                 <p>Vuong2</p>
                             </div>
                             <div class="third-friend">
-                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
                                 <p>Vuong3</p>
                             </div>
                             <div class="forth-friend">
-                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
                                 <p>Vuong4</p>
                             </div>
                             <div class="fifth-friend">
-                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
                                 <p>Vuong5</p>
                             </div>
                             <div class="sixth-friend">
-                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
                                 <p>Vuong6</p>
                             </div>
                             <div class="seventh-friend">
-                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
                                 <p>Vuong7</p>
                             </div>
                             <div class="eighth-friend">
-                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
                                 <p>Vuong8</p>
                             </div>
                             <div class="ninth-friend">
-                                <img src="media/users/userprofiles/avtVuong.png" alt="">
+                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
                                 <p>Vuong9</p>
                             </div>
                         </div>
@@ -237,7 +238,7 @@
             <div class="content-area profile-content-area">
                 <div class="write-post-container">
                     <div class="user-profile">
-                        <img src="media/users/userprofiles/avatar.png" alt="">
+                        <img src="{%static 'userprofiles/media/avatar.png' %}" alt="">
                         <div>
                             <p> Minh Tuann</p>
                             <small>Public <i class="fas fa-caret-down"></i></small>
@@ -247,9 +248,9 @@
                     <div class="post-upload-textarea">
                         <textarea name="" placeholder="Hom nay cua em the nao?" id="" cols="30" rows="3"></textarea>
                         <div class="add-post-links">
-                            <a href="#"><img src="media/users/userprofiles/live-video.png" alt="">Live Video</a>
-                            <a href="#"><img src="media/users/userprofiles/photo.png" alt="">Photo/Video</a>
-                            <a href="#"><img src="media/users/userprofiles/feeling.png" alt="">Feeling Activity</a>
+                            <a href="#"><img src="{%static 'userprofiles/media/live-video.png' %}" alt="">Live Video</a>
+                            <a href="#"><img src="{%static 'userprofiles/media/photo.png' %}" alt="">Photo/Video</a>
+                            <a href="#"><img src="{%static 'userprofiles/media/feeling.png' %}" alt="">Feeling Activity</a>
                         </div>
                     </div>
                 </div>
@@ -257,7 +258,7 @@
                 <div class="status-field-container write-post-container">
                     <div class="user-profile-box">
                         <div class="user-profile">
-                            <img src="media/users/userprofiles/khabanh2.jpg" alt="">
+                            <img src="{%static 'userprofiles/media/khabanh2.jpg' %}" alt="">
                             <div>
                                 <p> Nhat ky cua Banh</p>
                                 <small>March 01 2024, 09.18 pm</small>
@@ -270,17 +271,17 @@
                     <div class="status-field">
                         <p>Mấy ông lắm tiền mà làm lãnh đạo có khi là yêu nước thương dân
                         </p>
-                        <img src="media/users/userprofiles/khabanh.jpg" alt="">
+                        <img src="{%static 'userprofiles/media/khabanh.jpg' %}" alt="">
 
                     </div>
                     <div class="post-reaction">
                         <div class="activity-icons">
-                            <div><img src="media/users/userprofiles/like-blue.png" alt="">120</div>
-                            <div><img src="media/users/userprofiles/comments.png" alt="">52</div>
-                            <div><img src="media/users/userprofiles/share.png" alt="">35</div>
+                            <div><img src="{%static 'userprofiles/media/like-blue.png' %}" alt="">120</div>
+                            <div><img src="{%static 'userprofiles/media/comments.png' %}" alt="">52</div>
+                            <div><img src="{%static 'userprofiles/media/share.png' %}" alt="">35</div>
                         </div>
                         <div class="post-profile-picture">
-                            <img src="images/khabanh2.jpg" alt=""> <i class=" fas fa-caret-down"></i>
+                            <img src="{%static 'userprofiles/media/khabanh2.jpg' %}" alt=""> <i class=" fas fa-caret-down"></i>
                         </div>
                     </div>
                 </div>
@@ -291,9 +292,10 @@
     <footer id="footer">
         
     </footer>
-
-    <script src="/static/userprofiles/js/function.js"></script>
-    <script src="/static/userprofiles/js/editAvt.js"></script>
+    
+    <script src="{%static 'userprofiles/js/function.js' %}" ></script>
+    <script src="{%static 'userprofiles/js/editAvt.js' %}" ></script>
+    <script src="{%static 'userprofiles/js/profile.js' %}" ></script>
 </body>
 
 </html>
