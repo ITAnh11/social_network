@@ -60,13 +60,14 @@ class CreatePostsView(APIView):
         try:
             post = Posts.objects.create(
                 user_id=user,
-                tilte=request.data.get('title') or None,
+                title=request.data.get('title') or None,
                 content=request.data.get('content') or None,
                 status='public'
             )
             
             post.save()
         except:
+            print(1)
             return Response({'error': 'Error while saving post'}, status=400)
         
         return post

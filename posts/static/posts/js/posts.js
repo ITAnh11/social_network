@@ -42,83 +42,103 @@ function removeImg(event) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
 
-    uploadArea.addEventListener('click', function() {
-        uploadInput.click();
-    });
-
-    uploadInput.addEventListener('change', function(event) {
-        // console.log(event.target.files);
-
-        filesAmount = event.target.files.length;
-
-        for (var i = 0; i < filesAmount; i++) {
-            var reader = new FileReader();
-            reader.readAsDataURL(event.target.files[i]);
-            reader.onload = function(event) {
-                var html = `
-                    <div class="uploaded-img">
-                        <img src="${event.target.result}">
-                        <button type="button" class="remove-btn" onclick="removeImg(event)">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `;
-
-                uploadImg.insertAdjacentHTML('beforeend', html);
-            }
-        }
-
-        currentNumberFiles += filesAmount;
-        uploadInfoValue.textContent = currentNumberFiles.toString();
-    });
-
-    var post_btn = document.querySelector(".post_btn");
-    post_btn.addEventListener("click",function(){
-        form_submit.click();
-    })
-
-    form_submit.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const images = document.querySelectorAll('.uploaded-img img');
-
-        formData.append('content', "ádjjka");
-    
-        var number = 0;
-        var promises = [];
-        images.forEach(function(image) {
-            // console.log(image.src);
-            var promise = fetch(image.src)
-            .then(response => response.blob())
-            .then(blob => {
-                console.log(blob);
-                number += 1;
-                formData.append(`media`, blob, `images_${number}.png`);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-            promises.push(promise);
-        });
-        
-        Promise.all(promises)
-            .then(() => {
-            fetch(event.target.action, {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-            });
-    });
+uploadArea.addEventListener('click', function() {
+    uploadInput.click();
 });
+
+uploadInput.addEventListener('change', function(event) {
+    // console.log(event.target.files);
+
+    filesAmount = event.target.files.length;
+
+    for (var i = 0; i < filesAmount; i++) {
+        var reader = new FileReader();
+        reader.readAsDataURL(event.target.files[i]);
+        reader.onload = function(event) {
+            var html = `
+                <div class="uploaded-img">
+                    <img src="${event.target.result}">
+                    <button type="button" class="remove-btn" onclick="removeImg(event)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+            uploadImg.insertAdjacentHTML('beforeend', html);
+        }
+    }
+
+    currentNumberFiles += filesAmount;
+    uploadInfoValue.textContent = currentNumberFiles.toString();
+});
+
+var post_btn = document.querySelector(".post_btn");
+post_btn.addEventListener("click",function(){
+    form_submit.click();
+})
+
+form_submit.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const images = document.querySelectorAll('.uploaded-img img');
+
+    var content = post_content.value;
+    formData.append(`content`,content);
+
+    var number = 0;
+    var promises = [];
+    images.forEach(function(image) {
+        // console.log(image.src)
+        var promise = fetch(image.src)
+        .then(response => response.blob())
+        .then(blob => {
+            console.log(blob);
+            number += 1;
+            formData.append(`media`, blob, `images_${number}.png`);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+        promises.push(promise);
+    });
+    
+    Promise.all(promises)
+        .then(() => {
+        fetch(event.target.action, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        });
+});
+
+//lấy bài đăng
+const url_user_profile = 'http://127.0.0.1:8000/userprofiles/get_posts/';
+function get_posts(){
+    fetch(url_user_profile,{
+        method:'GET',
+        headers:{
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(function(post){
+            console.log(post);
+        })
+    })
+}
+
+get_posts();
+
+    
 
 
 
