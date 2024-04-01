@@ -34,6 +34,7 @@ def getUser(request):
         return None
     
     return User.objects.filter(id=payload['id']).first()
+
 class ProfileView(APIView):
     def get(self, request):
         user = getUser(request)
