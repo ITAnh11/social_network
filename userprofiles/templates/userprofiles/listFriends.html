@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link type="text/css" href="{%static 'userprofiles/css/profile.css' %}" rel="stylesheet" />
+    <link type="text/css" href="{%static 'userprofiles/css/listFriend.css' %}" rel="stylesheet" />
     <title>Profle - Socialbook</title>
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 </head>
@@ -123,122 +123,90 @@
             <div class="list-choose">
                 <ul class="profile-menu">
                     <li><a href="{% url 'userprofiles:profile' %}">Bài viết</a></li>
-                    {% comment %} <li><a href="{% url 'userprofiles:about' %}">Giới thiệu</a></li> {% endcomment %}
+                    {% comment %} <li><a href="about.html">Giới thiệu</a></li> {% endcomment %}
                     <li><a href="{% url 'userprofiles:listFriends' %}">Bạn bè</a></li>
                 </ul>
             </div>
         </div>
 
-
-        <div class="container content-profile-container">
-            <div class="left-sidebar profile-left-sidebar">
-                <div class="left-profile-sidebar-top">
-                    <div class="intro-bio">
-                        <h4>Story</h4>
-                        <p>Em co nho anh khong <i class="far fa-smile-beam"></i></p>
-                        <hr>
-                    </div>
-                    <div class="background-details">
-                        <a href="#"><i class="fas fa-briefcase"></i>
-                            <p>College Student</p>
-                        </a>
-                        <a href="#"><i class="fas fa-graduation-cap"></i>
-                            <p>Studied at University of Technology - Hanoi National University</p>
-                        </a>
-                        <a href="#"><i class="fas fa-home"></i>
-                            <p>Lives in Cau Giay, Ha Noi</p>
-                        </a>
-                        <a href="#"><i class="fas fa-map-marker-alt"></i>
-                            <p>From Y Yen, Nam Dinh</p>
-                        </a>
-                        <a href="https://www.instagram.com/_minhtuann_201/" target="_blank">
-                            <i class="fab fa-instagram"></i>
-                            <p style="color: blue">_minhtuann_201</p>
-                        </a>
-                    </div>
-                    <div class="edit-story-wrapper">
-                        <a href="{% url 'userprofiles:editProfile' %}" class="editStory">
-                            <button type="button" class="edit-story-btn">
-                                <i class="far fa-edit"></i> Edit your Profile
-                            </button>
-                        </a>
-                    </div>                    
-                </div>
-
-                <div class="left-profile-sidebar-top gallery">
-                    <div class="heading-link profile-heading-link">
-                        <h4>Photos</h4>
-                        <a href="">All Photos</a>
-                    </div>
-
-                    <div class="gallery-photos">
-                        <div class="gallery-photos-rowFirst">
-                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="left-profile-sidebar-top gallery">
-                    <div class="heading-link profile-heading-link">
-                        <h4>Friends</h4>
-                        <a href="">All Friends</a>
-                    </div>
-
-                    <div class="gallery-photos">
-                        <div class="gallery-photos-rowFirst">
-                            <div class="first-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                                <p>Vuong1</p>
-                            </div>
-                            <div class="second-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                                <p>Vuong2</p>
-                            </div>
-                            <div class="third-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                                <p>Vuong3</p>
-                            </div>
-                            <div class="forth-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                                <p>Vuong4</p>
-                            </div>
-                            <div class="fifth-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                                <p>Vuong5</p>
-                            </div>
-                            <div class="sixth-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                                <p>Vuong6</p>
-                            </div>
-                            <div class="seventh-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                                <p>Vuong7</p>
-                            </div>
-                            <div class="eighth-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                                <p>Vuong8</p>
-                            </div>
-                            <div class="ninth-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                                <p>Vuong9</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+        <!-- list friends-->
+        <div class="list-friends">
+          <div class="first-row">
+            <p>Bạn bè</p>
+            <div class="right-align">
+              <p>Lời mời kết bạn</p>
+              <p>Tìm bạn bè</p>
+              <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
             </div>
-
-            <!-- main-content- -->
-
-            <div class="content-area profile-content-area">
-                {% include "posts/posts.html" %}
+          </div>
+          <div class="second-row">
+            <div class="someFriends">
+              <div class="friend">
+                <div class="imgFriend">
+                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                </div>
+                <div class="in4Friend">
+                  <h4>Quoc Vuong</h4>
+                  <p>100 mutuals friends</p>
+                </div>  
+              </div>
+  
+              <div class="friend">
+                <div class="imgFriend">
+                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                </div>
+                <div class="in4Friend">
+                  <h4>Quoc Vuong</h4>
+                  <p>100 mutuals friends</p>
+                </div>  
+              </div>
+  
+              <div class="friend">
+                <div class="imgFriend">
+                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                </div>
+                <div class="in4Friend">
+                  <h4>Quoc Vuong</h4>
+                  <p>100 mutuals friends</p>
+                </div>  
+              </div>
+  
+              <div class="friend">
+                <div class="imgFriend">
+                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                </div>
+                <div class="in4Friend">
+                  <h4>Quoc Vuong</h4>
+                  <p>100 mutuals friends</p>
+                </div>  
+              </div>
+  
+              <div class="friend">
+                <div class="imgFriend">
+                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                </div>
+                <div class="in4Friend">
+                  <h4>Quoc Vuong</h4>
+                  <p>100 mutuals friends</p>
+                </div>  
+              </div>
+  
+              <div class="friend">
+                <div class="imgFriend">
+                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                </div>
+                <div class="in4Friend">
+                  <h4>Quoc Vuong</h4>
+                  <p>100 mutuals friends</p>
+                </div>  
+              </div>
             </div>
-            
+            <div class="moreFriends">
+              <button>
+                <p>More Friends</p>
+              </button>
+            </div>
+          </div>
         </div>
     </div>
     <footer id="footer">
@@ -247,7 +215,7 @@
     
     <script src="{%static 'userprofiles/js/function.js' %}" ></script>
     <script src="{%static 'userprofiles/js/editAvt.js' %}" ></script>
-    <script src="{%static 'userprofiles/js/profile_t.js' %}" ></script>
+    <script src="{%static 'userprofiles/js/profile.js' %}" ></script>
 </body>
 
 </html>

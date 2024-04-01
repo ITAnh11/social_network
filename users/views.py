@@ -55,14 +55,15 @@ class RegisterView(APIView):
         return render(request, 'users/register.html', {'imageProfileForm': imageProfileForm})
             
     def post(self, request):
-        print(request.data)
-        print(request.FILES)
+        # print(request.data)
+        # print(request.FILES)
         try:
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 user = serializer.save()
-                print(SetUserProfileView().post(request, user))
-                print(SetImageProfileView().post(request, user))
+                
+                SetUserProfileView().post(request, user)
+                SetImageProfileView().post(request, user)
 
                 return Response({'success': 'User registered successfully. Please Login.',
                                  'redirect_url': '/users/login/'})

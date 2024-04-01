@@ -14,7 +14,6 @@ from .serializers import PostsSerializer, MediaOfPostsSerializer
 
 # Create your views here.
 
-
 def get_user(request):
     token = request.COOKIES.get('jwt')
     
@@ -51,30 +50,94 @@ class CreatePostsView(APIView):
         print(request.FILES)
         
         post = self.createPost(user, request)
-        self.createMediaOfPost(post, request)     
+        if type(post) != Posts:
+            return post
+        
+        ret = self.createMediaOfPost(post, request.FILES.getlist('media'))
+        if ret != True:
+            return ret     
         
         return Response({'success': 'Post created!'})
 
     def createPost(self, user, request):
-        post = Posts.objects.create(
-            user_id=user,
-            content=request.data['content'],
-            status='public'
-        )
-        
-        post.save()
+        try:
+            post = Posts.objects.create(
+                user_id=user,
+                title=request.data['title'] or None,
+                content=request.data['content'] or None,
+                status='public'
+            )
+            
+            post.save()
+        except:
+            return Response({'error': 'Error while saving post'}, status=400)
         
         return post
     
-    def createMediaOfPost(self, post, request):
-        media = request.FILES.getlist('media')
-        if not media:
-            return None
-        for file in media:
-            media = MediaOfPosts.objects.create(
-                post_id=post,
-                media=file
+    def createMediaOfPost(self, post, media):
+        
+        # print('media:', media)
+        try:
+            listMediaOfPosts = []
+            for file in media:
+                if not file.content_type.startswith('image') and not file.content_type.startswith('video'):
+                    # print('not image or video')
+                    return Response({'error': 'File is not an image or video'}, status=400)
+                
+                mediaOfPosts = MediaOfPosts.objects.create(
+                    post_id=post,
+                    media=file
+                )
+                
+                listMediaOfPosts.append(mediaOfPosts)
+            
+            for obj in listMediaOfPosts:
+                # print('saving media')
+                obj.save()
+        except:
+            # print('cant save media')
+            return Response({'error': 'Error while saving media'}, status=400)
+        
+        return True
+    
+class CreatePostsAfterSetMediaProfileView():
+    def createAvatarPosts(self, user, avatar):
+        # print('avatar:', avatar)
+        try:
+            post = Posts.objects.create(
+                user_id=user,
+                title='Set avatar',
+                content="Hello world",
+                status='public'
             )
             
-            media.save()
-
+            ret = CreatePostsView().createMediaOfPost(post, [avatar])
+            if ret != True:
+                post.delete()
+                return ret
+            
+            post.save()
+        except:
+            # print('cant save post')
+            return Response({'error': 'Error while saving post'}, status=400)
+    
+    def createBackgroundPosts(self, user, background):
+        # print('background:', background)
+        try:
+            post = Posts.objects.create(
+                user_id=user,
+                title='Set background',
+                content=None,
+                status='public'
+            )
+                        
+            ret = CreatePostsView().createMediaOfPost(post, [background])
+            if ret != True:
+                post.delete()
+                return ret
+            
+            post.save()
+        except:
+            # print('cant save post')
+            return Response({'error': 'Error while saving post'}, status=400)
+        
