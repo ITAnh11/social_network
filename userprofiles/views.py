@@ -40,8 +40,24 @@ class ProfileView(APIView):
         
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
+        return render(request, 'userprofiles/profile.html')
+    
+class EditProfileView(APIView):
+    def get(self, request):
+        user = getUser(request)
 
-        return render(request, 'userprofiles/profile_demo.html')
+        if not isinstance(user, User):
+            return HttpResponseRedirect(reverse('user:login'))
+        return render(request, 'userprofiles/editProfile.html')
+    
+class ListFriendsView(APIView):
+    def get(self, request):
+        user = getUser(request)
+
+        if not isinstance(user, User):
+            return HttpResponseRedirect(reverse('users:login'))
+        return render(request, 'userprofiles/listFriends.html')
+
 class GetProfileView(APIView):
     def get(self, request):
         user = getUser(request)
