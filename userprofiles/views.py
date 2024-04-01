@@ -186,14 +186,17 @@ class GetPostsView(APIView):
         
         data = []
         
+        userDataForPosts = GetProfileView().getUserProfileForPosts(user)
+        
         posts = Posts.objects.filter(user_id=user).values('id', 'title', 'content', 'status', 'created_at').all().order_by('-created_at')    
+        
         for post in posts:
             posts_data = PostsSerializer(post).data
             media = MediaOfPosts.objects.filter(post_id=post.get('id')).all()
             media_data = MediaOfPostsSerializer(media, many=True).data
             
             posts_data['media'] = media_data
-            posts_data['user'] = GetProfileView().getUserProfileForPosts(user)
+            posts_data['user'] = userDataForPosts
 
             posts_data['created_at'] = self.getTimeDuration(post.get('created_at'))
         
