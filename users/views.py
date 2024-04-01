@@ -16,7 +16,8 @@ from userprofiles.forms import ImageProfileForm
 
 # Create your views here.
 class LoginView(APIView):
-    def get(self, request):     
+    def get(self, request):
+        LogoutView().post(request)
         return render(request, 'users/login.html')
     
     def post(self, request):
@@ -51,6 +52,7 @@ class LoginView(APIView):
   
 class RegisterView(APIView):
     def get(self, request):
+        LogoutView().post(request)
         imageProfileForm = ImageProfileForm()
         return render(request, 'users/register.html', {'imageProfileForm': imageProfileForm})
             
