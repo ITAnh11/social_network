@@ -66,9 +66,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-<<<<<<< HEAD
 
 # folder
-=======
->>>>>>> b1fe0668ed6cc27ae242694dcacfec6d10e6d287
 media/

@@ -18,7 +18,9 @@ from .forms import ImageProfileForm
 from posts.models import Posts, MediaOfPosts
 from posts.serializers import PostsSerializer, MediaOfPostsSerializer
 
-from datetime import datetime, timedelta
+from posts.views import CreatePostsAfterSetMediaProfileView
+
+from datetime import timedelta
 
 def getUser(request):
     token = request.COOKIES.get('jwt')
@@ -94,6 +96,8 @@ class SetUserProfileView(APIView):
                                                     birth_date=request.data.get('birth_date') or None,
                                                 )
 
+        userprofile.save()
+
         return Response({'message': 'User profile created successfully!'})
 class SetImageProfileView(APIView):
     # update user profile
@@ -109,6 +113,12 @@ class SetImageProfileView(APIView):
             imageprofile.avatar = request.FILES['avatar'] or None
             imageprofile.background = request.FILES['background'] or None
             imageprofile.save()
+            
+            if imageprofile.avatar:
+                CreatePostsAfterSetMediaProfileView().createAvatarPosts(user, imageprofile.avatar)
+            
+            if imageprofile.background:
+                CreatePostsAfterSetMediaProfileView().createBackgroundPosts(user, imageprofile.background)
 
         return HttpResponseRedirect(reverse('userprofiles:profile'))
     
@@ -116,7 +126,13 @@ class SetImageProfileView(APIView):
         imageProfileForm = ImageProfileForm(request.POST or None, request.FILES or None)
         if imageProfileForm.is_valid():
             imageProfileForm.save(user)
-        
+            
+            if imageProfileForm.cleaned_data.get('avatar'):
+                CreatePostsAfterSetMediaProfileView().createAvatarPosts(user, imageProfileForm.cleaned_data.get('avatar'))
+              
+            if imageProfileForm.cleaned_data.get('background'):
+                CreatePostsAfterSetMediaProfileView().createBackgroundPosts(user, imageProfileForm.cleaned_data.get('background'))
+                  
         return Response({'message': 'Image profile created successfully!'})
 class GetPostsView(APIView):
     
@@ -141,14 +157,13 @@ class GetPostsView(APIView):
         
         data = []
         
-        posts = Posts.objects.filter(user_id=user).values('id', 'content', 'status', 'created_at').all().order_by('-created_at')    
+        posts = Posts.objects.filter(user_id=user).values('id', 'title', 'content', 'status', 'created_at').all().order_by('-created_at')    
         for post in posts:
             posts_data = PostsSerializer(post).data
             media = MediaOfPosts.objects.filter(post_id=post.get('id')).all()
             media_data = MediaOfPostsSerializer(media, many=True).data
             
             posts_data['media'] = media_data
-            posts_data['user'] = UserSerializer(user).data
 
             posts_data['created_at'] = self.getTimeDuration(post.get('created_at'))
         
