@@ -60,8 +60,8 @@ class CreatePostsView(APIView):
         try:
             post = Posts.objects.create(
                 user_id=user,
-                title=request.data['title'] or None,
-                content=request.data['content'] or None,
+                tilte=request.data.get('title') or None,
+                content=request.data.get('content') or None,
                 status='public'
             )
             
