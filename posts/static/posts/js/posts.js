@@ -74,11 +74,17 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadInfoValue.textContent = currentNumberFiles.toString();
     });
 
+    var post_btn = document.querySelector(".post_btn");
+    post_btn.addEventListener("click",function(){
+        form_submit.click();
+    })
 
     form_submit.addEventListener('submit', function(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
         const images = document.querySelectorAll('.uploaded-img img');
+
+        formData.append('content', "ádjjka");
     
         var number = 0;
         var promises = [];

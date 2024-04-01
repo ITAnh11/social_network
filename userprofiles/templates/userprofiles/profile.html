@@ -236,57 +236,9 @@
             <!-- main-content- -->
 
             <div class="content-area profile-content-area">
-                <div class="write-post-container">
-                    <div class="user-profile">
-                        <img src="{%static 'userprofiles/media/avatar.png' %}" alt="">
-                        <div>
-                            <p> Minh Tuann</p>
-                            <small>Public <i class="fas fa-caret-down"></i></small>
-                        </div>
-                    </div>
-
-                    <div class="post-upload-textarea">
-                        <textarea name="" placeholder="Hom nay cua em the nao?" id="" cols="30" rows="3"></textarea>
-                        <div class="add-post-links">
-                            <a href="#"><img src="{%static 'userprofiles/media/live-video.png' %}" alt="">Live Video</a>
-                            <a href="#"><img src="{%static 'userprofiles/media/photo.png' %}" alt="">Photo/Video</a>
-                            <a href="#"><img src="{%static 'userprofiles/media/feeling.png' %}" alt="">Feeling Activity</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="status-field-container write-post-container">
-                    <div class="user-profile-box">
-                        <div class="user-profile">
-                            <img src="{%static 'userprofiles/media/khabanh2.jpg' %}" alt="">
-                            <div>
-                                <p> Nhat ky cua Banh</p>
-                                <small>March 01 2024, 09.18 pm</small>
-                            </div>
-                        </div>
-                        <div>
-                            <a href="#"><i class="fas fa-ellipsis-v"></i></a>
-                        </div>
-                    </div>
-                    <div class="status-field">
-                        <p>Mấy ông lắm tiền mà làm lãnh đạo có khi là yêu nước thương dân
-                        </p>
-                        <img src="{%static 'userprofiles/media/khabanh.jpg' %}" alt="">
-
-                    </div>
-                    <div class="post-reaction">
-                        <div class="activity-icons">
-                            <div><img src="{%static 'userprofiles/media/like-blue.png' %}" alt="">120</div>
-                            <div><img src="{%static 'userprofiles/media/comments.png' %}" alt="">52</div>
-                            <div><img src="{%static 'userprofiles/media/share.png' %}" alt="">35</div>
-                        </div>
-                        <div class="post-profile-picture">
-                            <img src="{%static 'userprofiles/media/khabanh2.jpg' %}" alt=""> <i class=" fas fa-caret-down"></i>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="btn-LoadMore" onclick="LoadMoreToggle()">Load More</button>
+                {% include "posts/posts.html" %}
             </div>
+            
         </div>
     </div>
     <footer id="footer">
