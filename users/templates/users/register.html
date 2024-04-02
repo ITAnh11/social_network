@@ -28,7 +28,6 @@
         <form id="form-register" action="{% url 'users:register' %}" method="post">
           {% csrf_token %}
           
-
           <div id="upload-textprofile-box">
             <div class="row clearfix">
               <div class="col_half">
@@ -50,11 +49,44 @@
             <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
               <input type="text" name="phone" placeholder="Phone"/>
             </div>
-  
-            <div class="input_field datepicker">
-              <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
-                  <input type="date" name="birth_date" id="birth_date" placeholder="Birthdate" required/>
+
+            <div class="birthday-choosen">
+              <div class="title-birthday">
+                <p>Birthday</p>
+              </div>
+              <div class="birthday-select">
+                <div class="choice">
+                  <label for="day">Date:</label>
+                  <select id="day" name="day"></select>
+                </div>               
+                <div class="choice">
+                  <label for="month">Month:</label>
+                  <select id="month" name="month"></select>
+                </div>  
+                <div class="choice">
+                  <label for="year">Year:</label>
+                  <select id="year" name="year"></select>
+                </div>
+              </div>
+            </div>
+
+            <div class="gender-choosen">
+              <div class="title-gender">
+                <p>Gender</p>
+              </div>
+              <div class="gender-select">
+                <div class="gender">
+                  <input type="radio" name="gender" id="rd1" value="Male">
+                  <label for="rd1">Male</label>
+                </div>
+                <div class="gender">
+                  <input type="radio" name="gender" id="rd2" value="Female">
+                  <label for="rd2">Female</label>
+                </div>
+                <div class="gender">
+                  <input type="radio" name="gender" id="rd3" value="Other">
+                  <label for="rd3">Other</label>
+                </div>
               </div>
             </div>
       
@@ -64,17 +96,16 @@
             <div class="input_field"> <span><i aria-hidden="true" class="fa fa-lock"></i></span>
               <input type="password" name="confirm_password" placeholder="Confirm Password" required />
             </div>
-        
-            <div class="input_field radio_option">
-              <input type="radio" name="gender" id="rd1" value="Male">
-              <label for="rd1">Male</label>
-              <input type="radio" name="gender" id="rd2" value="Female">
-              <label for="rd2">Female</label>
+
+            <div class="Rules">
+              <p>Users of our services may have uploaded 
+                your contact information to 
+                Facebook. <a href="https://www.facebook.com/help/637205020878504">Find out more.</a></p>
+              <p>By clicking Sign Up, you agree to our <a href="https://www.facebook.com/legal/terms/update">Terms, 
+                Privacy Policy</a> and <a href="https://www.facebook.com/privacy/policies/cookies/?entry_point=cookie_policy_redirect&entry=0">Cookie Policy</a>. You can receive our 
+                notifications via SMS and unsubscribe at any time.</p> 
             </div>
-            <div class="input_field checkbox_option">
-                <input type="checkbox" id="cb1" required>
-                <label for="cb1">I agree with terms and conditions</label>
-            </div>
+
             <input class="button" type="submit" value="Register" />
           </div>
 
