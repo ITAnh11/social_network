@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from rest_framework.views import APIView
-from rest_framework.response import Response, HttpResponseRedirect
+from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.exceptions import AuthenticationFailed
 
