@@ -16,19 +16,3 @@ class MediaPostsForm(forms.ModelForm):
         )
         
         return mediaPosts
-
-class PostsForm(forms.ModelForm):
-    class Meta:
-        model = Posts
-        fields = ['content', 'status']
-        
-    def save(self, user):
-        content = self.cleaned_data['content']
-        
-        post = Posts.objects.create(
-            user_id=user,
-            content=content,
-            status='public'
-        )
-        
-        return post
