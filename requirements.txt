@@ -9,4 +9,6 @@ djangorestframework
 django-cors-headers
 pyjwt
 pillow
-
+channels
+daphne
+docker
