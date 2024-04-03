@@ -91,8 +91,7 @@ class GetProfileView(APIView):
             "avatar": imageprofile.get('avatar')
         }
         
-        return data
-        
+        return data   
 class SetUserProfileView(APIView):
     # update user profile
     def post(self, request):

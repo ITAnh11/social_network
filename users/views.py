@@ -1,6 +1,6 @@
 from .serializers import UserSerializer
 from .models import User
-from userprofiles.views import SetUserProfileView
+from userprofiles.views import SetUserProfileView, SetImageProfileView
 
 import jwt, datetime
 from django.shortcuts import render
@@ -42,6 +42,8 @@ class LoginView(APIView):
         if not user.check_password(password):
             return Response({'warning': 'Incorrect password!'})
         
+        user.set_last_login()
+        
         token = self.makeToken(user)
         
         response = Response()
@@ -60,13 +62,16 @@ class RegisterView(APIView):
         return render(request, 'users/register.html')
             
     def post(self, request):
-        print(request.data)
+        # print(request.data)
         try:
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 user = serializer.save()
                 
                 SetUserProfileView().post(request, user)
+                SetImageProfileView().post(request, user)
+                
+                user.set_last_login()
                 
                 token = LoginView().makeToken(user)
                 
@@ -83,7 +88,8 @@ class RegisterView(APIView):
         except ValidationError as e:
             if e.detail.get('email'):
                 return Response({'warning': 'Email already exists.'})
-            return Response({'warning': 'Passwords must match.'})
+            if e.detail.get('password'):
+                return Response({'warning': 'Passwords must match.'})
         except Exception as e:
             return Response({'error': 'Something went wrong. Please try again.'})
 
