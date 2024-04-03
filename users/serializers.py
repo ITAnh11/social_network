@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}, 'confirm_password': {'write_only': True}}
     
     def check_password(self, raw_password):
-        pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+        pattern = r"^\S{8,}$"
         if not re.match(pattern, raw_password):
             return False
         
@@ -29,10 +29,10 @@ class UserSerializer(serializers.ModelSerializer):
             user = self.Meta.model(**validated_data)
             
             if password != confirm_password:
-                raise ValidationError(detail={'password': 'Passwords do not match!'})
+                raise ValidationError(detail={'comfirm_password': 'Passwords do not match!'})
         
-            # if not self.check_password(password):
-            #     raise serializers.ValidationError(detail={'password': 'Password does not meet the requirements!'})
+            if not self.check_password(password):
+                raise serializers.ValidationError(detail={'check_password': 'Password does not meet the requirements!'})
             
             user.set_password(password)
             user.confirm_password = user.password
