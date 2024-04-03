@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
+import datetime
 
 # Create your models here.
 class User(models.Model):

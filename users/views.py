@@ -27,8 +27,12 @@ class LoginView(APIView):
         return token
     
     def get(self, request):
-        LogoutView().post(request)
-        return render(request, 'users/login.html')
+        reponse = render(request, 'users/login.html')
+        print(request.COOKIES.get('jwt'))
+        
+        reponse.delete_cookie('jwt')
+        
+        return reponse
     
     def post(self, request):
         email = request.data.get('email')
@@ -49,7 +53,7 @@ class LoginView(APIView):
         response = Response()
         response.set_cookie(key='jwt', value=token, httponly=True)
         response.data = {
-            'success': 'login success',
+            'success': 'Login success!!!',
             'jwt': token,
             'redirect_url': '/userprofiles/' + f"?id={user.id}"
         }
@@ -58,8 +62,12 @@ class LoginView(APIView):
   
 class RegisterView(APIView):
     def get(self, request):
-        LogoutView().post(request)
-        return render(request, 'users/register.html')
+        
+        response = render(request, 'users/register.html')
+        print(request.COOKIES.get('jwt'))
+        response.delete_cookie('jwt')
+        
+        return response
             
     def post(self, request):
         # print(request.data)
@@ -71,14 +79,14 @@ class RegisterView(APIView):
                 SetUserProfileView().post(request, user)
                 SetImageProfileView().post(request, user)
                 
-                user.set_last_login()
+                # user.set_last_login()
                 
                 token = LoginView().makeToken(user)
                 
                 response = Response()
                 response.set_cookie(key='jwt', value=token, httponly=True)
                 response.data = {
-                    'success': 'login success',
+                    'success': 'Register success!!! Welcome to the feisubukku!',
                     'jwt': token,
                     'redirect_url': '/userprofiles/' + f"?id={user.id}"
                 }
@@ -87,9 +95,11 @@ class RegisterView(APIView):
             
         except ValidationError as e:
             if e.detail.get('email'):
-                return Response({'warning': 'Email already exists.'})
-            if e.detail.get('password'):
-                return Response({'warning': 'Passwords must match.'})
+                return Response({'warning': e.detail.get('email')})
+            if e.detail.get('comfirm_password'):
+                return Response({'warning': e.detail.get('comfirm_password')})
+            if e.detail.get('check_password'):
+                return Response({'warning': e.detail.get('check_password')})
         except Exception as e:
             return Response({'error': 'Something went wrong. Please try again.'})
 
