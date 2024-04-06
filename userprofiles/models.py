@@ -18,12 +18,14 @@ class UserProfile(models.Model):
     bio = models.TextField(blank=True)
     school = models.CharField(max_length=255, blank=True)
     work = models.CharField(max_length=255, blank=True)
+    _destroy = models.BooleanField(default=False)
 
 class ImageProfile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     avatar= models.ImageField(upload_to=media_directory_path, blank=True, default="users/default/avatar_default.png")
     background = models.ImageField(upload_to=media_directory_path, blank=True, default="users/default/background_default.jpg")
-
+    _destroy = models.BooleanField(default=False)
+    
 class LinkProfile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     link = models.CharField(max_length=255, null=False)

@@ -80,18 +80,7 @@ class GetProfileView(APIView):
         }
                 
         return Response(context)
-    
-    def getUserProfileForPosts(self, user):
-        userprofile = UserProfile.objects.filter(user_id=user).values('first_name', 'last_name').first()
-        imageprofile = ImageProfile.objects.filter(user_id=user).values('avatar').first()
-        
-        data = {
-            "id": user.id,
-            "name": f"{userprofile.get('first_name')} {userprofile.get('last_name')}",
-            "avatar": imageprofile.get('avatar')
-        }
-        
-        return data   
+       
 class SetUserProfileView(APIView):
     # update user profile
     def post(self, request):

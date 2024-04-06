@@ -93,18 +93,12 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
-    # 'mongodb': {
-    #     'ENGINE': 'djongo',
-    #     'NAME': 'social_network',
-    #     'CLIENT': {
-    #         'host': 'mongodb://localhost:27017/',
-    #         'username': 'admin',
-    #         'password': 'abc123',
-    #         'authSource': 'admin',
-    #         'authMechanism': 'SCRAM-SHA-1',
-    #     },
-    # },
+    'mongodb': {
+            'ENGINE': 'djongo',
+            'NAME': 'social_network',  
+        }
 }
+
 
 
 # Password validation

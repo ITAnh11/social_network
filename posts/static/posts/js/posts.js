@@ -15,7 +15,6 @@ escBtn.addEventListener("click",function(){
 })
 
 
-
 const uploadArea = document.querySelector('.upload-area');
 const uploadInput = document.querySelector('#upload-input');
 const uploadImg = document.querySelector('.upload-img');

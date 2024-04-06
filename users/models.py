@@ -11,6 +11,8 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     last_login = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
+    _destroy = models.BooleanField(default=False)
+    
     
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
