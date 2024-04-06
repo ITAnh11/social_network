@@ -5,7 +5,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['user_id', 'first_name', 'last_name', 'birth_date', 'gender', 'address', 'bio', 'school', 'work']
-    
+          
     def create(self, validated_data):
         userprofile = self.Meta.model(**validated_data)
         userprofile.save()

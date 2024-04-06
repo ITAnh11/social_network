@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
             return False
         
         return True
-        
+     
     def create(self, validated_data):
         password = validated_data.pop('password')
         confirm_password = validated_data.pop('confirm_password')

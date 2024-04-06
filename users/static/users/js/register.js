@@ -69,27 +69,15 @@ document.getElementById('form-register').addEventListener('submit', function(eve
     // collect form data
     const formData = new FormData(event.target);
 
+    const day = formData.get('day');
+    const month = formData.get('month');
+    const year = formData.get('year');
+    const birth_date = `${year}-${month}-${day}`;
+
+    formData.append('birth_date', birth_date);
+
     Promise.all([
-        // new Promise(resolve => {
-        //     if (cropper_avatar === undefined) {
-        //         resolve();
-        //         return;
-        //     }
-        //     cropper_avatar.getCroppedCanvas().toBlob((blob) => {
-        //         formData.append('avatar', blob, 'avatar.png');
-        //         resolve();
-        //     });
-        // }),
-        // new Promise(resolve => {
-        //     if (cropper_background === undefined) {
-        //         resolve();
-        //         return;
-        //     }
-        //     cropper_background.getCroppedCanvas().toBlob((blob) => {
-        //         formData.append('background', blob, 'background.png');
-        //         resolve();
-        //     });
-        // })
+        
     ]).then(() => {
         // make a POST request to the server
         fetch(event.target.action, {
