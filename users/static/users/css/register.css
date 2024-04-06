@@ -21,7 +21,6 @@ body {
 	margin: 8% auto 0;
 	position: relative;
 	z-index: 1;
-	border-top: 5px solid #1877f2;
 	-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
 	box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
@@ -109,11 +108,11 @@ body {
       -webkit-box-shadow: 0 0 2px 1px rgba(255, 169, 0, 0.5);
       -moz-box-shadow: 0 0 2px 1px rgba(255, 169, 0, 0.5);
       box-shadow: 0 0 2px 1px rgba(255, 169, 0, 0.5);
-      border: 1px solid #1877f2;
+      border: 1px solid;
       background: #fafafa;
     }
     &[type="submit"] {
-		background: #0d6efd;
+		background: green;
 		height: 35px;
 		line-height: 35px;
 		width: 100%;
@@ -389,6 +388,107 @@ body {
 	}
 	.remember_me {
 		padding-bottom: 20px;
-	}
+	}   
 }
 
+.birthday-choosen {
+  margin-bottom: 15px;
+}
+
+.title-birthday p {
+  color:grey;
+  margin-bottom: 0px;
+}
+
+.birthday-select,
+.gender-select {
+  display: flex;
+  align-items: center;
+}
+
+.birthday-select .choice {
+  margin-right: 30px;
+}
+
+.choice label {
+  margin-right: 5px;  
+  color: grey;
+}
+
+.choice select {
+  padding: 8px;
+  border-radius: 3px;
+  border: 1px solid grey;
+  font-size: 12px;
+  width: 90px;
+  color: grey;
+} 
+
+.gender-choosen {
+  margin-bottom: 15px;
+}
+
+.title-gender p {
+  color:grey;
+  margin-bottom: 0px;
+}
+
+.gender-select .gender {
+  padding: 8px;
+  border-radius: 3px;
+  border: 1px solid grey;
+  font-size: 12px;
+  width: 90px;
+  color: grey;
+}
+
+.gender {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 30px;
+}
+
+.gender input[type="radio"] {
+  display: none; /* Ẩn radio button mặc định */
+}
+
+.gender label {
+  position: relative;
+  padding-left: 20px; /* Khoảng cách giữa checkbox và label */
+}
+
+.gender label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+.gender input[type="radio"]:checked + label::before {
+  background-color: #007bff; /* Màu nền khi checked */
+}
+
+.gender label::after {
+  content: '\2713'; /* Ký tự checkmark Unicode */
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff; /* Màu chữ khi checked */
+  display: none; /* Ẩn ký tự checkmark mặc định */
+}
+
+.gender input[type="radio"]:checked + label::after {
+  display: block; /* Hiển thị ký tự checkmark khi checked */
+}
+
+.Rules p {
+  font-size: 12px;
+}
