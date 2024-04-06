@@ -11,6 +11,7 @@ class UserProfile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255, null=False)
     last_name = models.CharField(max_length=255, null=False)
+    phone = models.CharField(max_length=15, null=True)
     birth_date = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, null=False)
     address = models.CharField(max_length=255, blank=True)
@@ -22,4 +23,7 @@ class ImageProfile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     avatar= models.ImageField(upload_to=media_directory_path, blank=True, default="users/default/avatar_default.png")
     background = models.ImageField(upload_to=media_directory_path, blank=True, default="users/default/background_default.jpg")
-    
+
+class LinkProfile(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    link = models.CharField(max_length=255, null=False)

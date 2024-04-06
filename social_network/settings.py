@@ -93,7 +93,17 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
-    
+    # 'mongodb': {
+    #     'ENGINE': 'djongo',
+    #     'NAME': 'social_network',
+    #     'CLIENT': {
+    #         'host': 'mongodb://localhost:27017/',
+    #         'username': 'admin',
+    #         'password': 'abc123',
+    #         'authSource': 'admin',
+    #         'authMechanism': 'SCRAM-SHA-1',
+    #     },
+    # },
 }
 
 
@@ -140,7 +150,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.User'
+# AUTH_USER_MODEL = 'users.User'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
