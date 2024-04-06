@@ -2,6 +2,13 @@ var post = document.querySelector(".write-post-container");
 var posting = document.querySelector(".overlay");
 var img_upload = document.querySelector('.img_upload');
 var post_content = posting.querySelector('textArea');
+const uploadArea = document.querySelector('.upload-area');
+const uploadInput = document.querySelector('#upload-input');
+const uploadImg = document.querySelector('.upload-img');
+const uploadInfoValue = document.querySelector('.upload-info-value');
+const form_submit = document.getElementById('form-submit');
+const content_area = document.querySelector(".content-area");
+const posted_area = document.querySelector(".posted_area");
 
 post.addEventListener("click",function() {
     posting.style.display = 'flex';
@@ -14,6 +21,7 @@ escBtn.addEventListener("click",function(){
     post_content.value = '';
 })
 
+<<<<<<< HEAD
 
 const uploadArea = document.querySelector('.upload-area');
 const uploadInput = document.querySelector('#upload-input');
@@ -21,6 +29,8 @@ const uploadImg = document.querySelector('.upload-img');
 const uploadInfoValue = document.querySelector('.upload-info-value');
 const form_submit = document.getElementById('form-submit');
 
+=======
+>>>>>>> 87210dde88e7142024b1533953cf301e9e03b361
 var currentNumberFiles = 0;
 
 function removeImg(event) {
@@ -119,24 +129,54 @@ form_submit.addEventListener('submit', function(event) {
 });
 
 //lấy bài đăng
-const url_user_profile = 'http://127.0.0.1:8000/userprofiles/get_posts/';
+const url_user_profile = '/userprofiles/get_posts/';
 function get_posts(){
-    fetch(url_user_profile,{
-        method:'GET',
-        headers:{
-            'Content-Type': 'application/json'
-        }
-    })
+    fetch(url_user_profile)
     .then(response => response.json())
     .then(data => {
-        data.forEach(function(post){
-            console.log(post);
+        console.log(data);
+        data.posts.forEach(function(post){
+            var newDiv = 
+            `<div class="status-field-container write-post-container">
+            <div class="user-profile-box">
+                <div class="user-profile">
+                    <img src="${post.user.avatar}" alt="">
+                    <div>
+                        <p>${post.user.name}</p>
+                        <small>${post.created_at}</small>
+                    </div>
+                </div>
+                <div>
+                    <a href="#"><i class="fas fa-ellipsis-v"></i></a>
+                </div>
+            </div>
+            <div class="status-field">
+                <p>${post.content}</p>
+                <img src="${post.media[0].media}" alt="">
+
+            </div>
+            <div class="post-reaction">
+                <div class="activity-icons">
+                    <div><img src="{%static 'posts/images/like-blue.png'%}" alt="">120</div>
+                    <div><img src="{%static 'posts/images/comments.png'%}" alt="">52</div>
+                    <div><img src="{%static 'posts/images/share.png'%}" alt="">35</div>
+                </div>
+                <div class="post-profile-picture">
+                    <img src="${post.user.avatar}" alt=""> <i class=" fas fa-caret-down"></i>
+                </div>
+            </div>
+        </div>`
+
+        var posted = document.createElement("div");
+        posted.innerHTML = newDiv;
+
+        posted_area.appendChild(posted);
         })
     })
+    
 }
 
 get_posts();
-
     
 
 
