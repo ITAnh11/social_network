@@ -7,29 +7,16 @@ from rest_framework.response import Response
 
 import jwt, datetime
 
+from common_functions.common_function import getUser
 from users.models import User
 from .models import FriendRequest, Friendship
 from .serializers import FriendRequestSerializer
 # Create your views here.
-def get_user(request):
-    token = request.COOKIES.get('jwt')
-    
-    if not token:
-        return None
-    
-    try:
-        payload = jwt.decode(token, 'secret', algorithms=['HS256'])
-        user_id = payload['id']
-    except jwt.ExpiredSignatureError:
-        return None
-    
-    user = User.objects.get(id=user_id)
-    
-    return user
+
 
 class FriendsView(APIView):
     def get(self,request):
-        user = get_user(request)
+        user = getUser(request)
         
         if not user:
             return HttpResponseRedirect(reverse('users:login'))
@@ -38,7 +25,7 @@ class FriendsView(APIView):
 
 class  AddFriendView(APIView):
     def post(self, request, friend_id):
-        user = get_user(request)
+        user = getUser(request)
         
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
@@ -59,7 +46,7 @@ class  AddFriendView(APIView):
         
 class  FriendRequestsListView(APIView):
     def get(self, request):
-        user = get_user(request)
+        user = getUser(request)
         
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
@@ -68,3 +55,25 @@ class  FriendRequestsListView(APIView):
         serializer = FriendRequestSerializer(friend_requests_received, many=True)
         
         return Response(serializer.data)
+    
+class GetFriendView(APIView):
+    def get(self, request):
+        user = getUser(request)
+        
+        if not isinstance(user, User):
+            return HttpResponseRedirect(reverse('users:login'))
+        
+        friend_requests_sent = FriendRequest.objects.filter(from_id=user)
+        friend_requests_received = FriendRequest.objects.filter(to_id=user)
+        
+        friend_requests_sent_serializer = FriendRequestSerializer(friend_requests_sent, many=True)
+        friend_requests_received_serializer = FriendRequestSerializer(friend_requests_received, many=True)
+        
+        context = {
+            'friend_requests_sent': friend_requests_sent_serializer.data,
+            'friend_requests_received': friend_requests_received_serializer.data
+        }
+                
+        return Response(context)
+        
+        
