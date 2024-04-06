@@ -21,16 +21,6 @@ escBtn.addEventListener("click",function(){
     post_content.value = '';
 })
 
-<<<<<<< HEAD
-
-const uploadArea = document.querySelector('.upload-area');
-const uploadInput = document.querySelector('#upload-input');
-const uploadImg = document.querySelector('.upload-img');
-const uploadInfoValue = document.querySelector('.upload-info-value');
-const form_submit = document.getElementById('form-submit');
-
-=======
->>>>>>> 87210dde88e7142024b1533953cf301e9e03b361
 var currentNumberFiles = 0;
 
 function removeImg(event) {
