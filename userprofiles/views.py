@@ -20,20 +20,7 @@ from posts.serializers import PostsSerializer, MediaOfPostsSerializer
 
 from posts.views import CreatePostsAfterSetMediaProfileView
 
-from datetime import timedelta
-
-def getUser(request):
-    token = request.COOKIES.get('jwt')
-
-    if not token:
-        return None
-
-    try:
-        payload = jwt.decode(jwt=token, key='secret', algorithms=['HS256'])  
-    except jwt.ExpiredSignatureError:
-        return None
-    
-    return User.objects.filter(id=payload['id']).first()
+from common_functions.common_function import getUser, getTimeDuration, getUserProfileForPosts
 
 class ProfileView(APIView):
     def get(self, request):
@@ -153,18 +140,6 @@ class SetImageProfileView(APIView):
                   
         return Response({'message': 'Image profile created successfully!'})
 class GetPostsView(APIView):
-    
-    def getTimeDuration(self, created_at):
-        time_duration = timezone.now() - created_at
-        if time_duration < timedelta(minutes=1):
-            return f'{time_duration.seconds} seconds ago'
-        elif time_duration < timedelta(hours=1):
-            return f'{time_duration.seconds//60} minutes ago'
-        elif time_duration < timedelta(days=1):
-            return f'{time_duration.seconds//3600} hours ago'
-        else:
-            return f'{time_duration.days} days ago'
-    
     def get(self, request):
         user = getUser(request)
         
@@ -175,7 +150,7 @@ class GetPostsView(APIView):
         
         data = []
         
-        userDataForPosts = GetProfileView().getUserProfileForPosts(user)
+        userDataForPosts = getUserProfileForPosts(user)
         
         posts = Posts.objects.filter(user_id=user).values('id', 'title', 'content', 'status', 'created_at').all().order_by('-created_at')    
         
@@ -187,7 +162,7 @@ class GetPostsView(APIView):
             posts_data['media'] = media_data
             posts_data['user'] = userDataForPosts
 
-            posts_data['created_at'] = self.getTimeDuration(post.get('created_at'))
+            posts_data['created_at'] = getTimeDuration(post.get('created_at'))
         
             data.append(posts_data)
             

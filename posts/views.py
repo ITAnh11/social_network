@@ -14,21 +14,9 @@ from .models import Posts, MediaOfPosts
 
 from .serializers import PostsSerializer, MediaOfPostsSerializer
 
-from common_functions.common_function import getUserProfileForPosts, getTimeDuration
+from common_functions.common_function import getUserProfileForPosts, getTimeDuration, getUser
 
 # Create your views here.
-def getUser(request):
-    token = request.COOKIES.get('jwt')
-
-    if not token:
-        return None
-
-    try:
-        payload = jwt.decode(jwt=token, key='secret', algorithms=['HS256'])  
-    except jwt.ExpiredSignatureError:
-        return None
-    
-    return User.objects.filter(id=payload['id']).first()
 
 class PostsPageView(APIView):
     def get(self, request):
