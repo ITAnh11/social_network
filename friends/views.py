@@ -55,6 +55,19 @@ class  FriendRequestsListView(APIView):
         serializer = FriendRequestSerializer(friend_requests_received, many=True)
         
         return Response(serializer.data)
+
+class SentFriendRequestsView(APIView):
+    def get(self, request):
+        user = getUser(request)
+        
+        if not user:
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        friend_requests_sent = FriendRequest.objects.filter(from_id=user)
+        serializer = FriendRequestSerializer(friend_requests_sent, many=True)
+        
+        return Response(serializer.data)
+    
     
 class GetFriendView(APIView):
     def get(self, request):
@@ -75,5 +88,6 @@ class GetFriendView(APIView):
         }
                 
         return Response(context)
-        
+
+
         
