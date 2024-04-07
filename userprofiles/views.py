@@ -22,6 +22,8 @@ from posts.views import CreatePostsAfterSetMediaProfileView
 
 from common_functions.common_function import getUser, getTimeDuration, getUserProfileForPosts
 
+from django.contrib.auth import login,logout,authenticate
+
 class ProfileView(APIView):
     def get(self, request):
         user = getUser(request)
