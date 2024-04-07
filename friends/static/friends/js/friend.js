@@ -23,5 +23,36 @@ button1.forEach(function(button){
     });
 })
 
+//xử lí lời mời kết bạn
+var request_list = document.querySelector(".request-list");
+url_addfriend = "/friends/get_receivedfriendrequest/";
+function addfriend() {
+    fetch(url_addfriend)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        data.data.forEach(function(request){
+            var a = `<div class="card1">
+            <div class="card1-img">
+                <img style="object-fit: cover;width: 100%;height: 100%;" src="${request.friend_request_profile.avatar}" alt="Card Image" >
+            </div>
+            <div class="card1-content">
+                <h3>${request.friend_request_profile.name}</h3>
+            </div>
+            <div class="card1-button">
+                <button class="button1">Xác nhận</button>
+                <button class="button2">Xóa</button>
+            </div>
+        </div>`;
+        var newDiv = document.createElement("div");
+        newDiv.innerHTML = a;
+
+        request_list.appendChild(newDiv);
+        })
+    })
+}
+
+addfriend();
+
 
 
