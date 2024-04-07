@@ -3,15 +3,15 @@ from datetime import timedelta
 
 
 from userprofiles.models import UserProfile, ImageProfile
-from userprofiles.serializers import UserProfileSerializer, ImageProfileSerializer
+from userprofiles.serializers import ImageProfileSerializer
 from users.models import User
 
 import jwt
 
 def getUserProfileForPosts(user):
         userprofile = UserProfile.objects.filter(user_id=user).values('first_name', 'last_name').first()
-        imageprofile = ImageProfileSerializer(ImageProfile.objects.filter(user_id=user).values('avatar').first())
-        
+        imageprofile = ImageProfileSerializer(ImageProfile.objects.filter(user_id=user).first())
+                
         data = {
             "id": user.id,
             "name": f"{userprofile.get('first_name')} {userprofile.get('last_name')}",
