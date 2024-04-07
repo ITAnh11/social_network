@@ -61,7 +61,7 @@ ul.navlogo li img {
     margin: 0px 13px;
 }
 
-.profile-image img {
+.profileImage img {
     height: 40px;
     width: 40px;
     border-radius: 100%;
@@ -668,7 +668,7 @@ div#dark-button.dark-mode-on {
     border-radius: 50%;
 }
 
-.left-dashboard-info h3 {
+.user-name h3 {
     font-size: 25px;
 }
 

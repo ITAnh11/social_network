@@ -109,18 +109,12 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
-    # 'mongodb': {
-    #     'ENGINE': 'djongo',
-    #     'NAME': 'social_network',
-    #     'CLIENT': {
-    #         'host': 'mongodb://localhost:27017/',
-    #         'username': 'admin',
-    #         'password': 'abc123',
-    #         'authSource': 'admin',
-    #         'authMechanism': 'SCRAM-SHA-1',
-    #     },
-    # },
+    'mongodb': {
+            'ENGINE': 'djongo',
+            'NAME': 'social_network',  
+        }
 }
+
 
 
 # Password validation
@@ -158,8 +152,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'core\\static'),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'users\\static'),
+                    os.path.join(BASE_DIR, 'userprofiles\\static'),
+                    os.path.join(BASE_DIR, 'posts\\static'),
+                    os.path.join(BASE_DIR, 'friends\\static'),
+                    os.path.join(BASE_DIR, 'homepage\\static'),
+                    os.path.join(BASE_DIR, 'comments\\static'),
+                    os.path.join(BASE_DIR, 'reactions\\static'),
+                    )
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -169,7 +170,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # AUTH_USER_MODEL = 'users.User'
 
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

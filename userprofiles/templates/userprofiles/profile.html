@@ -14,7 +14,7 @@
 <body>
     <nav class="navbar">
         <div class="nav-left">
-            <a href="/templates/homepage/homepage_demo.html">
+            <a href="/templates/homepage/index.html">
                 <img class="logo" src="{%static 'userprofiles/media/logo3.png' %}" alt="">
             </a>
             <div class="search-box">
@@ -24,20 +24,26 @@
         </div>
         <div class="nav-right">
             <ul class="navlogo">
-                <li><a href="/templates/homepage/homepage_demo.html"> <img src="{%static 'userprofiles/media/home.png' %}" alt=""> </a></li>
+                <li><a href="/templates/homepage/index.html"> <img src="{%static 'userprofiles/media/home.png' %}" alt=""> </a></li>
                 <li><a href="#"><img src="{%static 'userprofiles/media/notif.png' %}"></a></li>
                 <li><a href="#"><img src="{%static 'userprofiles/media/mess2.png' %}"></a></li>
             </ul>                        
-            <div class="profile-image online" onclick="UserSettingToggle()">
-                <img src="{%static 'userprofiles/media/avatar.png' %}" alt="avt-icon">
+            <div class="profile-image online" id="profile-image-icon" onclick="UserSettingToggle()">
+                <div class="profileImage">
+
+                </div>
             </div>
         </div>
         <div class="user-settings">
             <div class="profile-darkButton">
+
                 <div class="user-profile">
-                    <img src="{%static 'userprofiles/media/avatar.png' %}" alt="avt-icon">
-                    <div>
-                        <p> dep trai lanh lung Tuan </p>
+                    <div class="profileImage">
+                        {% comment %} <img src="{%static 'userprofiles/media/avatar.png' %}" alt="avt-icon"> {% endcomment %}
+                    </div>
+                    
+                    <div id="userName1" class="user-name">
+            
                     </div>
                 </div>
                 <div id="dark-button" onclick="darkModeON()">
@@ -80,8 +86,8 @@
 
 
     <div class="profile-container">
-        <div class="cover">
-            <img src="{%static 'userprofiles/media/cover.jpg' %}" class="coverImage" alt="">
+        <div class="cover" id="coverImage">
+            {% comment %} <img src="{%static 'userprofiles/media/cover.jpg' %}" class="coverImage" alt=""> {% endcomment %}
             <div class="edit-coverImage">
                 <img src="{%static 'userprofiles/media/camera.png' %}" alt="">
                 <a href="#" style="color: black;">Change your coverImage </a>
@@ -90,7 +96,7 @@
         <div class="dashboard">
             <div class="left-dashboard">
                 <div class="avatar-container" id="avatarContainer">
-                    <img src="{%static 'userprofiles/media/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage">
+                    {% comment %} <img src="{%static 'userprofiles/media/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage"> {% endcomment %}
                 </div>
                 
                 <!-- Popup hoặc menu chứa các lựa chọn -->
@@ -99,7 +105,15 @@
                     <button onclick="chooseAvatar()">Choose Avatar</button>
                 </div>                                
                 <div class="left-dashboard-info">
-                    <h3>Minh Tuann</h3>
+                    <div id="userName2" class="user-name">
+
+                    </div>
+                    {% comment %} <h3 id="userName"></h3> {% endcomment %}
+                    {% comment %} {% if request.user.is_authenticated %}
+                        <h3>{{ request.user }}</h3>
+                    {% else %}
+                        <p>Đăng nhập để hiển thị thông tin người dùng {{ userprofile.first_name }}</p>
+                    {% endif %} {% endcomment %}
                     <p>446 Friends</p>
                     <div class="mutual-friend-images">
                         <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
@@ -247,7 +261,7 @@
     
     <script src="{%static 'userprofiles/js/function.js' %}" ></script>
     <script src="{%static 'userprofiles/js/editAvt.js' %}" ></script>
-    <script src="{%static 'userprofiles/js/profile_t.js' %}" ></script>
+    <script src="{%static 'userprofiles/js/profile.js' %}" ></script>
 </body>
 
 </html>
