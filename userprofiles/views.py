@@ -163,7 +163,6 @@ class GetPostsView(APIView):
                 posts_data['media'] = media_data
             else:
                 posts_data['media'] = None
-            
             posts_data['user'] = userDataForPosts
 
             posts_data['created_at'] = getTimeDuration(post.get('created_at'))

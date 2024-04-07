@@ -4,8 +4,8 @@ from users.models import User
 # Create your models here.
 class Posts(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100, null=True)
-    content = models.TextField(null=True)
+    title = models.CharField(max_length=100, null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=10, default='public')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -23,7 +23,7 @@ def post_directory_path(instance, filename):
 
 class MediaOfPosts(models.Model):
     post_id = models.ForeignKey(Posts, on_delete=models.CASCADE)
-    media = models.FileField(upload_to=post_directory_path)
+    media = models.FileField(upload_to=post_directory_path, null=True, blank=True)
     
     class Meta:
         indexes = [
