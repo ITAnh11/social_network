@@ -78,6 +78,7 @@ const clickFormSubmit = () => {
     return new Promise((resolve, reject) => {
         Promise.all(promises)
             .then(() => {
+                console.log("Form submit clicked");
                 form_submit.click();
                 resolve();
             })
@@ -88,6 +89,7 @@ const clickFormSubmit = () => {
 };
 const clickEscBtn = () => {
     return new Promise((resolve, reject) => {
+        console.log("Esc button clicked");
         escBtn.click();
         resolve();
     });
