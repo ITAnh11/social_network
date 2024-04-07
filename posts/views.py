@@ -44,6 +44,9 @@ class CreatePostsView(APIView):
             post.delete()
             return listMedia    
         
+        if len(listMedia) == 0 and not post.content:
+            return Response({'error': 'No posts uploaded'}, status=400)
+        
         data = []
         
                
