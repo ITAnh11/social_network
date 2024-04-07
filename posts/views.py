@@ -6,8 +6,6 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-import jwt, datetime
-
 from users.models import User
 
 from .models import Posts, MediaOfPosts
@@ -45,6 +43,9 @@ class CreatePostsView(APIView):
         if type(listMedia) != list:
             post.delete()
             return listMedia    
+        
+        if len(listMedia) == 0 and not post.content:
+            return Response({'error': 'No posts uploaded'}, status=400)
         
         data = []
         
