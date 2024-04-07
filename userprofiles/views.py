@@ -20,20 +20,7 @@ from posts.serializers import PostsSerializer, MediaOfPostsSerializer
 
 from posts.views import CreatePostsAfterSetMediaProfileView
 
-from datetime import timedelta
-
-def getUser(request):
-    token = request.COOKIES.get('jwt')
-
-    if not token:
-        return None
-
-    try:
-        payload = jwt.decode(jwt=token, key='secret', algorithms=['HS256'])  
-    except jwt.ExpiredSignatureError:
-        return None
-    
-    return User.objects.filter(id=payload['id']).first()
+from common_functions.common_function import getUser, getTimeDuration, getUserProfileForPosts
 
 class ProfileView(APIView):
     def get(self, request):
@@ -80,18 +67,7 @@ class GetProfileView(APIView):
         }
                 
         return Response(context)
-    
-    def getUserProfileForPosts(self, user):
-        userprofile = UserProfile.objects.filter(user_id=user).values('first_name', 'last_name').first()
-        imageprofile = ImageProfile.objects.filter(user_id=user).values('avatar').first()
-        
-        data = {
-            "id": user.id,
-            "name": f"{userprofile.get('first_name')} {userprofile.get('last_name')}",
-            "avatar": imageprofile.get('avatar')
-        }
-        
-        return data   
+       
 class SetUserProfileView(APIView):
     # update user profile
     def post(self, request):
@@ -164,18 +140,6 @@ class SetImageProfileView(APIView):
                   
         return Response({'message': 'Image profile created successfully!'})
 class GetPostsView(APIView):
-    
-    def getTimeDuration(self, created_at):
-        time_duration = timezone.now() - created_at
-        if time_duration < timedelta(minutes=1):
-            return f'{time_duration.seconds} seconds ago'
-        elif time_duration < timedelta(hours=1):
-            return f'{time_duration.seconds//60} minutes ago'
-        elif time_duration < timedelta(days=1):
-            return f'{time_duration.seconds//3600} hours ago'
-        else:
-            return f'{time_duration.days} days ago'
-    
     def get(self, request):
         user = getUser(request)
         
@@ -186,19 +150,22 @@ class GetPostsView(APIView):
         
         data = []
         
-        userDataForPosts = GetProfileView().getUserProfileForPosts(user)
+        userDataForPosts = getUserProfileForPosts(user)
         
         posts = Posts.objects.filter(user_id=user).values('id', 'title', 'content', 'status', 'created_at').all().order_by('-created_at')    
         
         for post in posts:
             posts_data = PostsSerializer(post).data
             media = MediaOfPosts.objects.filter(post_id=post.get('id')).all()
-            media_data = MediaOfPostsSerializer(media, many=True).data
-            
-            posts_data['media'] = media_data
+            if media:
+                media_data = MediaOfPostsSerializer(media, many=True).data
+                
+                posts_data['media'] = media_data
+            else:
+                posts_data['media'] = None
             posts_data['user'] = userDataForPosts
 
-            posts_data['created_at'] = self.getTimeDuration(post.get('created_at'))
+            posts_data['created_at'] = getTimeDuration(post.get('created_at'))
         
             data.append(posts_data)
             

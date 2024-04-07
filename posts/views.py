@@ -1,11 +1,10 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.utils import timezone
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
-import jwt, datetime
 
 from users.models import User
 
@@ -13,19 +12,9 @@ from .models import Posts, MediaOfPosts
 
 from .serializers import PostsSerializer, MediaOfPostsSerializer
 
+from common_functions.common_function import getUserProfileForPosts, getTimeDuration, getUser
+
 # Create your views here.
-def getUser(request):
-    token = request.COOKIES.get('jwt')
-
-    if not token:
-        return None
-
-    try:
-        payload = jwt.decode(jwt=token, key='secret', algorithms=['HS256'])  
-    except jwt.ExpiredSignatureError:
-        return None
-    
-    return User.objects.filter(id=payload['id']).first()
 
 class PostsPageView(APIView):
     def get(self, request):
@@ -35,26 +24,43 @@ class PostsPageView(APIView):
             return HttpResponseRedirect(reverse('users:login'))
         
         return render(request, 'posts/posts.html')
-
 class CreatePostsView(APIView):
+    
     def post(self, request):
         user = getUser(request)
         
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        print(request.data)
-        print(request.FILES)
+        # print(request.data)
+        # print(request.FILES)
         
         post = self.createPost(user, request)
         if type(post) != Posts:
             return post
         
-        ret = self.createMediaOfPost(post, request.FILES.getlist('media'))
-        if ret != True:
-            return ret     
+        listMedia = self.createMediaOfPost(post, request.FILES.getlist('media'))
+        if type(listMedia) != list:
+            post.delete()
+            return listMedia    
         
-        return Response({'success': 'Post created!'})
+        if len(listMedia) == 0 and not post.content:
+            return Response({'error': 'No posts uploaded'}, status=400)
+        
+        data = []
+        
+               
+        posts_data = PostsSerializer(post).data
+        
+        posts_data['media'] = MediaOfPostsSerializer(listMedia, many=True).data
+        posts_data['user'] = getUserProfileForPosts(user)
+
+        posts_data['created_at'] = getTimeDuration(post.created_at)
+        
+        data.append(posts_data)
+        
+        return Response({'success': 'Post created!',
+                         'posts': data})
 
     def createPost(self, user, request):
         try:
@@ -67,7 +73,7 @@ class CreatePostsView(APIView):
             
             post.save()
         except:
-            print(1)
+            # print(1)
             return Response({'error': 'Error while saving post'}, status=400)
         
         return post
@@ -96,7 +102,7 @@ class CreatePostsView(APIView):
             # print('cant save media')
             return Response({'error': 'Error while saving media'}, status=400)
         
-        return True
+        return listMediaOfPosts
 class CreatePostsAfterSetMediaProfileView():
     def createAvatarPosts(self, user, avatar):
         # print('avatar:', avatar)

@@ -492,3 +492,20 @@ body {
 .Rules p {
   font-size: 12px;
 }
+
+.request-password {
+  margin-top: 0%;
+}
+
+.required-star {
+  color: red;
+}
+
+.request-password p {
+  font-size: 12px;
+  color: red;
+}
+
+.login_button p {
+  font-size: 30px;
+}

@@ -32,38 +32,42 @@
                     </div>
                 </div>
             </div>
-            <div class="status-field-container write-post-container">
-                <div class="user-profile-box">
-                    <div class="user-profile">
-                        <img src="images/profile-pic.png" alt="">
+
+            <div class="posted_area">
+
+                <!-- <div class="status-field-container write-post-container">
+                    <div class="user-profile-box">
+                        <div class="user-profile">
+                            <img src="images/profile-pic.png" alt="">
+                            <div>
+                                <p> Alex Carry</p>
+                                <small>August 13 1999, 09.18 pm</small>
+                            </div>
+                        </div>
                         <div>
-                            <p> Alex Carry</p>
-                            <small>August 13 1999, 09.18 pm</small>
+                            <a href="#"><i class="fas fa-ellipsis-v"></i></a>
                         </div>
                     </div>
-                    <div>
-                        <a href="#"><i class="fas fa-ellipsis-v"></i></a>
+                    <div class="status-field">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis dolores praesentium dicta
+                            laborum nihil accusantium odit laboriosam, sed sit autem! <a
+                                href="#">#This_Post_is_Bigger!!!!</a> </p>
+                        <img src="images/feed-image-2.png" alt="">
+    
                     </div>
-                </div>
-                <div class="status-field">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis dolores praesentium dicta
-                        laborum nihil accusantium odit laboriosam, sed sit autem! <a
-                            href="#">#This_Post_is_Better!!!!</a> </p>
-                    <img src="images/feed-image-1.png" alt="">
-
-                </div>
-                <div class="post-reaction">
-                    <div class="activity-icons">
-                        <div><img src="images/like-blue.png" alt="">120</div>
-                        <div><img src="images/comments.png" alt="">52</div>
-                        <div><img src="images/share.png" alt="">35</div>
+                    <div class="post-reaction">
+                        <div class="activity-icons">
+                            <div><img src="images/like-blue.png" alt="">120</div>
+                            <div><img src="images/comments.png" alt="">52</div>
+                            <div><img src="images/share.png" alt="">35</div>
+                        </div>
+                        <div class="post-profile-picture">
+                            <img src="images/profile-pic.png " alt=""> <i class=" fas fa-caret-down"></i>
+                        </div>
                     </div>
-                    <div class="post-profile-picture">
-                        <img src="images/profile-pic.png " alt=""> <i class=" fas fa-caret-down"></i>
-                    </div>
-                </div>
+                </div> -->
+                
             </div>
-
             <button type="button" class="btn-LoadMore" onclick="LoadMoreToggle()">Load More</button>
         </div>
         
@@ -109,6 +113,7 @@
                 </div>
                 <div style="flex: 0.5;justify-content: center;align-items: center;display: flex;">
                     <form id="form-submit" action="{% url 'posts:create_posts' %}" method="post" style="">
+                        {% csrf_token %}
                         <button class="post_btn">Upload</button>
                     </form>
                 </div>

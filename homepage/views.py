@@ -1,31 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+
 from rest_framework.views import APIView
+from rest_framework.response import Response
 
 import jwt
 
-from users.models import User
 from users.views import LogoutView
 
-# Create your views here.
+from posts.models import Posts, MediaOfPosts
+from posts.serializers import PostsSerializer, MediaOfPostsSerializer
 
-def getUser(request):
-    token = request.COOKIES.get('jwt')
-    
-    if not token:
-        return None
-    
-    try:
-        payload = jwt.decode(token, 'secret', algorithms=['HS256'])
-        user_id = payload['id']
-    except jwt.ExpiredSignatureError:
-        return None
-    
-    user = User.objects.get(id=user_id)
-    
-    return user
-    
+from common_functions.common_function import getUserProfileForPosts, getTimeDuration
+
+# Create your views here.
 class HomePageView(APIView):
     def get(self, request):
         token = request.COOKIES.get('jwt')  
@@ -42,10 +31,33 @@ class HomePageView(APIView):
             
         return render(request, 'homepage/index.html')
 
-class getPostsView(APIView):
+class GetPostsView(APIView):
     def get(self, request):
-        token = request.COOKIES.get('jwt')
-        if not token:
-            return HttpResponseRedirect('/users/login/')
+        
+        reponse = Response()
+        
+        data = []
+        
+                
+        posts = Posts.objects.values('id', 'title', 'content', 'status', 'created_at').order_by('-created_at')[:50]  
+        
+        for post in posts:
             
-        return render(request, 'homepage/getPosts.html')
+            posts_data = PostsSerializer(post).data
+            
+            userDataForPosts = getUserProfileForPosts(post.get('user_id'))
+            
+            media = MediaOfPosts.objects.filter(post_id=post.get('id'))
+            media_data = MediaOfPostsSerializer(media, many=True).data
+            
+            posts_data['media'] = media_data
+            posts_data['user'] = userDataForPosts
+            posts_data['created_at'] = getTimeDuration(post.get('created_at'))
+        
+            data.append(posts_data)
+            
+        reponse.data = {
+            'posts': data
+        }
+
+        return reponse
