@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'homepage',
     'users',
     'posts',
+    'chat',
     'comments',
     'reactions',
     'friends',
