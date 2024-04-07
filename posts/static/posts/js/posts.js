@@ -72,62 +72,38 @@ uploadInput.addEventListener('change', function(event) {
     uploadInfoValue.textContent = currentNumberFiles.toString();
 });
 
-var post_btn = document.querySelector(".post_btn");
-post_btn.addEventListener("click",function(){
-    form_submit.click();
-})
 
-form_submit.addEventListener('submit', function(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const images = document.querySelectorAll('.uploaded-img img');
-
-    var content = post_content.value;
-    formData.append(`content`,content);
-
-    var number = 0;
-    var promises = [];
-    images.forEach(function(image) {
-        // console.log(image.src)
-        var promise = fetch(image.src)
-        .then(response => response.blob())
-        .then(blob => {
-            console.log(blob);
-            number += 1;
-            formData.append(`media`, blob, `images_${number}.png`);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-        promises.push(promise);
+// xử lí nút đăng bài
+const clickFormSubmit = () => {
+    return new Promise((resolve, reject) => {
+        Promise.all(promises)
+            .then(() => {
+                form_submit.click();
+                resolve();
+            })
+            .catch(error => {
+                reject(error);
+            });
     });
-    
-    Promise.all(promises)
-        .then(() => {
-        fetch(event.target.action, {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            console.log(data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-        });
+};
+const clickEscBtn = () => {
+    return new Promise((resolve, reject) => {
+        escBtn.click();
+        resolve();
+    });
+};
+var post_btn = document.querySelector(".post_btn");
+post_btn.addEventListener("click", function() {
+    clickFormSubmit()
+        .then(() => clickEscBtn())
 });
 
-//lấy bài đăng
-const url_user_profile = '/userprofiles/get_posts/';
-function get_posts(){
-    fetch(url_user_profile)
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        data.posts.forEach(function(post){
-            var newDiv = 
+
+
+//render_post
+function render_post(data,isOld){
+    data.posts.forEach(function(post){
+        var newDiv = 
             `<div class="status-field-container write-post-container">
             <div class="user-profile-box">
                 <div class="user-profile">
@@ -142,9 +118,8 @@ function get_posts(){
                 </div>
             </div>
             <div class="status-field">
-                <p>${post.content}</p>
-                <img src="${post.media[0].media}" alt="">
-
+                <p>${(post.content !== undefined && post.content !== null && post.content !== "") ? post.content : ""}</p>
+                ${(post.media && post.media.length > 0) ? `<img src="${post.media[0].media}" alt="">` : ""}
             </div>
             <div class="post-reaction">
                 <div class="activity-icons">
@@ -157,19 +132,82 @@ function get_posts(){
                 </div>
             </div>
         </div>`
-
         var posted = document.createElement("div");
         posted.innerHTML = newDiv;
 
-        posted_area.appendChild(posted);
-        })
+        if(isOld === "old"){
+            posted_area.appendChild(posted);
+        }
+        else{
+            var a = posted_area.children[0];
+            posted_area.insertBefore(posted,a);
+        }
     })
-    
+}
+
+//upload_post
+form_submit.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const images = document.querySelectorAll('.uploaded-img img');
+
+    var content = post_content.value;
+    formData.append(`content`,content);
+
+    var number = 0;
+    var promises = [];
+
+    images.forEach(function(image) {
+        // console.log(image.src)
+        var promise = fetch(image.src)
+        .then(response => response.blob())
+        .then(blob => {
+            console.log(blob);
+            number += 1;
+            formData.append(`media`, blob, `images_${number}.png`);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+        promises.push(promise);
+    });
+
+    Promise.all(promises)
+        .then(() => {
+        fetch(event.target.action, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            render_post(data,"new");
+            console.log(data);
+            if(data.posts[0].content === null){
+                console.log("ko co noi dung");
+            }
+            else{
+                console.log("co noi dung");
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        });
+});
+
+//lấy bài đăng
+const url_user_profile = '/userprofiles/get_posts/';
+function get_posts(){
+    fetch(url_user_profile)
+    .then(response => response.json())
+    .then(data => {
+        render_post(data,"old");
+        console.log(data);
+    })
 }
 
 get_posts();
     
-
 
 
 
