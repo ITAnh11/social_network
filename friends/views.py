@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 import jwt, datetime
 
-from common_functions.common_function import getUser
+from common_functions.common_function import getUser, getUserProfileForPosts
 from users.models import User
 from .models import FriendRequest, Friendship
 from .serializers import FriendRequestSerializer, FriendshipSerializer
@@ -149,10 +149,23 @@ class  GetReceivedFriendRequestsView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        friend_requests_received = FriendRequest.objects.filter(to_id=user)
-        serializer = FriendRequestSerializer(friend_requests_received, many=True)
-        
-        return Response(serializer.data)
+        data = []
+        list_friend_requests_received = FriendRequest.objects.filter(to_id=user)
+        print(list_friend_requests_received)
+        for friend_request_received in list_friend_requests_received:
+            serializer = FriendRequestSerializer(friend_request_received)
+            print(serializer)
+            
+            friend_request = {
+                "friend_request_received" : serializer.data,
+                "friend_request_profile": getUserProfileForPosts(friend_request_received.from_id)
+            }
+
+            data.append(friend_request)
+
+        return Response({
+            "data": data
+            })
 
 class GetListFriendView(APIView):
     def get(self, request):
