@@ -10,6 +10,9 @@ const form_submit = document.getElementById('form-submit');
 const content_area = document.querySelector(".content-area");
 const posted_area = document.querySelector(".posted_area");
 
+const baseUrl = document.body.getAttribute('data-base-url');
+
+
 post.addEventListener("click",function() {
     posting.style.display = 'flex';
 })
@@ -123,9 +126,9 @@ function render_post(data,isOld){
             </div>
             <div class="post-reaction">
                 <div class="activity-icons">
-                    <div><img src="{%static 'posts/images/like-blue.png'%}" alt="">120</div>
-                    <div><img src="{%static 'posts/images/comments.png'%}" alt="">52</div>
-                    <div><img src="{%static 'posts/images/share.png'%}" alt="">35</div>
+                    <div><img src="${baseUrl + "images/like-blue.png"}" alt="">120</div>
+                    <div><img src="${baseUrl + "images/comments.png"}" alt="">52</div>
+                    <div><img src="${baseUrl + "images/share.png"}" alt="">35</div>
                 </div>
                 <div class="post-profile-picture">
                     <img src="${post.user.avatar}" alt=""> <i class=" fas fa-caret-down"></i>
