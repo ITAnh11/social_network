@@ -11,7 +11,7 @@ for (let i = 1; i <= 31; i++) {
 
 for (let i = 1; i <= 12; i++) {
   const option = document.createElement('option');
-  option.text = 'Month ' + i;
+  option.text = i;
   option.value = i;
   monthSelect.add(option);
 }

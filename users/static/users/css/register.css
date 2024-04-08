@@ -495,7 +495,18 @@ body {
 
 .request-password {
   margin-top: 0%;
+  margin-bottom: 10px;
 }
+
+.request-password p {
+  display: inline-block;
+  margin: 0;
+  vertical-align: top;
+}
+
+/* .requets2 {
+  margin-bottom: 10px;
+} */
 
 .required-star {
   color: red;
