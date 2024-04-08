@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,10 +44,14 @@ INSTALLED_APPS = [
     'homepage',
     'users',
     'posts',
+    'chat',
     'comments',
     'reactions',
     'friends',
     'userprofiles',
+    'channels',
+    'mess',
+    
 ]
 
 MIDDLEWARE = [
@@ -80,6 +85,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'social_network.wsgi.application'
 
+ASGI_APPLICATION = "social_network.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -89,7 +105,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'social_network',
         'USER': 'admin',
-        'PASSWORD': 'abc123',
+        'PASSWORD': '12345',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
