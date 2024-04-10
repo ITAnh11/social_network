@@ -37,22 +37,23 @@ class GetPostsView(APIView):
         reponse = Response()
         
         data = []
-        
-                
-        posts = Posts.objects.values('id', 'title', 'content', 'status', 'created_at').order_by('-created_at')[:50]  
+     
+        posts = Posts.objects.order_by('-created_at')[:50]  
         
         for post in posts:
             
             posts_data = PostsSerializer(post).data
             
-            userDataForPosts = getUserProfileForPosts(post.get('user_id'))
+            print(post.user_id)
             
-            media = MediaOfPosts.objects.filter(post_id=post.get('id'))
+            userDataForPosts = getUserProfileForPosts(post.user_id)
+            
+            media = MediaOfPosts.objects.filter(post_id=posts_data.get('id'))
             media_data = MediaOfPostsSerializer(media, many=True).data
             
             posts_data['media'] = media_data
             posts_data['user'] = userDataForPosts
-            posts_data['created_at'] = getTimeDuration(post.get('created_at'))
+            posts_data['created_at'] = getTimeDuration(post.created_at)
         
             data.append(posts_data)
             
