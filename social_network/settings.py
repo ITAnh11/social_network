@@ -70,7 +70,15 @@ ROOT_URLCONF = 'social_network.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['users\\templates'],
+        'DIRS': ['users\\templates',
+                 'userprofiles\\templates',
+                 'posts\\templates',
+                 'friends\\templates',
+                 'homepage\\templates',
+                 'comments\\templates',
+                 'reactions\\templates',
+                 'chat\\templates',
+                 'mess\\templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

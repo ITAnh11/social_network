@@ -22,7 +22,7 @@ from posts.views import CreatePostsAfterSetMediaProfileView
 
 from common_functions.common_function import getUser, getTimeDuration, getUserProfileForPosts
 
-from django.contrib.auth import login,logout,authenticate
+import time
 
 class ProfileView(APIView):
     def get(self, request):
@@ -143,6 +143,9 @@ class SetImageProfileView(APIView):
         return Response({'message': 'Image profile created successfully!'})
 class GetPostsView(APIView):
     def get(self, request):
+        
+        start_time = time.time()
+        
         user = getUser(request)
         
         if not user:
@@ -154,25 +157,48 @@ class GetPostsView(APIView):
         
         userDataForPosts = getUserProfileForPosts(user)
         
-        posts = Posts.objects.filter(user_id=user).values('id', 'title', 'content', 'status', 'created_at').all().order_by('-created_at')    
+        posts = Posts.objects.filter(user_id=user).prefetch_related('mediaofposts_set').order_by('-created_at')    
         
         for post in posts:
             posts_data = PostsSerializer(post).data
-            media = MediaOfPosts.objects.filter(post_id=post.get('id')).all()
-            if media:
-                media_data = MediaOfPostsSerializer(media, many=True).data
-                
-                posts_data['media'] = media_data
-            else:
-                posts_data['media'] = None
+            media_data = MediaOfPostsSerializer(post.mediaofposts_set.all(), many=True).data
+            
+            posts_data['media'] = media_data
             posts_data['user'] = userDataForPosts
 
-            posts_data['created_at'] = getTimeDuration(post.get('created_at'))
+            posts_data['created_at'] = getTimeDuration(post.created_at)
         
             data.append(posts_data)
             
         reponse.data = {
             'posts': data
         }
+        
+        # posts = Posts.objects.filter(user_id=user).values('id', 'title', 'content', 'status', 'created_at').all().order_by('-created_at')    
+        
+        # for post in posts:
+        #     posts_data = PostsSerializer(post).data
+        #     media = MediaOfPosts.objects.filter(post_id=post.get('id')).all()
+        #     if media:
+        #         media_data = MediaOfPostsSerializer(media, many=True).data
+                
+        #         posts_data['media'] = media_data
+        #     else:
+        #         posts_data['media'] = None
+        #     posts_data['user'] = userDataForPosts
+
+        #     posts_data['created_at'] = getTimeDuration(post.get('created_at'))
+        
+        #     data.append(posts_data)
+            
+        # reponse.data = {
+        #     'posts': data
+        # }
+        
+        end_time = time.time()  # lưu thời gian kết thúc
+
+        execution_time = end_time - start_time  # tính thời gian thực thi
+
+        print(f"The function took {execution_time} seconds to complete")
 
         return reponse
