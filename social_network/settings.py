@@ -153,13 +153,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'users\\static'),
-                    os.path.join(BASE_DIR, 'userprofiles\\static'),
-                    os.path.join(BASE_DIR, 'posts\\static'),
-                    os.path.join(BASE_DIR, 'friends\\static'),
-                    os.path.join(BASE_DIR, 'homepage\\static'),
-                    os.path.join(BASE_DIR, 'comments\\static'),
-                    os.path.join(BASE_DIR, 'reactions\\static'),
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'users/static'),
+                    os.path.join(BASE_DIR, 'userprofiles/static'),
+                    os.path.join(BASE_DIR, 'posts/static'),
+                    os.path.join(BASE_DIR, 'friends/static'),
+                    os.path.join(BASE_DIR, 'homepage/static'),
+                    os.path.join(BASE_DIR, 'comments/static'),
+                    os.path.join(BASE_DIR, 'reactions/static'),
                     )
 
 # Default primary key field type
