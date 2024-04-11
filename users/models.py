@@ -17,7 +17,8 @@ class User(models.Model):
         indexes = [
             models.Index(fields=['email'])
         ]
-    
+    def __str__(self):
+        return f"{self.email}"
     
     def set_password(self, raw_password):
         self.password = make_password(raw_password)

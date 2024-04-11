@@ -109,10 +109,10 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
-    'mongodb': {
-            'ENGINE': 'djongo',
-            'NAME': 'social_network',  
-        }
+    # 'mongodb': {
+    #         'ENGINE': 'djongo',
+    #         'NAME': 'social_network',  
+    #     }
 }
 
 
