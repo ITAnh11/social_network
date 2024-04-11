@@ -201,18 +201,20 @@ form_submit.addEventListener('submit', function(event) {
 });
 
 //lấy bài đăng
-const url_user_profile = '/userprofiles/get_posts/';
+const url_user_post = '/userprofiles/get_posts/';
+const url_homepage_post = '/homepage/get_posts/';
 function get_posts(){
-    fetch(url_user_profile)
+    fetch(url_homepage_post)
     .then(response => response.json())
     .then(data => {
         render_post(data,"old");
         console.log(data);
     })
 }
-
 get_posts();
-    
+
+
+
 
 
 

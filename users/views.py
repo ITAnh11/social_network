@@ -53,7 +53,7 @@ class LoginView(APIView):
         response.data = {
             'success': 'Login success!!!',
             'jwt': token,
-            'redirect_url': '/userprofiles/' + f"?id={user.id}"
+            'redirect_url': '/'
         }
         
         return response
