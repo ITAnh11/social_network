@@ -4,21 +4,10 @@ from .settings import BASE_DIR
 
 
 SECRET_KEY = os.environ['SECRET']
-# ALLOWED_HOST = [os.environ['WEBSITE_HOSTNAME']]
-ALLOWED_HOST = ['*']
+ALLOWED_HOST = [os.environ['WEBSITE_HOSTNAME']]
+
 CSRF_TRUSTED_ORIGINS = ['https://' + os.environ['WEBSITE_HOSTNAME']]
 DEBUG = False
-
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'core',
-    'whitenoise.runserver_nostatic',
-]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -31,11 +20,16 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STORAGES = {
+    "default" : {
+        "BACKEND" : "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles" : {
+        "BACKEND" : "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    }
+}
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'core\\static'),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
 
 connection_string = os.environ['AZURE_POSTGRESQL_CONNECTIONSTRING']
 parameters = {}
