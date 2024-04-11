@@ -14,4 +14,7 @@ pillow==10.3.0
 channels
 daphne
 docker
+mongoengine
+django_mongoengine
+django-rest-framework-mongoengine
 
