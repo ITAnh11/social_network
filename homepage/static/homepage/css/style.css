@@ -9,8 +9,8 @@
 }
 
 :root {
-    --body-color: #efefef;
-    --nav-color: #1876f2;
+    --body-color: #f3f0f0;
+    --nav-color:  #e1e7ee;
     --bg-color: #fff;
 }
 
@@ -29,7 +29,9 @@ nav.navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    /* background: var(--nav-color); */
     background: var(--nav-color);
+    background-color: #f8f4f4;
     padding: 5px 5%;
     position: sticky;
     top: 0px;
