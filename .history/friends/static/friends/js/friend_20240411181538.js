@@ -18,6 +18,7 @@ function accept_button(event){
 
     formdata.append("st", "accepted");
     formdata.append("id", a);
+    console.log(sent_data);
     url = "/friends/accept_friendrequest/"
     fetch(url,{
         method:'POST',

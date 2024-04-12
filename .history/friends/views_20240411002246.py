@@ -6,8 +6,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 import jwt, datetime
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
 
 from common_functions.common_function import getUser, getUserProfileForPosts
 from users.models import User
@@ -29,7 +27,7 @@ class FriendsRequestsView(APIView):
         return render(request,'friends/friend.html')
 
 class  SentFriendRequestView(APIView):
-    def post(self, request, friend_id):
+    def sent(self, request, friend_id):
         user = getUser(request)
         
         if not user:
@@ -50,7 +48,7 @@ class  SentFriendRequestView(APIView):
         return Response({'success': 'Friend request sent successfully'})
     
 class DeleteFriendRequestView(APIView):
-    def post(self, request, friend_request_id):
+    def delete(self, request, friend_request_id):
         user = getUser(request)
         
         if not user:
@@ -69,38 +67,29 @@ class DeleteFriendRequestView(APIView):
         return Response({'success': 'Friend request deleted successfully'})
     
 class AcceptFriendRequestView(APIView):
-    def post(self, request):
+    def accept(self, request, friend_request_id):
         user = getUser(request)
         
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        # print(request.data)
-        
         try:
-                status = request.data.get('st')
-                friend_request_id = request.data.get('id')
-                friend_request = get_object_or_404(FriendRequest, id = friend_request_id)
-                
-                if (status == "accepted"):
-                    friend_request.status = "accepted"
-                    friend_request.save()
-                            
-                friend_ship = Friendship.objects.create(
-                    user_id1 = user,
-                    user_id2 = friend_request.from_id                 
-                )
-                
-                friend_ship.save()
-                
-                
-                return Response({'message': 'Friend request processed successfully'})
-            
-        except:
-            return Response({'error': 'Error while saving friend request'}, status=400)
+            friend_request = FriendRequest.objects.get(id=friend_request_id)
+        except FriendRequest.DoesNotExist:
+            return Response({'error': 'Friend request not found'}, status=404)
+        
+        if friend_request.to_id != user:
+            return Response({'error': 'Permission denied'}, status=403)
+        
+        friend_request.status = 'accepted'
+        friend_request.save()
+        
+        Friendship.objects.create(user_id1=friend_request.from_id, user_id2=user)
+        
+        return Response({'success': 'Friend request accepted successfully'})
 
 class DenineFriendRequestView(APIView):
-    def post(self, request, friend_request_id):
+    def denine(self, request, friend_request_id):
         user = getUser(request)
         
         if not user:
@@ -123,7 +112,7 @@ class DenineFriendRequestView(APIView):
         return Response({'success': 'Friend request denied successfully'})
     
 class DeleteFriendShip(APIView):
-    def post(self, request, friendship_id):
+    def delete(self, request, friendship_id):
         user = getUser(request)
         
         if not user:

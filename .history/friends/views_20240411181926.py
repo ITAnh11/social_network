@@ -79,16 +79,16 @@ class AcceptFriendRequestView(APIView):
         
         try:
                 status = request.data.get('st')
-                friend_request_id = request.data.get('id')
+                friend_request_id = request.data.get('friendRequest_id')
                 friend_request = get_object_or_404(FriendRequest, id = friend_request_id)
                 
-                if (status == "accepted"):
+                if (status == "accepted" and FriendRequest.objects.filter(id = friend_request_id)):
                     friend_request.status = "accepted"
                     friend_request.save()
                             
                 friend_ship = Friendship.objects.create(
                     user_id1 = user,
-                    user_id2 = friend_request.from_id                 
+                    user_id2 = friend_request.to_id                 
                 )
                 
                 friend_ship.save()
@@ -98,6 +98,11 @@ class AcceptFriendRequestView(APIView):
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)
+        
+        
+        Friendship.objects.create(user_id1=friend_request.from_id, user_id2=user)
+        
+        return Response({'success': 'Friend request accepted successfully'})
 
 class DenineFriendRequestView(APIView):
     def post(self, request, friend_request_id):

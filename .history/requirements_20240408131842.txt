@@ -1,5 +1,3 @@
-# pip install -r requirements.txt
-
 asgiref==3.7.2
 Django==5.0.2
 psycopg2==2.9.9
@@ -15,7 +13,4 @@ djongo
 channels
 daphne
 docker
-mongoengine
-django_mongoengine
-django-rest-framework-mongoengine
 

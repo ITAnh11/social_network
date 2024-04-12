@@ -13,11 +13,14 @@ function accept_button(event){
         event.target.style.backgroundColor = '#B8BABE';
     }
     var a = event.target.parentNode.parentNode.id;
-
+    var sent_data = {
+        st:"accepted",
+        friendRequest_id: a,
+    }
     const formdata = new FormData();
 
-    formdata.append("st", "accepted");
-    formdata.append("id", a);
+    formdata.append("st", sent_data);
+    console.log(sent_data);
     url = "/friends/accept_friendrequest/"
     fetch(url,{
         method:'POST',

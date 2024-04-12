@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework', # pip install djangorestframework
     'corsheaders', # pip install django-cors-headers
-    'django_mongoengine',
     'homepage',
     'users',
     'posts',
@@ -112,22 +111,7 @@ DATABASES = {
     },
 }
 
-MONGODB_DATABASES = {
-    "default": {
-        "name": "social_network",
-        "host": "localhost",
-        "port": 27017,
-        # "username": "mongo_user",  # replace with your username
-        # "password": "mongo_password",  # replace with your password
-    }
-}
 
-import mongoengine
-
-mongoengine.connect(
-    db='social_network',
-    host='mongodb://localhost/social_network'
-)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
