@@ -30,8 +30,8 @@ nav.navbar {
     align-items: center;
     justify-content: space-between;
     /* background: var(--nav-color); */
-    background: var(--nav-color);
-    background-color: #f8f4f4;
+    background: #f7f7f7;
+    background-color: #f7f7f7;
     padding: 5px 5%;
     position: sticky;
     top: 0px;

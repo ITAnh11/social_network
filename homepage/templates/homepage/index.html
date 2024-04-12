@@ -13,7 +13,9 @@
 
 <body>
     <nav class="navbar">
-        <div class="nav-left"><img class="logo fab fa-facebook-f" src="images/logo.png" alt="">
+        <div class="nav-left">
+            <li> <a href="{% url 'homepage:homepage' %}" id="fb"> <i class="fab fa-facebook-f    "></i> </a> </li>
+            {% comment %} <img class="logo fab fa-facebook-f" src="images/logo.png" alt=""> {% endcomment %}
             <ul class="navlogo">
                 <li><img src="images/notification.png"></li>
 

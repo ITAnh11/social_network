@@ -8,6 +8,33 @@ body{
     margin: 0;
     padding: 0;
 }
+
+nav.big_navbar {
+    /* display: flex;
+    align-items: center; */
+    /* justify-content: space-between; */
+    /* padding: 5px 5%; */
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+    background: #f7f7f7;
+}
+
+nav.big_navbar > ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav.big_navbar > ul > li {
+    margin-right: 10px; /* Khoảng cách giữa các phần tử li */
+}
+
+nav.big_navbar > ul > li:last-child {
+    margin-right: 0; /* Loại bỏ khoảng cách cho phần tử li cuối cùng */
+}
+
 nav{
     margin: 0;
     padding: 0;
@@ -100,6 +127,7 @@ nav ul li:hover #friend{
 
 .active{
     color: #0B84ED!important; 
+    margin-left: 30px;
 }
 
 .tooltip{
