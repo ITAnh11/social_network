@@ -7,7 +7,6 @@ from rest_framework.response import Response
 
 import jwt, datetime
 from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
 
 from common_functions.common_function import getUser, getUserProfileForPosts
 from users.models import User
@@ -75,29 +74,41 @@ class AcceptFriendRequestView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        # print(request.data)
-        
         try:
-                status = request.data.get('st')
-                friend_request_id = request.data.get('id')
+            if (request.method == 'POST'):
+                
+                status = request.POST.get('st')
+                friend_request_id = request.POST.get('friendRequest_id')
                 friend_request = get_object_or_404(FriendRequest, id = friend_request_id)
                 
-                if (status == "accepted"):
+                if (status == "accepted" and FriendRequest.objects.filter(id = friend_request_id)):
                     friend_request.status = "accepted"
-                    friend_request.save()
                             
                 friend_ship = Friendship.objects.create(
                     user_id1 = user,
-                    user_id2 = friend_request.from_id                 
+                    user_id2 = request.data.get('st'),
                 )
                 
                 friend_ship.save()
                 
+                friend_request = FriendRequest.objects.update(
+                    from_id = request.data.get('from_id'),
+                    to_id = user,
+                    status = 'accepted'
+                )
                 
-                return Response({'message': 'Friend request processed successfully'})
+                friend_request.save()
+                return JsonResponse({'message': 'Friend request processed successfully'})
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)
+        
+        # if friend_request.to_id != user:
+        #     return Response({'error': 'Permission denied'}, status=403)
+        
+        Friendship.objects.create(user_id1=friend_request.from_id, user_id2=user)
+        
+        return Response({'success': 'Friend request accepted successfully'})
 
 class DenineFriendRequestView(APIView):
     def post(self, request, friend_request_id):

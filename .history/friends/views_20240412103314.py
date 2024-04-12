@@ -88,7 +88,7 @@ class AcceptFriendRequestView(APIView):
                             
                 friend_ship = Friendship.objects.create(
                     user_id1 = user,
-                    user_id2 = friend_request.from_id                 
+                    user_id2 = friend_request.to_id                 
                 )
                 
                 friend_ship.save()
