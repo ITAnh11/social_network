@@ -6,44 +6,49 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link type="text/css" href="{%static 'userprofiles/css/profile.css' %}" rel="stylesheet" />
+    <link type="text/css" href="{%static 'userprofiles/css/navbar.css' %}" rel="stylesheet" />
     <title>Profle - Socialbook</title>
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="nav-left">
-            <a href="/templates/homepage/index.html">
-                <img class="logo" src="{%static 'userprofiles/media/logo3.png' %}" alt="">
-            </a>
+    <nav>
+        <ul>
+            <li> <a href="{% url 'homepage:homepage' %}" id="fb"> <i class="fab fa-facebook-f    "></i> </a> </li>
+            <!-- <li> <button id="search_btn" class="tooltip" data-tooltip="Search"> <i class="fas fa-search    "></i> </button> </li> -->
             <div class="search-box">
-                <img src="{%static 'userprofiles/media/search.png' %}" alt="">
-                <input type="text" placeholder="Search">
+              <img src="{% static 'userprofiles/media/search.png' %}" alt="">
+              <input type="text" placeholder="Search">
             </div>
-        </div>
-        <div class="nav-right">
-            <ul class="navlogo">
-                <li><a href="/templates/homepage/index.html"> <img src="{%static 'userprofiles/media/home.png' %}" alt=""> </a></li>
-                <li><a href="#"><img src="{%static 'userprofiles/media/notif.png' %}"></a></li>
-                <li><a href="#"><img src="{%static 'userprofiles/media/mess2.png' %}"></a></li>
-            </ul>                        
-            <div class="profile-image online" id="profile-image-icon" onclick="UserSettingToggle()">
+            <li id="space2"></li>
+            
+            <li> <a class="tooltip active" data-tooltip="Home" href="{% url 'homepage:homepage' %}" id="home"> <i class="fas fa-home    "></i> </a> </li>
+            <li> <a class="tooltip" data-tooltip="Group" href="#" id="group"> <i class="fas fa-user-friends    "></i> </a></li>
+            <li> <a class="tooltip" data-tooltip="Watch" href="#" id="tv"> <i class="fas fa-tv    "></i> </a> </li>
+            <li> <a class="tooltip" data-tooltip="Friend" href="{% url 'friends:friend' %}" id="friend"> <i class="fas fa-user-alt    "></i> </a> </li>
+            <li id="space1"></li>
+            <!-- <li> <button class="tooltip" data-tooltip="Add" id="btn_plus"><i class="fas fa-plus    "></i></button> </li> -->
+            <li> <button class="tooltip" data-tooltip="Message" id="btn_msg"><i class="fab fa-facebook-messenger    "></i></button></li>
+            <li> <button class="tooltip" data-tooltip="Notification" id="btn_bell"> <i class="fas fa-bell    "></i></button></li>
+            <div class="profile-image online" onclick="UserSettingToggle()">
                 <div class="profileImage">
 
                 </div>
+              {% comment %} <img src="{% static 'userprofiles/media/avatar.png' %}" alt="avt-icon"> {% endcomment %}
             </div>
-        </div>
+            
+            <!-- <li>  <button class="tooltip" data-tooltip="Profile" id="btn_profile"><i class="fas fa-user-cog    "></i></button>  </li> -->
+        </ul>
         <div class="user-settings">
             <div class="profile-darkButton">
-
                 <div class="user-profile">
                     <div class="profileImage">
-                        {% comment %} <img src="{%static 'userprofiles/media/avatar.png' %}" alt="avt-icon"> {% endcomment %}
+
                     </div>
-                    
                     <div id="userName1" class="user-name">
-            
+                
                     </div>
                 </div>
                 <div id="dark-button" onclick="darkModeON()">
@@ -52,34 +57,33 @@
             </div>
             <hr>
             <div class="user-profile">
-                <img src="{%static 'userprofiles/media/change-profile.png' %}" alt="">
+                <img src="{% static 'userprofiles/media/change-profile.png' %}" alt="">
                 <div>
                     <p> View all personal content</p>
                 </div>
             </div>
             <hr>
             <div class="settings-links">
-                <img src="{%static 'userprofiles/media/setting.png' %}" alt="" class="settings-icon">
-                <a href="#">Settings - Privary <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
+                <img src="{% static 'userprofiles/media/setting.png' %}" alt="" class="settings-icon">
+                <a href="#">Settings - Privary <img src="{% static 'userprofiles/media/arrow.png' %}" alt=""></a>
             </div>
-
+        
             <div class="settings-links">
-                <img src="{%static 'userprofiles/media/help.png' %}" alt="" class="settings-icon">
-                <a href="#">Help - Support <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
+                <img src="{% static 'userprofiles/media/help.png' %}" alt="" class="settings-icon">
+                <a href="#">Help - Support <img src="{% static 'userprofiles/media/arrow.png' %}" alt=""></a>
             </div>
-
+        
             <div class="settings-links">
-                <img src="{%static 'userprofiles/media/display.png' %}" alt="" class="settings-icon">
-                <a href="#">Display - Accessibility <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
+                <img src="{% static 'userprofiles/media/display.png' %}" alt="" class="settings-icon">
+                <a href="#">Display - Accessibility <img src="{% static 'userprofiles/media/arrow.png' %}" alt=""></a>
             </div>
-
+        
             <div class="settings-links">
-                <img src="{%static 'userprofiles/media/logout.png' %}" alt="" class="settings-icon">
-                <a href="#">Logout <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
+                <img src="{% static 'userprofiles/media/logout.png' %}" alt="" class="settings-icon">
+                <a href="{% url 'users:login' %}">Logout <img src="{% static 'userprofiles/media/arrow.png' %}" alt=""></a>
             </div>
-
+        
         </div>
-
     </nav>
 
     <!-- profile-page -->
@@ -108,12 +112,6 @@
                     <div id="userName2" class="user-name">
 
                     </div>
-                    {% comment %} <h3 id="userName"></h3> {% endcomment %}
-                    {% comment %} {% if request.user.is_authenticated %}
-                        <h3>{{ request.user }}</h3>
-                    {% else %}
-                        <p>Đăng nhập để hiển thị thông tin người dùng {{ userprofile.first_name }}</p>
-                    {% endif %} {% endcomment %}
                     <p>446 Friends</p>
                     <div class="mutual-friend-images">
                         <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">

@@ -15,4 +15,7 @@ djongo
 channels
 daphne
 docker
+mongoengine
+django_mongoengine
+django-rest-framework-mongoengine
 
