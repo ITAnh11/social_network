@@ -53,7 +53,7 @@ function request_button(event){
     }
 }
 
-//xử lí lời mời kết bạn
+//hiện lời mời kết bạn
 var request_list = document.querySelector(".request-list");
 url_addfriend = "/friends/get_receivedfriendrequest/";
 function addfriend() {
@@ -85,5 +85,17 @@ function addfriend() {
 }
 
 addfriend();
+
+//hiện danh sách bạn bè
+url_list_friend = "/friends/get_listfriend/";
+function show_list_friend(){
+    fetch(url_list_friend)
+    .then(response => response.json())
+    .then(data => {
+        console.log("friend_list:",data);
+    })
+    
+}
+show_list_friend();
 
 
