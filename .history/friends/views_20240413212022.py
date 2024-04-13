@@ -57,17 +57,16 @@ class RevokeFriendRequestView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         try:
-            friend_request_id = request.data.get('id')
-            friend_request = get_object_or_404(FriendRequest, id = friend_request_id)
-            
-            friend_request.delete()
-            
+            friend_request = FriendRequest.objects.get(id=friend_request_id)
         except FriendRequest.DoesNotExist:
             return Response({'error': 'Friend request not found'}, status=404)
         
+        if friend_request.from_id != user:
+            return Response({'error': 'Permission denied'}, status=403)
+        
         friend_request.delete()
         
-        return Response({'success': 'Friend request revoked successfully'})
+        return Response({'success': 'Friend request deleted successfully'})
     
 class AcceptFriendRequestView(APIView):
     def post(self, request):
@@ -79,20 +78,24 @@ class AcceptFriendRequestView(APIView):
         # print(request.data)
         
         try:
+                status = request.data.get('st')
                 friend_request_id = request.data.get('id')
                 friend_request = get_object_or_404(FriendRequest, id = friend_request_id)
                 
-                #friend_request.status = 'pending'
-                friend_request.status = 'accepted'
-                friend_request.save()
+                if (status == "accepted"):
+                    #friend_request.status = 'pending'
+                    friend_request.status = 'accepted'
+                    friend_request.save()
+                    
+                    friend_ship = Friendship.objects.create(
+                    user_id1 = user,
+                    user_id2 = friend_request.from_id                 
+                    )
+                    # Friendship.objects.all().delete()  
+                    friend_ship.save()     
                 
-                friend_ship = Friendship.objects.create(
-                user_id1 = user,
-                user_id2 = friend_request.from_id                 
-                )
-                # Friendship.objects.all().delete()  
-                friend_ship.save()     
-                       
+                
+                
                 return Response({'message': 'Friend request processed successfully'})
             
         except:
@@ -128,13 +131,15 @@ class DeleteFriendShip(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         try:
-            friendship_id = request.get('id')
-            friendship = get_object_or_404(Friendship, id = friendship_id)
-            
-            friendship.delete()
+            friendship = Friendship.objects.get(id=friendship_id)
         except Friendship.DoesNotExist:
             return Response({'error': 'Friendship not found'}, status=404)
-         
+        
+        if user != friendship.user_id1 and user != friendship.user_id2:
+            return Response({'error': 'Permission denied'}, status=403)
+        
+        friendship.delete()
+        
         return Response({'success': 'Friendship deleted successfully'})
     
 class GetSentFriendRequestsView(APIView):
@@ -192,23 +197,8 @@ class GetListFriendView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        data = []
-        list_friend_ship = Friendship.objects.filter(user_id1=user) | Friendship.objects.filter(user_id2=user)
-        print(list_friend_ship)
+        friendships = Friendship.objects.filter(user_id1=user) | Friendship.objects.filter(user_id2=user)
         
+        serializer = FriendshipSerializer(friendships, many=True)
         
-        for friend_ship in list_friend_ship:
-            serializer = FriendshipSerializer(friend_ship)
-            print(serializer)
-            
-            friend_ship = {
-                "friend_ship" : serializer.data,
-                "friend_profile": getUserProfileForPosts(friend_ship.user_id2)
-            }
-
-            data.append(friend_ship)
-
-        return Response({
-            "data": data
-            })
-        
+        return Response(serializer.data)

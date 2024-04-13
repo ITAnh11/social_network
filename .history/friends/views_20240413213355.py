@@ -192,23 +192,8 @@ class GetListFriendView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        data = []
-        list_friend_ship = Friendship.objects.filter(user_id1=user) | Friendship.objects.filter(user_id2=user)
-        print(list_friend_ship)
+        friendships = Friendship.objects.filter(user_id1=user) | Friendship.objects.filter(user_id2=user)
         
+        serializer = FriendshipSerializer(friendships, many=True)
         
-        for friend_ship in list_friend_ship:
-            serializer = FriendshipSerializer(friend_ship)
-            print(serializer)
-            
-            friend_ship = {
-                "friend_ship" : serializer.data,
-                "friend_profile": getUserProfileForPosts(friend_ship.user_id2)
-            }
-
-            data.append(friend_ship)
-
-        return Response({
-            "data": data
-            })
-        
+        return Response(serializer.data)
