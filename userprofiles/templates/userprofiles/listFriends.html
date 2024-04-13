@@ -12,69 +12,7 @@
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="nav-left">
-            <a href="/templates/homepage/homepage_demo.html">
-                <img class="logo" src="{%static 'userprofiles/media/logo3.png' %}" alt="">
-            </a>
-            <div class="search-box">
-                <img src="{%static 'userprofiles/media/search.png' %}" alt="">
-                <input type="text" placeholder="Search">
-            </div>
-        </div>
-        <div class="nav-right">
-            <ul class="navlogo">
-                <li><a href="/templates/homepage/homepage_demo.html"> <img src="{%static 'userprofiles/media/home.png' %}" alt=""> </a></li>
-                <li><a href="#"><img src="{%static 'userprofiles/media/notif.png' %}"></a></li>
-                <li><a href="#"><img src="{%static 'userprofiles/media/mess2.png' %}"></a></li>
-            </ul>                        
-            <div class="profile-image online" onclick="UserSettingToggle()">
-                <img src="{%static 'userprofiles/media/avatar.png' %}" alt="avt-icon">
-            </div>
-        </div>
-        <div class="user-settings">
-            <div class="profile-darkButton">
-                <div class="user-profile">
-                    <img src="{%static 'userprofiles/media/avatar.png' %}" alt="avt-icon">
-                    <div>
-                        <p> dep trai lanh lung Tuan </p>
-                    </div>
-                </div>
-                <div id="dark-button" onclick="darkModeON()">
-                    <span></span>
-                </div>
-            </div>
-            <hr>
-            <div class="user-profile">
-                <img src="{%static 'userprofiles/media/change-profile.png' %}" alt="">
-                <div>
-                    <p> View all personal content</p>
-                </div>
-            </div>
-            <hr>
-            <div class="settings-links">
-                <img src="{%static 'userprofiles/media/setting.png' %}" alt="" class="settings-icon">
-                <a href="#">Settings - Privary <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
-            </div>
-
-            <div class="settings-links">
-                <img src="{%static 'userprofiles/media/help.png' %}" alt="" class="settings-icon">
-                <a href="#">Help - Support <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
-            </div>
-
-            <div class="settings-links">
-                <img src="{%static 'userprofiles/media/display.png' %}" alt="" class="settings-icon">
-                <a href="#">Display - Accessibility <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
-            </div>
-
-            <div class="settings-links">
-                <img src="{%static 'userprofiles/media/logout.png' %}" alt="" class="settings-icon">
-                <a href="#">Logout <img src="{%static 'userprofiles/media/arrow.png' %}" alt=""></a>
-            </div>
-
-        </div>
-
-    </nav>
+    {%include 'navbar/navbar.html' %}
 
     <!-- profile-page -->
 
@@ -213,7 +151,6 @@
         
     </footer>
     
-    <script src="{%static 'userprofiles/js/function.js' %}" ></script>
     <script src="{%static 'userprofiles/js/editAvt.js' %}" ></script>
     <script src="{%static 'userprofiles/js/profile.js' %}" ></script>
 </body>
