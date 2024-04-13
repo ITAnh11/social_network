@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="posts-container" id="1" style="border: solid rgb(163, 162, 162); margin: 5px;">
+        <div class="post-box">
+            <div class="post" style="display: flex;">
+                <div class="post-header" style="margin: 5px 5px;">
+                    <div class="post-author">
+                        <p class="name" >ANH : </p>
+                    </div>
+                </div>
+                <div class="post-content" style="margin: 5px 5px;">
+                    <p class="content">This is a post</p>
+                    <img src="" alt="" style="width: 100px; height: 100px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="comment-container">
+
+            <div id="active-comment" >
+                <button id="active-comment-btn" class="1" onclick="show_commented(event)">show commented</button>
+            </div>
+
+            <div id="commented-box-1" >
+                <div id="comment-40" class="comment" style="display: flex; flex-direction: column;">
+                    <div class="comment-header">
+                        <div class="comment-author" style="margin: 0px 0px;">
+                            <p class="name" style="margin: 0px 0px;" >ANH : </p>
+                        </div>
+                    </div>
+                    <div class="comment-content" style="margin: 0px 0px; margin-left: 20px;">
+                        <p class="content" style="margin: 0px 0px;">This is a comment</p>
+                    </div>
+                    <div class="form-reply-comment" style="margin-left: 20px;">
+                        <form action="" method="post" id="send-comment-for-comment-40" >
+                            {% csrf_token %}
+                            <input type="text" name="content" id="content-comment-send">
+                            <input type="submit" id="submit" value="reply">
+                        </form>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div id="comment-for-posts-container" style="margin-top: 10px;">
+                <form action="" method="post" id="send-comment-for-posts-1">
+                    {% csrf_token %}
+                    <input type="text" name="content" id="content-comment-send">
+                    <input type="submit" id="submit" value="comment">
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+    <div id="main-container"></div>
+
+    {% csrf_token %}
+    <script src="{% static 'comments/js/comment_t.js' %}" >
+        var csrftoken = '{{ csrf_token }}';
+    </script>
+</body>
+</html>
