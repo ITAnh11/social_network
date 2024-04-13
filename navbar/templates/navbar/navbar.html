@@ -33,7 +33,7 @@
         <li> <button class="tooltip" data-tooltip="Notification" id="btn_bell"> <i class="fas fa-bell    "></i></button></li>
         <div class="profile-image online" onclick="UserSettingToggle()">
             <div class="profileImage">
-
+                {% comment %} <img src="{% static 'userprofiles/media/avatar.png' %}" alt="avt-icon"> {% endcomment %}
             </div>
           {% comment %} <img src="{% static 'userprofiles/media/avatar.png' %}" alt="avt-icon"> {% endcomment %}
         </div>
@@ -88,6 +88,7 @@
         
   </footer>
   <script src="{%static 'navbar/js/navbar.js' %}" ></script>
+  <script src="{%static 'navbar/js/in4user.js' %}" ></script>
 </body>
 
 </html>

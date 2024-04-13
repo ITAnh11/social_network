@@ -14,10 +14,9 @@
 </head>
 
 <body>
-    <nav class="big_navbar">
+    {% comment %} <nav class="big_navbar">
         <ul>
             <li> <a href="{% url 'homepage:homepage' %}" id="fb"> <i class="fab fa-facebook-f    "></i> </a> </li>
-            <!-- <li> <button id="search_btn" class="tooltip" data-tooltip="Search"> <i class="fas fa-search    "></i> </button> </li> -->
             <div class="search-box">
               <img src="{% static 'userprofiles/media/search.png' %}" alt="">
               <input type="text" placeholder="Search">
@@ -29,17 +28,17 @@
             <li> <a class="tooltip" data-tooltip="Watch" href="#" id="tv"> <i class="fas fa-tv    "></i> </a> </li>
             <li> <a class="tooltip" data-tooltip="Friend" href="{% url 'friends:friend' %}" id="friend"> <i class="fas fa-user-alt    "></i> </a> </li>
             <li id="space1"></li>
-            <!-- <li> <button class="tooltip" data-tooltip="Add" id="btn_plus"><i class="fas fa-plus    "></i></button> </li> -->
+            
             <li> <button class="tooltip" data-tooltip="Message" id="btn_msg"><i class="fab fa-facebook-messenger    "></i></button></li>
             <li> <button class="tooltip" data-tooltip="Notification" id="btn_bell"> <i class="fas fa-bell    "></i></button></li>
             <div class="profile-image online" onclick="UserSettingToggle()">
                 <div class="profileImage">
 
                 </div>
-              {% comment %} <img src="{% static 'userprofiles/media/avatar.png' %}" alt="avt-icon"> {% endcomment %}
+             
             </div>
             
-            <!-- <li>  <button class="tooltip" data-tooltip="Profile" id="btn_profile"><i class="fas fa-user-cog    "></i></button>  </li> -->
+            
         </ul>
         <div class="user-settings">
             <div class="profile-darkButton">
@@ -84,8 +83,8 @@
             </div>
         
         </div>
-    </nav>
-
+    </nav> {% endcomment %}
+    {% include 'navbar/navbar.html' %}
     <!-- profile-page -->
 
     <div class="profile-container">

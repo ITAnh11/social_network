@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'userprofiles',
     'channels',
     'mess',
-    
+    'navbar',
 ]
 
 MIDDLEWARE = [
