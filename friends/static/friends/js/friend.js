@@ -18,6 +18,9 @@ function denine_button(event){
     if(event.target.textContent === "Từ chối") {
         event.target.textContent = "Đã từ chối";
     }
+
+    event.target.parentNode.parentNode.querySelector(".button1").remove();
+
 }
 
 //xử lí accept button
@@ -37,9 +40,20 @@ function accept_button(event){
         method:'POST',
         body: formdata,
     })
+    event.target.parentNode.parentNode.querySelector(".button2").remove();
 }
 
-//xử lí lời mời kết bạn
+//xử lí friend request button
+function request_button(event){
+    if(event.target.textContent === "Thêm bạn bè") {
+        event.target.textContent = "Thu hồi";
+    }
+    else{
+        event.target.textContent = "Thêm bạn bè";
+    }
+}
+
+//hiện lời mời kết bạn
 var request_list = document.querySelector(".request-list");
 url_addfriend = "/friends/get_receivedfriendrequest/";
 function addfriend() {
@@ -71,5 +85,17 @@ function addfriend() {
 }
 
 addfriend();
+
+//hiện danh sách bạn bè
+url_list_friend = "/friends/get_listfriend/";
+function show_list_friend(){
+    fetch(url_list_friend)
+    .then(response => response.json())
+    .then(data => {
+        console.log("friend_list:",data);
+    })
+    
+}
+show_list_friend();
 
 
