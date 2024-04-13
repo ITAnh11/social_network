@@ -1,10 +1,10 @@
 from django.urls import path
-from.views import FriendsRequestsView, SentFriendRequestView, RevokeFriendRequestView, AcceptFriendRequestView, DenineFriendRequestView, DeleteFriendShip, GetSentFriendRequestsView, GetReceivedFriendRequestsView, GetListFriendView
+from.views import FriendsRequestsView, SentFriendRequestView, DeleteFriendRequestView, AcceptFriendRequestView, DenineFriendRequestView, DeleteFriendShip, GetSentFriendRequestsView, GetReceivedFriendRequestsView, GetListFriendView
 app_name = 'friends'
 urlpatterns = [
     path('',FriendsRequestsView.as_view(), name="friend"),
     path('sent_friendrequest/',SentFriendRequestView.as_view(), name="sent_friendrequest"),#gui loi moi ket ban , st: "pending" , to_id: "..."
-    path('revoke_friendrequest/',RevokeFriendRequestView.as_view(), name="revoke_friendrequest"),#thu hoi loi moi ket ban , st:"revoke", to_id:"..."
+    path('delete_friendrequest/',DeleteFriendRequestView.as_view(), name="delete_friendrequest"),#thu hoi loi moi ket ban , st:"revoke", to_id:"..."
     path('accept_friendrequest/',AcceptFriendRequestView.as_view(), name="accept_friendrequest"),#An nut xac nhan, st:"accepted", friendRequest_id:"..."
     path('denine_friendrequest/',DenineFriendRequestView.as_view(), name="denine_friendrequest"),#Tu choi ,st: "denided",friendRequest_id:"...";
     path('delete_friendship/',DeleteFriendShip.as_view(), name="delete_friendship"),#xoa ban be ,st: "deleted", to_id:" "
