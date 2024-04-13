@@ -206,13 +206,8 @@ class GetListFriendView(APIView):
                     "friend_ship" : serializer.data,
                     "friend_profile": getUserProfileForPosts(friend_ship.user_id2)
                 }
-                
-            elif (Friendship.objects.values_list('user_id2', flat=True).first() == user):
-                friend_ship = {
-                    "friend_ship" : serializer.data,
-                    "friend_profile": getUserProfileForPosts(friend_ship.user_id1)
-                }
-            data.append(friend_ship)
+            
+                data.append(friend_ship)
 
         return Response({
             "data": data
