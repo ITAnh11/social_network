@@ -18,6 +18,9 @@ function denine_button(event){
     if(event.target.textContent === "Từ chối") {
         event.target.textContent = "Đã từ chối";
     }
+
+    event.target.parentNode.parentNode.querySelector(".button1").remove();
+
 }
 
 //xử lí accept button
@@ -37,6 +40,17 @@ function accept_button(event){
         method:'POST',
         body: formdata,
     })
+    event.target.parentNode.parentNode.querySelector(".button2").remove();
+}
+
+//xử lí friend request button
+function request_button(event){
+    if(event.target.textContent === "Thêm bạn bè") {
+        event.target.textContent = "Thu hồi";
+    }
+    else{
+        event.target.textContent = "Thêm bạn bè";
+    }
 }
 
 //xử lí lời mời kết bạn
