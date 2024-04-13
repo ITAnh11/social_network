@@ -287,6 +287,11 @@ nav ul li #btn_profile::after{
   height: 1px;
 }
 
+.userNameIcon h4 {
+  font-size: 18px;
+  color: rgb(90, 89, 89);
+}
+
 .settings-links {
   display: flex;
   align-items: center;
