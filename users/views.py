@@ -16,7 +16,7 @@ class LoginView(APIView):
     def makeToken(self, user):
         payload = {
             'id': user.id,
-            'exp': datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=60),
+            'exp': datetime.datetime.now(datetime.UTC) + datetime.timedelta(hours=5),
             'iat': datetime.datetime.now(datetime.UTC)
         }
 

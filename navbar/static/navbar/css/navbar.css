@@ -10,10 +10,6 @@ body{
 }
 
 nav.big_navbar {
-    /* display: flex;
-    align-items: center; */
-    /* justify-content: space-between; */
-    /* padding: 5px 5%; */
     position: sticky;
     top: 0px;
     z-index: 100;
@@ -231,9 +227,8 @@ nav ul li #btn_profile::after{
 
 .user-settings {
   position: absolute;
-  right: 1%;
+  right: 0%;
   background: var(--bg-color);
-  /* top: 200%; */
   max-width: 350px;
   width: 90%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
