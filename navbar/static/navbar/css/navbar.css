@@ -122,12 +122,20 @@ nav ul li:hover #friend{
 
 } 
 
-
-
-.active{
+#home.active {
     color: #0B84ED!important; 
     margin-left: 30px;
 }
+
+#friend.active {
+  color: #0B84ED!important; 
+  margin-left: 30px;
+}
+
+/* .active{
+    color: #0B84ED!important; 
+    margin-left: 30px;
+} */
 
 .tooltip{
     position: relative;
