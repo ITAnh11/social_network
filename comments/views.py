@@ -1,3 +1,5 @@
+from django.shortcuts import render
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -11,14 +13,21 @@ from common_functions.common_function import getUser
 import datetime
 
 # Create your views here.
-class GetCommentsForPost(APIView):
+
+class CommentsTestView(APIView):
     def get(self, request):
+        return render(request, 'comments/comment_t.html')
+
+class GetCommentsForPost(APIView):
+    def post(self, request):
         
-        # print(request.data)
+        print(request.data)
         
         response = Response()
         
-        posts_id = request.data.get('posts_id')
+        posts_id = int(request.data.get('posts_id'))
+        
+        # print(type(posts_id))
         
         comments = Comments.objects(__raw__={'to_posts_id': posts_id})
         
@@ -37,7 +46,7 @@ class GetCommentsForComment(APIView):
     def post(self, request):
         response = Response()
         
-        comment_id = request.data.get('comment_id')
+        comment_id = int(request.data.get('comment_id'))
         
         comments = Comments.objects(__raw__={'to_comment_id': comment_id})
         
@@ -53,9 +62,9 @@ class GetCommentsForComment(APIView):
         
         return response
 
-class CreateCommentForPost(APIView):
+class CreateComment(APIView):
     def post(self, request):
-        user = getUser()
+        user = getUser(request)
         
         if not user:
             return Response({
@@ -64,15 +73,18 @@ class CreateCommentForPost(APIView):
         
         response = Response()
         
+        print(request.data)
         user_id = user.id
         post_id = request.data.get('to_posts_id')
+        comment_id = request.data.get('to_comment_id')
         content = request.data.get('content')
         
-        comment = Comments(to_posts_id=post_id, to_comment_id=-1, content=content, user_id=user_id, created_at=datetime.datetime.now(), updated_at=datetime.datetime.now())
+        comment = Comments(to_posts_id=post_id, to_comment_id=comment_id, content=content, user_id=user_id, created_at=datetime.datetime.now(), updated_at=datetime.datetime.now())
         comment.save()
         
         response.data = {
-            "success": "Comment created successfully"
+            "success": "Comment created successfully",
+            "comments": [CommentsSerializer(comment).data]
         }
         
         return response

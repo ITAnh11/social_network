@@ -154,7 +154,7 @@ class GetPostsView(APIView):
         
         userDataForPosts = getUserProfileForPosts(user)
         
-        posts = Posts.objects.filter(user_id=user).values('id', 'title', 'content', 'status', 'created_at').all().order_by('-created_at')    
+        posts = Posts.objects.filter(user_id=user).values('id', 'title', 'content', 'status', 'created_at').all().order_by('-created_at')[:10]    
         
         for post in posts:
             posts_data = PostsSerializer(post).data
