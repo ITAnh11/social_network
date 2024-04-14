@@ -200,17 +200,31 @@ form_submit.addEventListener('submit', function(event) {
         });
 });
 
+function hiden_posting(isOwer) {
+    if (isOwer === false){
+        post.remove();
+    }
+}
+
 //lấy bài đăng
-const url_user_post = '/userprofiles/get_posts/';
+const params = (new URL(document.location)).searchParams;
+const url_user_post = '/userprofiles/get_posts/?id=' + ((params.get('id') !== null) ? params.get('id') : '');
 const url_homepage_post = '/homepage/get_posts/';
+
+const url_get_posts = (window.location.pathname == '/userprofiles/') ? url_user_post : url_homepage_post;
+
+console.log(url_get_posts); 
+
 function get_posts(){
-    fetch(url_homepage_post)
+    fetch(url_get_posts)
     .then(response => response.json())
     .then(data => {
         render_post(data,"old");
+        hiden_posting(data.isOwner)
         console.log(data);
     })
 }
+
 get_posts();
 
 

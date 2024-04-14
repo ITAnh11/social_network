@@ -30,7 +30,15 @@ class ProfileView(APIView):
         print(user)
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
-        return render(request, 'userprofiles/profile.html')
+        
+        if request.query_params.get('id'):
+            return render(request, 'userprofiles/profile.html')
+        
+        id_requested = request.query_params.get('id') or user.id
+        
+        path = reverse('userprofiles:profile') + '?id=' + str(id_requested)
+        
+        return HttpResponseRedirect(path)
     
 class EditProfileView(APIView):
     def get(self, request):
@@ -53,22 +61,29 @@ class GetProfileView(APIView):
         user = getUser(request)
         
         if not isinstance(user, User):
-            return HttpResponseRedirect(reverse('users:login'))
+            return Response({'error': 'Unauthorized'}, status=401)
+
+        # print(request.query_params.get('id'))
         
-        id_requested = request.GET.get('id') or user.id
+        id_requested = request.query_params.get('id') or user.id
         
-        userprofile = UserProfile.objects.filter(user_id=id_requested).first()
-        imageprofile = ImageProfile.objects.filter(user_id=id_requested).first()
-        enable_edit = user.id == id_requested
+        context = self.getProfile(id_requested)
+        context['enable_edit'] = True if user.id == id_requested else False
+                
+        return Response(context)
+    
+    def getProfile(self, id):
+        user = User.objects.filter(id=id).first()
+        userprofile = UserProfile.objects.filter(user_id=id).first()
+        imageprofile = ImageProfile.objects.filter(user_id=id).first()
         
         context = {
             'user': UserSerializer(user).data,
             'userprofile': UserProfileSerializer(userprofile).data,
-            'imageprofile': ImageProfileSerializer(imageprofile).data,
-            'enable_edit': enable_edit
+            'imageprofile': ImageProfileSerializer(imageprofile).data
         }
-                
-        return Response(context)
+        
+        return context
        
 class SetUserProfileView(APIView):
     # update user profile
@@ -152,9 +167,18 @@ class GetPostsView(APIView):
         
         data = []
         
-        userDataForPosts = getUserProfileForPosts(user)
+        # print(request.query_params.get('id'))
         
-        posts = Posts.objects.filter(user_id=user).values('id', 'title', 'content', 'status', 'created_at').all().order_by('-created_at')[:10]    
+        idUserRequested = int(request.query_params.get('id')) or user.id
+
+        userRequest = User.objects.filter(id=idUserRequested).first()
+        
+        if not userRequest:
+            return Response({'error': 'User not found'}, status=404)
+        
+        userDataForPosts = getUserProfileForPosts(userRequest)
+        
+        posts = Posts.objects.filter(user_id=userRequest).values('id', 'title', 'content', 'status', 'created_at').all().order_by('-created_at')[:10]    
         
         for post in posts:
             posts_data = PostsSerializer(post).data
@@ -172,7 +196,8 @@ class GetPostsView(APIView):
             data.append(posts_data)
             
         reponse.data = {
-            'posts': data
+            'posts': data,
+            'isOwner': True if user.id == idUserRequested else False
         }
 
         return reponse
