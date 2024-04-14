@@ -49,6 +49,7 @@ uploadArea.addEventListener('click', function() {
     uploadInput.click();
 });
 
+//thêm ảnh vào bài đăng
 uploadInput.addEventListener('change', function(event) {
     // console.log(event.target.files);
 
@@ -150,6 +151,7 @@ function render_post(data,isOld){
     })
 }
 
+
 //upload_post
 form_submit.addEventListener('submit', function(event) {
     event.preventDefault();
@@ -200,19 +202,54 @@ form_submit.addEventListener('submit', function(event) {
         });
 });
 
+function hiden_posting(isOwer) {
+    if (isOwer === false){
+        post.remove();
+    }
+}
+
 //lấy bài đăng
-const url_user_post = '/userprofiles/get_posts/';
+const params = (new URL(document.location)).searchParams;
+const url_user_post = '/userprofiles/get_posts/?id=' + ((params.get('id') !== null) ? params.get('id') : '');
 const url_homepage_post = '/homepage/get_posts/';
+
+const url_get_posts = (window.location.pathname == '/userprofiles/') ? url_user_post : url_homepage_post;
+
+console.log(url_get_posts); 
+
 function get_posts(){
-    fetch(url_homepage_post)
+    fetch(url_get_posts)
     .then(response => response.json())
     .then(data => {
         render_post(data,"old");
+        hiden_posting(data.isOwner)
         console.log(data);
     })
 }
+
 get_posts();
 
+
+//cài đặt thông tin người dùng cho phần đăng bài
+function set_user_post(){
+    var userProfile = document.querySelector(".write-post-container .user-profile");
+    var userNameElement = userProfile.querySelector("p");
+    var userImageElement = userProfile.querySelector("img");
+
+    // Sử dụng localStorage thay vì Location
+    var userName = localStorage.getItem("name");
+    var userAvatar = localStorage.getItem("avatar");
+
+    // Gán giá trị từ localStorage cho các phần tử
+    if (userNameElement) {
+        userNameElement.textContent = userName;
+    }
+
+    if (userImageElement) {
+        userImageElement.src = userAvatar;
+    }
+}
+set_user_post();
 
 
 

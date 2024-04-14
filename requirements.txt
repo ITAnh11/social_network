@@ -1,16 +1,16 @@
 # pip install -r requirements.txt
 
-asgiref==3.7.2
-Django==5.0.2
-psycopg2==2.9.9
-python-dotenv==1.0.1
-sqlparse==0.4.4
-tzdata==2023.4
-whitenoise==6.6.0
-djangorestframework==3.15.1
-django-cors-headers==4.3.1
-pyjwt==2.8.0
-pillow==10.3.0
+asgiref
+Django
+psycopg2
+python-dotenv
+sqlparse
+tzdata
+whitenoise
+djangorestframework
+django-cors-headers
+pyjwt
+pillow
 channels
 daphne
 docker

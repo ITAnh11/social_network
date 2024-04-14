@@ -29,8 +29,9 @@ urlpatterns = [
     path('posts/', include('posts.urls')),
     path('friends/', include('friends.urls')),
     path('mess/', include('mess.urls')),
-    path("chat/", include("chat.urls")),
+    path('chat/', include('chat.urls')),
     path('comments/', include('comments.urls')),
+    path('navbar/', include('navbar.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

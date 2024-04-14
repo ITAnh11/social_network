@@ -55,6 +55,7 @@ class GetPostsView(APIView):
                 "avatar": imageProfile.data.get('avatar')
             }
             
+
             # media = posts.mediaofposts_set.all()
             media_data = MediaOfPostsSerializer(post.mediaofposts_set.all(), many=True).data
             
