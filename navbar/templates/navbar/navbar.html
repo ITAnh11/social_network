@@ -42,12 +42,14 @@
     <div class="user-settings">
         <div class="profile-darkButton">
             <div class="user-profile">
-                <div class="profileImage">
+                <a href="{% url 'userprofiles:profile'%}" class="inforUser">
+                    <div class="profileImage">
 
-                </div>
-                <div id="userName1" class="userNameIcon">
-            
-                </div>
+                    </div>
+                    <div id="userName1" class="userNameIcon">
+                
+                    </div>
+                </a>
             </div>
             <div id="dark-button" onclick="darkModeON()">
                 <span></span>

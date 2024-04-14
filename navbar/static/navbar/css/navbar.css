@@ -10,8 +10,11 @@ body{
 }
 
 nav.big_navbar {
+    align-content: center;
     position: sticky;
-    top: 0px;
+    top: 0;
+    left: 0; 
+    width: 100%; 
     z-index: 100;
     background: #f7f7f7;
 }
@@ -119,12 +122,20 @@ nav ul li:hover #friend{
 
 } 
 
-
-
-.active{
+#home.active {
     color: #0B84ED!important; 
     margin-left: 30px;
 }
+
+#friend.active {
+  color: #0B84ED!important; 
+  margin-left: 30px;
+}
+
+/* .active{
+    color: #0B84ED!important; 
+    margin-left: 30px;
+} */
 
 .tooltip{
     position: relative;
@@ -278,6 +289,18 @@ nav ul li #btn_profile::after{
   color: #626262;
 }
 
+.inforUser {
+  display: flex;
+  align-items: center;
+}
+
+.inforUser img {
+  height:45px;
+  width: 45px;
+  border-radius: 50%;
+  margin-right: 10px;
+
+}
 
 .user-settings hr {
   width: 90%;
