@@ -1,3 +1,5 @@
+var request_list = document.querySelector(".request-list");
+var friend_list = document.querySelector(".card-list");
 
 
 //Xử lí denine button
@@ -40,6 +42,10 @@ function accept_button(event){
         method:'POST',
         body: formdata,
     })
+    .then(response => response.json())
+    .then(data => {
+        console.log("acb:",data);
+    })
     event.target.parentNode.parentNode.querySelector(".button2").remove();
 }
 
@@ -54,7 +60,6 @@ function request_button(event){
 }
 
 //hiện lời mời kết bạn
-var request_list = document.querySelector(".request-list");
 url_addfriend = "/friends/get_receivedfriendrequest/";
 function addfriend() {
     fetch(url_addfriend)
@@ -93,8 +98,21 @@ function show_list_friend(){
     .then(response => response.json())
     .then(data => {
         console.log("friend_list:",data);
+        data.data.forEach(function(friend){
+            var a = ` 
+                <div class="card" id="${friend.friend_profile.id}">
+                    <div class="card-img">
+                        <img style=" display: flex ; width: 100%;height: 100%;" src="${friend.friend_profile.avatar}" alt="Card Image" >
+                    </div>
+                    <div class="card-content">
+                        <h3>${friend.friend_profile.name}</h3>
+                    </div>
+                </div>`
+            var newCard = document.createElement("div");
+            newCard.innerHTML = a;
+            friend_list.appendChild(newCard);
+        })
     })
-    
 }
 show_list_friend();
 

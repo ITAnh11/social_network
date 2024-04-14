@@ -25,12 +25,12 @@ class LoginView(APIView):
         return token
     
     def get(self, request):
-        reponse = render(request, 'users/login.html')
-        print(request.COOKIES.get('jwt'))
+        response = render(request, 'users/login.html')
+        # print(request.COOKIES.get('jwt'))
         
-        reponse.delete_cookie('jwt')
+        response.delete_cookie('jwt')
         
-        return reponse
+        return response
     
     def post(self, request):
         email = request.data.get('email')
