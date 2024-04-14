@@ -1,6 +1,6 @@
 var request_list = document.querySelector(".request-list");
 var friend_list = document.querySelector(".card-list");
-
+var suggest_list = document.querySelector(".suggest_list");
 
 //Xử lí denine button
 function denine_button(event){
@@ -70,6 +70,16 @@ function accept_button(event){
 function request_button(event){
     if(event.target.textContent === "Thêm bạn bè") {
         event.target.textContent = "Thu hồi";
+        var a = event.target.parentNode.parentNode.id;
+        var formdata = new FormData();
+        formdata.append("st", "pending");
+        formdata.append("id", a);
+    
+        url_sent_friendrequest = "/friends/sent_friendrequest/";
+        fetch(url_sent_friendrequest,{
+            method:"POST",
+            body: formdata,
+        })
     }
     else{
         event.target.textContent = "Thêm bạn bè";
@@ -143,9 +153,30 @@ function show_suggest_friend(){
     .then(response => response.json())
     .then(data => {
         console.log("suggest_friend_list:",data);
+        data.suggestions.forEach(function(suggest_friend){
+            console.log(suggest_friend.other_user_profile.id);
+            var a = `
+            <div class="card1" id="${suggest_friend.other_user_profile.id}">
+                <div class="card1-img">
+                    <img style="object-fit: cover;width: 100%;height: 100%;" src="${suggest_friend.other_user_profile.avatar}" alt="Card Image" >
+                </div>
+                <div class="card1-content">
+                    <h3>${suggest_friend.other_user_profile.name}</h3>
+                </div>
+                <div class="card1-button">
+                    <button class="button1" onclick="request_button(event)">Thêm bạn bè</button>
+                    <button class="button2">Xóa</button>
+                </div>
+            </div>`
+            var newDiv = document.createElement("div");
+            newDiv.innerHTML = a;
+    
+            suggest_list.appendChild(newDiv);
+        })
     })
     
 }
 show_suggest_friend();
+
 
 
