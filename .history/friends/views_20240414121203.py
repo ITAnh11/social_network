@@ -219,15 +219,15 @@ class GetMutualFriendView(APIView):
             if not user:
                 return Response({'error': 'Unauthorized'}, status=401)
             
-            other_user_id = request.get('user_id')    #lấy từ fe của các user
+            friend_id = request.get('friend_id')    #lấy từ fe của các user
             
-            other_user = get_object_or_404(Friendship, id=other_user_id)
+            friend = get_object_or_404(Friendship, id=friend_id)
             
             user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
             
-            other_user_friendships = Friendship.objects.filter(Q(user_id1=other_user.user_id1) | Q(user_id2=other_user.user_id2))
+            friend_friendships = Friendship.objects.filter(Q(user_id1=friend.user_id1) | Q(user_id2=friend.user_id2))
             
-            mutual_friendships = user_friendships.intersection(other_user_friendships)
+            mutual_friendships = user_friendships.intersection(friend_friendships)
             
             data = []
             
@@ -244,7 +244,7 @@ class GetMutualFriendView(APIView):
                 "data": data
                 })
 
-class GetSuggestionFriendView(APIView):
+class GetSuggestionFriendView():
         def get(self, request):
             user = getUser(request)
             

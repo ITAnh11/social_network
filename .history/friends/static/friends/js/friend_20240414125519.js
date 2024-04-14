@@ -98,16 +98,4 @@ function show_list_friend(){
 }
 show_list_friend();
 
-//hiện danh sách gợi ý
-url_list_suggest_friend = "/friends/get_suggestionfriend/";
-function show_suggest_friend(){
-    fetch(url_list_suggest_friend)
-    .then(response => response.json())
-    .then(data => {
-        console.log("suggest_friend_list:",data);
-    })
-    
-}
-show_suggest_friend();
-
 

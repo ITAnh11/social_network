@@ -225,9 +225,9 @@ class GetMutualFriendView(APIView):
             
             user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
             
-            other_user_friendships = Friendship.objects.filter(Q(user_id1=other_user.user_id1) | Q(user_id2=other_user.user_id2))
+            friend_friendships = Friendship.objects.filter(Q(user_id1=other_user.user_id1) | Q(user_id2=other_user.user_id2))
             
-            mutual_friendships = user_friendships.intersection(other_user_friendships)
+            mutual_friendships = user_friendships.intersection(friend_friendships)
             
             data = []
             
@@ -244,7 +244,7 @@ class GetMutualFriendView(APIView):
                 "data": data
                 })
 
-class GetSuggestionFriendView(APIView):
+class GetSuggestionFriendView():
         def get(self, request):
             user = getUser(request)
             

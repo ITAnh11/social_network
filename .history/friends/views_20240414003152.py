@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.db.models import Q
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -194,90 +193,34 @@ class GetListFriendView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         data = []
-        list_friend_ship = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
+        list_friend_ship = Friendship.objects.filter(user_id1=user) | Friendship.objects.filter(user_id2=user)
         print(list_friend_ship)
         
         
         for friend_ship in list_friend_ship:
-             
+            serializer = FriendshipSerializer(friend_ship)
+            print(serializer)
+            
+            
             try:
-                friend = {
-                "friend_ship": FriendshipSerializer(friend_ship).data,
-                "friend_profile": getUserProfileForPosts(friend_ship.user_id2) if user == friend_ship.user_id1 else getUserProfileForPosts(friend_ship.user_id1)
-                }
-                
-                data.append(friend)
+                if (Friendship.objects.values_list('user_id1', flat=True).first() == user):
+                    return Response({'Ok!'})
+                    # friend = {
+                    #     "friend_ship" : serializer.data,
+                    #     "friend_profile": getUserProfileForPosts(friend_ship.user_id2)
+                    # }
+                    
+                # elif (Friendship.objects.values_list('user_id2', flat=True).first() == user):
+                #     friend = {
+                #         "friend_ship" : serializer.data,
+                #         "friend_profile": getUserProfileForPosts(friend_ship.user_id1)
+                #     }
+                # data.append(friend)
             except:
                 return Response({'error': 'Friendship not found'}, status=404)
         return Response({
             "data": data
             })
 
-class GetMutualFriendView(APIView):
-        def get(self, request):
-            user = getUser(request)
-            if not user:
-                return Response({'error': 'Unauthorized'}, status=401)
-            
-            other_user_id = request.get('user_id')    #lấy từ fe của các user
-            
-            other_user = get_object_or_404(Friendship, id=other_user_id)
-            
-            user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
-            
-            other_user_friendships = Friendship.objects.filter(Q(user_id1=other_user.user_id1) | Q(user_id2=other_user.user_id2))
-            
-            mutual_friendships = user_friendships.intersection(other_user_friendships)
-            
-            data = []
-            
-            for mutual_friendship in mutual_friendships:
-                
-                friend_profile = getUserProfileForPosts(mutual_friendship.user_id2) if user == mutual_friendship.user_id1 else getUserProfileForPosts(mutual_friendship.user_id1)
-                
-                data.append({
-                "mutual_friendship": FriendshipSerializer(mutual_friendship).data,
-                "friend_profile": friend_profile
-                })
-            
-            return Response({
-                "data": data
-                })
-
-class GetSuggestionFriendView(APIView):
-        def get(self, request):
-            user = getUser(request)
-            
-            if not user:
-                return Response({'error': 'Unauthorized'}, status=401)
-            
-            #dsach bạn bè của mình
-            user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
-            
-            suggestions = []
-            
-            #chạy từng bạn bè của mình
-            for friendship in user_friendships:
-                #tìm thằng nào là bạn bè của bạn mình
-                mutual_friendships = Friendship.objects.filter(Q(user_id1=friendship.user_id1) | Q(user_id2=friendship.user_id1)) \
-                                                     .filter(Q(user_id1=friendship.user_id2) | Q(user_id2=friendship.user_id2))
-                
-                mutual_friendships_count = mutual_friendships.exclude(Q(user_id1=user) | Q(user_id2=user)).count()
-                
-                if mutual_friendships_count >= 1:
-                    
-                    # friend_profile = getUserProfileForPosts(friendship.user_id2) if user == friendship.user_id1 else getUserProfileForPosts(friendship.user_id1)
-                    for mutual_friendship in mutual_friendships:
-                        #lấy profile của thằng suggest đó
-                        mutual_friend_profile = getUserProfileForPosts(mutual_friendship.user_id1) if user == friendship.user_id2 else getUserProfileForPosts(mutual_friendship.user_id1)
-                        
-                        if not Friendship.objects.filter(Q(user_id1=user, user_id2=mutual_friend_profile.user) | Q(user_id1=mutual_friend_profile.user, user_id2=user)).exists():
-                            
-                            suggestions.append({
-                            "mutual_friendships_count": mutual_friendships_count,
-                            "mutual_friend_profile": mutual_friend_profile
-                            })
-                        
-            return Response({
-                "suggestions": suggestions
-                })
+# class GetMutualFriendView(APIView):
+    
