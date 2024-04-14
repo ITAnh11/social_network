@@ -77,13 +77,13 @@ function request_button(event){
     
         url_sent_friendrequest = "/friends/sent_friendrequest/";
         fetch(url_sent_friendrequest,{
-            method:'POST',
+            method:"POST",
             body: formdata,
         })
     }
-    else{
-        event.target.textContent = "Thêm bạn bè";
-    }
+    // else{
+    //     event.target.textContent = "Thêm bạn bè";
+    // }
 }
 
 //hiện lời mời kết bạn

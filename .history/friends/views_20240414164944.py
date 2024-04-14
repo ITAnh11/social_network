@@ -37,12 +37,10 @@ class  SentFriendRequestView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         to_user_id = request.data.get('id')
-        print(request.data)
-        to_user = get_object_or_404(User, id = to_user_id)
         try:
             friend_request = FriendRequest.objects.create(
                 from_id = user,
-                to_id = to_user,
+                to_id = to_user_id,
                 status = 'pending'
             )
             friend_request.save()
@@ -94,18 +92,9 @@ class AcceptFriendRequestView(APIView):
                 user_id2 = friend_request.from_id                 
                 )
                 # Friendship.objects.all().delete()  
-                friend_ship.save()    
-                 
-                data = []
-                
-                accepted_friend_request = {
-                "friend_profile" : getUserProfileForPosts(friend_request.from_id)
-                }
-                data.append(accepted_friend_request)
-                return Response ({
-                    'accepted_friend_request': data
-                    })
-                # return Response({'message': 'Friend request processed successfully'})
+                friend_ship.save()     
+                       
+                return Response({'message': 'Friend request processed successfully'})
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)
@@ -294,14 +283,13 @@ class GetSuggestionFriendView(APIView):
             #                 "mutual_friend_profile": mutual_friend_profile
             #                 })
             data = []
-            others_user = Friendship.objects.all()
+            others_user = User.objects.filter()
             for other_user in others_user:
                 
                 suggestions = {
-                    "other_user_profile": getUserProfileForPosts(other_user.user_id2) 
+                    "other_user_profile": getUserProfileForPosts(other_user.id) 
                     }
                 data.append(suggestions)
-                
             return Response({
                 "suggestions": data
                 })
