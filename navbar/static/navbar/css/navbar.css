@@ -160,6 +160,13 @@ nav ul li:hover #friend{
 .tooltip:hover::after{
     opacity: 1;
 }
+
+.tooltip img {
+  height: 45px;
+  width: 45px;
+  border-radius: 0%;
+}
+
 nav ul li #btn_profile::after{
    margin-left: -20px;
 }
@@ -239,7 +246,8 @@ nav ul li #btn_profile::after{
 .user-settings {
   position: absolute;
   right: 0%;
-  background: var(--bg-color);
+  /* background: var(--bg-color); */
+  background: white;
   max-width: 350px;
   width: 90%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
@@ -247,6 +255,8 @@ nav ul li #btn_profile::after{
   overflow: hidden;
   max-height: 0px;
   transition: max-height 0.3s;
+  z-index: 500;
+
 }
 
 .user-setting-showup-toggle {

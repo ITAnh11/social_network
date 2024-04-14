@@ -143,6 +143,8 @@
   height: 50vh;
 }
 
+
+/* danh sach loi moi ket ban */
 .request-list{
   display: flex; 
   position: relative; 
@@ -165,6 +167,32 @@
 }
 
 .request-list::-webkit-scrollbar-thumb:hover {
+  background: #727171; /* Màu của thanh cuộn khi di chuột qua */
+}
+
+/* danh sach goi y ket ban */
+.suggest_list{
+  display: flex; 
+  position: relative; 
+  margin-left: 8vh;
+  flex: 6;
+  flex-wrap: wrap;
+  overflow-x: auto;
+}
+.suggest_list::-webkit-scrollbar {
+  width: 8px; /* Chiều rộng của thanh cuộn */
+}
+
+.suggest_list:-webkit-scrollbar-track {
+  background: #f1f1f1; /* Màu nền của thanh cuộn */
+}
+
+.suggest_list::-webkit-scrollbar-thumb {
+  background: #bdbbbb; /* Màu của thanh cuộn */
+  border-radius: 6px; /* Đường viền của thanh cuộn */
+}
+
+.suggest_list::-webkit-scrollbar-thumb:hover {
   background: #727171; /* Màu của thanh cuộn khi di chuột qua */
 }
 
