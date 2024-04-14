@@ -296,7 +296,7 @@ class GetSuggestionFriendView(APIView):
             for other_user in others_user:
                 
                 suggestions = {
-                    "other_user_profile": getUserProfileForPosts(other_user.user_id2) 
+                    "other_user_profile": getUserProfileForPosts(other_user.user_id1) 
                     }
                 data.append(suggestions)
                 
