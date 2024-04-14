@@ -292,14 +292,13 @@ class GetSuggestionFriendView(APIView):
             #                 "mutual_friend_profile": mutual_friend_profile
             #                 })
             data = []
-            others_user = Friendship.objects.all()
+            others_user = User.objects.filter()
             for other_user in others_user:
                 
                 suggestions = {
-                    "other_user_profile": getUserProfileForPosts(other_user.user_id2) 
+                    "other_user_profile": getUserProfileForPosts(other_user.id) 
                     }
                 data.append(suggestions)
-                
             return Response({
                 "suggestions": data
                 })
