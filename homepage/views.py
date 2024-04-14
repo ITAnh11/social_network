@@ -44,7 +44,7 @@ class GetPostsView(APIView):
             
             posts_data = PostsSerializer(post).data
             
-            print(post.user_id)
+            # print(post.user_id)
             
             userDataForPosts = getUserProfileForPosts(post.user_id)
             

@@ -27,7 +27,7 @@ from django.contrib.auth import login,logout,authenticate
 class ProfileView(APIView):
     def get(self, request):
         user = getUser(request)
-        
+        print(user)
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
         return render(request, 'userprofiles/profile.html')
