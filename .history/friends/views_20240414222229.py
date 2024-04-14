@@ -38,11 +38,10 @@ class  SentFriendRequestView(APIView):
         
         to_user_id = request.data.get('id')
         print(request.data)
-        to_user = get_object_or_404(User, id = to_user_id)
         try:
             friend_request = FriendRequest.objects.create(
                 from_id = user,
-                to_id = to_user,
+                to_id = user,
                 status = 'pending'
             )
             friend_request.save()

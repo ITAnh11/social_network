@@ -37,18 +37,17 @@ class  SentFriendRequestView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         to_user_id = request.data.get('id')
-        print(request.data)
-        to_user = get_object_or_404(User, id = to_user_id)
         try:
             friend_request = FriendRequest.objects.create(
                 from_id = user,
-                to_id = to_user,
+                to_id = to_user_id,
                 status = 'pending'
             )
             friend_request.save()
         except :
             return Response({'error': 'Friend Request can not create'}, status=404)
         
+        FriendRequest.objects.create(from_id=user, to_id=friend, status='pending')
         
         return Response({'success': 'Friend request sent successfully'})
     
@@ -103,7 +102,7 @@ class AcceptFriendRequestView(APIView):
                 }
                 data.append(accepted_friend_request)
                 return Response ({
-                    'accepted_friend_request': data
+                    "accepted_friend_request": data
                     })
                 # return Response({'message': 'Friend request processed successfully'})
             
@@ -264,44 +263,36 @@ class GetSuggestionFriendView(APIView):
                 return Response({'error': 'Unauthorized'}, status=401)
             
             #dsach bạn bè của mình
-            # user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
+            user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
             
-            # suggestions = []
+            suggestions = []
             
-            # #chạy từng bạn bè của mình
-            # for friendship in user_friendships:
-            #     #tìm thằng nào là bạn bè của bạn mình
-            #     mutual_friendships = Friendship.objects.filter(Q(user_id1=friendship.user_id1) | Q(user_id2=friendship.user_id1)) \
-            #                                          .filter(Q(user_id1=friendship.user_id2) | Q(user_id2=friendship.user_id2))
+            #chạy từng bạn bè của mình
+            for friendship in user_friendships:
+                #tìm thằng nào là bạn bè của bạn mình
+                mutual_friendships = Friendship.objects.filter(Q(user_id1=friendship.user_id1) | Q(user_id2=friendship.user_id1)) \
+                                                     .filter(Q(user_id1=friendship.user_id2) | Q(user_id2=friendship.user_id2))
                 
-            #     mutual_friendships_count = mutual_friendships.exclude(Q(user_id1=user) | Q(user_id2=user)).count()
+                mutual_friendships_count = mutual_friendships.exclude(Q(user_id1=user) | Q(user_id2=user)).count()
                 
-            #     if mutual_friendships_count >= 1:
+                if mutual_friendships_count >= 1:
                     
-            #         # friend_profile = getUserProfileForPosts(friendship.user_id2) if user == friendship.user_id1 else getUserProfileForPosts(friendship.user_id1)
-            #         for mutual_friendship in mutual_friendships:
-            #             #lấy profile của thằng suggest đó
-            #             if mutual_friendship.user_id1 == friendship.user_id2 | mutual_friendship.user_id1==friendship.user_id1 :
-            #                 mutual_friend_profile = getUserProfileForPosts(mutual_friendship.user_id1) 
+                    # friend_profile = getUserProfileForPosts(friendship.user_id2) if user == friendship.user_id1 else getUserProfileForPosts(friendship.user_id1)
+                    for mutual_friendship in mutual_friendships:
+                        #lấy profile của thằng suggest đó
+                        if mutual_friendship.user_id1 == friendship.user_id2 | mutual_friendship.user_id1==friendship.user_id1 :
+                            mutual_friend_profile = getUserProfileForPosts(mutual_friendship.user_id1) 
                         
-            #             elif mutual_friendship.user_id2 == friendship.user_id2 | mutual_friendship.user_id2==friendship.user_id1 :
-            #                 getUserProfileForPosts(mutual_friendship.user_id1)
+                        elif mutual_friendship.user_id2 == friendship.user_id2 | mutual_friendship.user_id2==friendship.user_id1 :
+                            getUserProfileForPosts(mutual_friendship.user_id1)
                         
-            #             if not Friendship.objects.filter(Q(user_id1=user, user_id2=mutual_friend_profile.user) | Q(user_id1=mutual_friend_profile.user, user_id2=user)).exists():
+                        if not Friendship.objects.filter(Q(user_id1=user, user_id2=mutual_friend_profile.user) | Q(user_id1=mutual_friend_profile.user, user_id2=user)).exists():
                             
-            #                 suggestions.append({
-            #                 "mutual_friendships_count": mutual_friendships_count,
-            #                 "mutual_friend_profile": mutual_friend_profile
-            #                 })
-            data = []
-            others_user = Friendship.objects.all()
-            for other_user in others_user:
-                
-                suggestions = {
-                    "other_user_profile": getUserProfileForPosts(other_user.user_id2) 
-                    }
-                data.append(suggestions)
-                
+                            suggestions.append({
+                            "mutual_friendships_count": mutual_friendships_count,
+                            "mutual_friend_profile": mutual_friend_profile
+                            })
+                        
             return Response({
-                "suggestions": data
+                "suggestions": suggestions
                 })
