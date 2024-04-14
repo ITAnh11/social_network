@@ -49,6 +49,7 @@ uploadArea.addEventListener('click', function() {
     uploadInput.click();
 });
 
+//thêm ảnh vào bài đăng
 uploadInput.addEventListener('change', function(event) {
     // console.log(event.target.files);
 
@@ -150,6 +151,7 @@ function render_post(data,isOld){
     })
 }
 
+
 //upload_post
 form_submit.addEventListener('submit', function(event) {
     event.preventDefault();
@@ -227,6 +229,27 @@ function get_posts(){
 
 get_posts();
 
+
+//cài đặt thông tin người dùng cho phần đăng bài
+function set_user_post(){
+    var userProfile = document.querySelector(".write-post-container .user-profile");
+    var userNameElement = userProfile.querySelector("p");
+    var userImageElement = userProfile.querySelector("img");
+
+    // Sử dụng localStorage thay vì Location
+    var userName = localStorage.getItem("name");
+    var userAvatar = localStorage.getItem("avatar");
+
+    // Gán giá trị từ localStorage cho các phần tử
+    if (userNameElement) {
+        userNameElement.textContent = userName;
+    }
+
+    if (userImageElement) {
+        userImageElement.src = userAvatar;
+    }
+}
+set_user_post();
 
 
 

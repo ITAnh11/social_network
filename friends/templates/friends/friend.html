@@ -10,72 +10,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{%static 'friends/css/friend.css'%}">
-    <link rel="stylesheet" href="{%static 'friends/css/style.css'%}">
+    {% comment %} <link rel="stylesheet" href="{%static 'friends/css/style.css'%}"> {% endcomment %}
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="nav-left"><img class="logo" src="images/logo.png" alt="">
-            <ul class="navlogo">
-                <li><img src="{%static 'friends/images/notification.png'%}"></li>
-                <li><img src="{%static 'friends/images/inbox.png'%}"></li>
-                <li><img src="{%static 'friends/images/video.png'%}"></li>
-            </ul>
-        </div>
-        <div class="nav-right">
-            <div class="search-box">
-                <img src="{%static 'friends/images/search.png'%}" alt="">
-                <input type="text" placeholder="Search">
-            </div>
-            <div class="profile-image online" onclick="UserSettingToggle()">
-                <img src="{%static 'friends/images/profile-pic.png'%}" alt="">
-            </div>
-
-        </div>
-        <div class="user-settings">
-            <div class="profile-darkButton">
-            <div class="user-profile">
-                <img src="{%static 'friends/images/profile-pic.png'%}" alt="">
-                <div>
-                    <p> Alex Carry</p>
-                    <a href="#">See your profile</a>
-                </div>
-            </div>
-            <div id="dark-button" onclick="darkModeON()">
-                <span></span>
-            </div>
-            </div>
-            <hr>
-            <div class="user-profile">
-                <img src="{%static 'friends/images/feedback.png'%}" alt="">
-                <div>
-                    <p> Give Feedback</p>
-                    <a href="#">Help us to improve</a>
-                </div>
-            </div>
-            <hr>
-            <div class="settings-links">
-                <img src="{%static 'friends/images/setting.png'%}" alt="" class="settings-icon">
-                <a href="#">Settings & Privary <img src="{%static 'friends/images/arrow.png'%}" alt=""></a>
-            </div>
-
-            <div class="settings-links">
-                <img src="{%static 'friends/images/help.png'%}" alt="" class="settings-icon">
-                <a href="#">Help & Support <img src="{%static 'friends/images/arrow.png'%}" alt=""></a>
-            </div>
-
-            <div class="settings-links">
-                <img src="{%static 'friends/images/display.png'%}" alt="" class="settings-icon">
-                <a href="#">Display & Accessibility <img src="{%static 'friends/images/arrow.png'%}" alt=""></a>
-            </div>
-
-            <div class="settings-links">
-                <img src="{%static 'friends/images/logout.png'%}" alt="" class="settings-icon">
-                <a href="#">Logout <img src="{%static 'friends/images/arrow.png'%}" alt=""></a>
-            </div>
-
-        </div>
-    </nav>
+    {%include 'navbar/navbar.html' %}
     
     <div style="display: flex; flex-direction: row; height: 100vh;">
         <div class="Friends_List">
@@ -147,7 +86,7 @@
                             <h3>Văn Tùng</h3>
                         </div>
                         <div class="card1-button">
-                            <button class="button1">Thêm bạn bè</button>
+                            <button class="button1" onclick="request_button(event)">Thêm bạn bè</button>
                             <button class="button2">Xóa</button>
                         </div>
                     </div>

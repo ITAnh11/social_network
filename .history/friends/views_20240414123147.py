@@ -244,7 +244,7 @@ class GetMutualFriendView(APIView):
                 "data": data
                 })
 
-class GetSuggestionFriendView(APIView):
+class GetSuggestionFriendView():
         def get(self, request):
             user = getUser(request)
             
