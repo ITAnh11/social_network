@@ -115,7 +115,9 @@ function render_post(data,isOld){
                 <div class="user-profile">
                     <img src="${post.user.avatar}" alt="">
                     <div>
-                        <p>${post.user.name}</p>
+                        <a href="/userprofiles/?id=${post.user.id}" style="text-decoration: none;">
+                            <p>${post.user.name}</p>
+                        </a>
                         <small>${post.created_at}</small>
                     </div>
                 </div>
