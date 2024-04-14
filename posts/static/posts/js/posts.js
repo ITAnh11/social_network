@@ -221,8 +221,8 @@ function get_posts(){
     fetch(url_get_posts)
     .then(response => response.json())
     .then(data => {
+        hiden_posting(data.isOwner);
         render_post(data,"old");
-        hiden_posting(data.isOwner)
         console.log(data);
     })
 }

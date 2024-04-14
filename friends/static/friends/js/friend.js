@@ -45,6 +45,23 @@ function accept_button(event){
     .then(response => response.json())
     .then(data => {
         console.log("acb:",data);
+        data.accepted_friend_request.forEach(function(friend){
+            var url = `/userprofiles/?id=${friend.friend_profile.id}`;
+            var b = ` 
+                <a href="${url}" style="text-decoration: none;">
+                    <div class="card" id="${friend.friend_profile.id}">
+                        <div class="card-img">
+                            <img style="display: flex; width: 100%; height: 100%;" src="${friend.friend_profile.avatar}" alt="Card Image">
+                        </div>
+                        <div class="card-content">
+                            <h3>${friend.friend_profile.name}</h3>
+                        </div>
+                    </div>
+                </a>`;
+                var newCard = document.createElement("div");
+                newCard.innerHTML = b;
+                friend_list.appendChild(newCard);  
+        })
     })
     event.target.parentNode.parentNode.querySelector(".button2").remove();
 }
@@ -99,15 +116,18 @@ function show_list_friend(){
     .then(data => {
         console.log("friend_list:",data);
         data.data.forEach(function(friend){
-            var a = ` 
+            var url = `/userprofiles/?id=${friend.friend_profile.id}`;
+            var a = `
+            <a href="${url}" style="text-decoration: none;">
                 <div class="card" id="${friend.friend_profile.id}">
                     <div class="card-img">
-                        <img style=" display: flex ; width: 100%;height: 100%;" src="${friend.friend_profile.avatar}" alt="Card Image" >
+                        <img style="display: flex; width: 100%; height: 100%;" src="${friend.friend_profile.avatar}" alt="Card Image">
                     </div>
                     <div class="card-content">
                         <h3>${friend.friend_profile.name}</h3>
                     </div>
-                </div>`
+                </div>
+            </a>`;
             var newCard = document.createElement("div");
             newCard.innerHTML = a;
             friend_list.appendChild(newCard);
