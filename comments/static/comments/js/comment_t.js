@@ -2,7 +2,7 @@ const main_container = document.getElementById('main-container');
 
 
 //lấy bài đăng
-const api_get_posts_for_userprofilepage = '/userprofiles/get_posts/';
+const api_get_posts_for_userprofilepage = '/homepage/get_posts/';
 const api_get_comments_for_posts = '/comments/get_comments_for_post/';
 const api_get_comments_for_comment = '/comments/get_comments_for_comment/';
 
@@ -28,7 +28,7 @@ function render_post(data,old) {
         var created_at = post.created_at;
         var user_id = post.user.id;
         var user_name = post.user.name;
-        var images = (post.media) ? post.media[0].media : "";
+        var images = (post.media[0]) ? post.media[0].media : "";
         var post = `<div class="posts-container" id="posts-${posts_id}" style="border: solid rgb(163, 162, 162); margin: 5px;">
                         <div class="post-box">
                             <div class="post" style="display: flex;">
@@ -87,6 +87,8 @@ function send_comment(event, posts_id, comment_id, forwhat){
     formData.append('content', content);
     formData.append('to_posts_id', posts_id);
     formData.append('to_comment_id', comment_id);
+
+    console.log(formData.get('to_posts_id'));
 
     idWhat = (forwhat === "posts") ? posts_id : comment_id;
 
@@ -232,8 +234,8 @@ function render_comment(data, idElement){ {
     });
 
     data.comments.forEach(comment => {
-        var comment_id = comment.id;
-        var form = document.getElementById(`send-comment-for-comment-${comment_id}`);
+        const comment_id = comment.id;
+        const form = document.getElementById(`send-comment-for-comment-${comment_id}`);
         form.addEventListener('submit', function(event){
             event.preventDefault();
             console.log("submit");

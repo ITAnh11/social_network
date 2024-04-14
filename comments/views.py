@@ -88,28 +88,3 @@ class CreateComment(APIView):
         }
         
         return response
-
-class CreateCommentForComment(APIView):
-    def post(self, request):
-        user = getUser()
-        
-        if not user:
-            return Response({
-                "message": "Unauthorized"
-                },status=401)
-        
-        response = Response()
-        
-        user_id = user.id
-        post_id = request.data.get('to_comment_id')
-        content = request.data.get('content')
-        
-        
-        comment = Comments(to_posts_id=post_id, to_comment_id=-1, content=content, user_id=user_id, created_at=datetime.datetime.now(), updated_at=datetime.datetime.now())
-        comment.save()
-        
-        response.data = {
-            "success": "Comment created successfully"
-        }
-        
-        return response

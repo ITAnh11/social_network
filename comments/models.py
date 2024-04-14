@@ -19,7 +19,6 @@ class Comments(Document):
         ]
     }
     
-    
 # from django_mongoengine import fields, Document, EmbeddedDocument
 # from mongoengine.fields import EmbeddedDocumentField
 
