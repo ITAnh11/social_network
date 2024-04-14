@@ -196,6 +196,7 @@ function show_commented_of_comment(event){
 }
 
 function render_comment(data, idElement){ {
+
     data.comments.forEach(comment => {
         var comment_id = comment.id;
         var content = comment.content;
