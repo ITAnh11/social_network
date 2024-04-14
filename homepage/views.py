@@ -12,6 +12,8 @@ from users.views import LogoutView
 from posts.models import Posts, MediaOfPosts
 from posts.serializers import PostsSerializer, MediaOfPostsSerializer
 
+from userprofiles.serializers import UserProfileSerializer, ImageProfileSerializer
+
 from common_functions.common_function import getUserProfileForPosts, getTimeDuration
 
 # Create your views here.
@@ -38,18 +40,24 @@ class GetPostsView(APIView):
         
         data = []
      
-        posts = Posts.objects.order_by('-created_at')[:50]  
-        
+        posts = Posts.objects.prefetch_related('user_id__userprofile_set', 'user_id__imageprofile_set', 'mediaofposts_set').order_by('-created_at')[:50]
+
         for post in posts:
             
             posts_data = PostsSerializer(post).data
+
+            userProfile = UserProfileSerializer(post.user_id.userprofile_set.first())
+            imageProfile = ImageProfileSerializer(post.user_id.imageprofile_set.first())
+
+            userDataForPosts = {
+                "id": post.user_id.id,
+                "name": f"{userProfile.data.get('first_name')} {userProfile.data.get('last_name')}",
+                "avatar": imageProfile.data.get('avatar')
+            }
             
-            # print(post.user_id)
-            
-            userDataForPosts = getUserProfileForPosts(post.user_id)
-            
-            media = MediaOfPosts.objects.filter(post_id=posts_data.get('id'))
-            media_data = MediaOfPostsSerializer(media, many=True).data
+
+            # media = posts.mediaofposts_set.all()
+            media_data = MediaOfPostsSerializer(post.mediaofposts_set.all(), many=True).data
             
             posts_data['media'] = media_data
             posts_data['user'] = userDataForPosts
