@@ -16,12 +16,14 @@ var LoadMoreBackground =document.querySelector(".btn-LoadMore");
         };
 
 /* change-color */
-var currentUrl = window.location.href;
-if (currentUrl.includes("homepage/index.html")) {
+const currentUrl = window.location.pathname;
+console.log(currentUrl);
+
+if (currentUrl.includes("/")) {
     document.getElementById("home").classList.add("active");
-} else if (currentUrl.includes("friends/friend.html")) {
+} else if (currentUrl.includes("/friend")) {
     document.getElementById("friend").classList.add("active");
-} else if (currentUrl.includes("userprofiles/profile.html")) {
+} else if (currentUrl.includes("/userprofiles")) {
     document.getElementById("home").classList.remove("active");
     document.getElementById("friend").classList.remove("active");
 }
