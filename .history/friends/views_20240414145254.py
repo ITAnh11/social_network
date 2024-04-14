@@ -113,12 +113,6 @@ class AcceptFriendRequestView(APIView):
                 "friend_profile" : getUserProfileForPosts(friend_request_id)
             }
             
-            data.append(accepted_friend_request)
-            
-            return Response ({
-                'data': data
-            })
-            
 
 class DenineFriendRequestView(APIView):
     def post(self, request):

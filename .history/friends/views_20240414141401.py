@@ -98,27 +98,6 @@ class AcceptFriendRequestView(APIView):
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)
-        
-    def get(self, request):
-            user = getUser(request)
-        
-            if not user:
-                return Response({'error': 'Unauthorized'}, status=401)
-            
-            status = request.get('st')
-            friend_request_id = request.get('id')
-            
-            data = []
-            accepted_friend_request = {
-                "friend_profile" : getUserProfileForPosts(friend_request_id)
-            }
-            
-            data.append(accepted_friend_request)
-            
-            return Response ({
-                'data': data
-            })
-            
 
 class DenineFriendRequestView(APIView):
     def post(self, request):
