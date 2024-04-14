@@ -11,6 +11,6 @@ urlpatterns = [
     path('get_sentfriendrequest/',GetSentFriendRequestsView.as_view(), name="get_sentfriendrequest"),
     path('get_receivedfriendrequest/',GetReceivedFriendRequestsView.as_view(), name="get_receivedfriendrequest"),
     path('get_listfriend/',GetListFriendView.as_view(), name="get_listfriend"),#lay danh sach ban be
-    path('get_mutualfriend/',GetMutualFriendView.as_view(), name='get_mutualfriend'), #lay ds cac ban be chung cua 2 user
-    path('get_suggestionfriend/',GetSuggestionFriendView.as_view(), name='get_suggestionfriend'), # dsach gợi ý kết bạn
+    path('get_mutualfriend/',GetMutualFriendView.as_view(), name='get_mutualfriend'), #lay cac ban be chung cua 2 user
+    path('get_suggestionfriend/',GetSuggestionFriendView.as_view(), name='get_suggestionfriend')
 ]
