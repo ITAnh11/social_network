@@ -1,3 +1,7 @@
 .hiden {
     display: none;
 }
+
+.active-reaction-btn {
+    color: #007bff;
+}

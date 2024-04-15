@@ -255,3 +255,24 @@ class GetPostsView(APIView):
         print(f"The function took {execution_time} seconds to complete")
 
         return reponse
+    
+class GetUserProfileBasicView(APIView):
+    def get(self, request):
+        user = getUser(request)
+        
+        if not user:
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        userprofile = UserProfile.objects.filter(user_id=user).first()
+        imageprofile = ImageProfile.objects.filter(user_id=user).first()
+        
+        profileSerializer = UserProfileSerializer(userprofile)
+        imageSerializer = ImageProfileSerializer(imageprofile)
+        
+        context = {
+            'user_id': user.id,
+            'name': f"{profileSerializer.data.get('first_name')} {profileSerializer.data.get('last_name')}",
+            'avatar': imageSerializer.data.get('avatar')
+        }
+        
+        return Response(context)
