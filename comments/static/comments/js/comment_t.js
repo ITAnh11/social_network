@@ -5,15 +5,33 @@ const main_container = document.getElementById('main-container');
 const api_get_posts_for_userprofilepage = '/homepage/get_posts/';
 const api_get_comments_for_posts = '/comments/get_comments_for_post/';
 const api_get_comments_for_comment = '/comments/get_comments_for_comment/';
-
+const api_get_profile_basic = '/userprofiles/get_profile_basic/';
+const api_get_reactions = '/reactions/get_reactions/'
+const api_create_reaction = '/reactions/create_reaction/'
+const api_delete_reaction = '/reactions/delete_reaction/'
+const api_is_reacted = '/reactions/is_reacted/'
 
 const posts_lists = [];
+
+var USERPROFILE = {};
+
+function get_userprofile() {
+    fetch(api_get_profile_basic)
+    .then(response => response.json())
+    .then(data => {
+        // console.log(data);
+        USERPROFILE.id = data.user_id;
+        USERPROFILE.name = data.name;
+        USERPROFILE.avatar = data.avatar;
+    })
+
+}
 
 function get_posts(){
     fetch(api_get_posts_for_userprofilepage)
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        // console.log(data);
         render_post(data,"old");
     })
 }
@@ -29,7 +47,7 @@ function render_post(data,old) {
         var user_id = post.user.id;
         var user_name = post.user.name;
         var images = (post.media[0]) ? post.media[0].media : "";
-        var post = `<div class="posts-container" id="posts-${posts_id}" style="border: solid rgb(163, 162, 162); margin: 5px;">
+        var post = `<div class="${posts_id} posts-container" id="posts-${posts_id}" style="border: solid rgb(163, 162, 162); margin: 5px;">
                         <div class="post-box">
                             <div class="post" style="display: flex;">
                                 <div class="post-header" style="margin: 5px 5px;">
@@ -44,6 +62,11 @@ function render_post(data,old) {
                             </div>
                         </div>
 
+                    <div class="reaction-container" style="display: flex;">
+                        <p id="count-reaction-posts-${posts_id}" style="margin: 5px; padding: 0;">100</p>
+                        <button id="react-btn-posts-${posts_id}" type="button" class="of-posts ${posts_id}" style="margin: 5px;" onclick="sendReaction(event)">like</button>
+                    </div>
+
                     <div class="comment-container">
 
                         <div id="active-comment">
@@ -53,7 +76,7 @@ function render_post(data,old) {
                         <div id="commented-of-posts-box-${posts_id}" style="display: none;"></div>
                         
                         <div id="comment-for-posts-container" style="margin-top: 10px;">
-                            <form action="/comments/create_comment/" method="post" id="send-comment-for-posts-${posts_id}"">
+                            <form action="/comments/create_comment/" method="post" id="send-comment-for-posts-${posts_id}">
                                 <input type="text" name="content" id="content-comment-send">
                                 <input type="submit" id="submit" value="comment">
                             </form>
@@ -64,14 +87,19 @@ function render_post(data,old) {
         main_container.innerHTML += post;
     });
 
-    posts_lists.forEach(post => {
+    data.posts.forEach(post => {
         var posts_id = post.id;
+
         var form = document.getElementById(`send-comment-for-posts-${posts_id}`);
         form.addEventListener('submit', function(event){
             event.preventDefault();
             console.log("submit");
             send_comment(event, posts_id, -1, "posts");
         });
+
+        setCountReaction('posts', posts_id);
+
+        isReacted('posts', posts_id);
     });
     
 }
@@ -87,6 +115,7 @@ function send_comment(event, posts_id, comment_id, forwhat){
     formData.append('content', content);
     formData.append('to_posts_id', posts_id);
     formData.append('to_comment_id', comment_id);
+    formData.append('user', JSON.stringify(USERPROFILE));
 
     console.log(formData.get('to_posts_id'));
 
@@ -115,7 +144,7 @@ function get_comments_for_post(posts_id, idElement){
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        // console.log(data);
         render_comment(data, idElement);
     })
 
@@ -135,11 +164,13 @@ function show_commented_of_posts(event){
     var active_comment_btn = document.getElementById(`active-comment-of-posts-btn-${posts_id}`);
     console.log(active_comment_btn);
 
-    if (commented_box.innerHTML !== ""){
-    } else {
-        get_comments_for_post(posts_id, posts_id_element);
-    }
-    // get_comments_for_post(posts_id);
+    // if (commented_box.innerHTML !== ""){
+    // } else {
+    //     get_comments_for_post(posts_id, posts_id_element);
+    // }
+    commented_box.innerHTML = "";
+    get_comments_for_post(posts_id, posts_id_element);
+    
 
     if(commented_box.style.display === "none"){
         commented_box.style.display = "block";
@@ -163,7 +194,7 @@ function get_comments_for_comment(comment_id, idElement){
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        // console.log(data);
         render_comment(data, idElement);
     })
 }
@@ -182,11 +213,12 @@ function show_commented_of_comment(event){
     var active_comment_btn = document.getElementById(`active-comment-of-comment-btn-${comment_id}`);
     console.log(active_comment_btn);
 
-    if (commented_box.innerHTML !== ""){
-    } else {
-        get_comments_for_comment(comment_id, comment_id_element);
-    }
-    // get_comments_for_post(posts_id);
+    // if (commented_box.innerHTML !== ""){
+    // } else {
+    //     get_comments_for_comment(comment_id, comment_id_element);
+    // }
+    commented_box.innerHTML = "";
+    get_comments_for_comment(comment_id, comment_id_element);
 
     if(commented_box.style.display === "none"){
         commented_box.style.display = "block";
@@ -204,16 +236,22 @@ function render_comment(data, idElement){ {
         var comment_id = comment.id;
         var content = comment.content;
         var created_at = comment.created_at;
-        var user_id = comment.user_id;
+        var user = comment.user;
 
         var comment = `<div id="comment-${comment_id}" class="comment" style="display: flex; flex-direction: column; margin-left: 20px;">
                             <div class="comment-header">
-                                <div class="comment-author" style="margin: 0px 0px;">
-                                    <p class="name" style="margin: 0px 0px;" >${user_id} : </p>
+                                <div class="comment-author" style="margin: 0px 0px; display: flex;">
+                                    <img src="${user.avatar}" alt="" style="width: 20px; height: 20px;">
+                                    <p class="name" style="margin: 0px 0px;" >${user.name} : </p>
                                 </div>
                             </div>
-                            <div class="comment-content" style="margin: 0px 0px; margin-left: 20px;">
+                            <div class="comment-content" style="margin: 0px 0px; margin-left: 20px; display: inline;">
                                 <p class="content" style="margin: 0px 0px;">${content}</p>
+                            </div>
+
+                            <div class="reaction-container" style="display: flex;">
+                                <p id="count-reaction-comment-${comment_id}" style="margin: 5px; padding: 0;">100</p>
+                                <button id="react-btn-comment-${comment_id}" type="button" class="of-comment ${comment_id}" style="margin: 5px;" onclick="sendReaction(event)">like</button>
                             </div>
 
                             <div id="active-comment">
@@ -241,8 +279,137 @@ function render_comment(data, idElement){ {
             console.log("submit");
             send_comment(event, -1, comment_id, "comment");
         });
+
+        setCountReaction('comment', comment_id);
+
+        isReacted('comment', comment_id);
     });
     }
 }
 
+function setCountReaction(forWhat, idWhat){
+    formData = new FormData();
+    what = (forWhat == 'posts') ? 'posts_id' : 'comment_id';
+    otherWhat = (what == 'posts_id') ? 'comment_id' : 'posts_id';
+
+    formData.append(what, idWhat);
+    formData.append(otherWhat, -1);
+
+    fetch(api_get_reactions, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // console.log(data);
+        count = data.count;
+        document.getElementById(`count-reaction-${forWhat}-${idWhat}`).textContent = count;
+    })
+}
+
+function setStatusBtnReaction(target) {
+    if (target.classList.contains('active-reaction-btn')) {
+        target.classList.remove('active-reaction-btn');
+    } else {
+        target.classList.add('active-reaction-btn');
+    }
+}
+
+function isReacted(forWhat, idWhat){
+    formData = new FormData();
+    what = (forWhat == 'posts') ? 'posts_id' : 'comment_id';
+    otherWhat = (what == 'posts_id') ? 'comment_id' : 'posts_id';
+
+    formData.append(what, idWhat);
+    formData.append(otherWhat, -1);
+
+    fetch(api_is_reacted, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // console.log(data);
+        if (data.is_reacted) {
+            setStatusBtnReaction(document.getElementById(`react-btn-${forWhat}-${idWhat}`));
+        }
+    })
+}
+
+function sendReaction(event) {
+    event.preventDefault();
+
+    setStatusBtnReaction(event.target);
+
+    console.log("sendReaction");
+
+    ofWhat = (event.target.classList[0] == 'of-posts') ? 'posts_id' : 'comment_id';
+    otherWhat = (ofWhat == 'posts_id') ? 'comment_id' : 'posts_id';
+    idWhat = parseInt(event.target.classList[1]);
+    what = (ofWhat == 'posts_id') ? 'posts' : 'comment';
+
+    formData = new FormData();
+    formData.append(ofWhat, idWhat);
+    formData.append(otherWhat, -1);
+    formData.append('user', JSON.stringify(USERPROFILE));
+    formData.append('type', 'like');
+
+    if (event.target.classList.contains('active-reaction-btn')) {
+        fetch(api_create_reaction, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            setCountReaction(what, idWhat);
+        })
+    } else {
+        fetch(api_delete_reaction, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            setCountReaction(what, idWhat);
+        })
+    }
+    
+}
+
+
+get_userprofile();
 get_posts();
+
+// setInterval(function() {
+
+//     // posts_lists = document.querySelectorAll('.posts-container');
+
+//     posts_lists.forEach(post => {
+//         // console.log(post.classList[0]);
+        
+//         // posts_id = parseInt(post.classList[0]);
+//         posts_id = post.id;
+
+//         comment_id = -1;
+
+//         // console.log(posts_id);
+
+//         formData = new FormData();
+//         formData.append('posts_id', posts_id);
+//         formData.append('comment_id', comment_id);
+
+//         fetch(api_get_reactions, {
+//             method: 'POST',
+//             body: formData
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             count = data.count;
+//             document.getElementById(`count-reaction-posts-${posts_id}`).textContent = count;
+//         })
+//         .catch(error => console.error('Error:', error));
+//     });
+    
+// }, 2000);
