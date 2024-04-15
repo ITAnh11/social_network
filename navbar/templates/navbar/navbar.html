@@ -9,9 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link type="text/css" href="{%static 'navbar/css/navbar.css' %}" rel="stylesheet" />
     <title>Profle - Socialbook</title>
-    <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
+    
 </head>
-
 <body>
   <nav class="big_navbar">
     <ul>
@@ -23,10 +22,11 @@
         </div>
         <li id="space2"></li>
         
-        <li> <a class="tooltip active" data-tooltip="Home" href="{% url 'homepage:homepage' %}" id="home"> <i class="fas fa-home    "></i> </a> </li>
-        <li> <a class="tooltip" data-tooltip="Group" href="#" id="group"> <i class="fas fa-user-friends    "></i> </a></li>
-        <li> <a class="tooltip" data-tooltip="Watch" href="#" id="tv"> <i class="fas fa-tv    "></i> </a> </li>
-        <li> <a class="tooltip" data-tooltip="Friend" href="{% url 'friends:friend' %}" id="friend"> <i class="fas fa-user-alt    "></i> </a> </li>
+        <li> <a class="tooltip active" data-tooltip="Home" href="{% url 'homepage:homepage' %}" id="home"> <img src="{%static '/userprofiles/media/profile-home.png' %}"> </a> </li>
+        {% comment %} <li> <a class="tooltip active" data-tooltip="Home" href="{% url 'homepage:homepage' %}" id="home"> <i class="fas fa-home    "></i> </a> </li> {% endcomment %}
+        <li> <a class="tooltip" data-tooltip="Group" href="#" id="group"> <img src="{%static 'navbar/media/group.png' %}" style="height:35px; width:35px;"> </a></li>
+        <li> <a class="tooltip" data-tooltip="Watch" href="#" id="tv"> <img src="{%static 'navbar/media/television.png' %}" style="width:35px; height:35px"> </a> </li>
+        <li> <a class="tooltip" data-tooltip="Friend" href="{% url 'friends:friend' %}" id="friend"> <img src="{%static 'navbar/media/addUser.png' %}" style="height:35px; width:35px" > </a> </li>
         <li id="space1"></li>
         <!-- <li> <button class="tooltip" data-tooltip="Add" id="btn_plus"><i class="fas fa-plus    "></i></button> </li> -->
         <li> <button class="tooltip" data-tooltip="Message" id="btn_msg"><i class="fab fa-facebook-messenger    "></i></button></li>
@@ -51,9 +51,9 @@
                     </div>
                 </a>
             </div>
-            <div id="dark-button" onclick="darkModeON()">
+            {% comment %} <div id="dark-button" onclick="darkModeON()">
                 <span></span>
-            </div>
+            </div> {% endcomment %}
         </div>
         <hr>
         <div class="user-profile">
@@ -88,6 +88,8 @@
   
   <script src="{%static 'navbar/js/navbar.js' %}" ></script>
   <script src="{%static 'navbar/js/in4user.js' %}" ></script>
+  <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
+
 </body>
 
 </html>

@@ -43,10 +43,18 @@ class ProfileView(APIView):
 class EditProfileView(APIView):
     def get(self, request):
         user = getUser(request)
-
+        print(user)
         if not isinstance(user, User):
-            return HttpResponseRedirect(reverse('user:login'))
-        return render(request, 'userprofiles/editProfile.html')
+            return HttpResponseRedirect(reverse('users:login'))
+        
+        if request.query_params.get('id'):
+            return render(request, 'userprofiles/editProfile.html')
+        
+        id_requested = request.query_params.get('id') or user.id
+        
+        path = reverse('userprofiles:editProfile') + '?id=' + str(id_requested)
+        
+        return HttpResponseRedirect(path)
     
 class ListFriendsView(APIView):
     def get(self, request):
@@ -92,6 +100,8 @@ class SetUserProfileView(APIView):
         
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
+        
+        user.email = request.data.get('email')
 
         userprofile = UserProfile.objects.filter(user_id=user).first()
 
@@ -100,6 +110,7 @@ class SetUserProfileView(APIView):
             userprofile.last_name = request.data.get('last_name')
             userprofile.gender = request.data.get('gender')
             userprofile.birth_date = request.data.get('birth_date')
+            userprofile.phone = request.data.get('phone')
             userprofile.bio = request.data.get('bio') or None
             userprofile.address = request.data.get('address') or None
             userprofile.school = request.data.get('school') or None
@@ -115,6 +126,7 @@ class SetUserProfileView(APIView):
                                                     first_name=request.data.get('first_name'),
                                                     last_name=request.data.get('last_name'),
                                                     gender=request.data.get('gender'),
+                                                    phone=request.data.get('phone'),
                                                     birth_date=request.data.get('birth_date') or None,
                                                 )
 
