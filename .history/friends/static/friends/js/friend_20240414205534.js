@@ -77,7 +77,7 @@ function request_button(event){
     
         url_sent_friendrequest = "/friends/sent_friendrequest/";
         fetch(url_sent_friendrequest,{
-            method:'POST',
+            method:"POST",
             body: formdata,
         })
     }

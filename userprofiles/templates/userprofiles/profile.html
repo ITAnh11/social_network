@@ -62,9 +62,9 @@
             </div>
             <div class="list-choose">
                 <ul class="profile-menu">
-                    <li><a href="{% url 'userprofiles:profile' %}">Bài viết</a></li>
+                    <li><a href="{% url 'userprofiles:profile' %}">Posts</a></li>
                     {% comment %} <li><a href="{% url 'userprofiles:about' %}">Giới thiệu</a></li> {% endcomment %}
-                    <li><a href="{% url 'userprofiles:listFriends' %}">Bạn bè</a></li>
+                    <li><a href="{% url 'userprofiles:listFriends' %}">Friends</a></li>
                 </ul>
             </div>
         </div>
@@ -97,9 +97,9 @@
                         </a>
                     </div>
                     <div class="edit-story-wrapper">
-                        <a href="{% url 'userprofiles:editProfile' %}" class="editStory">
+                        <a href="{% url 'userprofiles:editStory' %}" class="editStory">
                             <button type="button" class="edit-story-btn">
-                                <i class="far fa-edit"></i> Edit your Profile
+                                <i class="far fa-edit"></i> Edit your story
                             </button>
                         </a>
                     </div>                    

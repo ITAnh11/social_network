@@ -55,6 +55,22 @@ class EditProfileView(APIView):
         path = reverse('userprofiles:editProfile') + '?id=' + str(id_requested)
         
         return HttpResponseRedirect(path)
+
+class EditStoryView(APIView):
+    def get(self, request):
+        user = getUser(request)
+        print(user)
+        if not isinstance(user, User):
+            return HttpResponseRedirect(reverse('users:login'))
+        
+        if request.query_params.get('id'):
+            return render(request, 'userprofiles/editStory.html')
+        
+        id_requested = request.query_params.get('id') or user.id
+        
+        path = reverse('userprofiles:editStory') + '?id=' + str(id_requested)
+        
+        return HttpResponseRedirect(path)
     
 class ListFriendsView(APIView):
     def get(self, request):
