@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Message
+from .models import Message, Conversation
 from userprofiles.models import UserProfile, ImageProfile
 
 class UserInfoSerializer(serializers.ModelSerializer):
@@ -10,6 +10,11 @@ class UserInfoSerializer(serializers.ModelSerializer):
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageProfile
+        fields = '__all__'
+
+class ConversationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Conversation
         fields = '__all__'
 
 class MessageSerializer(serializers.ModelSerializer):

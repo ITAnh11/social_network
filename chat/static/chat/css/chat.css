@@ -1,0 +1,113 @@
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 300px;
+  background-color: #4267B2; /* Facebook Blue */
+  color: #fff;
+  padding: 20px;
+}
+
+.chat {
+  flex: 1;
+  padding: 20px;
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  cursor: pointer;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+li:last-child {
+  border-bottom: none;
+}
+
+.chatInput {
+  margin-top: auto;
+}
+
+#chatMessages {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+.message {
+  background-color: #fff;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  max-width: 70%;
+}
+
+.message.sent {
+  align-self: flex-end;
+  background-color: #DCF8C6; /* Light green */
+}
+
+.message.received {
+  align-self: flex-start;
+  background-color: #fff;
+}
+
+#messageInput {
+  width: calc(100% - 60px);
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  margin-right: 10px;
+}
+
+#sendMessageBtn {
+  background-color: #4267B2; /* Facebook Blue */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+#sendMessageBtn:hover {
+  background-color: #365899; /* Darker Facebook Blue */
+}
+
+#search {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+#search::placeholder {
+  color: #fff;
+}
+
+#chatHeader {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333;
+}
