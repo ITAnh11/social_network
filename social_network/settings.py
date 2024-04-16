@@ -71,15 +71,7 @@ ROOT_URLCONF = 'social_network.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['users\\templates',
-                 'userprofiles\\templates',
-                 'posts\\templates',
-                 'friends\\templates',
-                 'homepage\\templates',
-                 'comments\\templates',
-                 'reactions\\templates',
-                 'chat\\templates',
-                 'mess\\templates',],
+        'DIRS': ['users\\templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -173,16 +165,14 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
-
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'users\\static'),
-                    os.path.join(BASE_DIR, 'userprofiles\\static'),
-                    os.path.join(BASE_DIR, 'posts\\static'),
-                    os.path.join(BASE_DIR, 'friends\\static'),
-                    os.path.join(BASE_DIR, 'homepage\\static'),
-                    os.path.join(BASE_DIR, 'comments\\static'),
-                    os.path.join(BASE_DIR, 'reactions\\static'),
-                    os.path.join(BASE_DIR, 'navbar\\static'),
-
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'users/static'),
+                    os.path.join(BASE_DIR, 'userprofiles/static'),
+                    os.path.join(BASE_DIR, 'posts/static'),
+                    os.path.join(BASE_DIR, 'friends/static'),
+                    os.path.join(BASE_DIR, 'homepage/static'),
+                    # os.path.join(BASE_DIR, 'comments/static'),
+                    # os.path.join(BASE_DIR, 'reactions/static'),
+                    )
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
