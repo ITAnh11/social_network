@@ -4,6 +4,7 @@
         "duong",
         "feisu",
         "psycopg",
+        "userprofiles",
         "whitenoise"
     ]
 }
