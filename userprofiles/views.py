@@ -11,7 +11,7 @@ import jwt
 from users.models import User
 from users.serializers import UserSerializer
 
-from .models import UserProfile, ImageProfile
+from .models import UserProfile, ImageProfile, Image
 from .serializers import UserProfileSerializer, ImageProfileSerializer
 from .forms import ImageProfileForm
 
@@ -37,6 +37,27 @@ class ProfileView(APIView):
         id_requested = request.query_params.get('id') or user.id
         
         path = reverse('userprofiles:profile') + '?id=' + str(id_requested)
+        
+        return HttpResponseRedirect(path)
+
+def main_view(request):
+        obj = Image.objects.get(pk=1)
+        context = {'obj': obj}
+        return render(request, 'userprofiles:editImages', context)
+
+class EditImages(APIView):
+    def get(self, request):
+        user = getUser(request)
+        print(user)
+        if not isinstance(user, User):
+            return HttpResponseRedirect(reverse('users:login'))
+        
+        if request.query_params.get('id'):
+            return render(request, 'userprofiles/editImages.html')
+        
+        id_requested = request.query_params.get('id') or user.id
+        
+        path = reverse('userprofiles:editImages') + '?id=' + str(id_requested)
         
         return HttpResponseRedirect(path)
     
