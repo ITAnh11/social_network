@@ -70,7 +70,7 @@ ROOT_URLCONF = 'social_network.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['users\\templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -158,6 +158,8 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'users/static'),
                     os.path.join(BASE_DIR, 'posts/static'),
                     os.path.join(BASE_DIR, 'friends/static'),
                     os.path.join(BASE_DIR, 'homepage/static'),
+                    os.path.join(BASE_DIR, 'chat/static'),
+                    # os.path.join(BASE_DIR, 'chat_app/build/static')
                     # os.path.join(BASE_DIR, 'comments/static'),
                     # os.path.join(BASE_DIR, 'reactions/static'),
                     )

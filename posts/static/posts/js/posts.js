@@ -103,8 +103,6 @@ post_btn.addEventListener("click", function() {
         .then(() => clickEscBtn())
 });
 
-
-
 //render_post
 function render_post(data,isOld){
     data.posts.forEach(function(post){

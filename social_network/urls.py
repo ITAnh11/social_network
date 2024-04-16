@@ -33,6 +33,8 @@ urlpatterns = [
     # path('mess/', include('mess.urls')),
     path("chat/", include("chat.urls")),
     path("send_message/", views.SendMessage.as_view()),
+    path("search/<username>", views.SearchUser.as_view()),
+    
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
