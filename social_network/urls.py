@@ -30,9 +30,13 @@ urlpatterns = [
     path('userprofiles/', include('userprofiles.urls')),
     path('posts/', include('posts.urls')),
     path('friends/', include('friends.urls')),
-    # path('mess/', include('mess.urls')),
-    path("chat/", include("chat.urls")),
+
+    path('chat/', include('chat.urls')),
+    path('comments/', include('comments.urls')),
+    path('navbar/', include('navbar.urls')),
+    path('reactions/', include('reactions.urls')),
     path("send_message/", views.SendMessage.as_view()),
+
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .active-reaction-btn {
+            color: white;
+            background-color: rgb(26, 70, 151);
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- <div class="template">
+        <div class="posts-container" id="posts-${posts_id}" style="border: solid rgb(163, 162, 162); margin: 5px;">
+            <div class="post-box">
+                <div class="post" style="display: flex;">
+                    <div class="post-header" style="margin: 5px 5px;">
+                        <div class="post-author">
+                            <p class="name" >${user_name} : </p>
+                        </div>
+                    </div>
+                    <div class="post-content" style="margin: 5px 5px;">
+                        <p class="content">${content}</p>
+                        <img src="${images}" alt="" style="width: 100px; height: 100px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="reaction-container" style="display: flex;">
+                <p id="count-reaction-posts-3" style="margin: 5px; padding: 0;">100</p>
+                <button type="button" class="of-post 3 active-reaction-btn" style="margin: 5px;" onclick="sendReaction(event)">like</button>
+            </div>
+
+            <div class="comment-container">
+
+                <div id="active-comment">
+                    <button id="active-comment-of-posts-btn-${posts_id}" class="${posts_id}" onclick="show_commented_of_posts(event)">show commented</button>
+                </div>
+
+                <div id="commented-of-posts-box-${posts_id}" style="display: box;">
+                    <div id="comment-${comment_id}" class="comment" style="display: flex; flex-direction: column; margin-left: 20px;">
+                        <div class="comment-header">
+                            <div class="comment-author" style="margin: 0px 0px; display: flex;">
+                                <img src="${user.avatar}" alt="" style="width: 20px; height: 20px;">
+                                <p class="name" style="margin: 0px 0px;" >${user.name} : </p>
+                            </div>
+                        </div>
+                        <div class="comment-content" style="margin: 0px 0px; margin-left: 20px; display: inline;">
+                            <p class="content" style="margin: 0px 0px;">${content}</p>
+                        </div>
+
+                        <div class="reaction-container" style="display: flex;">
+                            <p id="count-reaction-comment-3" style="margin: 5px; padding: 0;">100</p>
+                            <button type="button" class="of-post 3 active-reaction-btn" style="margin: 5px;" onclick="sendReaction(event)">like</button>
+                        </div>
+
+                        <div id="active-comment">
+                            <button id="active-comment-of-comment-btn-${comment_id}" class="${comment_id}" onclick="show_commented_of_comment(event)">show reply</button>
+                        </div>
+                        
+                        <div id="commented-of-comment-box-${comment_id}" style="display: none;"></div>
+                        <div class="form-reply-comment" style="margin-left: 20px;">
+                            <form action="/comments/create_comment/" method="post" id="send-comment-for-comment-${comment_id}" >
+                                <input type="text" name="content" id="content-comment-send">
+                                <input type="submit" id="submit" value="reply">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="comment-for-posts-container" style="margin-top: 10px;">
+                    <form action="/comments/create_comment/" method="post" id="send-comment-for-posts-${posts_id}">
+                        <input type="text" name="content" id="content-comment-send">
+                        <input type="submit" id="submit" value="comment">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div id="main-container"></div>
+
+    {% csrf_token %}
+    <script src="{% static 'comments/js/comment_t.js' %}" >
+        var csrftoken = '{{ csrf_token }}';
+    </script>
+</body>
+</html>
