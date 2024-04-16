@@ -1,18 +1,22 @@
+
 # pip install -r requirements.txt
 
-asgiref==3.7.2
-Django==3.2.10
-psycopg2==2.9.9
-python-dotenv==1.0.1
+asgiref
+Django
+psycopg2
+python-dotenv
 sqlparse
-tzdata==2023.4
-whitenoise==6.6.0
-djangorestframework==3.13.1
-django-cors-headers==4.0.0
-pyjwt==2.3.0
+tzdata
+whitenoise
+djangorestframework
+django-cors-headers
+pyjwt
 pillow
-djongo
 channels
 daphne
 docker
+mongoengine
+django_mongoengine
+django-rest-framework-mongoengine
+
 

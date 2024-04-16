@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework', # pip install djangorestframework
     'corsheaders', # pip install django-cors-headers
+    'django_mongoengine',
     'homepage',
     'users',
     'posts',
@@ -51,7 +52,7 @@ INSTALLED_APPS = [
     'userprofiles',
     'channels',
     'mess',
-    
+    'navbar',
 ]
 
 MIDDLEWARE = [
@@ -70,7 +71,7 @@ ROOT_URLCONF = 'social_network.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['users\\templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -109,13 +110,24 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
-    # 'mongodb': {
-    #         'ENGINE': 'djongo',
-    #         'NAME': 'social_network',  
-    #     }
 }
 
+MONGODB_DATABASES = {
+    "default": {
+        "name": "social_network",
+        "host": "localhost",
+        "port": 27017,
+        # "username": "mongo_user",  # replace with your username
+        # "password": "mongo_password",  # replace with your password
+    }
+}
 
+import mongoengine
+
+mongoengine.connect(
+    db='social_network',
+    host='mongodb://localhost/social_network'
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -158,8 +170,6 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'users/static'),
                     os.path.join(BASE_DIR, 'posts/static'),
                     os.path.join(BASE_DIR, 'friends/static'),
                     os.path.join(BASE_DIR, 'homepage/static'),
-                    os.path.join(BASE_DIR, 'chat/static'),
-                    # os.path.join(BASE_DIR, 'chat_app/build/static')
                     # os.path.join(BASE_DIR, 'comments/static'),
                     # os.path.join(BASE_DIR, 'reactions/static'),
                     )

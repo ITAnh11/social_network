@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'feisubukku'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3AC23C6425854EA5AC7C10D733691401 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C30B0F48D2DC45288960585B228D97EB }}

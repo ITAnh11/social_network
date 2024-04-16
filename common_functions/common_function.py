@@ -36,13 +36,13 @@ def getUser(request):
     token = request.COOKIES.get('jwt')
     
     if not token:
-        return None
+        return {'error': 'Unauthorized'}
     
     try:
         payload = jwt.decode(token, 'secret', algorithms=['HS256'])
         user_id = payload['id']
     except jwt.ExpiredSignatureError:
-        return None
+        return {'error': 'Unauthorized'}
     
     user = User.objects.get(id=user_id)
     

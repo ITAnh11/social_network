@@ -16,7 +16,7 @@ class LoginView(APIView):
     def makeToken(self, user):
         payload = {
             'id': user.id,
-            'exp': datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=60),
+            'exp': datetime.datetime.now(datetime.UTC) + datetime.timedelta(hours=5),
             'iat': datetime.datetime.now(datetime.UTC)
         }
 
@@ -25,12 +25,12 @@ class LoginView(APIView):
         return token
     
     def get(self, request):
-        reponse = render(request, 'users/login.html')
-        print(request.COOKIES.get('jwt'))
+        response = render(request, 'users/login.html')
+        # print(request.COOKIES.get('jwt'))
         
-        reponse.delete_cookie('jwt')
+        response.delete_cookie('jwt')
         
-        return reponse
+        return response
     
     def post(self, request):
         email = request.data.get('email')
