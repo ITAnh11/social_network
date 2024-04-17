@@ -40,12 +40,17 @@ class  SentFriendRequestView(APIView):
         print(request.data)
         to_user = get_object_or_404(User, id = to_user_id)
         try:
-            friend_request = FriendRequest.objects.create(
-                from_id = user,
-                to_id = to_user,
-                status = 'pending'
-            )
-            friend_request.save()
+            user_id = get_object_or_404(User, email=user)
+            friend_request_check = FriendRequest.objects.filter(from_id=to_user_id, to_id=user_id)
+            if (friend_request_check==""):
+                friend_request = FriendRequest.objects.create(
+                    from_id = user,
+                    to_id = to_user,
+                    status = 'pending'
+                )
+                friend_request.save()
+            else:
+                return Response({'error': 'This User sent request to you'})
         except :
             return Response({'error': 'Friend Request can not create'}, status=404)
         

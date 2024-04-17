@@ -40,6 +40,7 @@ class  SentFriendRequestView(APIView):
         print(request.data)
         to_user = get_object_or_404(User, id = to_user_id)
         try:
+            friend_request = get_object_or_404(FriendRequest, to_id = to_user_id)
             friend_request = FriendRequest.objects.create(
                 from_id = user,
                 to_id = to_user,
@@ -48,6 +49,7 @@ class  SentFriendRequestView(APIView):
             friend_request.save()
         except :
             return Response({'error': 'Friend Request can not create'}, status=404)
+        
         
         return Response({'success': 'Friend request sent successfully'})
     
