@@ -68,13 +68,12 @@ function accept_button(event){
 
 //xử lí friend request button
 function request_button(event){
+    var a = event.target.parentNode.parentNode.id;
     if(event.target.textContent === "Thêm bạn bè") {
         event.target.textContent = "Thu hồi";
-        var a = event.target.parentNode.parentNode.id;
         var formdata = new FormData();
         formdata.append("st", "pending");
         formdata.append("id", a);
-    
         url_sent_friendrequest = "/friends/sent_friendrequest/";
         fetch(url_sent_friendrequest,{
             method:'POST',
@@ -83,6 +82,18 @@ function request_button(event){
     }
     else{
         event.target.textContent = "Thêm bạn bè";
+        var formdata = new FormData();
+        formdata.append("st","revoke");
+        formdata.append("id",a);
+        url_revoke_friendrequest = "/friends/revoke_friendrequest/";
+        fetch(url_revoke_friendrequest,{
+            method:'POST',
+            body: formdata,
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
     }
 }
 
@@ -128,7 +139,7 @@ function show_list_friend(){
         data.data.forEach(function(friend){
             var url = `/userprofiles/?id=${friend.friend_profile.id}`;
             var a = `
-            <a href="${url}" style="text-decoration: none;">
+            <a href="${url}" style="text-decoration: none;color:black;">
                 <div class="card" id="${friend.friend_profile.id}">
                     <div class="card-img">
                         <img style="display: flex; width: 100%; height: 100%;" src="${friend.friend_profile.avatar}" alt="Card Image">
