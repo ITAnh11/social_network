@@ -49,6 +49,7 @@ class  SentFriendRequestView(APIView):
         except :
             return Response({'error': 'Friend Request can not create'}, status=404)
         
+        
         return Response({'success': 'Friend request sent successfully'})
     
 class RevokeFriendRequestView(APIView):

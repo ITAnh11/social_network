@@ -49,6 +49,7 @@ class  SentFriendRequestView(APIView):
         except :
             return Response({'error': 'Friend Request can not create'}, status=404)
         
+        
         return Response({'success': 'Friend request sent successfully'})
     
 class RevokeFriendRequestView(APIView):
@@ -59,12 +60,12 @@ class RevokeFriendRequestView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         try:
-            user_id = get_object_or_404(User, email = user)
-            to_id = request.data.get('id')
-            friend_request = get_object_or_404(FriendRequest, from_id=user_id, to_id=to_id)
+            # user_id = get_object_or_404(User, id = user_id)
+            # to_id = request.data.get('id')
+            # friend_request = get_object_or_404(FriendRequest, from_id=user_id, to_id=to_id)
             
-            friend_request.delete()
-            #print(user)
+            # friend_request.delete()
+            print(user)
         except FriendRequest.DoesNotExist:
             return Response({'error': 'Friend request not found'}, status=404)
         
