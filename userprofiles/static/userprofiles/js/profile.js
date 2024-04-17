@@ -17,6 +17,8 @@ fetch(api_get_profile)
         var avatarContainer = document.getElementById('avatarContainer');
         avatarContainer.innerHTML += `<img src ="${data.imageprofile['avatar']}" alt="avatar" class="dashboard-img">`;
 
+        var editProfile = document.getElementById('editProfile');
+        
         // var profileImage = document.getElementsByClassName('profileImage');
         // for (var i = 0; i < profileImage.length; i++) {
         //     profileImage[i].innerHTML += `<img src ="${data.imageprofile['avatar']}" alt="avatarIcon">`;
