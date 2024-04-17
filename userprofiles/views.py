@@ -42,13 +42,13 @@ class ProfileView(APIView):
 
 def main_view(request):
         obj = Image.objects.get(pk=1)
-        context = {'obj': obj}
+        context = {'obj': obj}  
         return render(request, 'userprofiles:editImages', context)
 
 class EditImages(APIView):
     def get(self, request):
         user = getUser(request)
-        print(user)
+        print(user)                    
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
         
@@ -96,10 +96,18 @@ class EditStoryView(APIView):
 class ListFriendsView(APIView):
     def get(self, request):
         user = getUser(request)
-
+        print(user)
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
-        return render(request, 'userprofiles/listFriends.html')
+        
+        if request.query_params.get('id'):
+            return render(request, 'userprofiles/listFriends.html')
+        
+        id_requested = request.query_params.get('id') or user.id
+        
+        path = reverse('userprofiles:listFriends') + '?id=' + str(id_requested)
+        
+        return HttpResponseRedirect(path)
 
 class GetProfileView(APIView):
     def get(self, request):
@@ -110,12 +118,18 @@ class GetProfileView(APIView):
 
         # print(request.query_params.get('id'))
         
-        id_requested = request.query_params.get('id') or user.id
+        idUserRequested = int(request.query_params.get('id')) or user.id
         
-        context = self.getProfile(id_requested)
-        context['enable_edit'] = True if user.id == id_requested else False
+        context = self.getProfile(idUserRequested)
+        context['isOwner'] = True if user.id == idUserRequested else False
                 
         return Response(context)
+        # id_requested = request.query_params.get('id') or user.id
+        
+        # context = self.getProfile(id_requested)
+        # context['isOwner'] = True if user.id == id_requested else False
+                
+        # return Response(context)
     
     def getProfile(self, id):
         user = User.objects.filter(id=id).first()

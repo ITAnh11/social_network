@@ -1,4 +1,4 @@
-var api_get_profile = '/userprofiles/get_profile'
+var api_get_profile = '/userprofiles/get_profile/?id=' + (new URL(document.location)).searchParams.get('id').toString();
 
 fetch(api_get_profile) 
   .then(response => response.json())

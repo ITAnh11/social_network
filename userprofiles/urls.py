@@ -6,7 +6,6 @@ app_name = 'userprofiles'
 urlpatterns = [
         path('', ProfileView.as_view(), name='profile'),
         path('editImages/', EditImages.as_view(), name='editImages'),
-        # path('editImages/', main_view.as_view(), name='editImages'),
         path('editProfile/', EditProfileView.as_view(), name='editProfile'),
         path('editStory/', EditStoryView.as_view(), name='editStory'),
         path('listFriends/', ListFriendsView.as_view(), name='listFriends'),

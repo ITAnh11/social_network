@@ -19,16 +19,16 @@
 
     <div class="profile-container">
         <div class="cover" id="coverImage">
-            {% comment %} <img src="{%static 'userprofiles/media/cover.jpg' %}" class="coverImage" alt=""> {% endcomment %}
+            {% comment %} <img src="{%static 'userprofiles/images/cover.jpg' %}" class="coverImage" alt=""> {% endcomment %}
             <div class="edit-coverImage">
-                <img src="{%static 'userprofiles/media/camera.png' %}" alt="">
+                <img src="{%static 'userprofiles/images/camera.png' %}" alt="">
                 <a href="#" style="color: black;">Change your coverImage </a>
             </div>
         </div>
         <div class="dashboard">
             <div class="left-dashboard">
                 <div class="avatar-container" id="avatarContainer">
-                    {% comment %} <img src="{%static 'userprofiles/media/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage"> {% endcomment %}
+                    {% comment %} <img src="{%static 'userprofiles/images/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage"> {% endcomment %}
                 </div>
                 
                 <!-- Popup hoặc menu chứa các lựa chọn -->
@@ -42,21 +42,23 @@
                     </div>
                     <p>446 Friends</p>
                     <div class="mutual-friend-images">
-                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                     </div>
                 </div>
             </div>
             <div class="right-dashboard-info">
                 <div class="right-dashboard-info-top">
 
-                    <button type="button"><span class="plus-sign">+</span> Add to your story</button>
-                    <a href="{% url 'userprofiles:editProfile' %}" class="editProfile">
+                    <div class="editProfile" id="editProfile">
+                        <button type="button" class="edit_button"><img src="{%static 'userprofiles/images/add-friend.png' %}" style="width:20px; height:20px ">Add to your friend</button>
+                    </div>
+                    {% comment %} <a href="{% url 'userprofiles:editProfile' %}" class="editProfile" id ="editProfile">
                         <button type="button"><i class="far fa-edit"></i> Edit your profile</button>
-                    </a>                    
+                    </a>                     {% endcomment %}
                 </div>
                 <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
             </div>
@@ -113,12 +115,12 @@
 
                     <div class="gallery-photos">
                         <div class="gallery-photos-rowFirst">
-                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                            <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                            <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                            <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                            <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                            <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                            <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                            <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                         </div>
                     </div>
                 </div>
@@ -132,39 +134,39 @@
                     <div class="gallery-photos">
                         <div class="gallery-photos-rowFirst">
                             <div class="first-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                                 <p>Vuong1</p>
                             </div>
                             <div class="second-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                                 <p>Vuong2</p>
                             </div>
                             <div class="third-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                                 <p>Vuong3</p>
                             </div>
                             <div class="forth-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                                 <p>Vuong4</p>
                             </div>
                             <div class="fifth-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                                 <p>Vuong5</p>
                             </div>
                             <div class="sixth-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                                 <p>Vuong6</p>
                             </div>
                             <div class="seventh-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                                 <p>Vuong7</p>
                             </div>
                             <div class="eighth-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                                 <p>Vuong8</p>
                             </div>
                             <div class="ninth-friend">
-                                <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                                 <p>Vuong9</p>
                             </div>
                         </div>
