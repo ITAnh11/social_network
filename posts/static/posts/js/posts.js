@@ -236,6 +236,9 @@ function set_user_post(){
     var userNameElement = userProfile.querySelector("p");
     var userImageElement = userProfile.querySelector("img");
 
+    var a = posting.querySelector(".user-profile");
+    var userImageElement1 = a.querySelector("img");
+    var userNameElement1 = a.querySelector("p");
     // Sử dụng localStorage thay vì Location
     var userName = localStorage.getItem("name");
     var userAvatar = localStorage.getItem("avatar");
@@ -244,10 +247,16 @@ function set_user_post(){
     if (userNameElement) {
         userNameElement.textContent = userName;
     }
-
     if (userImageElement) {
         userImageElement.src = userAvatar;
     }
+    if (userNameElement1) {
+        userNameElement1.textContent = userName;
+    }
+    if (userImageElement1) {
+        userImageElement1.src = userAvatar;
+    }
+
 }
 set_user_post();
 
