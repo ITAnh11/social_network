@@ -20,6 +20,24 @@
           <img src="{% static 'userprofiles/images/search.png' %}" alt="">
           <input type="text" placeholder="Search">
         </div>
+        <div class="search-list">
+            <div style="display: flex;flex-direction: row;align-items: center;">
+                <div style="font-size: large; color: rgb(0, 110, 255); margin: 10px;text-decoration: underline;display: block;margin-right: 70px;"> Danh sách tìm kiếm </div>
+                <button type="button" class="remove-search-list">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <a href="${url}" style="text-decoration: none;color:black;">
+                <div class="person_being_searched">
+                    <div class="person_being_searched_img">
+                        <img style=" display: flex ; width: 100%;height: 100%;" src="/static/friends/images/hq720.webp" alt="Card Image">
+                    </div>
+                    <div>
+                        <h3>Văn Tùng</h3>
+                    </div>
+                </div>
+            </a>
+        </div>
         <li id="space2"></li>
         
         <li> <a class="tooltip active" data-tooltip="Home" href="{% url 'homepage:homepage' %}" id="home"> <img src="{%static 'navbar/images/profile-home.png' %}"> </a> </li>

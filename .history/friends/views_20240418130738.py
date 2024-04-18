@@ -310,10 +310,10 @@ class GetSuggestionFriendView(APIView):
             other_users = list(set(User.objects.all().values_list('id', flat=True)) - (sent_set | received_set | friend1_set | friend2_set | not_user_set))
             
             for other_user in other_users:
-                suggesion = get_object_or_404(User, id=other_user)
+                #suggesion = get_object_or_404(User, id=other_user)
                 #print(suggesion)
                 suggesions = {
-                    "suggestions_friend": getUserProfileForPosts(suggesion)
+                    "suggestions_friend": getUserProfileForPosts(other_user.id)
                 }
                 data.append(suggesions)
                 

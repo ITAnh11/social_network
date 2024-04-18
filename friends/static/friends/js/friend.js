@@ -48,7 +48,7 @@ function accept_button(event){
         data.accepted_friend_request.forEach(function(friend){
             var url = `/userprofiles/?id=${friend.friend_profile.id}`;
             var b = ` 
-                <a href="${url}" style="text-decoration: none;">
+                <a href="${url}" style="text-decoration: none;color:black;">
                     <div class="card" id="${friend.friend_profile.id}">
                         <div class="card-img">
                             <img style="display: flex; width: 100%; height: 100%;" src="${friend.friend_profile.avatar}" alt="Card Image">
@@ -79,6 +79,10 @@ function request_button(event){
             method:'POST',
             body: formdata,
         })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
     }
     else{
         event.target.textContent = "Thêm bạn bè";
@@ -106,13 +110,16 @@ function addfriend() {
         console.log("friend_request: ", data);
         data.data.forEach(function(request){
             if(request.friend_request_received.status === "pending"){
+                var url = `/userprofiles/?id=${request.friend_request_profile.id}`;
                 var a = `<div class="card1" id="${request.friend_request_received.id}">
                 <div class="card1-img">
                     <img style="object-fit: cover;width: 100%;height: 100%;" src="${request.friend_request_profile.avatar}" alt="Card Image" >
                 </div>
-                <div class="card1-content">
-                    <h3>${request.friend_request_profile.name}</h3>
-                </div>
+                <a href="${url}" style="text-decoration: none;color:black;flex:1">
+                    <div class="card1-content">
+                        <h3>${request.friend_request_profile.name}</h3>
+                    </div>
+                </a>
                 <div class="card1-button">
                     <button class="button1" onclick="accept_button(event)">Xác nhận</button>
                     <button class="button2" onclick="denine_button(event)">Từ chối</button>
@@ -164,16 +171,19 @@ function show_suggest_friend(){
     .then(response => response.json())
     .then(data => {
         console.log("suggest_friend_list:",data);
-        data.suggestions.forEach(function(suggest_friend){
-            console.log(suggest_friend.other_user_profile.id);
+        data.suggestions.forEach(function(suggestions){
+            console.log(suggestions.suggestions_friend.id);
+            var url = `/userprofiles/?id=${suggestions.suggestions_friend.id}`;
             var a = `
-            <div class="card1" id="${suggest_friend.other_user_profile.id}">
+            <div class="card1" id="${suggestions.suggestions_friend.id}">
                 <div class="card1-img">
-                    <img style="object-fit: cover;width: 100%;height: 100%;" src="${suggest_friend.other_user_profile.avatar}" alt="Card Image" >
+                    <img style="object-fit: cover;width: 100%;height: 100%;" src="${suggestions.suggestions_friend.avatar}" alt="Card Image" >
                 </div>
-                <div class="card1-content">
-                    <h3>${suggest_friend.other_user_profile.name}</h3>
-                </div>
+                <a href="${url}" style="text-decoration: none;color:black;flex:1">
+                    <div class="card1-content">
+                        <h3>${suggestions.suggestions_friend.name}</h3>
+                    </div>
+                </a>
                 <div class="card1-button">
                     <button class="button1" onclick="request_button(event)">Thêm bạn bè</button>
                     <button class="button2">Xóa</button>
