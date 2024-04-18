@@ -118,7 +118,10 @@ class GetProfileView(APIView):
 
         # print(request.query_params.get('id'))
         
-        idUserRequested = int(request.query_params.get('id')) or user.id
+        if request.query_params.get('id'):
+            idUserRequested = int(request.query_params.get('id'))
+        else:  
+            idUserRequested = user.id
         
         context = self.getProfile(idUserRequested)
         context['isOwner'] = True if user.id == idUserRequested else False
@@ -229,13 +232,14 @@ class GetPostsView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        reponse = Response()
-        
         data = []
         
         # print(request.query_params.get('id'))
         
-        idUserRequested = int(request.query_params.get('id')) or user.id
+        if request.query_params.get('id'):
+            idUserRequested = int(request.query_params.get('id'))
+        else:  
+            idUserRequested = user.id
 
         userRequest = User.objects.filter(id=idUserRequested).first()
         
@@ -244,7 +248,7 @@ class GetPostsView(APIView):
         
         userDataForPosts = getUserProfileForPosts(userRequest)
         
-        posts = Posts.objects.filter(user_id=userRequest).prefetch_related('mediaofposts_set').order_by('-created_at')    
+        posts = Posts.objects.filter(user_id=userRequest).prefetch_related('mediaofposts_set').order_by('-created_at')[:10] 
         
         for post in posts:
             posts_data = PostsSerializer(post).data
@@ -257,31 +261,12 @@ class GetPostsView(APIView):
         
             data.append(posts_data)
             
+        reponse = Response()
+        
         reponse.data = {
             'posts': data,
             'isOwner': True if user.id == idUserRequested else False
         }
-        
-        # posts = Posts.objects.filter(user_id=user).values('id', 'title', 'content', 'status', 'created_at').all().order_by('-created_at')    
-        
-        # for post in posts:
-        #     posts_data = PostsSerializer(post).data
-        #     media = MediaOfPosts.objects.filter(post_id=post.get('id')).all()
-        #     if media:
-        #         media_data = MediaOfPostsSerializer(media, many=True).data
-                
-        #         posts_data['media'] = media_data
-        #     else:
-        #         posts_data['media'] = None
-        #     posts_data['user'] = userDataForPosts
-
-        #     posts_data['created_at'] = getTimeDuration(post.get('created_at'))
-        
-        #     data.append(posts_data)
-            
-        # reponse.data = {
-        #     'posts': data
-        # }
         
         end_time = time.time()  # lưu thời gian kết thúc
 

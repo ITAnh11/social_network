@@ -40,7 +40,7 @@ class GetPostsView(APIView):
         
         data = []
      
-        posts = Posts.objects.prefetch_related('user_id__userprofile_set', 'user_id__imageprofile_set', 'mediaofposts_set').order_by('-created_at')[:50]
+        posts = Posts.objects.prefetch_related('user_id__userprofile_set', 'user_id__imageprofile_set', 'mediaofposts_set').order_by('-created_at')[:10]
 
         for post in posts:
             
