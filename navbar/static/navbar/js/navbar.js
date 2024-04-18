@@ -27,3 +27,19 @@ if (currentUrl.includes("/")) {
     document.getElementById("home").classList.remove("active");
     document.getElementById("friend").classList.remove("active");
 }
+
+//Sử lý phần search
+var search_list = document.querySelector(".search-list");
+function remove_search_list(event){
+    console.log("abc:",event.target.parentNode.parentNode);
+    search_list.style.display = "none";
+}
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('keyup', function(event) {
+  // Kiểm tra nếu phím nhấn là Enter (mã ASCII: 13)
+  if (event.keyCode === 13) {
+    console.log(searchInput.value);
+    search_list.style.display = "flex";
+  }
+});
+

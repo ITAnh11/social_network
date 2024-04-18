@@ -18,12 +18,12 @@
         <!-- <li> <button id="search_btn" class="tooltip" data-tooltip="Search"> <i class="fas fa-search    "></i> </button> </li> -->
         <div class="search-box">
           <img src="{% static 'userprofiles/images/search.png' %}" alt="">
-          <input type="text" placeholder="Search">
+          <input id="search-input" type="text" placeholder="Search">
         </div>
         <div class="search-list">
             <div style="display: flex;flex-direction: row;align-items: center;">
                 <div style="font-size: large; color: rgb(0, 110, 255); margin: 10px;text-decoration: underline;display: block;margin-right: 70px;"> Danh sách tìm kiếm </div>
-                <button type="button" class="remove-search-list">
+                <button type="button" class="remove-search-list" onclick="remove_search_list(event)">
                     <i class="fas fa-times" aria-hidden="true"></i>
                 </button>
             </div>
@@ -55,7 +55,6 @@
             </div>
           
         </div>
-        
     </ul>
     <div class="user-settings">
         <div class="profile-darkButton">

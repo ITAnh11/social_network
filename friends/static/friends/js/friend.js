@@ -198,3 +198,4 @@ function show_suggest_friend(){
     
 }
 show_suggest_friend();
+
