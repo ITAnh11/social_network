@@ -1,11 +1,10 @@
 var api_get_profile = '/userprofiles/get_profile/?id=' + (new URL(document.location)).searchParams.get('id').toString();
-console.log(api_get_profile);
-
+// console.log(api_get_profile);
 
 fetch(api_get_profile)
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        // console.log(data);
         set_user_data(data);
 
         var userName2 = document.getElementById('userName2');
@@ -18,11 +17,14 @@ fetch(api_get_profile)
         avatarContainer.innerHTML += `<img src ="${data.imageprofile['avatar']}" alt="avatar" class="dashboard-img">`;
 
         var editProfile = document.getElementById('editProfile');
-        
-        // var profileImage = document.getElementsByClassName('profileImage');
-        // for (var i = 0; i < profileImage.length; i++) {
-        //     profileImage[i].innerHTML += `<img src ="${data.imageprofile['avatar']}" alt="avatarIcon">`;
-        // }
+        var id_user = data.userprofile['user_id'];
+
+        if (data.isOwner === true) {
+            editProfile.innerHTML = `<button type="button" id="editProfileReal"> <i class="far fa-edit"></i><a href="/userprofiles/editProfile.html" style="text-decoration: none; color: white;">Edit your profile</a></button>`;
+        }
+        else {
+            editProfile.innerHTML = `<button type="button"> <i class="fas fa-user-plus"></i> Add to your friend</button>`;
+        }
 
         profile = document.getElementById('profile');
         profile.innerHTML += `<h3>Login with: ${data.user['email']}</h3>`     

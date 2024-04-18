@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-xrJd3FWN0edZsvYOti2oZVrY02JzSXY5Jz6An+5KjpOb2Ry4LlQwUCYh1SU+65t4uV9iJKmbO7uUTFKWPtDzVg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link type="text/css" href="{%static 'userprofiles/css/profile.css' %}" rel="stylesheet" />
     {% comment %} <link type="text/css" href="{%static 'userprofiles/css/navbar.css' %}" rel="stylesheet" /> {% endcomment %}
     <title>Profle - Socialbook</title>
@@ -52,13 +54,9 @@
             </div>
             <div class="right-dashboard-info">
                 <div class="right-dashboard-info-top">
-
                     <div class="editProfile" id="editProfile">
-                        <button type="button" class="edit_button"><img src="{%static 'userprofiles/images/add-friend.png' %}" style="width:20px; height:20px ">Add to your friend</button>
-                    </div>
-                    {% comment %} <a href="{% url 'userprofiles:editProfile' %}" class="editProfile" id ="editProfile">
-                        <button type="button"><i class="far fa-edit"></i> Edit your profile</button>
-                    </a>                     {% endcomment %}
+                        
+                    </div>                     
                 </div>
                 <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
             </div>
