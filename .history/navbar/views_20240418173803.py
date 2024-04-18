@@ -8,13 +8,14 @@ from rest_framework.response import Response
 from users.models import User
 from userprofiles.models import UserProfile
 
-class navbarView(APIView):     
-    def navbar(request):
-        return render(request, "navbar/navbar.html")
+def navbar(request):
+    return render(request, "navbar/navbar.html")
 
-class searchListView(APIView):
+class searchList(APIView()):
     def post(self, request):
         return render(request.data)
 
-
+class getSearchList(APIView()):
+    def get(self, request):
+        return Response('Ok')
     

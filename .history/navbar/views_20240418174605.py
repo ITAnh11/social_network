@@ -12,7 +12,7 @@ class navbarView(APIView):
     def navbar(request):
         return render(request, "navbar/navbar.html")
 
-class searchListView(APIView):
+class searchListView(APIView()):
     def post(self, request):
         return render(request.data)
 
