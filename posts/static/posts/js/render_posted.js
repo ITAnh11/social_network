@@ -29,14 +29,20 @@ export function render_post(data,isOld){
                 `<div class="status-field-container write-post-container">
                 <div class="user-profile-box">
                     <div class="user-profile">
-                        <img src="${post.user.avatar}" alt="">
+                        <a href="/userprofiles/?id=${post.user.id}" style="text-decoration: none;">
+                            <img src="${post.user.avatar}" alt="">
+                        </a>
                         <div>
                             <a href="/userprofiles/?id=${post.user.id}" style="text-decoration: none;">
                                 <p>${post.user.name}</p>
                             </a>
                             <small>${post.created_at}</small>
                         </div>
+                        <div class="title-posts" style="align-self: baseline; padding-top: 4px;">
+                                <small style="font-size: 15px; margin-left: 10px;">${((post.title) ? post.title : "")}</small>
+                        </div>
                     </div>
+
                     <div>
                         <a href="#"><i class="fas fa-ellipsis-v"></i></a>
                     </div>

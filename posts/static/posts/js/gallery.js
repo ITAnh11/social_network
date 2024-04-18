@@ -29,7 +29,7 @@ function layout2(images, galleryContainerElement) {
 
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img
-                                                class="gallery-image gallery-four-grid-cells"
+                                                class="gallery-image gallery-three-grid-cells"
                                                 src="${images[0].media}"
                                                 alt="Image"
                                             />`
@@ -38,7 +38,7 @@ function layout2(images, galleryContainerElement) {
 
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img
-                                                class="gallery-image gallery-four-grid-cells"
+                                                class="gallery-image gallery-three-grid-cells"
                                                 src="${images[1].media}"
                                                 alt="Image"
                                             />`
@@ -48,21 +48,21 @@ function layout2(images, galleryContainerElement) {
 function layout3(images, galleryContainerElement) {
 
     setTimeout(() => {
-        galleryContainerElement.innerHTML += `<img class="gallery-image gallery-wide-image"
+        galleryContainerElement.innerHTML += `<img class="gallery-image gallery-four-grid-cells"
         src="${images[0].media}"
         alt="Image"
     />`
     }, TIME_DELAY_LOAD_IMAGE * 1);
 
     setTimeout(() => {
-        galleryContainerElement.innerHTML += `<img class="gallery-image gallery-four-grid-cells"
+        galleryContainerElement.innerHTML += `<img class="gallery-image gallery-two-grid-cells"
         src="${images[1].media}"
         alt="Image"
     />`
     }, TIME_DELAY_LOAD_IMAGE * 2);
 
     setTimeout(() => {
-        galleryContainerElement.innerHTML += `<img class="gallery-image gallery-wide-image"
+        galleryContainerElement.innerHTML += `<img class="gallery-image gallery-two-grid-cells"
         src="${images[2].media}"
         alt="Image"
     />`
@@ -72,7 +72,7 @@ function layout3(images, galleryContainerElement) {
 function layout4(images, galleryContainerElement) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img
-        class="gallery-image gallery-four-grid-cells"
+        class="gallery-image gallery-three-grid-cells"
         src="${images[0].media}"
         alt="Image"
     />`
@@ -80,7 +80,7 @@ function layout4(images, galleryContainerElement) {
 
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img
-        class="gallery-image gallery-four-grid-cells"
+        class="gallery-image gallery-three-grid-cells"
         src="${images[1].media}"
         alt="Image"
     />`
@@ -88,7 +88,7 @@ function layout4(images, galleryContainerElement) {
 
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img 
-        class="gallery-image gallery-four-grid-cells"
+        class="gallery-image gallery-three-grid-cells"
         src="${images[2].media}"
         alt="Image"
     />`
@@ -96,7 +96,7 @@ function layout4(images, galleryContainerElement) {
 
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img 
-        class="gallery-image gallery-four-grid-cells"
+        class="gallery-image gallery-three-grid-cells"
         src="${images[3].media}"
         alt="Image"
     />`
