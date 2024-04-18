@@ -171,17 +171,17 @@ function show_suggest_friend(){
     .then(response => response.json())
     .then(data => {
         console.log("suggest_friend_list:",data);
-        data.suggestions.forEach(function(suggest_friend){
-            console.log(suggest_friend.other_user_profile.id);
-            var url = `/userprofiles/?id=${suggest_friend.other_user_profile.id}`;
+        data.suggestions.forEach(function(suggestions){
+            console.log(suggestions.suggestions_friend.id);
+            var url = `/userprofiles/?id=${suggestions.suggestions_friend.id}`;
             var a = `
-            <div class="card1" id="${suggest_friend.other_user_profile.id}">
+            <div class="card1" id="${suggestions.suggestions_friend.id}">
                 <div class="card1-img">
-                    <img style="object-fit: cover;width: 100%;height: 100%;" src="${suggest_friend.other_user_profile.avatar}" alt="Card Image" >
+                    <img style="object-fit: cover;width: 100%;height: 100%;" src="${suggestions.suggestions_friend.avatar}" alt="Card Image" >
                 </div>
                 <a href="${url}" style="text-decoration: none;color:black;flex:1">
                     <div class="card1-content">
-                        <h3>${suggest_friend.other_user_profile.name}</h3>
+                        <h3>${suggestions.suggestions_friend.name}</h3>
                     </div>
                 </a>
                 <div class="card1-button">
