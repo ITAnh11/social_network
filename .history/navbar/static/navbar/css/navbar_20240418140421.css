@@ -390,7 +390,7 @@ div#dark-button.dark-mode-on {
   margin-top: 50px;
   margin-left: 50px; 
   width: 300px;
-  display: flex;
+  display: none;
   flex-direction:column;
   border-radius: 8px;
   max-height: 400px;

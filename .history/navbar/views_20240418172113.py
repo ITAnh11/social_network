@@ -14,5 +14,5 @@ class searchList(APIView()):
 
 class getSearchList(APIView()):
     def get(self, request):
-        return Response('Ok')
+        return Respone('Ok')
     
