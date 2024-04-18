@@ -59,9 +59,10 @@ class RevokeFriendRequestView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         try:
+            user_id = get_object_or_404(User, email = user)
+            print(user_id)
             to_id = request.data.get('id')
-            #print(to_id)
-            friend_request = get_object_or_404(FriendRequest, from_id=user, to_id=to_id)
+            friend_request = get_object_or_404(FriendRequest, from_id=user_id, to_id=to_id)
             
             friend_request.delete()
             #print(user)
@@ -158,10 +159,10 @@ class GetSentFriendRequestsView(APIView):
         
         data = []
         list_friend_requests_sent = FriendRequest.objects.filter(from_id=user)
-        #print(list_friend_requests_sent)
+        print(list_friend_requests_sent)
         for friend_request_sent in list_friend_requests_sent:
             serializer = FriendRequestSerializer(friend_request_sent)
-            #print(serializer)
+            print(serializer)
             
             friend_request = {
                 "friend_request_sent" : serializer.data,
@@ -181,10 +182,10 @@ class  GetReceivedFriendRequestsView(APIView):
         
         data = []
         list_friend_requests_received = FriendRequest.objects.filter(to_id=user)
-        #print(list_friend_requests_received)
+        print(list_friend_requests_received)
         for friend_request_received in list_friend_requests_received:
             serializer = FriendRequestSerializer(friend_request_received)
-            #print(serializer)
+            print(serializer)
             
             friend_request = {
                 "friend_request_received" : serializer.data,
@@ -206,7 +207,7 @@ class GetListFriendView(APIView):
         
         data = []
         list_friend_ship = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
-        #print(list_friend_ship)
+        print(list_friend_ship)
         
         
         for friend_ship in list_friend_ship:
@@ -262,6 +263,8 @@ class GetSuggestionFriendView(APIView):
             if not user:
                 return Response({'error': 'Unauthorized'}, status=401)
             
+            user_id = get_object_or_404(User, email = user)
+            print(user_id)
             #dsach bạn bè của mình
             # user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
             
@@ -293,31 +296,19 @@ class GetSuggestionFriendView(APIView):
             #                 "mutual_friend_profile": mutual_friend_profile
             #                 })
             data = []
-            
-            sent_friend_requests_list = (FriendRequest.objects.filter(from_id=user).values_list('to_id', flat=True))
-            received_friend_requests_list = (FriendRequest.objects.filter(to_id=user).values_list('from_id', flat=True))
-            friend_list_1 = (Friendship.objects.filter(user_id1=user).values_list('user_id2', flat=True))
-            friend_list_2 = (Friendship.objects.filter(user_id2=user).values_list('user_id1', flat=True))
-            not_user = User.objects.filter(email=user).values_list('id', flat=True)
-            
-            sent_set = set(sent_friend_requests_list)
-            received_set = set(received_friend_requests_list)
-            friend1_set = set(friend_list_1)
-            friend2_set = set(friend_list_2)
-            not_user_set = set(not_user)
-            
-            #print(sent_set)
-            other_users = list(set(User.objects.all().values_list('id', flat=True)) - (sent_set | received_set | friend1_set | friend2_set | not_user_set))
-            
+            # other_users = User.objects.exclude(id=user_id) 
+            # # non_friends = other_users.exclude(
+            # #     Q(friend_requests_received__from_id=user) |  
+            # #     Q(friendships__user_id1=user) | 
+            # #     Q(friendships__user_id2=user)
+            # # )
+            other_users = Friendship.objects.all()
             for other_user in other_users:
-                suggesion = get_object_or_404(User, id=other_user)
-                #print(suggesion)
-                suggesions = {
-                    "suggestions_friend": getUserProfileForPosts(suggesion)
-                }
-                data.append(suggesions)
                 
-            
+                suggestions = {
+                    "other_user_profile": getUserProfileForPosts(other_user.user_id2) 
+                    }
+                data.append(suggestions)
                 
             return Response({
                 "suggestions": data
