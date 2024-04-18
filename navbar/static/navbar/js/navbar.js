@@ -29,17 +29,43 @@ if (currentUrl.includes("/")) {
 }
 
 //Sử lý phần search
-var search_list = document.querySelector(".search-list");
+const searchInput = document.getElementById('search-input');
+const nav_bar = document.querySelector("ul");
 function remove_search_list(event){
     console.log("abc:",event.target.parentNode.parentNode);
-    search_list.style.display = "none";
+    event.target.parentNode.parentNode.remove();
+    searchInput.value = null;
 }
-const searchInput = document.getElementById('search-input');
+
 searchInput.addEventListener('keyup', function(event) {
   // Kiểm tra nếu phím nhấn là Enter (mã ASCII: 13)
-  if (event.keyCode === 13) {
+  if (event.keyCode === 13 && searchInput.value !== null && searchInput.value !== "") {
     console.log(searchInput.value);
-    search_list.style.display = "flex";
+    var a = 
+    `
+    <div style="display: flex;flex-direction: row;align-items: center;">
+        <div style="font-size: large; color: rgb(0, 110, 255); margin: 10px;text-decoration: underline;display: block;margin-right: 70px;"> Danh sách tìm kiếm </div>
+        <button type="button" class="remove-search-list" onclick="remove_search_list(event)">
+            <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+    <a href="" style="text-decoration: none;color:black;">
+        <div class="person_being_searched">
+            <div class="person_being_searched_img">
+                <img style=" display: flex ; width: 100%;height: 100%;" src="/static/friends/images/hq720.webp" alt="Card Image">
+            </div>
+            <div>
+                <h3>${searchInput.value}</h3>
+            </div>
+        </div>
+    </a>
+    `
+
+    var newDiv = document.createElement("div");
+    newDiv.classList.add("search-list");
+    newDiv.innerHTML = a;
+    nav_bar.appendChild(newDiv);
+    
   }
 });
 
