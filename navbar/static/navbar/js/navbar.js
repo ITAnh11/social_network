@@ -17,7 +17,7 @@ var LoadMoreBackground =document.querySelector(".btn-LoadMore");
 
 /* change-color */
 const currentUrl = window.location.pathname;
-console.log(currentUrl);
+// console.log(currentUrl);
 
 if (currentUrl.includes("/")) {
     document.getElementById("home").classList.add("active");
