@@ -1,3 +1,4 @@
+
 *{
   box-sizing: border-box;
 }
@@ -381,3 +382,78 @@ div#dark-button.dark-mode-on {
   background: red;
   color: white;
 }
+
+/* danh sach thanh search */
+.search-list{
+  background-color: #E4E9F0;
+  position: absolute;
+  margin-top: 50px;
+  margin-left: 50px; 
+  width: 300px;
+  display: none;
+  flex-direction:column;
+  border-radius: 8px;
+  max-height: 400px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+}
+  .search-list::-webkit-scrollbar {
+  width: 8px; 
+  }
+  
+  .search-list::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  }
+  
+  .search-list::-webkit-scrollbar-thumb {
+  background: #99aed6; 
+  border-radius: 6px; 
+  }
+  
+  .search-list::-webkit-scrollbar-thumb:hover {
+  background: #7a97cc; 
+  }
+
+
+.person_being_searched{
+  height: 60px; 
+  border: 1px solid #ccc; 
+  width: 100%; 
+  display: flex;
+  background-color: rgb(255, 255, 255); 
+  border-radius: 20px;
+  text-align: center;
+  align-items: center;
+}
+
+.person_being_searched_img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.remove-search-list{
+  width: 25px;
+  height: 25px;
+  background-color: #ffffff;
+  border: 2px solid rgb(0, 110, 255);
+  border-radius: 50%;
+  color: rgb(0, 110, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+}
+.remove-search-list:hover{
+  background-color: rgb(0, 110, 255);
+  color: #ffffff;
+}
+
