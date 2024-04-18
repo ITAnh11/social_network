@@ -294,30 +294,64 @@ class GetSuggestionFriendView(APIView):
             #                 })
             data = []
             
+            # sent_friend_requests = FriendRequest.objects.filter(from_id=user)
+            # received_friend_requests = FriendRequest.objects.filter(to_id=user)
+            
+            #user_friends = Friendship.objects.filter(Q(user_id1 = user) | Q(user_id2 = user)) 
+            #print(sent_friend_requests)
+            
+            # other_users = User.objects.exclude(
+            # Q(email=user)| 
+            # Q(id__in=sent_friend_requests.values_list('id', flat=True)) |
+            # Q(id__in=received_friend_requests.values_list('id', flat=True))
+            # )
+            # other_users = User.objects.exclude(
+            #     id__in=received_friend_requests.values_list('id', flat=True)
+            # ) 
+            # print(other_users)
+            # other_users = User.objects.prefetch_related('FriendRequest_set')
+            
+            # friend_requests_sent = user.friend_requests_sent.all()
+            # friend_requests_received = user.friend_requests_received.all()
+            # print(friend_requests_sent)
+            
+            # sent_friend_requests_list = list(FriendRequest.objects.filter(from_id=user).values_list('to_id', flat=True))
+            # received_friend_requests_list = list(FriendRequest.objects.filter(to_id=user).values_list('from_id', flat=True))
+            # friend_list_1 = list(Friendship.objects.filter(user_id1=user).values_list('user_id2', flat=True))
+            # friend_list_2 = list(Friendship.objects.filter(user_id2=user).values_list('user_id1', flat=True))
+            
+            # suggestions_id = sent_friend_requests_list + received_friend_requests_list + friend_list_1 + friend_list_2
+            # suggestions_id.append(user.id)
+            # print(suggestions_id)
+            # for suggestion in suggestions_id:
+            #     other_user_id = get_object_or_404(User, id = suggestion)
+                
+            #     suggestions = {
+            #         "other_user_profile": getUserProfileForPosts(other_user_id)
+            #         }
+            #     data.append(suggestions)
             sent_friend_requests_list = (FriendRequest.objects.filter(from_id=user).values_list('to_id', flat=True))
             received_friend_requests_list = (FriendRequest.objects.filter(to_id=user).values_list('from_id', flat=True))
             friend_list_1 = (Friendship.objects.filter(user_id1=user).values_list('user_id2', flat=True))
             friend_list_2 = (Friendship.objects.filter(user_id2=user).values_list('user_id1', flat=True))
-            not_user = User.objects.filter(email=user).values_list('id', flat=True)
+            sum = sent_friend_requests_list + received_friend_requests_list + friend_list_1 + friend_list_2
+            print(sum)
+            # friend_requests_sent_id = User.objects.exclude(email = )
+            # non_friends = other_users.exclude(
+            #     Q(friend_requests_received__from_id=user) |  
+            #     Q(friend_requests_sent__to_id=user) |
+            #     Q(friendships__user_id1=user) | 
+            #     Q(friendships__user_id2=user)
+            # )
+            # for other_user in other_users:
+            #     print(other_user)
             
-            sent_set = set(sent_friend_requests_list)
-            received_set = set(received_friend_requests_list)
-            friend1_set = set(friend_list_1)
-            friend2_set = set(friend_list_2)
-            not_user_set = set(not_user)
-            
-            #print(sent_set)
-            other_users = list(set(User.objects.all().values_list('id', flat=True)) - (sent_set | received_set | friend1_set | friend2_set | not_user_set))
-            
-            for other_user in other_users:
-                suggesion = get_object_or_404(User, id=other_user)
-                #print(suggesion)
-                suggesions = {
-                    "suggestions_friend": getUserProfileForPosts(suggesion)
-                }
-                data.append(suggesions)
+            # for other_user in other_users:
                 
-            
+            #     suggestions = {
+            #         "other_user_profile": getUserProfileForPosts(other_user.id)
+            #         }
+            #     data.append(suggestions)
                 
             return Response({
                 "suggestions": data
