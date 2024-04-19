@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from common_functions.common_function import getUser, getUserProfileForPosts
+from common_functions import getUserProfileForPosts
 from users.models import User
 from userprofiles.models import UserProfile
 
@@ -22,21 +22,19 @@ class SearchListView(generics.ListAPIView):
     serializer_class = UserInfoSerializer
     queryset = UserProfile.objects.all()
 
-    def post(self, request, *args, **kwargs):
-        username = request.data.get('name')
-        #username = self.request.query_params.get('name', '')
-        # username = self.kwargs['username']
-        print(username)
+    def post(self, request):
+        username = self.request.query_params.get('username', '')
+        
         users =  UserProfile.objects.filter(
             Q(user_id__email__icontains=username) |
             Q(first_name__icontains=username) |
             Q(last_name__icontains=username)
-        ).order_by('first_name')
-        #print(users)
+        )
+        print(users)
         if not users.exists():
             return Response({"detail": "Không tìm thấy người dùng"})
         
-        serializer = UserInfoSerializer(users,  many=True)
+        serializer = getUserProfileForPosts(users)
         return Response(serializer.data)
     
     

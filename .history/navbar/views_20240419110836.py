@@ -31,7 +31,7 @@ class SearchListView(generics.ListAPIView):
             Q(user_id__email__icontains=username) |
             Q(first_name__icontains=username) |
             Q(last_name__icontains=username)
-        ).order_by('first_name')
+        )
         #print(users)
         if not users.exists():
             return Response({"detail": "Không tìm thấy người dùng"})
