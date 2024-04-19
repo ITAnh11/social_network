@@ -32,8 +32,8 @@ class CreatePostsView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        # print(request.data)
-        # print(request.FILES)
+        print(request.data)
+        print(request.FILES)
         
         post = self.createPost(user, request)
         if type(post) != Posts:

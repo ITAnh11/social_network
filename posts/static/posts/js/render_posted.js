@@ -58,9 +58,6 @@ export function render_post(data,isOld){
                         <div><img src="${baseUrl + "images/comments.png"}" alt="">52</div>
                         <div><img src="${baseUrl + "images/share.png"}" alt="">35</div>
                     </div>
-                    <div class="post-profile-picture">
-                        <img src="${post.user.avatar}" alt=""> <i class=" fas fa-caret-down"></i>
-                    </div>
                 </div>
             </div>`
             var posted = document.createElement("div");

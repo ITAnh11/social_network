@@ -33,6 +33,9 @@ class LoginView(APIView):
         return response
     
     def post(self, request):
+        
+        print(request.data)
+        
         email = request.data.get('email')
         password = request.data.get('password')
 
@@ -68,7 +71,7 @@ class RegisterView(APIView):
         return response
             
     def post(self, request):
-        # print(request.data)
+        print(request.data)
         try:
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):

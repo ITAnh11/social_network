@@ -49,6 +49,8 @@
     justify-content: center;
     align-items: center;
     border-radius: 2%;
+    width: 100%;
+    height: 100%;
 }
 
 .gallery-image-overlay .gallery-plus {

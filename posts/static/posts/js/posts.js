@@ -116,6 +116,7 @@ function appendImageToFormData(images, formData) {
         .then(response => response.blob())
         .then(blob => {
             number += 1;
+            console.log(number);
             formData.append(`media`, blob, `images_${number}.png`);
         })
         .catch(error => {
@@ -130,7 +131,7 @@ function appendImageToFormData(images, formData) {
 //upload_post
 form_submit.addEventListener('submit', function(event) {
     event.preventDefault();
-    const formData = new FormData();
+    const formData = new FormData(event.target);
     const images = document.querySelectorAll('.uploaded-img img');
 
     var content = uploadContent.value;

@@ -18,11 +18,13 @@ export function createLayoutImages(images, galleryContainerElement) {
 }
 
 function layout1(images, galleryContainerElement) {
+    setTimeout(() => {
     galleryContainerElement.innerHTML += `<img
                 class="gallery-image gallery-normal-image"
                 src="${images[0].media}"
                 alt="Image"
             />`
+    }, TIME_DELAY_LOAD_IMAGE * 1);
 }
 
 function layout2(images, galleryContainerElement) {
