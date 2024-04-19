@@ -105,8 +105,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'social_network',
-        'USER': 'admin',
-        'PASSWORD': 'abc123',
+        'USER': 'postgres',
+        'PASSWORD': 'TuAnhkc11',
         'HOST': 'database-1.cxmwy0oq0y75.ap-southeast-2.rds.amazonaws.com',
         'PORT': '5432',
     },
