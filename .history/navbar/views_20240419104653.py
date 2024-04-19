@@ -23,15 +23,15 @@ class SearchListView(generics.ListAPIView):
     queryset = UserProfile.objects.all()
 
     def post(self, request, *args, **kwargs):
-        username = request.data.get('name')
-        #username = self.request.query_params.get('name', '')
+        name = request.data.get('name')
+        username = self.request.query_params.get('name', '')
         # username = self.kwargs['username']
         print(username)
         users =  UserProfile.objects.filter(
             Q(user_id__email__icontains=username) |
             Q(first_name__icontains=username) |
             Q(last_name__icontains=username)
-        ).order_by('first_name')
+        )
         #print(users)
         if not users.exists():
             return Response({"detail": "Không tìm thấy người dùng"})
