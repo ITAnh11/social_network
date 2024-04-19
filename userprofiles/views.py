@@ -127,17 +127,11 @@ class GetProfileView(APIView):
         context['isOwner'] = True if user.id == idUserRequested else False
                 
         return Response(context)
-        # id_requested = request.query_params.get('id') or user.id
-        
-        # context = self.getProfile(id_requested)
-        # context['isOwner'] = True if user.id == id_requested else False
-                
-        # return Response(context)
     
     def getProfile(self, id):
         user = User.objects.filter(id=id).first()
-        userprofile = UserProfile.objects.filter(user_id=id).first()
-        imageprofile = ImageProfile.objects.filter(user_id=id).first()
+        userprofile = UserProfile.objects.get(user_id=id)
+        imageprofile = ImageProfile.objects.get(user_id=id)
         
         context = {
             'user': UserSerializer(user).data,
@@ -146,6 +140,7 @@ class GetProfileView(APIView):
         }
         
         return context
+    
        
 class SetUserProfileView(APIView):
     # update user profile

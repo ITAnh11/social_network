@@ -1,3 +1,4 @@
+var posts_upload_box = document.querySelector("#posts-upload-box");
 var post_upload_area = document.querySelector(".post-upload-textarea");
 var posting = document.querySelector(".overlay");
 var uploadContent = posting.querySelector('textArea');
@@ -106,7 +107,6 @@ post_btn.addEventListener("click", function() {
     clickFormSubmit();
 });
 
-
 function appendImageToFormData(images, formData) {
     var promises = [];
     var number = 0;
@@ -162,23 +162,18 @@ form_submit.addEventListener('submit', function(event) {
         });
 });
 
-function hiden_posting(isOwer) {
-    if (isOwer === false){
-        post.remove();
-    } else {
-        
-    }
-}
 
 //cài đặt thông tin người dùng cho phần đăng bài
 function set_user_post(){
-    var userProfile = document.querySelector(".write-post-container .user-profile");
-    var userNameElement = userProfile.querySelector("p");
-    var userImageElement = userProfile.querySelector("img");
+    var userProfile = document.querySelector("#posts-upload-userprofile");
+    // console.log(userProfile);
+    var userNameElement = userProfile.querySelector("#posts-upload-name-user");
+    var userImageElement = userProfile.querySelector("#posts-upload-image-user");
 
-    var a = posting.querySelector(".user-profile");
-    var userImageElement1 = a.querySelector("img");
-    var userNameElement1 = a.querySelector("p");
+    var userprofileOverlay = posting.querySelector(".user-profile");
+    var userImageElement1 = userprofileOverlay.querySelector("img");
+    var userNameElement1 = userprofileOverlay.querySelector("p");
+    
     // Sử dụng localStorage thay vì Location
     var userName = localStorage.getItem("name");
     var userAvatar = localStorage.getItem("avatar");
@@ -198,6 +193,23 @@ function set_user_post(){
     }
 
 }
+
+function showUploadPostsBox() {
+    var url = window.location.href;
+    var params = new URLSearchParams(window.location.search);
+    if (url.includes("userprofiles")) {
+        if (localStorage.getItem('id') != params.get('id')) {
+            posts_upload_box.remove();
+            console.log('remove');
+            return;
+        }
+    }
+
+    posts_upload_box.style.display = 'block';
+}
+
+
+showUploadPostsBox();
 set_user_post();
 
 
