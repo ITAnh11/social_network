@@ -69,6 +69,8 @@ class EditProfileView(APIView):
             return HttpResponseRedirect(reverse('users:login'))
         
         if request.query_params.get('id'):
+            if int(request.query_params.get('id')) != user.id:
+                return Response({'error': 'Unauthorized'}, status=401)
             return render(request, 'userprofiles/editProfile.html')
         
         id_requested = request.query_params.get('id') or user.id
@@ -85,6 +87,8 @@ class EditStoryView(APIView):
             return HttpResponseRedirect(reverse('users:login'))
         
         if request.query_params.get('id'):
+            if int(request.query_params.get('id')) != user.id:
+                return Response({'error': 'Unauthorized'}, status=401) 
             return render(request, 'userprofiles/editStory.html')
         
         id_requested = request.query_params.get('id') or user.id
@@ -92,7 +96,9 @@ class EditStoryView(APIView):
         path = reverse('userprofiles:editStory') + '?id=' + str(id_requested)
         
         return HttpResponseRedirect(path)
-    
+    def post(self, request):
+        print(request.data)
+        return Response()
 class ListFriendsView(APIView):
     def get(self, request):
         user = getUser(request)
