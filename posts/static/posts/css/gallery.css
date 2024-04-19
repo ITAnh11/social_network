@@ -14,9 +14,19 @@
     grid-column: span 2 / auto;
 }
 
-.gallery-image.gallery-four-grid-cells {
+.gallery-image.gallery-two-grid-cells {
+    grid-row: span 2 / span 2;
+    grid-column: span 2 / span 2;
+}
+
+.gallery-image.gallery-three-grid-cells {
     grid-row: span 3 / auto;
     grid-column: span 3 / auto;
+}
+
+.gallery-image.gallery-four-grid-cells {
+    grid-row: span 4 / auto;
+    grid-column: span 4 / auto;
 }
 
 .gallery-image.gallery-wide-image {

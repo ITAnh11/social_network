@@ -30,7 +30,7 @@ def getTimeDuration(created_at):
             return f'{time_duration.seconds//3600} hours ago'
         elif time_duration < timedelta(days=7):
             return f'{time_duration.days} days ago'
-        return created_at
+        return created_at.strftime('%d, %B %Y')
 
 def getUser(request):
     token = request.COOKIES.get('jwt')
