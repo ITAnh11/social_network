@@ -42,10 +42,10 @@ class LoginView(APIView):
         user = User.objects.filter(email=email).first()
 
         if user is None:
-            return Response({'warning': 'User not found!'})
+            return Response({'warning': 'User not found!'}, status=404)
 
         if not user.check_password(password):
-            return Response({'warning': 'Incorrect password!'})
+            return Response({'warning': 'Incorrect password!'}, status=401)
         
         # user.set_last_login()
         
@@ -96,13 +96,13 @@ class RegisterView(APIView):
             
         except ValidationError as e:
             if e.detail.get('email'):
-                return Response({'warning': e.detail.get('email')})
+                return Response({'warning': e.detail.get('email')}, status=400)
             if e.detail.get('comfirm_password'):
-                return Response({'warning': e.detail.get('comfirm_password')})
+                return Response({'warning': e.detail.get('comfirm_password')}, status=400)
             if e.detail.get('check_password'):
-                return Response({'warning': e.detail.get('check_password')})
+                return Response({'warning': e.detail.get('check_password')}, status=400)
         except Exception as e:
-            return Response({'error': 'Something went wrong. Please try again.'})
+            return Response({'error': 'Something went wrong. Please try again.'}, status=500)
 
 class LogoutView(APIView):
     def post(self, request):
