@@ -37,7 +37,7 @@ class SearchListView(generics.ListAPIView):
         data =[]
         for user in users:
             data.append({
-                "search user": getUserProfileForPosts(user.user_id)
+                "search_user": getUserProfileForPosts(user.user_id)
             })
         #serializer = UserInfoSerializer(users,  many=True)
         return Response(data)
