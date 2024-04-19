@@ -9,6 +9,7 @@ function denine_button(event){
     const formdata = new FormData();
     formdata.append("st", "denined");
     formdata.append("id", a);
+    formdata.append("csrfmiddlewaretoken", csrftoken);
     url = "/friends/denine_friendrequest/";
 
     fetch(url,{
@@ -37,6 +38,7 @@ function accept_button(event){
 
     formdata.append("st", "accepted");
     formdata.append("id", a);
+    formdata.append("csrfmiddlewaretoken", csrftoken);
     url = "/friends/accept_friendrequest/"
     fetch(url,{
         method:'POST',
@@ -74,6 +76,7 @@ function request_button(event){
         var formdata = new FormData();
         formdata.append("st", "pending");
         formdata.append("id", a);
+        formdata.append("csrfmiddlewaretoken", csrftoken);
         url_sent_friendrequest = "/friends/sent_friendrequest/";
         fetch(url_sent_friendrequest,{
             method:'POST',
@@ -89,6 +92,7 @@ function request_button(event){
         var formdata = new FormData();
         formdata.append("st","revoke");
         formdata.append("id",a);
+        formdata.append("csrfmiddlewaretoken", csrftoken);
         url_revoke_friendrequest = "/friends/revoke_friendrequest/";
         fetch(url_revoke_friendrequest,{
             method:'POST',
