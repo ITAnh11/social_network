@@ -21,19 +21,19 @@
   </head>
   <body data-base-url="{% static 'posts/' %}">
     <div class="content-area">
-      <div class="write-post-container">
-        <div class="user-profile">
-          <img alt="" />
+      <div class="write-post-container" id="posts-upload-box" style="display: none;">
+        <div class="user-profile" id="posts-upload-userprofile">
+          <img id="posts-upload-image-user" alt="" />
           <div>
-            <p></p>
-            <small>Public <i class="fas fa-caret-down"></i></small>
+            <p id="posts-upload-name-user"></p>
+            <small></small>
           </div>
         </div>
 
         <div class="post-upload-textarea">
           <textarea
             name=""
-            placeholder="What's on your mind, Alex?"
+            placeholder="What's on your mind?"
             id=""
             cols="30"
             rows="3"
