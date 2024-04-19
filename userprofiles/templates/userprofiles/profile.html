@@ -15,7 +15,7 @@
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body link-url-editProfile="{% url 'userprofiles:editProfile' %}" link-url-editStory="{%url 'userprofiles:editStory'%}">
     {% include 'navbar/navbar.html' %}
     <!-- profile-page -->
 
@@ -75,33 +75,44 @@
                 <div class="left-profile-sidebar-top">
                     <div class="intro-bio">
                         <h4>Story</h4>
-                        <p>Em co nho anh khong <i class="far fa-smile-beam"></i></p>
+                        {% comment %} <p>Em co nho anh khong <i class="far fa-smile-beam"></i></p> {% endcomment %}
+                        <div class="intro-bio" id="intro_bio">
+
+                        </div>
                         <hr>
                     </div>
                     <div class="background-details">
                         <a href="#"><i class="fas fa-briefcase"></i>
-                            <p>College Student</p>
+                            <p class="work" id="work">
+
+                            </p>
                         </a>
                         <a href="#"><i class="fas fa-graduation-cap"></i>
-                            <p>Studied at University of Technology - Hanoi National University</p>
+                            <p class="address_work" id="address_work">
+                                <!--Studied at University of Technology - Hanoi National University--> 
+                            </p>
                         </a>
                         <a href="#"><i class="fas fa-home"></i>
-                            <p>Lives in Cau Giay, Ha Noi</p>
+                            <p class="address" id="address">
+                                <!--Lives in Cau Giay, Ha Noi-->                           
+                            </p>
                         </a>
                         <a href="#"><i class="fas fa-map-marker-alt"></i>
-                            <p>From Y Yen, Nam Dinh</p>
+                            <p class="place_birth" id="place_birth">
+                                <!--From Y Yen, Nam Dinh-->
+                            </p>
                         </a>
                         <a href="https://www.instagram.com/_minhtuann_201/" target="_blank">
                             <i class="fab fa-instagram"></i>
                             <p style="color: blue">_minhtuann_201</p>
                         </a>
                     </div>
-                    <div class="edit-story-wrapper">
-                        <a href="{% url 'userprofiles:editStory' %}" class="editStory">
+                    <div class="edit-story-wrapper" id="editStoryButton">
+                        {% comment %} <a href="{% url 'userprofiles:editStory' %}" class="editStory">
                             <button type="button" class="edit-story-btn">
                                 <i class="far fa-edit"></i> Edit your story
                             </button>
-                        </a>
+                        </a> {% endcomment %}
                     </div>                    
                 </div>
 
