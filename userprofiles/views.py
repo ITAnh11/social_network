@@ -20,6 +20,8 @@ from posts.serializers import PostsSerializer, MediaOfPostsSerializer
 
 from posts.views import CreatePostsAfterSetMediaProfileView
 
+# from users.views import LoginView
+
 from common_functions.common_function import getUser, getTimeDuration, getUserProfileForPosts
 
 import time
@@ -98,7 +100,31 @@ class EditStoryView(APIView):
         return HttpResponseRedirect(path)
     def post(self, request):
         print(request.data)
-        return Response()
+        try:
+            serializer = UserSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                user = serializer.save()
+
+                SetUserProfileView().post(request, user)
+
+                return Response({'success': 'Update success'})
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
+
+        #         token = LoginView().makeToken(user)
+
+        #         response = Response()
+        #         response.set_cookie(key='jwt', value=token, httponly=True)
+        #         response.data = {
+        #             'success': 'Your story has been successfully updated!!!',
+        #             'jwt': token,
+        #             'redirect_url': '/userprofiles/' + f"?id={user.id}"
+        #         }
+                
+        #         return response
+        # except Exception:
+        #     return Response({'error': 'Sonething went wrong. Please try again.'})
+
 class ListFriendsView(APIView):
     def get(self, request):
         user = getUser(request)
