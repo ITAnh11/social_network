@@ -18,7 +18,6 @@ class UserSerializer(serializers.ModelSerializer):
      
     def create(self, validated_data):
         try:
-            
             password = validated_data.pop('password')
             confirm_password = validated_data.pop('confirm_password')
             
@@ -39,6 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
                 user.set_password(password)
                 user.confirm_password = user.password
                 user.save()
+                print('User created!')
                 return user
         except Exception as e:
             print(e)
