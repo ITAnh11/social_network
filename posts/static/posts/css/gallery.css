@@ -34,7 +34,7 @@
 }
 
 .gallery-image.gallery-normal-image {
-    grid-column: span 6;
+    grid-column: span 6 / auto;
 }
 
 .image-container {
