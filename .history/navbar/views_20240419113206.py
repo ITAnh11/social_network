@@ -28,6 +28,7 @@ class SearchListView(generics.ListAPIView):
         # username = self.kwargs['username']
         print(username)
         users =  UserProfile.objects.filter(
+            Q(user_id__email__icontains=username) |
             Q(first_name__icontains=username) |
             Q(last_name__icontains=username)
         ).order_by('first_name')

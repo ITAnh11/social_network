@@ -28,6 +28,7 @@ class SearchListView(generics.ListAPIView):
         # username = self.kwargs['username']
         print(username)
         users =  UserProfile.objects.filter(
+            Q(user_id__email__icontains=username) |
             Q(first_name__icontains=username) |
             Q(last_name__icontains=username)
         ).order_by('first_name')
@@ -35,10 +36,9 @@ class SearchListView(generics.ListAPIView):
         if not users.exists():
             return Response({"detail": "Không tìm thấy người dùng"})
         data =[]
-        for user in users:
-            data.append({
-                "search user": getUserProfileForPosts(user.user_id)
-            })
+        data.append({
+            "search user": getUserProfileForPosts(users.user_id)
+        })
         #serializer = UserInfoSerializer(users,  many=True)
         return Response(data)
     
