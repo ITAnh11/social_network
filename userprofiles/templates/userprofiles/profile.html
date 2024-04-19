@@ -15,7 +15,7 @@
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 </head>
 
-<body link-url="{% url 'userprofiles:editProfile' %}">
+<body link-url-editProfile="{% url 'userprofiles:editProfile' %}" link-url-editStory="{%url 'userprofiles:editStory'%}">
     {% include 'navbar/navbar.html' %}
     <!-- profile-page -->
 
@@ -107,12 +107,12 @@
                             <p style="color: blue">_minhtuann_201</p>
                         </a>
                     </div>
-                    <div class="edit-story-wrapper">
-                        <a href="{% url 'userprofiles:editStory' %}" class="editStory">
+                    <div class="edit-story-wrapper" id="editStoryButton">
+                        {% comment %} <a href="{% url 'userprofiles:editStory' %}" class="editStory">
                             <button type="button" class="edit-story-btn">
                                 <i class="far fa-edit"></i> Edit your story
                             </button>
-                        </a>
+                        </a> {% endcomment %}
                     </div>                    
                 </div>
 
