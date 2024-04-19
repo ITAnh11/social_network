@@ -15,7 +15,7 @@
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body link-url="{% url 'userprofiles:editProfile' %}">
     {% include 'navbar/navbar.html' %}
     <!-- profile-page -->
 
@@ -79,9 +79,11 @@
                         <hr>
                     </div>
                     <div class="background-details">
-                        <a href="#"><i class="fas fa-briefcase"></i>
+                        {% comment %} <a href="#"><i class="fas fa-briefcase"></i>
                             <p>College Student</p>
-                        </a>
+                        </a> {% endcomment %}
+                        <i class="fas fa-briefcase"></i>
+                        <div class="intro-bio" id="intro_bio"></div>
                         <a href="#"><i class="fas fa-graduation-cap"></i>
                             <p>Studied at University of Technology - Hanoi National University</p>
                         </a>

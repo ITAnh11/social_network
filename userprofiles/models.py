@@ -18,6 +18,9 @@ class UserProfile(models.Model):
     bio = models.TextField(blank=True)
     school = models.CharField(max_length=255, blank=True)
     work = models.CharField(max_length=255, blank=True)
+    address_work = models.CharField(max_length=255, blank=True)
+    place_birth = models.CharField(max_length=255, blank=True)
+    social_link = models.CharField(max_length=255, blank=True)
     _destroy = models.BooleanField(default=False)
     
     class Meta:
