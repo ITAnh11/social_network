@@ -2,10 +2,11 @@ from .serializers import UserSerializer
 from .models import User
 from userprofiles.views import SetUserProfileView, SetImageProfileView
 
-import jwt, datetime
+import jwt
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils import timezone
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -16,8 +17,8 @@ class LoginView(APIView):
     def makeToken(self, user):
         payload = {
             'id': user.id,
-            'exp': datetime.datetime.now(datetime.UTC) + datetime.timedelta(hours=5),
-            'iat': datetime.datetime.now(datetime.UTC)
+            'exp': timezone.now() + timezone.timedelta(hours=5),
+            'iat': timezone.now()
         }
 
         token = jwt.encode(payload=payload, key='secret', algorithm='HS256')
