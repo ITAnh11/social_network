@@ -24,6 +24,7 @@ class User(models.Model):
         self.password = make_password(raw_password)
     
     def check_password(self, raw_password):
+        # print(check_password(raw_password, self.password))
         return check_password(raw_password, self.password)
     
     def set_last_login(self):

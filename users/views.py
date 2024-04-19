@@ -47,7 +47,7 @@ class LoginView(APIView):
         if not user.check_password(password):
             return Response({'warning': 'Incorrect password!'})
         
-        user.set_last_login()
+        # user.set_last_login()
         
         token = self.makeToken(user)
         

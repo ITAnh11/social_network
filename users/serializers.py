@@ -17,24 +17,28 @@ class UserSerializer(serializers.ModelSerializer):
         return True
      
     def create(self, validated_data):
-        password = validated_data.pop('password')
-        confirm_password = validated_data.pop('confirm_password')
-        
-        user_exists = User.objects.filter(email=validated_data['email']).exists()
-        
-        if user_exists:
-            raise ValidationError(detail={'email': 'Email already exists!'})
-        
-        if password is not None:
-            user = self.Meta.model(**validated_data)
+        try:
             
-            if password != confirm_password:
-                raise ValidationError(detail={'comfirm_password': 'Passwords do not match!'})
-        
-            if not self.check_password(password):
-                raise serializers.ValidationError(detail={'check_password': 'Password does not meet the requirements!'})
+            password = validated_data.pop('password')
+            confirm_password = validated_data.pop('confirm_password')
             
-            user.set_password(password)
-            user.confirm_password = user.password
-            user.save()
-            return user
+            user_exists = User.objects.filter(email=validated_data['email']).exists()
+            
+            if user_exists:
+                raise ValidationError(detail={'email': 'Email already exists!'})
+            
+            if password is not None:
+                user = self.Meta.model(**validated_data)
+                
+                if password != confirm_password:
+                    raise ValidationError(detail={'comfirm_password': 'Passwords do not match!'})
+            
+                if not self.check_password(password):
+                    raise serializers.ValidationError(detail={'check_password': 'Password does not meet the requirements!'})
+                
+                user.set_password(password)
+                user.confirm_password = user.password
+                user.save()
+                return user
+        except Exception as e:
+            print(e)
