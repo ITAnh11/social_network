@@ -92,8 +92,10 @@
     <div id="main-container"></div>
 
     {% csrf_token %}
-    <script src="{% static 'comments/js/comment_t.js' %}" >
+    <script>
         var csrftoken = '{{ csrf_token }}';
+    </script>
+    <script src="{% static 'comments/js/comment_t.js' %}" >
     </script>
 </body>
 </html>
