@@ -31,6 +31,17 @@ fetch(api_get_profile)
         var intro_bio = document.getElementById('intro_bio');
         intro_bio.innerHTML += `<p>${data.userprofile['bio']}</p>`;
 
+        var work = document.getElementById('work');
+        work.innerHTML += `${data.userprofile['work']}`;
+
+        var address_work = document.getElementById('address_work');
+        address_work.innerHTML += `${data.userprofile['address_work']}`;
+
+        var address = document.getElementById('address');
+        address.innerHTML += `${data.userprofile['address']}`;
+
+        var place_birth = document.getElementById('place_birth');
+        place_birth.innerHTML += `${data.userprofile['place_birth']}`;
         //
         profile = document.getElementById('profile');
         profile.innerHTML += `<h3>Login with: ${data.user['email']}</h3>`     
