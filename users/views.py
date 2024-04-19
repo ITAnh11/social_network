@@ -84,6 +84,8 @@ class RegisterView(APIView):
                 
                 token = LoginView().makeToken(user)
                 
+                print('made token')
+                
                 response = Response()
                 response.set_cookie(key='jwt', value=token, httponly=True)
                 response.data = {
@@ -91,6 +93,8 @@ class RegisterView(APIView):
                     'jwt': token,
                     'redirect_url': '/userprofiles/' + f"?id={user.id}"
                 }
+                
+                print('made response')
                 
                 return response
             
@@ -102,6 +106,7 @@ class RegisterView(APIView):
             if e.detail.get('check_password'):
                 return Response({'warning': e.detail.get('check_password')}, status=400)
         except Exception as e:
+            print(e)
             return Response({'error': 'Something went wrong. Please try again.'}, status=500)
 
 class LogoutView(APIView):
