@@ -107,7 +107,7 @@ DATABASES = {
         'NAME': 'social_network',
         'USER': 'admin',
         'PASSWORD': 'abc123',
-        'HOST': '127.0.0.1',
+        'HOST': 'database-1.cxmwy0oq0y75.ap-southeast-2.rds.amazonaws.com',
         'PORT': '5432',
     },
 }
