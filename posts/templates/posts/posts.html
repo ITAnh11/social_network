@@ -1,93 +1,251 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="{% static 'posts/css/posts.css' %}">
-        <link rel="stylesheet" href="{% static 'posts/css/style.css' %}">
-    </head>
-    <body data-base-url="{% static 'posts/' %}">
-        <div class="content-area">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
 
-            <div class="write-post-container">
-                <div class="user-profile">
-                    <img alt="">
-                    <div>
-                        <p> </p>
-                        <small>Public <i class="fas fa-caret-down"></i></small>
-                    </div>
-                </div>
-
-                <div class="post-upload-textarea">
-                    <textarea name="" placeholder="What's on your mind, Alex?" id="" cols="30" rows="3"></textarea>
-                    <div class="add-post-links">
-                        <a href="#"><img src="images/live-video.png" alt="">Live Video</a>
-                        <a href="#"><img src="images/photo.png" alt="">Photo/Video</a>
-                        <a href="#"><img src="images/feeling.png" alt="">Feeling Activity</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="posted_area">
-                <!-- khu vực đăng bài -->
-            </div>
-            <button type="button" class="btn-LoadMore" onclick="LoadMoreToggle()">Load More</button>
+    <link rel="stylesheet" href="{% static 'posts/css/gallery.css' %}" />
+    <link rel="stylesheet" href="{% static 'posts/css/posts.css' %}" />
+    <link rel="stylesheet" href="{% static 'posts/css/style.css' %}" />
+  </head>
+  <body data-base-url="{% static 'posts/' %}">
+    <div class="content-area">
+      <div class="write-post-container" id="posts-upload-box" style="display: none;">
+        <div class="user-profile" id="posts-upload-userprofile">
+          <img id="posts-upload-image-user" alt="" />
+          <div>
+            <p id="posts-upload-name-user"></p>
+            <small></small>
+          </div>
         </div>
-        
-        <div class="overlay">
-            <div class="post">
-                <div style="background-color: rgb(255, 255, 255); flex: 1; display: flex; flex-direction: row;">
-                    <div style="background-color: aliceblue; flex: 6;">
-                        <div class="user-profile">
-                            <img src="images/profile-pic.png" alt="">
-                            <div>
-                                <p> Alex Carry</p>
-                                <small>Public <i class="fas fa-caret-down"></i></small>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div style="background-color: #F0F8FF; flex: 1;display: flex; justify-content: center;align-items: center;">
-                        <button id="escBtn" style="width: 50px;height: 30px;border: 2px solid rgb(73, 73, 73);border-radius: 3px;cursor: pointer;">Esc</button>
-                    </div>
-                </div>
-    
-                <div style="flex: 3;">
-                    <textarea style="width: 100%; height: 100%; padding: 10px;" name="" placeholder="What's on your mind?" id="" cols="30" rows="3"></textarea>
-                </div>
-                <div class = "upload">
-                    <div class = "upload-wrapper">
-                        <div class = "upload-img">
-                            <!-- image here -->
-                        </div>
-                        <div class = "upload-info">
-                            <p>
-                                <span class = "upload-info-value">0</span> file(s) uploaded.
-                            </p>
-                        </div>
-                        <div class = "upload-area">
-                            <div class = "upload-area-img">
-                                <img style="width: 30px;" src = "/images/upload.png" alt = "">
-                            </div>
-                            <p class = "upload-area-text">Select images or <span>browse</span>.</p>
-                        </div>
-                        <input type = "file" class = "visually-hidden" id = "upload-input" multiple>
-                    </div>
-                </div>
-                <div style="flex: 0.5;justify-content: center;align-items: center;display: flex;">
-                    <form id="form-submit" action="{% url 'posts:create_posts' %}" method="post" style="">
-                        {% csrf_token %}
-                        <button class="post_btn">Upload</button>
-                    </form>
-                </div>
-            </div>
+
+        <div class="post-upload-textarea">
+          <textarea
+            name=""
+            placeholder="What's on your mind?"
+            id=""
+            cols="30"
+            rows="3"
+          ></textarea>
+          <div class="add-post-links">
+            <a href="#"
+              ><img
+                src="{%static 'userprofiles/images/live-video.png' %}"
+                alt=""
+              />Live Video</a
+            >
+            <a href="#"
+              ><img
+                src="{%static 'userprofiles/images/photo.png' %}"
+                alt=""
+              />Photo/Video</a
+            >
+            <a href="#"
+              ><img
+                src="{%static 'userprofiles/images/feeling.png' %}"
+                alt=""
+              />Feeling Activity</a
+            >
+          </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
-        <script src = "{% static 'posts/js/posts.js' %}"></script>
-    </body>
+      </div>
+
+      <div class="posted_area">
+        <!-- khu vực đăng bài -->
+        <!-- <div class="status-field-container write-post-container">
+          <div class="user-profile-box">
+            <div class="user-profile">
+              <img src="${post.user.avatar}" alt="" />
+              <div>
+                <a
+                  href="/userprofiles/?id=${post.user.id}"
+                  style="text-decoration: none"
+                >
+                  <p>${post.user.name}</p>
+                </a>
+                <small>${post.created_at}</small>
+              </div>
+            </div>
+            <div>
+              <a href="#"><i class="fas fa-ellipsis-v"></i></a>
+            </div>
+          </div>
+          <div class="status-field">
+            <p>hay</p>
+            <div class="gallery-container">
+              <img
+                class="gallery-image gallery-wide-image"
+                src="https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg"
+                alt="Northern Winter Sky Image"
+              />
+
+              <img
+                class="gallery-image gallery-wide-image"
+                src="https://images.pexels.com/photos/3933881/pexels-photo-3933881.jpeg"
+                alt="A River Flowing Image"
+              />
+
+              <img class="gallery-image"
+                src="https://images.pexels.com/photos/1142950/pexels-photo-1142950.jpeg"
+                alt="Shining Stars Image"
+              />
+
+              <img class="gallery-image"
+              src="https://images.pexels.com/photos/1142950/pexels-photo-1142950.jpeg"
+              alt="Shining Stars Image"
+            />
+
+            <div class="gallery-image-container gallery-image">
+              <img 
+                  class="gallery-image"
+                  src="https://images.pexels.com/photos/1142950/pexels-photo-1142950.jpeg"
+                  alt="Image"
+              />
+              <div class="gallery-image-overlay gallery-image">
+              </div>
+          </div>
+
+            </div>
+          </div>
+          <div class="post-reaction">
+            <div class="activity-icons">
+              <div>
+                <img src="${baseUrl + "images/like-blue.png"}" alt="">120
+              </div>
+              <div><img src="${baseUrl + "images/comments.png"}" alt="">52</div>
+              <div><img src="${baseUrl + "images/share.png"}" alt="">35</div>
+            </div>
+            <div class="post-profile-picture">
+              <img src="${post.user.avatar}" alt="" />
+              <i class="fas fa-caret-down"></i>
+            </div>
+          </div>
+        </div> -->
+      </div>
+      <button type="button" class="btn-LoadMore" onclick="LoadMoreToggle()">
+        Load More
+      </button>
+    </div>
+
+    <div class="overlay">
+      <div class="post">
+        <div
+          style="
+            background-color: rgb(255, 255, 255);
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+          "
+        >
+          <div style="background-color: aliceblue; flex: 6">
+            <div class="user-profile">
+              <img src="images/profile-pic.png" alt="" />
+              <div>
+                <p>Alex Carry</p>
+                <small>Public <i class="fas fa-caret-down"></i></small>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style="
+              background-color: #f0f8ff;
+              flex: 1;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <button
+              id="escBtn"
+              style="
+                width: 50px;
+                height: 30px;
+                border: 2px solid rgb(73, 73, 73);
+                border-radius: 3px;
+                cursor: pointer;
+              "
+            >
+              Esc
+            </button>
+          </div>
+        </div>
+
+        <div style="flex: 3">
+          <textarea
+            style="width: 100%; height: 100%; padding: 10px"
+            name=""
+            placeholder="What's on your mind?"
+            id=""
+            cols="30"
+            rows="3"
+          ></textarea>
+        </div>
+        <div class="upload">
+          <div class="upload-wrapper">
+            <div class="upload-img">
+              <!-- image here -->
+            </div>
+            <div class="upload-info">
+              <p><span class="upload-info-value">0</span> file(s) uploaded.</p>
+            </div>
+            <div class="upload-area">
+              <div class="upload-area-img">
+                <img style="width: 30px" src="/images/upload.png" alt="" />
+              </div>
+              <p class="upload-area-text">
+                Select images or <span>browse</span>.
+              </p>
+            </div>
+            <input
+              type="file"
+              class="visually-hidden"
+              id="upload-input"
+              multiple
+            />
+          </div>
+        </div>
+        <div
+          style="
+            flex: 0.5;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+          "
+        >
+          <form
+            id="form-submit"
+            action="{% url 'posts:create_posts' %}"
+            method="post"
+            style=""
+          >
+            {% csrf_token %}
+            <button class="post_btn">Upload</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.js"
+      integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+      crossorigin="anonymous"
+    ></script>
+    <script src="{% static 'posts/js/gallery.js' %}" type="module"></script>
+    <script
+      src="{% static 'posts/js/render_posted.js' %}"
+      type="module"
+    ></script>
+    <script src="{% static 'posts/js/posts.js' %}" type="module"></script>
+  </body>
 </html>

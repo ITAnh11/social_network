@@ -1,10 +1,10 @@
 var api_get_profile = '/userprofiles/get_profile/?id=' + (new URL(document.location)).searchParams.get('id').toString();
-console.log(api_get_profile);
+// console.log(api_get_profile);
 
 fetch(api_get_profile)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
+    //   console.log(data);
       set_user_data(data);
 
       var avatarImage = document.getElementById('avatarImage');
@@ -26,7 +26,7 @@ fetch(api_get_profile)
       birthdate.value = `${data.userprofile['birth_date']}`;
 
       var linkFb = document.getElementById('linkFb');
-      linkFb.value = '/http:/127.0.0.1:8000/userprofiles/?id=' + (new URL(document.location)).searchParams.get('id').toString();
+      linkFb.value = '/http://127.0.0.1:8000/userprofiles/?id=' + (new URL(document.location)).searchParams.get('id').toString();
 
       })
       function set_user_data(data){

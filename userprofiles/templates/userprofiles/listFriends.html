@@ -7,7 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/css" href="{%static 'userprofiles/css/listFriend.css' %}" rel="stylesheet" />
-    <title>Profle - Socialbook</title>
+    <link type="text/css" href="{%static 'userprofiles/css/profile.css' %}" rel="stylesheet" />
+    <title>Profle - ListFriend</title>
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 </head>
 
@@ -16,56 +17,55 @@
 
     <!-- profile-page -->
 
-
     <div class="profile-container">
-        <div class="cover">
-            <img src="{%static 'userprofiles/media/cover.jpg' %}" class="coverImage" alt="">
-            <div class="edit-coverImage">
-                <img src="{%static 'userprofiles/media/camera.png' %}" alt="">
-                <a href="#" style="color: black;">Change your coverImage </a>
-            </div>
+      <div class="cover" id="coverImage">
+        {% comment %} <img src="{%static 'userprofiles/images/cover.jpg' %}" class="coverImage" alt=""> {% endcomment %}
+        <div class="edit-coverImage">
+            <img src="{%static 'userprofiles/images/camera.png' %}" alt="">
+            <a href="#" style="color: black;">Change your coverImage </a>
         </div>
-        <div class="dashboard">
-            <div class="left-dashboard">
-                <div class="avatar-container" id="avatarContainer">
-                    <img src="{%static 'userprofiles/media/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage">
-                </div>
-                
-                <!-- Popup hoặc menu chứa các lựa chọn -->
-                <div id="avatarOptions" class="avatar-options">
-                    <button onclick="viewAvatar()">View Avatar</button>
-                    <button onclick="chooseAvatar()">Choose Avatar</button>
-                </div>                                
-                <div class="left-dashboard-info">
-                    <h3>Minh Tuann</h3>
-                    <p>446 Friends</p>
-                    <div class="mutual-friend-images">
-                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                        <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
-                    </div>
-                </div>
+      </div>
+      <div class="dashboard">
+        <div class="left-dashboard">
+            <div class="avatar-container" id="avatarContainer">
+                {% comment %} <img src="{%static 'userprofiles/images/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage"> {% endcomment %}
             </div>
-            <div class="right-dashboard-info">
-                <div class="right-dashboard-info-top">
+            
+            <!-- Popup hoặc menu chứa các lựa chọn -->
+            <div id="avatarOptions" class="avatar-options">
+                <button onclick="viewAvatar()">View Avatar</button>
+                <button onclick="chooseAvatar()">Choose Avatar</button>
+            </div>                                
+            <div class="left-dashboard-info">
+                <div id="userName2" class="userName">
 
-                    <button type="button"><span class="plus-sign">+</span> Add to your story</button>
-                    <a href="{% url 'userprofiles:editProfile' %}" class="editProfile">
-                        <button type="button"><i class="far fa-edit"></i> Edit your profile</button>
-                    </a>                    
                 </div>
-                <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
-            </div>
-            <div class="list-choose">
-                <ul class="profile-menu">
-                    <li><a href="{% url 'userprofiles:profile' %}">Bài viết</a></li>
-                    {% comment %} <li><a href="about.html">Giới thiệu</a></li> {% endcomment %}
-                    <li><a href="{% url 'userprofiles:listFriends' %}">Bạn bè</a></li>
-                </ul>
+                <p>446 Friends</p>
+                <div class="mutual-friend-images">
+                    <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                    <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                    <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                    <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                    <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                </div>
             </div>
         </div>
+        <div class="right-dashboard-info">
+            <div class="right-dashboard-info-top">
+                <div class="editProfile" id="editProfile">
+                    
+                </div>                     
+            </div>
+            <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
+        </div>
+        <div class="list-choose">
+            <ul class="profile-menu">
+                <li><a href="{% url 'userprofiles:profile' %}">Posts</a></li>
+                {% comment %} <li><a href="{% url 'userprofiles:about' %}">Giới thiệu</a></li> {% endcomment %}
+                <li><a href="{% url 'userprofiles:listFriends' %}">Friends</a></li>
+            </ul>
+        </div>
+      </div>
 
         <!-- list friends-->
         <div class="list-friends">
@@ -81,7 +81,7 @@
             <div class="someFriends">
               <div class="friend">
                 <div class="imgFriend">
-                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                  <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                 </div>
                 <div class="in4Friend">
                   <h4>Quoc Vuong</h4>
@@ -91,7 +91,7 @@
   
               <div class="friend">
                 <div class="imgFriend">
-                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                  <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                 </div>
                 <div class="in4Friend">
                   <h4>Quoc Vuong</h4>
@@ -101,7 +101,7 @@
   
               <div class="friend">
                 <div class="imgFriend">
-                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                  <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                 </div>
                 <div class="in4Friend">
                   <h4>Quoc Vuong</h4>
@@ -111,7 +111,7 @@
   
               <div class="friend">
                 <div class="imgFriend">
-                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                  <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                 </div>
                 <div class="in4Friend">
                   <h4>Quoc Vuong</h4>
@@ -121,7 +121,7 @@
   
               <div class="friend">
                 <div class="imgFriend">
-                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                  <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                 </div>
                 <div class="in4Friend">
                   <h4>Quoc Vuong</h4>
@@ -131,7 +131,7 @@
   
               <div class="friend">
                 <div class="imgFriend">
-                  <img src="{%static 'userprofiles/media/avtVuong.png' %}" alt="">
+                  <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                 </div>
                 <div class="in4Friend">
                   <h4>Quoc Vuong</h4>

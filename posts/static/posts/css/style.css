@@ -385,7 +385,8 @@ img.advertisement-image {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0px 10px;
+    margin: 30px 10px;
+    margin-bottom: 0px;
 }
 
 .post-profile-picture img {

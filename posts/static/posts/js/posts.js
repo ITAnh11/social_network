@@ -1,19 +1,26 @@
-var post = document.querySelector(".write-post-container");
+var posts_upload_box = document.querySelector("#posts-upload-box");
+var post_upload_area = document.querySelector(".post-upload-textarea");
 var posting = document.querySelector(".overlay");
-var img_upload = document.querySelector('.img_upload');
-var post_content = posting.querySelector('textArea');
+var uploadContent = posting.querySelector('textArea');
 const uploadArea = document.querySelector('.upload-area');
 const uploadInput = document.querySelector('#upload-input');
 const uploadImg = document.querySelector('.upload-img');
 const uploadInfoValue = document.querySelector('.upload-info-value');
 const form_submit = document.getElementById('form-submit');
-const content_area = document.querySelector(".content-area");
-const posted_area = document.querySelector(".posted_area");
 
-const baseUrl = document.body.getAttribute('data-base-url');
+import { render_post } from './render_posted.js';
 
+var currentNumberFiles = 0;
 
-post.addEventListener("click",function() {
+function resetValueUpload() {
+    uploadImg.innerHTML = '';
+    uploadInfoValue.textContent = '0';
+    uploadInput.value = '';
+    uploadContent.value = '';
+    currentNumberFiles = 0;
+}
+
+post_upload_area.addEventListener("click",function() {
     posting.style.display = 'flex';
 })
 
@@ -21,15 +28,23 @@ post.addEventListener("click",function() {
 var escBtn = posting.querySelector("#escBtn");
 escBtn.addEventListener("click",function(){
     posting.style.display = 'none';
-    post_content.value = '';
 })
 
-var currentNumberFiles = 0;
+
+uploadArea.addEventListener('click', function() {
+    uploadInput.click();
+});
+
+// Function to handle file upload
+function handleFileUpload(event) {
+    var files = event.target.files;
+    for (var i = 0; i < files.length; i++) {
+        readFile(files[i]);
+    }
+}
 
 function removeImg(event) {
     // Remove the node parent element of the button
-    // console.log(event.target.parentNode);
-
     if (event.target.parentNode.classList.contains('uploaded-img')) { 
         event.target.parentNode.remove(); 
     } else if (event.target.parentNode.parentNode.classList.contains('uploaded-img')) { 
@@ -44,132 +59,62 @@ function removeImg(event) {
     }
 }
 
+// Function to read file as data URL
+function readFile(file) {
+    var reader = new FileReader();
+    reader.onload = function(event) {
+        // Create the elements
+        var uploadedImgDiv = document.createElement('div');
+        uploadedImgDiv.classList.add('uploaded-img');
 
-uploadArea.addEventListener('click', function() {
-    uploadInput.click();
-});
+        var img = document.createElement('img');
+        img.src = event.target.result;
 
-//thêm ảnh vào bài đăng
+        var removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.classList.add('remove-btn');
+        removeBtn.onclick = function(event) {
+            removeImg(event);
+        };
+
+        var icon = document.createElement('i');
+        icon.classList.add('fas', 'fa-times');
+
+        // Append elements to the container
+        removeBtn.appendChild(icon);
+        uploadedImgDiv.appendChild(img);
+        uploadedImgDiv.appendChild(removeBtn);
+        uploadImg.appendChild(uploadedImgDiv);
+    };
+    reader.readAsDataURL(file); // Read file as data URL
+}
+
+// Event listener for file input change
 uploadInput.addEventListener('change', function(event) {
-    // console.log(event.target.files);
-
-    filesAmount = event.target.files.length;
-
-    for (var i = 0; i < filesAmount; i++) {
-        var reader = new FileReader();
-        reader.readAsDataURL(event.target.files[i]);
-        reader.onload = function(event) {
-            var html = `
-                <div class="uploaded-img">
-                    <img src="${event.target.result}">
-                    <button type="button" class="remove-btn" onclick="removeImg(event)">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `;
-
-            uploadImg.insertAdjacentHTML('beforeend', html);
-        }
-    }
-
-    currentNumberFiles += filesAmount;
+    handleFileUpload(event);
+    // Update the number of uploaded files
+    currentNumberFiles += event.target.files.length;
     uploadInfoValue.textContent = currentNumberFiles.toString();
 });
 
-
 // xử lí nút đăng bài
 const clickFormSubmit = () => {
-    return new Promise((resolve, reject) => {
-        Promise.all(promises)
-            .then(() => {
-                console.log("Form submit clicked");
-                form_submit.click();
-                resolve();
-            })
-            .catch(error => {
-                reject(error);
-            });
-    });
+    form_submit.click();
 };
-const clickEscBtn = () => {
-    return new Promise((resolve, reject) => {
-        console.log("Esc button clicked");
-        escBtn.click();
-        resolve();
-    });
-};
+
 var post_btn = document.querySelector(".post_btn");
 post_btn.addEventListener("click", function() {
-    clickFormSubmit()
-        .then(() => clickEscBtn())
+    clickFormSubmit();
 });
 
-//render_post
-function render_post(data,isOld){
-    data.posts.forEach(function(post){
-        var newDiv = 
-            `<div class="status-field-container write-post-container">
-            <div class="user-profile-box">
-                <div class="user-profile">
-                    <img src="${post.user.avatar}" alt="">
-                    <div>
-                        <a href="/userprofiles/?id=${post.user.id}" style="text-decoration: none;">
-                            <p>${post.user.name}</p>
-                        </a>
-                        <small>${post.created_at}</small>
-                    </div>
-                </div>
-                <div>
-                    <a href="#"><i class="fas fa-ellipsis-v"></i></a>
-                </div>
-            </div>
-            <div class="status-field">
-                <p>${(post.content !== undefined && post.content !== null && post.content !== "") ? post.content : ""}</p>
-                ${(post.media && post.media.length > 0) ? `<img src="${post.media[0].media}" alt="">` : ""}
-            </div>
-            <div class="post-reaction">
-                <div class="activity-icons">
-                    <div><img src="${baseUrl + "images/like-blue.png"}" alt="">120</div>
-                    <div><img src="${baseUrl + "images/comments.png"}" alt="">52</div>
-                    <div><img src="${baseUrl + "images/share.png"}" alt="">35</div>
-                </div>
-                <div class="post-profile-picture">
-                    <img src="${post.user.avatar}" alt=""> <i class=" fas fa-caret-down"></i>
-                </div>
-            </div>
-        </div>`
-        var posted = document.createElement("div");
-        posted.innerHTML = newDiv;
-
-        if(isOld === "old"){
-            posted_area.appendChild(posted);
-        }
-        else{
-            var a = posted_area.children[0];
-            posted_area.insertBefore(posted,a);
-        }
-    })
-}
-
-
-//upload_post
-form_submit.addEventListener('submit', function(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const images = document.querySelectorAll('.uploaded-img img');
-
-    var content = post_content.value;
-    formData.append(`content`,content);
-
-    var number = 0;
+function appendImageToFormData(images, formData) {
     var promises = [];
+    var number = 0;
 
     images.forEach(function(image) {
-        // console.log(image.src)
         var promise = fetch(image.src)
         .then(response => response.blob())
         .then(blob => {
-            console.log(blob);
             number += 1;
             formData.append(`media`, blob, `images_${number}.png`);
         })
@@ -178,6 +123,24 @@ form_submit.addEventListener('submit', function(event) {
         });
         promises.push(promise);
     });
+
+    return promises;
+}
+
+//upload_post
+form_submit.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const formData = new FormData();
+    const images = document.querySelectorAll('.uploaded-img img');
+
+    var content = uploadContent.value;
+    var promises = appendImageToFormData(images, formData);
+
+    if (content === "" && images.length === 0) {
+        return;
+    }
+    
+    formData.append(`content`,content);
 
     Promise.all(promises)
         .then(() => {
@@ -188,13 +151,10 @@ form_submit.addEventListener('submit', function(event) {
         .then(response => response.json())
         .then(data => {
             render_post(data,"new");
-            console.log(data);
-            if(data.posts[0].content === null){
-                console.log("ko co noi dung");
-            }
-            else{
-                console.log("co noi dung");
-            }
+        })
+        .then(() => {
+            resetValueUpload();
+            posting.style.display = 'none';
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -202,40 +162,18 @@ form_submit.addEventListener('submit', function(event) {
         });
 });
 
-function hiden_posting(isOwer) {
-    if (isOwer === false){
-        post.remove();
-    }
-}
-
-//lấy bài đăng
-const params = (new URL(document.location)).searchParams;
-const url_user_post = '/userprofiles/get_posts/?id=' + ((params.get('id') !== null) ? params.get('id') : '');
-const url_homepage_post = '/homepage/get_posts/';
-
-const url_get_posts = (window.location.pathname == '/userprofiles/') ? url_user_post : url_homepage_post;
-
-console.log(url_get_posts); 
-
-function get_posts(){
-    fetch(url_get_posts)
-    .then(response => response.json())
-    .then(data => {
-        hiden_posting(data.isOwner);
-        render_post(data,"old");
-        console.log(data);
-    })
-}
-
-get_posts();
-
 
 //cài đặt thông tin người dùng cho phần đăng bài
 function set_user_post(){
-    var userProfile = document.querySelector(".write-post-container .user-profile");
-    var userNameElement = userProfile.querySelector("p");
-    var userImageElement = userProfile.querySelector("img");
+    var userProfile = document.querySelector("#posts-upload-userprofile");
+    // console.log(userProfile);
+    var userNameElement = userProfile.querySelector("#posts-upload-name-user");
+    var userImageElement = userProfile.querySelector("#posts-upload-image-user");
 
+    var userprofileOverlay = posting.querySelector(".user-profile");
+    var userImageElement1 = userprofileOverlay.querySelector("img");
+    var userNameElement1 = userprofileOverlay.querySelector("p");
+    
     // Sử dụng localStorage thay vì Location
     var userName = localStorage.getItem("name");
     var userAvatar = localStorage.getItem("avatar");
@@ -244,11 +182,34 @@ function set_user_post(){
     if (userNameElement) {
         userNameElement.textContent = userName;
     }
-
     if (userImageElement) {
         userImageElement.src = userAvatar;
     }
+    if (userNameElement1) {
+        userNameElement1.textContent = userName;
+    }
+    if (userImageElement1) {
+        userImageElement1.src = userAvatar;
+    }
+
 }
+
+function showUploadPostsBox() {
+    var url = window.location.href;
+    var params = new URLSearchParams(window.location.search);
+    if (url.includes("userprofiles")) {
+        if (localStorage.getItem('id') != params.get('id')) {
+            posts_upload_box.remove();
+            console.log('remove');
+            return;
+        }
+    }
+
+    posts_upload_box.style.display = 'block';
+}
+
+
+showUploadPostsBox();
 set_user_post();
 
 

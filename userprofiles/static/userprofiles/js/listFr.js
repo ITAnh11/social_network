@@ -1,11 +1,11 @@
 var api_get_profile = '/userprofiles/get_profile/?id=' + (new URL(document.location)).searchParams.get('id').toString();
-console.log(api_get_profile);
+// console.log(api_get_profile);
 
 
 fetch(api_get_profile)
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        // console.log(data);
         set_user_data(data);
 
         var userName2 = document.getElementById('userName2');

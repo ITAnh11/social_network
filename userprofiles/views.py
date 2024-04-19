@@ -11,7 +11,7 @@ import jwt
 from users.models import User
 from users.serializers import UserSerializer
 
-from .models import UserProfile, ImageProfile
+from .models import UserProfile, ImageProfile, Image
 from .serializers import UserProfileSerializer, ImageProfileSerializer
 from .forms import ImageProfileForm
 
@@ -37,6 +37,27 @@ class ProfileView(APIView):
         id_requested = request.query_params.get('id') or user.id
         
         path = reverse('userprofiles:profile') + '?id=' + str(id_requested)
+        
+        return HttpResponseRedirect(path)
+
+def main_view(request):
+        obj = Image.objects.get(pk=1)
+        context = {'obj': obj}  
+        return render(request, 'userprofiles:editImages', context)
+
+class EditImages(APIView):
+    def get(self, request):
+        user = getUser(request)
+        print(user)                    
+        if not isinstance(user, User):
+            return HttpResponseRedirect(reverse('users:login'))
+        
+        if request.query_params.get('id'):
+            return render(request, 'userprofiles/editImages.html')
+        
+        id_requested = request.query_params.get('id') or user.id
+        
+        path = reverse('userprofiles:editImages') + '?id=' + str(id_requested)
         
         return HttpResponseRedirect(path)
     
@@ -75,10 +96,18 @@ class EditStoryView(APIView):
 class ListFriendsView(APIView):
     def get(self, request):
         user = getUser(request)
-
+        print(user)
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
-        return render(request, 'userprofiles/listFriends.html')
+        
+        if request.query_params.get('id'):
+            return render(request, 'userprofiles/listFriends.html')
+        
+        id_requested = request.query_params.get('id') or user.id
+        
+        path = reverse('userprofiles:listFriends') + '?id=' + str(id_requested)
+        
+        return HttpResponseRedirect(path)
 
 class GetProfileView(APIView):
     def get(self, request):
@@ -89,17 +118,20 @@ class GetProfileView(APIView):
 
         # print(request.query_params.get('id'))
         
-        id_requested = request.query_params.get('id') or user.id
+        if request.query_params.get('id'):
+            idUserRequested = int(request.query_params.get('id'))
+        else:  
+            idUserRequested = user.id
         
-        context = self.getProfile(id_requested)
-        context['enable_edit'] = True if user.id == id_requested else False
+        context = self.getProfile(idUserRequested)
+        context['isOwner'] = True if user.id == idUserRequested else False
                 
         return Response(context)
     
     def getProfile(self, id):
         user = User.objects.filter(id=id).first()
-        userprofile = UserProfile.objects.filter(user_id=id).first()
-        imageprofile = ImageProfile.objects.filter(user_id=id).first()
+        userprofile = UserProfile.objects.get(user_id=id)
+        imageprofile = ImageProfile.objects.get(user_id=id)
         
         context = {
             'user': UserSerializer(user).data,
@@ -108,6 +140,7 @@ class GetProfileView(APIView):
         }
         
         return context
+    
        
 class SetUserProfileView(APIView):
     # update user profile
@@ -194,13 +227,14 @@ class GetPostsView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        reponse = Response()
-        
         data = []
         
         # print(request.query_params.get('id'))
         
-        idUserRequested = int(request.query_params.get('id')) or user.id
+        if request.query_params.get('id'):
+            idUserRequested = int(request.query_params.get('id'))
+        else:  
+            idUserRequested = user.id
 
         userRequest = User.objects.filter(id=idUserRequested).first()
         
@@ -209,7 +243,7 @@ class GetPostsView(APIView):
         
         userDataForPosts = getUserProfileForPosts(userRequest)
         
-        posts = Posts.objects.filter(user_id=userRequest).prefetch_related('mediaofposts_set').order_by('-created_at')    
+        posts = Posts.objects.filter(user_id=userRequest).prefetch_related('mediaofposts_set').order_by('-created_at')[:10] 
         
         for post in posts:
             posts_data = PostsSerializer(post).data
@@ -222,31 +256,12 @@ class GetPostsView(APIView):
         
             data.append(posts_data)
             
+        reponse = Response()
+        
         reponse.data = {
             'posts': data,
             'isOwner': True if user.id == idUserRequested else False
         }
-        
-        # posts = Posts.objects.filter(user_id=user).values('id', 'title', 'content', 'status', 'created_at').all().order_by('-created_at')    
-        
-        # for post in posts:
-        #     posts_data = PostsSerializer(post).data
-        #     media = MediaOfPosts.objects.filter(post_id=post.get('id')).all()
-        #     if media:
-        #         media_data = MediaOfPostsSerializer(media, many=True).data
-                
-        #         posts_data['media'] = media_data
-        #     else:
-        #         posts_data['media'] = None
-        #     posts_data['user'] = userDataForPosts
-
-        #     posts_data['created_at'] = getTimeDuration(post.get('created_at'))
-        
-        #     data.append(posts_data)
-            
-        # reponse.data = {
-        #     'posts': data
-        # }
         
         end_time = time.time()  # lưu thời gian kết thúc
 

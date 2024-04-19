@@ -17,9 +17,27 @@
         <li> <a href="{% url 'homepage:homepage' %}" id="fb"> <i class="fab fa-facebook-f    "></i> </a> </li>
         <!-- <li> <button id="search_btn" class="tooltip" data-tooltip="Search"> <i class="fas fa-search    "></i> </button> </li> -->
         <div class="search-box">
-          <img src="{% static 'userprofiles/media/search.png' %}" alt="">
-          <input type="text" placeholder="Search">
+          <img src="{% static 'userprofiles/images/search.png' %}" alt="">
+          <input id="search-input" type="text" placeholder="Search">
         </div>
+        <!-- <div class="search-list">
+            <div style="display: flex;flex-direction: row;align-items: center;">
+                <div style="font-size: large; color: rgb(0, 110, 255); margin: 10px;text-decoration: underline;display: block;margin-right: 70px;"> Danh sách tìm kiếm </div>
+                <button type="button" class="remove-search-list" onclick="remove_search_list(event)">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <a href="${url}" style="text-decoration: none;color:black;">
+                <div class="person_being_searched">
+                    <div class="person_being_searched_img">
+                        <img style=" display: flex ; width: 100%;height: 100%;" src="/static/friends/images/hq720.webp" alt="Card Image">
+                    </div>
+                    <div>
+                        <h3>Văn Tùng</h3>
+                    </div>
+                </div>
+            </a>
+        </div> -->
         <li id="space2"></li>
         
         <li> <a class="tooltip active" data-tooltip="Home" href="{% url 'homepage:homepage' %}" id="home"> <img src="{%static 'navbar/images/profile-home.png' %}"> </a> </li>
@@ -37,7 +55,6 @@
             </div>
           
         </div>
-        
     </ul>
     <div class="user-settings">
         <div class="profile-darkButton">
@@ -57,30 +74,30 @@
         </div>
         <hr>
         <div class="user-profile">
-            <img src="{% static 'userprofiles/media/change-profile.png' %}" alt="">
+            <img src="{% static 'userprofiles/images/change-profile.png' %}" alt="">
             <div>
                 <p> View all personal content</p>
             </div>
         </div>
         <hr>
         <div class="settings-links">
-            <img src="{% static 'userprofiles/media/setting.png' %}" alt="" class="settings-icon">
-            <a href="#">Settings - Privary <img src="{% static 'userprofiles/media/arrow.png' %}" alt=""></a>
+            <img src="{% static 'userprofiles/images/setting.png' %}" alt="" class="settings-icon">
+            <a href="#">Settings - Privary <img src="{% static 'userprofiles/images/arrow.png' %}" alt=""></a>
         </div>
     
         <div class="settings-links">
-            <img src="{% static 'userprofiles/media/help.png' %}" alt="" class="settings-icon">
-            <a href="#">Help - Support <img src="{% static 'userprofiles/media/arrow.png' %}" alt=""></a>
+            <img src="{% static 'userprofiles/images/help.png' %}" alt="" class="settings-icon">
+            <a href="#">Help - Support <img src="{% static 'userprofiles/images/arrow.png' %}" alt=""></a>
         </div>
     
         <div class="settings-links">
-            <img src="{% static 'userprofiles/media/display.png' %}" alt="" class="settings-icon">
-            <a href="#">Display - Accessibility <img src="{% static 'userprofiles/media/arrow.png' %}" alt=""></a>
+            <img src="{% static 'userprofiles/images/display.png' %}" alt="" class="settings-icon">
+            <a href="#">Display - Accessibility <img src="{% static 'userprofiles/images/arrow.png' %}" alt=""></a>
         </div>
     
         <div class="settings-links">
-            <img src="{% static 'userprofiles/media/logout.png' %}" alt="" class="settings-icon">
-            <a href="{% url 'users:login' %}">Logout <img src="{% static 'userprofiles/media/arrow.png' %}" alt=""></a>
+            <img src="{% static 'userprofiles/images/logout.png' %}" alt="" class="settings-icon">
+            <a href="{% url 'users:login' %}">Logout <img src="{% static 'userprofiles/images/arrow.png' %}" alt=""></a>
         </div>
     
     </div>
