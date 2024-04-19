@@ -42,3 +42,4 @@ class UserSerializer(serializers.ModelSerializer):
                 return user
         except Exception as e:
             print(e)
+            raise e
