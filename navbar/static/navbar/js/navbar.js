@@ -51,26 +51,48 @@ searchInput.addEventListener('keyup', function(event) {
     .then(response => response.json())
     .then(data =>{
         console.log(data);
+        var a = 
+        `
+        <div style="display: flex;flex-direction: row;align-items: center;">
+            <div style="font-size: large; color: rgb(0, 110, 255); margin: 10px;text-decoration: underline;display: block;margin-right: 70px;"> Danh sách tìm kiếm </div>
+            <button type="button" class="remove-search-list" onclick="remove_search_list(event)">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+        </div>`;
+        data.forEach(function(people){
+            var name = people.first_name + " " + people.last_name;
+            a+=`
+            <a href="" style="text-decoration: none;color:black;">
+            <div class="person_being_searched">
+                <div class="person_being_searched_img">
+                    <img style=" display: flex ; width: 100%;height: 100%;" src="" alt="Card Image">
+                </div>
+                <div>
+                    <h3>${name}</h3>
+                </div>
+            </div>
+            </a>`; 
+        })
     })
-//     var a = 
-//     `
-//     <div style="display: flex;flex-direction: row;align-items: center;">
-//         <div style="font-size: large; color: rgb(0, 110, 255); margin: 10px;text-decoration: underline;display: block;margin-right: 70px;"> Danh sách tìm kiếm </div>
-//         <button type="button" class="remove-search-list" onclick="remove_search_list(event)">
-//             <i class="fas fa-times" aria-hidden="true"></i>
-//         </button>
-//     </div>
-//     <a href="" style="text-decoration: none;color:black;">
-//         <div class="person_being_searched">
-//             <div class="person_being_searched_img">
-//                 <img style=" display: flex ; width: 100%;height: 100%;" src="/static/friends/images/hq720.webp" alt="Card Image">
-//             </div>
-//             <div>
-//                 <h3>${searchInput.value}</h3>
-//             </div>
-//         </div>
-//     </a>
-//     `
+    // var a = 
+    // `
+    // <div style="display: flex;flex-direction: row;align-items: center;">
+    //     <div style="font-size: large; color: rgb(0, 110, 255); margin: 10px;text-decoration: underline;display: block;margin-right: 70px;"> Danh sách tìm kiếm </div>
+    //     <button type="button" class="remove-search-list" onclick="remove_search_list(event)">
+    //         <i class="fas fa-times" aria-hidden="true"></i>
+    //     </button>
+    // </div>
+    // <a href="" style="text-decoration: none;color:black;">
+    //     <div class="person_being_searched">
+    //         <div class="person_being_searched_img">
+    //             <img style=" display: flex ; width: 100%;height: 100%;" src="/static/friends/images/hq720.webp" alt="Card Image">
+    //         </div>
+    //         <div>
+    //             <h3>${searchInput.value}</h3>
+    //         </div>
+    //     </div>
+    // </a>
+    // `
 
 //     var newDiv = document.createElement("div");
 //     newDiv.classList.add("search-list");
