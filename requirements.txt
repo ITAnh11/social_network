@@ -18,5 +18,7 @@ docker
 mongoengine
 django_mongoengine
 django-rest-framework-mongoengine
-
+django-storages
+boto3
+sshtunnel
 

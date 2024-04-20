@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework', # pip install djangorestframework
     'corsheaders', # pip install django-cors-headers
     'django_mongoengine',
+    'storages',
     'homepage',
     'users',
     'posts',
@@ -101,15 +102,42 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'social_network',
+#         'USER': 'postgres',
+#         'PASSWORD': 'TuAnhkc11',
+#         'HOST': 'database-1.cxmwy0oq0y75.ap-southeast-2.rds.amazonaws.com',
+#         'PORT': '5432',
+#     },
+# }
+
+import sshtunnel
+
+SSH_PKEY_PATH = os.path.join(BASE_DIR, '../pem/test.pem')
+
+sshtunnel.SSH_TIMEOUT = 5.0
+sshtunnel.TUNNEL_TIMEOUT = 5.0
+
+tunnel = sshtunnel.SSHTunnelForwarder(
+    ('ec2-54-252-204-63.ap-southeast-2.compute.amazonaws.com'),  # Public EC2 instance address
+    ssh_username='unbuntu',
+    ssh_pkey='pem/test.pem',  # Private key of the EC2 instance
+    remote_bind_address=('database-2.cxmwy0oq0y75.ap-southeast-2.rds.amazonaws.com', 5432)  # Private RDS instance address
+)
+
+tunnel.start()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'social_network',
-        'USER': 'postgres',
+        'USER': 'tuananh',
         'PASSWORD': 'TuAnhkc11',
-        'HOST': 'database-1.cxmwy0oq0y75.ap-southeast-2.rds.amazonaws.com',
-        'PORT': '5432',
-    },
+        'HOST': '127.0.0.1',
+        'PORT': tunnel.local_bind_port,
+    }
 }
 
 MONGODB_DATABASES = {
@@ -189,3 +217,13 @@ CORS_ALLOW_CREDENTIALS = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+AWS_ACCESS_KEY_ID = 'AKIAZQ3DQVSTOELWTKJU'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'feisubukku'
+AWS_S3_REGION_NAME = 'ap-southeast-2'  # Optional
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+AWS_PUBLIC_MEDIA_LOCATION = 'media/'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_PUBLIC_MEDIA_LOCATION)
