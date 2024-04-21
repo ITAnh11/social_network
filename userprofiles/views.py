@@ -66,7 +66,7 @@ class EditImages(APIView):
 class EditProfileView(APIView):
     def get(self, request):
         user = getUser(request)
-        print(user)
+        # print(user)
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
         
@@ -80,11 +80,38 @@ class EditProfileView(APIView):
         path = reverse('userprofiles:editProfile') + '?id=' + str(id_requested)
         
         return HttpResponseRedirect(path)
-
+    
+    def post(self, request):
+        user = getUser(request)
+        
+        if not isinstance(user, User):
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        try:
+            userprofile = UserProfile.objects.get(user_id=user)
+            
+            first_name = request.data.get('first_name')
+            last_name = request.data.get('last_name')
+            
+            if not first_name or not last_name:
+                return Response({'warning': 'First name and last name are required!'}, status=404)
+            
+            userprofile.first_name = first_name
+            userprofile.last_name = last_name
+            userprofile.phone = request.data.get('phone') or ''
+            userprofile.birth_date = request.data.get('birth_date') or None
+        
+            userprofile.save()
+            
+            return Response({'success': 'User profile updated successfully!',
+                             'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=404)
 class EditStoryView(APIView):
     def get(self, request):
         user = getUser(request)
-        print(user)
+        # print(user)
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
         

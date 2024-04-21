@@ -13,6 +13,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
+from common_functions.common_function import getUser
+
 # Create your views here.
 class LoginView(APIView):
     def makeToken(self, user):
@@ -111,3 +113,29 @@ class LogoutView(APIView):
             'message': 'logout success'
         }
         return response
+    
+class ChangePassword(APIView):
+    def post(self, request):
+        user = getUser(request)
+        
+        if user is None:
+            return Response({'error': 'Unauthorized!'}, status=401)
+        
+        old_password = request.data.get('current_password')
+        new_password = request.data.get('new_password')
+        comfirm_password = request.data.get('comfirm_password')
+        
+        if not user.check_password(old_password):
+            return Response({'warning': 'Current password is incorrect!'})
+        
+        if new_password != comfirm_password:
+            return Response({'warning': 'Password and comfirm password not match!'})
+        
+        if not UserSerializer().check_password(new_password):
+            return Response({'warning': 'Password does not meet the requirements!\nPassword must be at least 8 characters long!\nPassword must not contain any spaces!'})
+        
+        user.set_password(new_password)
+        user.confirm_password = user.password
+        user.save()
+        
+        return Response({'success': 'Change password success!'})
