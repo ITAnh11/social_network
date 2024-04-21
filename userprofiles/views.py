@@ -100,31 +100,28 @@ class EditStoryView(APIView):
         return HttpResponseRedirect(path)
     def post(self, request):
         print(request.data)
+        user = getUser(request)
+        
+        if not isinstance(user, User):
+            return Response({'error': 'Unauthorized'}, status=401)
+        
         try:
-            serializer = UserSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=True):
-                user = serializer.save()
-
-                SetUserProfileView().post(request, user)
-
-                return Response({'success': 'Update success'})
+            userprofile = UserProfile.objects.get(user_id=user)
+            
+            userprofile. bio = request.data.get('bio')
+            userprofile.work = request.data.get('work')
+            userprofile.address_work = request.data.get('address_work')
+            userprofile.address = request.data.get('address')
+            userprofile.place_birth = request.data.get('place_birth')
+            userprofile.social_link = request.data.get('social_link')
+            
+            userprofile.save()
+            
+            return Response({'success': 'User profile updated successfully!',
+                             'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
         except Exception as e:
-            return Response({'error': str(e)}, status=400)
-
-        #         token = LoginView().makeToken(user)
-
-        #         response = Response()
-        #         response.set_cookie(key='jwt', value=token, httponly=True)
-        #         response.data = {
-        #             'success': 'Your story has been successfully updated!!!',
-        #             'jwt': token,
-        #             'redirect_url': '/userprofiles/' + f"?id={user.id}"
-        #         }
-                
-        #         return response
-        # except Exception:
-        #     return Response({'error': 'Sonething went wrong. Please try again.'})
-
+            return Response({'error': str(e)}, status=404)
+        
 class ListFriendsView(APIView):
     def get(self, request):
         user = getUser(request)
@@ -181,33 +178,7 @@ class GetProfileView(APIView):
             raise e
     
        
-class SetUserProfileView(APIView):
-    # update user profile
-    def post(self, request):
-        user = getUser(request)
-        
-        if not isinstance(user, User):
-            return HttpResponseRedirect(reverse('users:login'))
-        
-        user.email = request.data.get('email')
-
-        userprofile = UserProfile.objects.filter(user_id=user).first()
-
-        if userprofile:
-            userprofile.first_name = request.data.get('first_name')
-            userprofile.last_name = request.data.get('last_name')
-            userprofile.gender = request.data.get('gender')
-            userprofile.birth_date = request.data.get('birth_date')
-            userprofile.phone = request.data.get('phone')
-            userprofile.bio = request.data.get('bio') or None
-            userprofile.address = request.data.get('address') or None
-            userprofile.school = request.data.get('school') or None
-            userprofile.work = request.data.get('work') or None
-
-            userprofile.save()
-
-        return HttpResponseRedirect(reverse('userprofiles:profile'))
-    
+class SetUserProfileView(APIView):    
     # create a new user profile
     def post(self, request, user):
         userprofile = UserProfile.objects.create(   user_id=user,
