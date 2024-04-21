@@ -103,6 +103,10 @@
 
         </div>
     </div>
+    {% csrf_token %}
+    <script>
+        var csrftoken = '{{ csrf_token }}';
+    </script>
     <script src="{%static 'friends/js/friend.js'%}"></script>
 </body>
 </html>
