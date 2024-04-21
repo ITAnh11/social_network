@@ -1,19 +1,32 @@
+document.addEventListener("DOMContentLoaded", function() {
+    var button = document.querySelector(".button_notif");
+    var listNotif = document.querySelector(".list_notif");
+  
+    button.addEventListener("click", function() {
+      // Kiểm tra xem phần tử list_notif đã hiển thị hay chưa
+      var isListNotifVisible = getComputedStyle(listNotif).display !== "none";
+      
+      // Nếu đã hiển thị, ẩn đi; ngược lại, hiển thị
+      if (isListNotifVisible) {
+        listNotif.style.display = "none";
+      } else {
+        listNotif.style.display = "block";
+      }
+    });
+  });
 /* user-settings */
 var userSettings = document.querySelector(".user-settings");
-var darkBtn = document.getElementById("dark-button");
 var LoadMoreBackground =document.querySelector(".btn-LoadMore");
+var listNotif = document.querySelector(".list_notif");
         function UserSettingToggle(){
             userSettings.classList.toggle("user-setting-showup-toggle");
         }
-
-        function darkModeON(){
-            darkBtn.classList.toggle("dark-mode-on");
-        document.body.classList.toggle("dark-theme");
-        };
-
-        function LoadMoreToggle(){
-            LoadMoreBackground.classList.toggle("loadMoreToggle");
-        };
+        function ListNotifToggle() {
+            listNotif.classList.toggle("list-notif-showup-toggle");
+        }
+        // function LoadMoreToggle(){
+        //     LoadMoreBackground.classList.toggle("loadMoreToggle");
+        // };
 
 /* change-color */
 const currentUrl = window.location.pathname;
