@@ -135,7 +135,7 @@ class EditStoryView(APIView):
         try:
             userprofile = UserProfile.objects.get(user_id=user)
             
-            userprofile. bio = request.data.get('bio')
+            userprofile.bio = request.data.get('bio')
             userprofile.work = request.data.get('work')
             userprofile.address_work = request.data.get('address_work')
             userprofile.address = request.data.get('address')
