@@ -115,7 +115,7 @@ CHANNEL_LAYERS = {
 
 import sshtunnel
 
-SSH_PKEY_PATH = os.path.join(BASE_DIR, '../pem/test.pem')
+SSH_PKEY_PATH = os.path.join(BASE_DIR, 'pem', 'test.pem')
 
 sshtunnel.SSH_TIMEOUT = 5.0
 sshtunnel.TUNNEL_TIMEOUT = 5.0
@@ -123,7 +123,7 @@ sshtunnel.TUNNEL_TIMEOUT = 5.0
 tunnel = sshtunnel.SSHTunnelForwarder(
     ('ec2-54-252-204-63.ap-southeast-2.compute.amazonaws.com'),  # Public EC2 instance address
     ssh_username='unbuntu',
-    ssh_pkey='pem/test.pem',  # Private key of the EC2 instance
+    ssh_pkey='D:/upcloud_aws/test.pem',  # Private key of the EC2 instance
     remote_bind_address=('database-2.cxmwy0oq0y75.ap-southeast-2.rds.amazonaws.com', 5432)  # Private RDS instance address
 )
 
