@@ -283,3 +283,37 @@ transition: 0.15s;
 .button2:hover{
 background-color:#b8babe;
 }
+
+.list_setting_btn{
+  background-color: #dbdbdb;
+  max-height: 0px;
+  height: 120px;
+  width: 250px;
+  position: absolute;
+  margin-top: 160px;
+  margin-left: 200px; 
+  z-index: 2;
+  border-radius: 8px;
+  display: flex;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  flex-direction: column;
+  transition: max-height 0.5s;
+  overflow: hidden;
+}
+.list_setting_btn_toggle{
+  max-height: 3000px;
+}
+.choose_list_buton{
+  flex: 1;
+  margin: 5px;
+  border-radius: 8px;
+  background-color: #0861F2;
+  color: white;
+  font-weight: bolder;
+  border: none;
+  transition: 0.15s;
+  font-size: medium;
+}
+.choose_list_buton:hover{
+  background-color:#0654d3;
+}
