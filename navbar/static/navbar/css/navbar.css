@@ -486,3 +486,35 @@ div#dark-button.dark-mode-on {
   align-items: center;
   margin-bottom: 10px;
 }
+
+.comment_setting {
+  width: 450px;
+  max-width: 450px;
+}
+
+.avt_user img {
+  width: 50px; 
+  height: 50px; 
+  overflow: hidden; 
+  border-radius: 50%; 
+}
+
+.comment_setting {
+  display: flex;
+  align-items: center;
+  
+}
+
+.content_notif {
+  display: inline-block;
+  margin-bottom: 0px;
+}
+
+.name_user, .comments_notif {
+  display: inline; /* Chuyển thành inline để hiển thị cùng một dòng */
+  margin: 0; /* Xóa margin mặc định */
+}
+
+.comments_notif {
+  margin-left: 5px;
+}
