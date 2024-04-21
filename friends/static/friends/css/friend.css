@@ -284,6 +284,11 @@ transition: 0.15s;
 background-color:#b8babe;
 }
 
+
+.list{
+  flex: 10;
+  display: flex;
+}
 .list_setting_btn{
   background-color: #dbdbdb;
   max-height: 0px;

@@ -1,7 +1,6 @@
 var request_list = document.querySelector(".request-list");
 // var friend_list = document.querySelector(".card-list");
 var suggest_list = document.querySelector(".suggest_list");
-
 //Xử lí denine button
 function denine_button(event){
     var a = event.target.parentNode.parentNode.id;
@@ -173,13 +172,14 @@ function show_list_friend(){
     .then(response => response.json())
     .then(data => {
         console.log("friend_list:",data);
-        var list = document.createElement("div");
-        list.className = "card-list";
-        var Friend_list = document.querySelector(".Friends_List");
-        Friend_list.appendChild(list);
+        var list_friend = document.createElement("div");
+        list_friend.className = "card-list";
+        var Friend_list = document.querySelector(".list");
+        console.log("abc",Friend_list);
+        Friend_list.appendChild(list_friend);
         var p = document.createElement("div");
         p.innerHTML =`<div style="font-size: large; color: rgb(0, 110, 255); margin: 10px;text-decoration: underline;"> Tất cả bạn bè </div>`;
-        list.appendChild(p);
+        list_friend.appendChild(p);
         data.data.forEach(function(friend){
             var url = `/userprofiles/?id=${friend.friend_profile.id}`;
             var a = `
@@ -195,7 +195,7 @@ function show_list_friend(){
             </a>`;
             var newCard = document.createElement("div");
             newCard.innerHTML = a;
-            list.appendChild(newCard);
+            list_friend.appendChild(newCard);
         })
     })
 }
@@ -244,15 +244,15 @@ function show_get_sentfriendrequest(){
     .then(response => response.json())
     .then(data => {
         console.log("abc:",data);
-        var list = document.createElement("div");
-        list.className = "card-list";
-        var Friend_list = document.querySelector(".Friends_List");
-        Friend_list.appendChild(list);
+        var list_friend = document.createElement("div");
+        list_friend.className = "card-list";
+        var Friend_list = document.querySelector(".list");
+        Friend_list.appendChild(list_friend);
         var p = document.createElement("div");
         p.innerHTML =`<div style="font-size: large; color: rgb(0, 110, 255); margin: 10px;text-decoration: underline;"> Người bạn đã gửi lời mời </div>`;
-        list.appendChild(p);
+        list_friend.appendChild(p);
         data.data.forEach(function(friend){
-            if(friend.friend_request_sent.status ="pending"){
+            if(friend.friend_request_sent.status ==="pending"){
                 var url = `/userprofiles/?id=${friend.friend_request_profile.id}`;
                 var a = `
                 <a href="${url}" style="text-decoration: none;color:black;">
@@ -267,9 +267,8 @@ function show_get_sentfriendrequest(){
                 </a>`;
                 var newCard = document.createElement("div");
                 newCard.innerHTML = a;
-                list.appendChild(newCard);
+                list_friend.appendChild(newCard);
             }
         })
     })
 }
-//show_get_sentfriendrequest();
