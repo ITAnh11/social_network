@@ -9,6 +9,7 @@ fetch(api_get_profile)
         // console.log(data);
         set_user_data(data);
         // edit profile
+        // const urlToIg = "https://www.instagram.com/"
         var userName2 = document.getElementById('userName2');
         userName2.innerHTML += `<h3>${data.userprofile['first_name'] + " " + data.userprofile['last_name']}</h3>`;
 
@@ -21,7 +22,7 @@ fetch(api_get_profile)
         var editProfile = document.getElementById('editProfile');
         var editStoryButton = document.getElementById('editStoryButton');
         var id_user = data.userprofile['user_id'];
-
+        
         if (data.isOwner === true) {
             editProfile.innerHTML = `<button type="button" id="editProfileReal"> <i class="far fa-edit"></i><a href="${urlFromEditProfile}" style="text-decoration: none; color: white;">Edit your profile</a></button>`;
             editStoryButton.innerHTML += `<a href="${urlFromEditStory}" class="editStory">
@@ -50,6 +51,10 @@ fetch(api_get_profile)
 
         var place_birth = document.getElementById('place_birth');
         place_birth.innerHTML += `${data.userprofile['place_birth']}`;
+
+        var social_link = document.getElementById('social_link');
+        social_link.innerHTML += `<a href="https://www.instagram.com/${data.userprofile['social_link']}/"><p>${data.userprofile['social_link']}</p></a>`;
+        // social_link.innerHTML  += `<a href=></a>${data.userprofile['social_link']}`;
         //
         profile = document.getElementById('profile');
         profile.innerHTML += `<h3>Login with: ${data.user['email']}</h3>`     
