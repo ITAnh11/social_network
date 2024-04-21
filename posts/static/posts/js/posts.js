@@ -130,7 +130,7 @@ function appendImageToFormData(images, formData) {
 //upload_post
 form_submit.addEventListener('submit', function(event) {
     event.preventDefault();
-    const formData = new FormData();
+    const formData = new FormData(event.target);
     const images = document.querySelectorAll('.uploaded-img img');
 
     var content = uploadContent.value;
