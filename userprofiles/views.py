@@ -128,7 +128,7 @@ class EditStoryView(APIView):
 class ListFriendsView(APIView):
     def get(self, request):
         user = getUser(request)
-        print(user)
+        # print(user)
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
         
@@ -155,23 +155,30 @@ class GetProfileView(APIView):
         else:  
             idUserRequested = user.id
         
-        context = self.getProfile(idUserRequested)
+        try:
+            context = self.getProfile(idUserRequested)
+        except Exception as e:
+            return Response({'error': str(e)}, status=404)
+        
         context['isOwner'] = True if user.id == idUserRequested else False
                 
         return Response(context)
     
     def getProfile(self, id):
-        user = User.objects.filter(id=id).first()
-        userprofile = UserProfile.objects.get(user_id=id)
-        imageprofile = ImageProfile.objects.get(user_id=id)
-        
-        context = {
-            'user': UserSerializer(user).data,
-            'userprofile': UserProfileSerializer(userprofile).data,
-            'imageprofile': ImageProfileSerializer(imageprofile).data
-        }
-        
-        return context
+        try:
+            user = User.objects.get(id=id)
+            userprofile = UserProfile.objects.get(user_id=id)
+            imageprofile = ImageProfile.objects.get(user_id=id)
+            
+            context = {
+                'user': UserSerializer(user).data,
+                'userprofile': UserProfileSerializer(userprofile).data,
+                'imageprofile': ImageProfileSerializer(imageprofile).data
+            }
+            
+            return context
+        except Exception as e:
+            raise e
     
        
 class SetUserProfileView(APIView):
