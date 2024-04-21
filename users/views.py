@@ -114,7 +114,7 @@ class LogoutView(APIView):
         }
         return response
     
-class ChangePassword(APIView):
+class ChangePasswordView(APIView):
     def post(self, request):
         user = getUser(request)
         
