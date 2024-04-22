@@ -248,15 +248,15 @@ nav ul li #btn_profile::after{
   position: absolute;
   right: 0%;
   /* background: var(--bg-color); */
-  background: white;
+  background: white;  
   max-width: 350px;
-  width: 90%;
+  /* width: 90%; */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
   border-radius: 4px;
   overflow: hidden;
   max-height: 0px;
   transition: max-height 0.3s;
-  z-index: 500;
+  /* z-index: 500; */
 
 }
 
@@ -458,3 +458,63 @@ div#dark-button.dark-mode-on {
   color: #ffffff;
 }
 
+/* notif css */
+.list-notif-showup-toggle {
+  max-height: 500px;
+}
+
+.list_notif {
+  display: none;
+  position: absolute;
+  right: 10px;
+  /* background: var(--bg-color); */
+  background: white;  
+  /* max-width: 350px; */
+  /* width: 90%; */
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  overflow: hidden;
+  max-height: 0px;
+  transition: max-height 0.3s; */
+  z-index: 500;
+
+}
+
+.notif_header {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.comment_setting {
+  width: 450px;
+  max-width: 450px;
+}
+
+.avt_user img {
+  width: 50px; 
+  height: 50px; 
+  overflow: hidden; 
+  border-radius: 50%; 
+}
+
+.comment_setting {
+  display: flex;
+  align-items: center;
+  
+}
+
+.content_notif {
+  display: inline-block;
+  margin-bottom: 0px;
+}
+
+.name_user, .comments_notif {
+  display: inline; /* Chuyển thành inline để hiển thị cùng một dòng */
+  margin: 0; /* Xóa margin mặc định */
+}
+
+.comments_notif {
+  margin-left: 5px;
+}

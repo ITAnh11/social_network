@@ -116,6 +116,7 @@ function send_comment(event, posts_id, comment_id, forwhat){
     formData.append('to_posts_id', posts_id);
     formData.append('to_comment_id', comment_id);
     formData.append('user', JSON.stringify(USERPROFILE));
+    formData.append('csrfmiddlewaretoken', csrftoken);
 
     console.log(formData.get('to_posts_id'));
 
@@ -137,6 +138,7 @@ function get_comments_for_post(posts_id, idElement){
 
     formData = new FormData();
     formData.append('posts_id', posts_id);
+    formData.append('csrfmiddlewaretoken', csrftoken);
 
     fetch(api_get_comments_for_posts, {
         method: 'POST',
@@ -187,6 +189,7 @@ function get_comments_for_comment(comment_id, idElement){
 
     formData = new FormData();
     formData.append('comment_id', comment_id);
+    formData.append('csrfmiddlewaretoken', csrftoken);
 
     fetch(api_get_comments_for_comment, {
         method: 'POST',
@@ -294,6 +297,7 @@ function setCountReaction(forWhat, idWhat){
 
     formData.append(what, idWhat);
     formData.append(otherWhat, -1);
+    formData.append('csrfmiddlewaretoken', csrftoken);
 
     fetch(api_get_reactions, {
         method: 'POST',
@@ -319,7 +323,7 @@ function isReacted(forWhat, idWhat){
     formData = new FormData();
     what = (forWhat == 'posts') ? 'posts_id' : 'comment_id';
     otherWhat = (what == 'posts_id') ? 'comment_id' : 'posts_id';
-
+    formData.append('csrfmiddlewaretoken', csrftoken);
     formData.append(what, idWhat);
     formData.append(otherWhat, -1);
 
@@ -353,6 +357,7 @@ function sendReaction(event) {
     formData.append(otherWhat, -1);
     formData.append('user', JSON.stringify(USERPROFILE));
     formData.append('type', 'like');
+    formData.append('csrfmiddlewaretoken', csrftoken);
 
     if (event.target.classList.contains('active-reaction-btn')) {
         fetch(api_create_reaction, {
@@ -382,34 +387,4 @@ function sendReaction(event) {
 get_userprofile();
 get_posts();
 
-// setInterval(function() {
-
-//     // posts_lists = document.querySelectorAll('.posts-container');
-
-//     posts_lists.forEach(post => {
-//         // console.log(post.classList[0]);
-        
-//         // posts_id = parseInt(post.classList[0]);
-//         posts_id = post.id;
-
-//         comment_id = -1;
-
-//         // console.log(posts_id);
-
-//         formData = new FormData();
-//         formData.append('posts_id', posts_id);
-//         formData.append('comment_id', comment_id);
-
-//         fetch(api_get_reactions, {
-//             method: 'POST',
-//             body: formData
-//         })
-//         .then(response => response.json())
-//         .then(data => {
-//             count = data.count;
-//             document.getElementById(`count-reaction-posts-${posts_id}`).textContent = count;
-//         })
-//         .catch(error => console.error('Error:', error));
-//     });
-    
-// }, 2000);
+// console.log('csrf_token: ', csrftoken);
