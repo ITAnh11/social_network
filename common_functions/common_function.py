@@ -47,3 +47,6 @@ def getUser(request):
     user = User.objects.get(id=user_id)
     
     return user
+
+def getAllUsers():
+     return User.objects.filter()

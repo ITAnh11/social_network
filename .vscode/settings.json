@@ -3,6 +3,7 @@
         "CONNECTIONSTRING",
         "duong",
         "feisu",
+        "messeeji",
         "psycopg",
         "userprofiles",
         "whitenoise"
