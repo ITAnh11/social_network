@@ -20,7 +20,6 @@ class UserSerializer(serializers.ModelSerializer):
         try:
             password = validated_data.pop('password')
             confirm_password = validated_data.pop('confirm_password')
-            
             user_exists = User.objects.filter(email=validated_data['email']).exists()
             
             if user_exists:
@@ -28,10 +27,14 @@ class UserSerializer(serializers.ModelSerializer):
             
             if password is not None:
                 user = self.Meta.model(**validated_data)
-                
-                if password != confirm_password:
-                    raise ValidationError(detail={'comfirm_password': 'Passwords do not match!'})
-            
+               
+            if password != confirm_password:
+                raise ValidationError(detail={'comfirm_password': 'Passwords do not match!'})
+        
+            if not self.check_password(password):
+                raise serializers.ValidationError(
+                    detail={'check_password': 'Password does not meet the requirements!\nPassword must be at least 8 characters long!\nPassword must not contain any spaces!'})
+
                 if not self.check_password(password):
                     raise serializers.ValidationError(detail={'check_password': 'Password does not meet the requirements!'})
                 

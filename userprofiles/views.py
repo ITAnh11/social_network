@@ -20,6 +20,8 @@ from posts.serializers import PostsSerializer, MediaOfPostsSerializer
 
 from posts.views import CreatePostsAfterSetMediaProfileView
 
+# from users.views import LoginView
+
 from common_functions.common_function import getUser, getTimeDuration, getUserProfileForPosts
 
 import time
@@ -64,11 +66,13 @@ class EditImages(APIView):
 class EditProfileView(APIView):
     def get(self, request):
         user = getUser(request)
-        print(user)
+        # print(user)
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
         
         if request.query_params.get('id'):
+            if int(request.query_params.get('id')) != user.id:
+                return Response({'error': 'Unauthorized'}, status=401)
             return render(request, 'userprofiles/editProfile.html')
         
         id_requested = request.query_params.get('id') or user.id
@@ -76,15 +80,44 @@ class EditProfileView(APIView):
         path = reverse('userprofiles:editProfile') + '?id=' + str(id_requested)
         
         return HttpResponseRedirect(path)
-
+    
+    def post(self, request):
+        user = getUser(request)
+        
+        if not isinstance(user, User):
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        try:
+            userprofile = UserProfile.objects.get(user_id=user)
+            
+            first_name = request.data.get('first_name')
+            last_name = request.data.get('last_name')
+            
+            if not first_name or not last_name:
+                return Response({'warning': 'First name and last name are required!'}, status=404)
+            
+            userprofile.first_name = first_name
+            userprofile.last_name = last_name
+            userprofile.phone = request.data.get('phone') or ''
+            userprofile.birth_date = request.data.get('birth_date') or None
+        
+            userprofile.save()
+            
+            return Response({'success': 'User profile updated successfully!',
+                             'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=404)
 class EditStoryView(APIView):
     def get(self, request):
         user = getUser(request)
-        print(user)
+        # print(user)
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
         
         if request.query_params.get('id'):
+            if int(request.query_params.get('id')) != user.id:
+                return Response({'error': 'Unauthorized'}, status=401) 
             return render(request, 'userprofiles/editStory.html')
         
         id_requested = request.query_params.get('id') or user.id
@@ -92,11 +125,34 @@ class EditStoryView(APIView):
         path = reverse('userprofiles:editStory') + '?id=' + str(id_requested)
         
         return HttpResponseRedirect(path)
-    
+    def post(self, request):
+        print(request.data)
+        user = getUser(request)
+        
+        if not isinstance(user, User):
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        try:
+            userprofile = UserProfile.objects.get(user_id=user)
+            
+            userprofile.bio = request.data.get('bio')
+            userprofile.work = request.data.get('work')
+            userprofile.address_work = request.data.get('address_work')
+            userprofile.address = request.data.get('address')
+            userprofile.place_birth = request.data.get('place_birth')
+            userprofile.social_link = request.data.get('social_link')
+            
+            userprofile.save()
+            
+            return Response({'success': 'User profile updated successfully!',
+                             'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
+        except Exception as e:
+            return Response({'error': str(e)}, status=404)
+        
 class ListFriendsView(APIView):
     def get(self, request):
         user = getUser(request)
-        print(user)
+        # print(user)
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
         
@@ -123,52 +179,33 @@ class GetProfileView(APIView):
         else:  
             idUserRequested = user.id
         
-        context = self.getProfile(idUserRequested)
+        try:
+            context = self.getProfile(idUserRequested)
+        except Exception as e:
+            return Response({'error': str(e)}, status=404)
+        
         context['isOwner'] = True if user.id == idUserRequested else False
                 
         return Response(context)
     
     def getProfile(self, id):
-        user = User.objects.filter(id=id).first()
-        userprofile = UserProfile.objects.get(user_id=id)
-        imageprofile = ImageProfile.objects.get(user_id=id)
-        
-        context = {
-            'user': UserSerializer(user).data,
-            'userprofile': UserProfileSerializer(userprofile).data,
-            'imageprofile': ImageProfileSerializer(imageprofile).data
-        }
-        
-        return context
+        try:
+            user = User.objects.get(id=id)
+            userprofile = UserProfile.objects.get(user_id=id)
+            imageprofile = ImageProfile.objects.get(user_id=id)
+            
+            context = {
+                'user': UserSerializer(user).data,
+                'userprofile': UserProfileSerializer(userprofile).data,
+                'imageprofile': ImageProfileSerializer(imageprofile).data
+            }
+            
+            return context
+        except Exception as e:
+            raise e
     
        
-class SetUserProfileView(APIView):
-    # update user profile
-    def post(self, request):
-        user = getUser(request)
-        
-        if not isinstance(user, User):
-            return HttpResponseRedirect(reverse('users:login'))
-        
-        user.email = request.data.get('email')
-
-        userprofile = UserProfile.objects.filter(user_id=user).first()
-
-        if userprofile:
-            userprofile.first_name = request.data.get('first_name')
-            userprofile.last_name = request.data.get('last_name')
-            userprofile.gender = request.data.get('gender')
-            userprofile.birth_date = request.data.get('birth_date')
-            userprofile.phone = request.data.get('phone')
-            userprofile.bio = request.data.get('bio') or None
-            userprofile.address = request.data.get('address') or None
-            userprofile.school = request.data.get('school') or None
-            userprofile.work = request.data.get('work') or None
-
-            userprofile.save()
-
-        return HttpResponseRedirect(reverse('userprofiles:profile'))
-    
+class SetUserProfileView(APIView):    
     # create a new user profile
     def post(self, request, user):
         userprofile = UserProfile.objects.create(   user_id=user,
