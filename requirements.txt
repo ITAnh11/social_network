@@ -3,7 +3,7 @@
 
 asgiref
 Django
-psycopg2
+psycopg2-binary
 python-dotenv
 sqlparse
 tzdata
@@ -20,5 +20,5 @@ django_mongoengine
 django-rest-framework-mongoengine
 django-storages
 boto3
-sshtunnel
+
 
