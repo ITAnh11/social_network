@@ -27,11 +27,11 @@ class UserProfile(models.Model):
 
 def media_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/avatars/<filename>
-    return 'users/userprofile_{0}/{1}'.format(instance.user_id.id, filename)
+    return 'media/users/userprofile_{0}/{1}'.format(instance.user_id.id, filename)
 class ImageProfile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    avatar= models.ImageField(upload_to=media_directory_path, blank=True, default="users/default/avatar_default.png")
-    background = models.ImageField(upload_to=media_directory_path, blank=True, default="users/default/background_default.jpg")
+    avatar= models.ImageField(upload_to=media_directory_path, blank=True, default="media/users/default/avatar_default.png")
+    background = models.ImageField(upload_to=media_directory_path, blank=True, default="media/users/default/background_default.jpg")
     _destroy = models.BooleanField(default=False)
     
     class Meta:

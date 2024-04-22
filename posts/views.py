@@ -49,7 +49,6 @@ class CreatePostsView(APIView):
         
         data = []
         
-               
         posts_data = PostsSerializer(post).data
         
         posts_data['media'] = MediaOfPostsSerializer(listMedia, many=True).data
@@ -88,18 +87,15 @@ class CreatePostsView(APIView):
                     # print('not image or video')
                     return Response({'error': 'File is not an image or video'}, status=400)
                 
-                mediaOfPosts = MediaOfPosts.objects.create(
-                    post_id=post,
-                    media=file
-                )
-                
+                mediaOfPosts = MediaOfPosts(post_id=post, media=file)
                 listMediaOfPosts.append(mediaOfPosts)
             
             for obj in listMediaOfPosts:
-                # print('saving media')
+                print('saving media')
                 obj.save()
-        except:
-            # print('cant save media')
+        except Exception as e:
+            print(e)
+            print('cant save media')
             return Response({'error': 'Error while saving media'}, status=400)
         
         return listMediaOfPosts

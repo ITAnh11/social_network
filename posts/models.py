@@ -19,12 +19,12 @@ class Posts(models.Model):
 
 def post_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/post_<id>/<filename>
-    return 'posts/post_{0}/{1}'.format(instance.post_id.id, filename)
+    return 'media/posts/post_{0}/{1}'.format(instance.post_id.id, filename)
 
 class MediaOfPosts(models.Model):
     post_id = models.ForeignKey(Posts, on_delete=models.CASCADE)
-    media = models.FileField(upload_to=post_directory_path, null=True, blank=True)
-    
+    media = models.FileField(null=True, blank=True)
+        
     class Meta:
         indexes = [
             models.Index(fields=['post_id'])

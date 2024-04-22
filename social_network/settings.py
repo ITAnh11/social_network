@@ -97,17 +97,27 @@ CHANNEL_LAYERS = {
 }
 
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'social_network',
+#         'USER': 'postgres',
+#         'PASSWORD': 'TuAnhkc11',
+#         'HOST': 'database-1.cxmwy0oq0y75.ap-southeast-2.rds.amazonaws.com',
+#         'PORT': '5432',
+#     },
+# }
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'social_network',
-        'USER': 'postgres',
-        'PASSWORD': 'TuAnhkc11',
-        'HOST': 'database-1.cxmwy0oq0y75.ap-southeast-2.rds.amazonaws.com',
+        'NAME': 'social_network_test',
+        'USER': 'admin',
+        'PASSWORD': 'abc123',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     },
 }
@@ -187,15 +197,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True 
 
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# aws settings
+AWS_ACCESS_KEY_ID = 'AKIAZQ3DQVSTJJ73AV5T'
+AWS_SECRET_ACCESS_KEY = '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'
 
-
-# AWS S3 settings 
-AWS_ACCESS_KEY_ID = 'AKIAZQ3DQVSTOELWTKJU'
-AWS_SECRET_ACCESS_KEY = 'x7VkbWAfXvW5mPZXe6nH5e64JZL2STno2gJUM3uS'
-AWS_STORAGE_BUCKET_NAME = 'webtest-feisubukku'
-AWS_S3_REGION_NAME = 'ap-southeast-2'  # e.g., 'us-east-1'
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+AWS_STORAGE_BUCKET_NAME = 'feisubukku-test'
+AWS_S3_REGION_NAME= 'ap-southeast-2'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_FILE_OVERWRITE = False
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
