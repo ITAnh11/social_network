@@ -19,7 +19,7 @@ body {
 .chat {
   flex: 1;
   padding: 20px;
-  background-color: #f0f0f0;
+  background-color: #fff; /* Change background color */
   display: flex;
   flex-direction: column;
 }
@@ -36,7 +36,7 @@ ul {
 li {
   cursor: pointer;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Lighter border */
 }
 
 li:last-child {
@@ -45,6 +45,8 @@ li:last-child {
 
 .chatInput {
   margin-top: auto;
+  display: flex; /* Add display flex for alignment */
+  align-items: center; /* Align items center */
 }
 
 #chatMessages {
@@ -54,7 +56,8 @@ li:last-child {
 }
 
 .message {
-  background-color: #fff;
+  /* display: inline-block; */
+  background-color: #f0f0f0; /* Lighter background */
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
@@ -63,16 +66,19 @@ li:last-child {
 
 .message.sent {
   align-self: flex-end;
-  background-color: #DCF8C6; /* Light green */
+  text-align: right;
+  color: #fff;
+  background-color: #4267B2; /* Facebook Blue */
 }
 
 .message.received {
   align-self: flex-start;
-  background-color: #fff;
+  text-align: left;
+  background-color: #f0f0f0; /* Lighter background */
 }
 
 #messageInput {
-  width: calc(100% - 60px);
+  flex: 1; /* Take remaining space */
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 20px;
@@ -98,12 +104,12 @@ li:last-child {
   border: none;
   border-radius: 5px;
   margin-bottom: 10px;
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background-color: #f0f0f0; /* Lighter background */
+  color: #333; /* Darker text color */
 }
 
 #search::placeholder {
-  color: #fff;
+  color: #666; /* Lighter placeholder text color */
 }
 
 #chatHeader {
