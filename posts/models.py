@@ -23,7 +23,7 @@ def post_directory_path(instance, filename):
 
 class MediaOfPosts(models.Model):
     post_id = models.ForeignKey(Posts, on_delete=models.CASCADE)
-    media = models.FileField(null=True, blank=True)
+    media = models.FileField(upload_to=post_directory_path, null=True, blank=True)
         
     class Meta:
         indexes = [

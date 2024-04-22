@@ -1,4 +1,4 @@
-const TIME_DELAY_LOAD_IMAGE = 222;
+const TIME_DELAY_LOAD_IMAGE = 400;
 
 export function createLayoutImages(images, galleryContainerElement) {
     const length = images.length;
