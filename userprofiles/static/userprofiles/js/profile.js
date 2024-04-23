@@ -6,8 +6,8 @@ const urlFromEditStory = document.body.getAttribute('link-url-editStory');
 fetch(api_get_profile)
     .then(response => response.json())
     .then(data => {
-        // console.log(data);
-        set_user_data(data);
+
+        
         // edit profile
         // const urlToIg = "https://www.instagram.com/"
         var userName2 = document.getElementById('userName2');
@@ -63,10 +63,6 @@ fetch(api_get_profile)
         profile.innerHTML += `<img src="${data.imageprofile['background']}" alt="background" srcset="" style="width: 640px; height: 360px; object-fit: cover;">`;
         
     })
-    function set_user_data(data){
-        localStorage.setItem('name', data.userprofile['first_name'] + " " + data.userprofile['last_name']);
-        localStorage.setItem('avatar', data.imageprofile['avatar']);
-    }
 
     //dgdj
     
