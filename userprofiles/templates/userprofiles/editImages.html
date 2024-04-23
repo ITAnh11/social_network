@@ -7,16 +7,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Images</title>
     <link type="text/css" href="{%static 'userprofiles/css/editImages.css' %}" rel="stylesheet" />
+    <link type="text/css" href="{%static 'userprofiles/css/profile.css' %}" rel="stylesheet" />
     <!-- cropper css -->
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-  <div id="image-box">
-    <image src={{obj.file.url}} id="image" width="400px">
-  </div>  
+  <form class="editImage">
+    {% comment %} <input type="Images" class="avatar-container" id="avatar-container">
+    <input type="Images" class="coverImage" id="coverImage"> {% endcomment %}
+    <div class="choose_img">
+      <div class="choose_avt">
+        <div class="file-input-avt">
+          <!-- Input file -->
+          <input type="file" id="upload" accept="image/*">
+          <!-- Label tùy chỉnh -->
+          <label for="upload" style="background-color: blue;">Choose your avatar</label>
+        </div>
+    
+        <!-- Khu vực hiển thị ảnh đã chọn -->
+        <div class="image-preview" id="avt-preview"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="choose_cover">
+        <div class="file-input-cover">
+          <!-- Input file -->
+          <input type="file" id="upload" accept="image/*">
+          <!-- Label tùy chỉnh -->
+          <label for="upload" style="background-color: pink;">Choose your cover</label>
+        </div>
+    
+        <!-- Khu vực hiển thị ảnh đã chọn -->
+        <div class="image-preview" id="cover-preview"></div>
+      </div>
+      
+    </div>
+    <div class="preview">
+      <div class="cover" id="coverImage">
+        <img src="{%static 'userprofiles/images/cover.jpg' %}" class="coverImage" alt="">
+        <div class="edit-coverImage">
+            <img src="{%static 'userprofiles/images/camera.png' %}" alt="">
+            <a href="#" style="color: black;">Change your coverImage </a>
+        </div>
+      </div>
+      <div class="dashboard">
+          <div class="left-dashboard">
+              <div class="avatar-container" id="avatarContainer">
+                  <img src="{%static 'userprofiles/images/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage">
+              </div>
+              
+              <!-- Popup hoặc menu chứa các lựa chọn -->
+              <div id="avatarOptions" class="avatar-options">
+                  <button onclick="viewAvatar()">View Avatar</button>
+                  <button onclick="chooseAvatar()">Choose Avatar</button>
+              </div>                                
+              <div class="left-dashboard-info">
+                  <div id="userName2" class="userName">
+
+                  </div>
+                  <p>446 Friends</p>
+                  <div class="mutual-friend-images">
+                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                  </div>
+              </div>
+          </div>
+          <div class="right-dashboard-info">
+              <div class="right-dashboard-info-top">
+                  <div class="editProfile" id="editProfile">
+                      
+                  </div>                     
+              </div>
+              <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
+          </div>
+          <div class="list-choose">
+              <ul class="profile-menu">
+                  <li><a href="{% url 'userprofiles:profile' %}">Posts</a></li>
+                  {% comment %} <li><a href="{% url 'userprofiles:about' %}">Giới thiệu</a></li> {% endcomment %}
+                  <li><a href="{% url 'userprofiles:listFriends' %}">Friends</a></li>
+              </ul>
+          </div>
+      </div>
+    </div>
+    
+  </form>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js"></script>
+  <script src="{%static 'userprofiles/js/editImages.js' %}"></script>
 </body>
 
 </html>
