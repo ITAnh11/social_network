@@ -4,9 +4,7 @@ var api_get_profile = '/userprofiles/get_profile/?id=' + (new URL(document.locat
 fetch(api_get_profile)
     .then(response => response.json())
     .then(data => {
-    //   console.log(data);
-      set_user_data(data);
-
+        // console.log(data);
       var avatarImage = document.getElementById('avatarImage');
       avatarImage.innerHTML += `<img src="${data.imageprofile['avatar']}" alt="avatarImage" class="d-block ui-w-80">`;
 
@@ -28,8 +26,4 @@ fetch(api_get_profile)
       var linkFb = document.getElementById('linkFb');
       linkFb.value = '/http://127.0.0.1:8000/userprofiles/?id=' + (new URL(document.location)).searchParams.get('id').toString();
 
-      })
-      function set_user_data(data){
-          localStorage.setItem('name', data.userprofile['first_name'] + " " + data.userprofile['last_name']);
-          localStorage.setItem('avatar', data.imageprofile['avatar']);
-      }
+      });
