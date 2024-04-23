@@ -7,10 +7,13 @@
     <title>Comments</title>
     <link rel="stylesheet" href="{%static 'comments/css/cmt.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet"> {% endcomment %}
   </head>
 
   <body>
+    
+    {% include 'navbar/navbar.html' %}
+
     <div class="all_post">
       <div class="slideshow-container">
         <div class="mySlides fade">
