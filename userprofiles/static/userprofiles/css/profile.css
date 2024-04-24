@@ -123,6 +123,15 @@ ul.navlogo li img {
     align-self: flex-start;
 }
 
+.ig_link {
+    display: flex;
+    align-items: center;
+}
+
+.social_link p {
+    color:#1876f2;
+}
+
 .important-links a,
 .shortcut-links a {
     display: flex;

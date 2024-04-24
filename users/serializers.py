@@ -32,7 +32,8 @@ class UserSerializer(serializers.ModelSerializer):
                 raise ValidationError(detail={'comfirm_password': 'Passwords do not match!'})
         
             if not self.check_password(password):
-                raise serializers.ValidationError(detail={'check_password': 'Password does not meet the requirements!'})
+                raise serializers.ValidationError(
+                    detail={'check_password': 'Password does not meet the requirements!\nPassword must be at least 8 characters long!\nPassword must not contain any spaces!'})
             
             user.set_password(password)
             user.confirm_password = user.password

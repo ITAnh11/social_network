@@ -29,7 +29,7 @@ class FriendsRequestsView(APIView):
         
         return render(request,'friends/friend.html')
 
-class  SentFriendRequestView(APIView):
+class SentFriendRequestView(APIView):
     def post(self, request):
         user = getUser(request)
         
@@ -210,7 +210,7 @@ class GetListFriendView(APIView):
         
         
         for friend_ship in list_friend_ship:
-             
+            
             try:
                 friend = {
                 "friend_ship": FriendshipSerializer(friend_ship).data,
