@@ -1,20 +1,37 @@
  /* Tùy chỉnh giao diện cho input file */
- .file-input {
+.file-input-avt {
+    text-align: center; /* Căn giữa nội dung */
     margin-bottom: 20px;
 }
 
-.file-input label {
+.file-input-avt label {
     padding: 10px 15px;
-    /* background-color: #007bff; */
     color: #fff;
     border-radius: 5px;
     cursor: pointer;
 }
 
-.file-input input[type="file"] {
+.file-input-avt input[type="file"] {
     display: none;
 }
 
+ .file-input-cover {
+    text-align: center; /* Căn giữa nội dung */
+    margin-bottom: 20px;
+}
+
+.file-input-cover label {
+    padding: 10px 15px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.file-input-cover input[type="file"] {
+    display: none;
+}
+
+/* Hiển thị ảnh */
 .image-preview img {
     height: 100px;
     width: 100px;
