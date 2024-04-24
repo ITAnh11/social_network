@@ -14,38 +14,39 @@
 </head>
 
 <body>
-  <form class="editImage">
+  <form id="form-editImage" action="{% url 'userprofiles:editImages' %}" method="post" class="editImage">
     {% comment %} <input type="Images" class="avatar-container" id="avatar-container">
     <input type="Images" class="coverImage" id="coverImage"> {% endcomment %}
     <div class="choose_img">
       <div class="choose_avt">
         <div class="file-input-avt">
           <!-- Input file -->
-          <input type="file" id="upload" accept="image/*">
+          <input type="file" id="avatar" accept="image/*">
           <!-- Label tùy chỉnh -->
-          <label for="upload" style="background-color: blue;">Choose your avatar</label>
+          <label class="form-label" for="avatar" style="background-color: #46bf8d;">Choose your avt</label>
         </div>
-    
+
         <!-- Khu vực hiển thị ảnh đã chọn -->
         <div class="image-preview" id="avt-preview"></div>
       </div>
+
       <div class="divider"></div>
+
       <div class="choose_cover">
         <div class="file-input-cover">
           <!-- Input file -->
-          <input type="file" id="upload" accept="image/*">
+          <input type="file" id="cover" accept="image/*">
           <!-- Label tùy chỉnh -->
-          <label for="upload" style="background-color: pink;">Choose your cover</label>
+          <label class="form-label" for="cover" style="background-color: #a32983;">Choose your cover</label>
         </div>
-    
         <!-- Khu vực hiển thị ảnh đã chọn -->
         <div class="image-preview" id="cover-preview"></div>
       </div>
       
     </div>
-    <div class="preview">
+    {% comment %} <div class="preview">
       <div class="cover" id="coverImage">
-        <img src="{%static 'userprofiles/images/cover.jpg' %}" class="coverImage" alt="">
+        <img src="{%static 'userprofiles/images/cover.jpg' %}" class="coverImage" alt="" style="height: 300px;">
         <div class="edit-coverImage">
             <img src="{%static 'userprofiles/images/camera.png' %}" alt="">
             <a href="#" style="color: black;">Change your coverImage </a>
@@ -57,7 +58,6 @@
                   <img src="{%static 'userprofiles/images/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage">
               </div>
               
-              <!-- Popup hoặc menu chứa các lựa chọn -->
               <div id="avatarOptions" class="avatar-options">
                   <button onclick="viewAvatar()">View Avatar</button>
                   <button onclick="chooseAvatar()">Choose Avatar</button>
@@ -87,12 +87,11 @@
           <div class="list-choose">
               <ul class="profile-menu">
                   <li><a href="{% url 'userprofiles:profile' %}">Posts</a></li>
-                  {% comment %} <li><a href="{% url 'userprofiles:about' %}">Giới thiệu</a></li> {% endcomment %}
                   <li><a href="{% url 'userprofiles:listFriends' %}">Friends</a></li>
               </ul>
           </div>
       </div>
-    </div>
+    </div> {% endcomment %}
     
   </form>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js"></script>
