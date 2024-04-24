@@ -364,6 +364,8 @@ img.advertisement-image {
     margin: 20px 0px 5px 0px;
     text-transform: capitalize;
     color: #626262;
+    max-width: 700px;
+    word-wrap: break-word;
 }
 
 .status-field p a {
