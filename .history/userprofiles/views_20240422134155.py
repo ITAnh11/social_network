@@ -11,7 +11,7 @@ from rest_framework.response import Response
 import jwt 
 
 from users.models import User
-from friends.models import Friendship, FriendRequest
+from friends.models import Friendship
 from users.serializers import UserSerializer
 from friends.serializers import FriendshipSerializer
 
@@ -339,10 +339,9 @@ class GetMutualFriendView(APIView):
             if not user:
                 return Response({'error': 'Unauthorized'}, status=401)
             
-            other_user_id = request.query_params.get('id')    #lấy từ fe của user kia, fe gửi lên sever id profile của người đó
+            other_user_id = request.query_params.get('user_id')    #lấy từ fe của các user
             
-            print(other_user_id)
-            other_user = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id)) # user_id1, user_id2
+            other_user = get_object_or_404(Friendship, id=other_user_id)
             
             user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
             
@@ -364,45 +363,3 @@ class GetMutualFriendView(APIView):
             return Response({
                 "data": data
                 })
-
-class GetStatusFriend(APIView):
-    def get(self, request):
-        user = getUser(request)
-        if not user:
-            return Response({'error': 'Unauthorized'}, status=401)
-        
-        other_user_id = request.query_params.get('id') 
-        
-        if user == other_user_id : 
-            return Response({'status_relationship': 'user'})
-        
-        status_relationship = FriendRequest.objects.filter(from_id=user, to_id=other_user_id).first()
-        
-        if not status_relationship :
-            return Response({'status_relationship': 'not_friend'})
-        
-        return Response({
-            "status_relationship": status_relationship
-        })
-
-class GetFriendShip(APIView):
-    def get(self, request):
-        user = getUser(request)
-        if not user:
-            return Response({'error': 'Unauthorized'}, status=401)
-        
-        other_user_id = request.query_params.get('id') 
-        
-        others_user_friend = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
-        
-        data = []
-        for other_user_friend in others_user_friend:
-            
-            friend_ship = {
-                "friend_profile": getUserProfileForPosts(other_user_friend)
-            }
-            data.append(friend_ship)
-            
-        return Response({
-            "data": data
-        })

@@ -171,7 +171,6 @@ class GetSentFriendRequestsView(APIView):
         return Response({
             "data" : data
         })
-    
 
 class  GetReceivedFriendRequestsView(APIView):
     def get(self, request):
@@ -262,7 +261,9 @@ class GetSuggestionFriendView(APIView):
             
             if not user:
                 return Response({'error': 'Unauthorized'}, status=401)
+            other_user_id = User.objects.exclude(email=user)    #lấy từ fe của các user
             
+            other_user = get_object_or_404(Friendship, id=other_user_id)
             
             #dsach bạn bè của mình
             # user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))

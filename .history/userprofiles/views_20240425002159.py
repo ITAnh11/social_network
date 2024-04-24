@@ -386,23 +386,5 @@ class GetStatusFriend(APIView):
         })
 
 class GetFriendShip(APIView):
-    def get(self, request):
-        user = getUser(request)
-        if not user:
-            return Response({'error': 'Unauthorized'}, status=401)
-        
-        other_user_id = request.query_params.get('id') 
-        
-        others_user_friend = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
-        
-        data = []
-        for other_user_friend in others_user_friend:
-            
-            friend_ship = {
-                "friend_profile": getUserProfileForPosts(other_user_friend)
-            }
-            data.append(friend_ship)
-            
-        return Response({
-            "data": data
-        })
+    
+    
