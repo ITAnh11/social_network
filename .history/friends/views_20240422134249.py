@@ -150,28 +150,57 @@ class DeleteFriendShip(APIView):
         return Response({'success': 'Friendship deleted successfully'})
     
 class GetSentFriendRequestsView(APIView):
-    def get(self, request):
-        user = getUser(request)
+    # def get(self, request):
+    #     user = getUser(request)
         
-        if not user:
-            return Response({'error': 'Unauthorized'}, status=401)
+    #     if not user:
+    #         return Response({'error': 'Unauthorized'}, status=401)
         
-        data = []
-        list_friend_requests_sent = FriendRequest.objects.filter(from_id=user)
-        #print(list_friend_requests_sent)
-        for friend_request_sent in list_friend_requests_sent:
-            serializer = FriendRequestSerializer(friend_request_sent)
-            #print(serializer)
+    #     data = []
+    #     list_friend_requests_sent = FriendRequest.objects.filter(from_id=user)
+    #     #print(list_friend_requests_sent)
+    #     for friend_request_sent in list_friend_requests_sent:
+    #         serializer = FriendRequestSerializer(friend_request_sent)
+    #         #print(serializer)
             
-            friend_request = {
-                "friend_request_sent" : serializer.data,
-                "friend_request_profile": getUserProfileForPosts(friend_request_sent.to_id)
-            }
-            data.append(friend_request)
-        return Response({
-            "data" : data
-        })
-    
+    #         friend_request = {
+    #             "friend_request_sent" : serializer.data,
+    #             "friend_request_profile": getUserProfileForPosts(friend_request_sent.to_id)
+    #         }
+    #         data.append(friend_request)
+    #     return Response({
+    #         "data" : data
+    #     })
+    def get(self, request):
+            user = getUser(request)
+            if not user:
+                return Response({'error': 'Unauthorized'}, status=401)
+            
+            other_user_id = request.query_params.get('user_id')    #lấy từ fe của các user
+            
+            print(other_user_id)
+            other_user = get_object_or_404(Friendship, id=other_user_id)
+            
+            user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
+            
+            other_user_friendships = Friendship.objects.filter(Q(user_id1=other_user.user_id1) | Q(user_id2=other_user.user_id2))
+            
+            mutual_friendships = user_friendships.intersection(other_user_friendships)
+            
+            data = []
+            
+            for mutual_friendship in mutual_friendships:
+                
+                friend_profile = getUserProfileForPosts(mutual_friendship.user_id2) if user == mutual_friendship.user_id1 else getUserProfileForPosts(mutual_friendship.user_id1)
+                
+                mutual_friendship = {
+                "mutual_friendship": FriendshipSerializer(mutual_friendship).data,
+                "friend_profile": friend_profile
+                }
+                data.append(mutual_friendship)
+            return Response({
+                "data": data
+                })
 
 class  GetReceivedFriendRequestsView(APIView):
     def get(self, request):
