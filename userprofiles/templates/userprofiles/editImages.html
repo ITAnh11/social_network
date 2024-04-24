@@ -9,14 +9,17 @@
     <link type="text/css" href="{%static 'userprofiles/css/editImages.css' %}" rel="stylesheet" />
     <link type="text/css" href="{%static 'userprofiles/css/profile.css' %}" rel="stylesheet" />
     <!-- cropper css -->
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css">
+    {% comment %} <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css"> {% endcomment %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.css" integrity="sha512-087vysR/jM0N5cp13Vlp+ZF9wx6tKbvJLwPO8Iit6J7R+n7uIMMjg37dEgexOshDmDITHYY5useeSmfD1MYiQA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-  <form id="form-editImage" action="{% url 'userprofiles:editImages' %}" method="post" class="editImage">
-    {% comment %} <input type="Images" class="avatar-container" id="avatar-container">
-    <input type="Images" class="coverImage" id="coverImage"> {% endcomment %}
+  <div class="choose_img">
+    
+  </div>
+  <form id="form-editAvt" action="{% url 'userprofiles:editAvatar' %}" method="post" class="editAvt">
+    {% csrf_token %}
     <div class="choose_img">
       <div class="choose_avt">
         <div class="file-input-avt">
@@ -27,74 +30,50 @@
         </div>
 
         <!-- Khu vực hiển thị ảnh đã chọn -->
-        <div class="image-preview" id="avt-preview"></div>
-      </div>
+        <div class="upload-avt-box" id="upload-avatar-box" style="border-radius: 100%; margin-bottom: 10px;"></div>
+        <input class="button" id="confirm-button-avt" type="submit" value="Confirm" style="display: none;" />
+        {% comment %} <button id="confirm-button" style="display: none;">Confirm</button> {% endcomment %}
 
-      <div class="divider"></div>
-
+      </div>  
+  </form> 
+    <div class="divider"></div>
+  <form id="form-editCover" action="{% url 'userprofiles:editCover' %}" method="post" class="editCover">
+    {% csrf_token %}
+    <div class="choose_img">
       <div class="choose_cover">
         <div class="file-input-cover">
           <!-- Input file -->
           <input type="file" id="background" accept="image/*">
           <!-- Label tùy chỉnh -->
-          <label class="form-label" for="background" style="background-color: #a32983;">Choose your cover</label>
+          <label class="form-label" for="background" style="background-color: #5b1044;">Choose your background</label>
         </div>
-        <!-- Khu vực hiển thị ảnh đã chọn -->
-        <div class="image-preview" id="cover-preview"></div>
-      </div>
-      
-    </div>
-    {% comment %} <div class="preview">
-      <div class="cover" id="coverImage">
-        <img src="{%static 'userprofiles/images/cover.jpg' %}" class="coverImage" alt="" style="height: 300px;">
-        <div class="edit-coverImage">
-            <img src="{%static 'userprofiles/images/camera.png' %}" alt="">
-            <a href="#" style="color: black;">Change your coverImage </a>
-        </div>
-      </div>
-      <div class="dashboard">
-          <div class="left-dashboard">
-              <div class="avatar-container" id="avatarContainer">
-                  <img src="{%static 'userprofiles/images/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage">
-              </div>
-              
-              <div id="avatarOptions" class="avatar-options">
-                  <button onclick="viewAvatar()">View Avatar</button>
-                  <button onclick="chooseAvatar()">Choose Avatar</button>
-              </div>                                
-              <div class="left-dashboard-info">
-                  <div id="userName2" class="userName">
 
-                  </div>
-                  <p>446 Friends</p>
-                  <div class="mutual-friend-images">
-                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                  </div>
-              </div>
-          </div>
-          <div class="right-dashboard-info">
-              <div class="right-dashboard-info-top">
-                  <div class="editProfile" id="editProfile">
-                      
-                  </div>                     
-              </div>
-              <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
-          </div>
-          <div class="list-choose">
-              <ul class="profile-menu">
-                  <li><a href="{% url 'userprofiles:profile' %}">Posts</a></li>
-                  <li><a href="{% url 'userprofiles:listFriends' %}">Friends</a></li>
-              </ul>
-          </div>
+        <!-- Khu vực hiển thị ảnh đã chọn -->
+        <div class="upload-bg-box" id="upload-background-box" style="border-radius: 100%; margin-bottom: 10px;"></div>
+        <input class="button" id="confirm-button-bg" type="submit" value="Confirm" style="display: none;" />
+        {% comment %} <button id="confirm-button" style="display: none;">Confirm</button> {% endcomment %}
       </div>
-    </div> {% endcomment %}
-    
   </form>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js"></script>
+  <div class="preview-place" id="preview-imageprofile-box">
+    <h5>Preview</h5>
+    <div id="cover_review">
+      {% comment %} <img id="img-background-preview" src="{%static 'userprofiles/images/avatar.png' %}" alt="image" style="width: 560px; height: 285px; object-fit: cover; position: relative;" /> {% endcomment %}
+    </div>
+    
+    <div id="avt_review">
+      {% comment %} <img id="img-avatar-preview" src="{%static 'userprofiles/images/avtVuong.png' %}" alt="image" style="width: 120px; height: 120px; border-radius: 100%; object-fit: cover;
+      position: relative; top: -45px; left: 20px;" /> {% endcomment %}
+    </div>
+
+  </div>
+  <div class="Cancel">
+    <a href="{% url 'userprofiles:profile' %}">
+      <button type="button" class="btn btn-default">Cancel</button>
+    </a>
+  </div>
+   
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.js" integrity="sha512-lR8d1BXfYQuiqoM/LeGFVtxFyspzWFTZNyYIiE5O2CcAGtTCRRUMLloxATRuLz8EmR2fYqdXYlrGh+D6TVGp3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
   <script src="{%static 'userprofiles/js/editImages.js' %}"></script>
 </body>
 
