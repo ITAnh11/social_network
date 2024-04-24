@@ -1,3 +1,4 @@
+
 //lấy bài đăng
 const params = (new URL(document.location)).searchParams;
 const url_user_post = '/userprofiles/get_posts/?id=' + ((params.get('id') !== null) ? params.get('id') : '');
@@ -11,6 +12,10 @@ const baseUrl = document.body.getAttribute('data-base-url');
 
 import { createLayoutImages } from './gallery.js';
 
+//xử lí hover react_btn    
+// var a = event.target.parentNode.parentNode.querySelector(".list_reaction");
+// a.classList.toggle(".show_list_reaction");
+
 function get_posts(){
     fetch(url_get_posts)
     .then(response => response.json())
@@ -23,10 +28,9 @@ function get_posts(){
 //render_post
 export function render_post(data,isOld){
     data.posts.forEach(function(post, index){
-
         setTimeout(function() {
             var newDiv = 
-                `<div class="status-field-container write-post-container">
+                `<div class="status-field-container write-post-container" id="${post.id}">
                 <div class="user-profile-box">
                     <div class="user-profile">
                         <a href="/userprofiles/?id=${post.user.id}" style="text-decoration: none;">
@@ -54,13 +58,38 @@ export function render_post(data,isOld){
                 </div>
                 <div class="post-reaction">
                     <div class="activity-icons">
-                        <div><img src="${baseUrl + "images/like-blue.png"}" alt="">120</div>
+                        <div onmouseover="show_list_reaction(event)"><img  src="${baseUrl + "images/haha.png"}" alt="" id="count-reaction-posts-${post.id}">120</div>
                         <div><img src="${baseUrl + "images/comments.png"}" alt="">52</div>
                         <div><img src="${baseUrl + "images/share.png"}" alt="">35</div>
                     </div>
                     <div class="post-profile-picture">
                         <img src="${post.user.avatar}" alt=""> <i class=" fas fa-caret-down"></i>
                     </div>
+                    
+                    <div class="list_reaction">
+                        <div class="reaction_btn">
+                            <img src="${baseUrl + "images/tim.png"}">
+                        </div>
+                        <div class="reaction_btn">
+                            <img src="${baseUrl + "images/like2.png"}">
+                        </div>
+                        <div class="reaction_btn">
+                            <img src="${baseUrl + "images/thuongthuong.png"}">
+                        </div>
+                        <div class="reaction_btn">
+                            <img src="${baseUrl + "images/haha.png"}">
+                        </div>
+                        <div class="reaction_btn">
+                            <img src="${baseUrl + "images/wow.png"}">
+                        </div>
+                        <div class="reaction_btn">
+                            <img src="${baseUrl + "images/buon.png"}">
+                        </div>
+                        <div class="reaction_btn">
+                            <img src="${baseUrl + "images/phanno.png"}">
+                        </div>
+                    </div>
+
                 </div>
             </div>`
             var posted = document.createElement("div");
@@ -73,10 +102,9 @@ export function render_post(data,isOld){
                 var a = posted_area.children[0];
                 posted_area.insertBefore(posted,a);
             }
-
+            
             var galleryContainerElement = posted.querySelector('.gallery-container');
             createLayoutImages(post.media, galleryContainerElement);
-
         }, 500 * index);
 
     })
