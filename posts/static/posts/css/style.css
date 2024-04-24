@@ -360,10 +360,12 @@ img.advertisement-image {
 }
 
 .status-field p {
+    word-wrap: break-word;
     font-size: 14px;
     margin: 20px 0px 5px 0px;
     text-transform: capitalize;
     color: #626262;
+    max-width: 700px;
 }
 
 .status-field p a {
