@@ -27,7 +27,7 @@ class CreatePostsView(APIView):
         if type(post) != Posts:
             return post
         
-        listMedia = self.createMediaOfPost(post, request.FILES.getlist('media'))
+        listMedia = self.createMediaOfPosts(post, request.FILES.getlist('media'))
         if type(listMedia) != list:
             post.delete()
             return listMedia    
@@ -103,7 +103,7 @@ class CreatePostsAfterSetImageProfileView():
         try:
             post = Posts.objects.create(
                 user_id=user,
-                title=f"Updated {typeImage} profile picture ",
+                title=f"updated {typeImage} profile picture ",
                 content='',
                 status='public'
             )
