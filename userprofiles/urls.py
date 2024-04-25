@@ -17,3 +17,4 @@ urlpatterns = [
         path('<int:pk>',ProfileDetail.as_view()),
 
     ]
+#

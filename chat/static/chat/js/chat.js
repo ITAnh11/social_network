@@ -1,15 +1,15 @@
-// show all users
+
 const chatHeader = document.getElementById('chatHeader');
-const all_messeeji = document.getElementById('chatMessages');
+const all_messeeji = document.getElementById('chat');
 const messageInput = document.getElementById('messageInput');
 const sendMessageBtn = document.getElementById('sendMessageBtn');
-const searchInput = document.getElementById('search');
+// const searchInput = document.getElementById('search');
 const list_all_users = document.getElementById("userList");
 var conversations = [
 ];
 
-var url_all_users = "../search/@"; // Assuming this is the correct endpoint to fetch all users
-var url_get_channel = "create_channel/"
+var url_all_users = "/search/@"; // Assuming this is the correct endpoint to fetch all users
+var url_get_channel = "chat/create_channel/"
 function show_all_users() {
   fetch(url_all_users)
   .then(response => response.json())
@@ -107,7 +107,7 @@ show_all_users();
 function showChannel(user, channel_id) {
   var full_name = user.first_name + " " + user.last_name;
   chatHeader.textContent = full_name;
-  chatMessages.innerHTML = '';
+  chat.innerHTML = '';
   get_all_messeeji(user, channel_id);
   websocket_handle(user, channel_id);
 }
@@ -134,13 +134,13 @@ function get_all_messeeji(user, channel_id){
           if (user.id == messeeji.sender_id) {
             const div = document.createElement('div');
             div.classList.add('message');
-            div.classList.add('sent');
+            div.classList.add('parker');
             div.textContent = messeeji.message_content;
             all_messeeji.appendChild(div);
           } else {
             const div = document.createElement('div');
             div.classList.add('message');
-            div.classList.add('received');
+            div.classList.add('stark');
             div.textContent = messeeji.message_content;
             all_messeeji.appendChild(div);
           }
@@ -167,10 +167,10 @@ function websocket_handle(user, channel_id) {
   socket.onclose = (event) => {
     console.log("WebSocket connection closed!");
   };  
-  // Form submit listener
-  document.getElementById('sendMessageBtn').addEventListener('click', function(event){
-    event.preventDefault();
+
+  function sendMessage() {
     const message = document.getElementById('messageInput').value;
+    if (message == "") return 
     socket.send(
         JSON.stringify({
             'message_content': message,
@@ -178,7 +178,21 @@ function websocket_handle(user, channel_id) {
             'sender_id': user.id,
         })
     );
+  }
+  // Form submit listener
+  document.getElementById('sendMessageBtn').addEventListener('click', function(event){
+    event.preventDefault();
+    sendMessage()
   });
+
+  document.getElementById('messageInput').addEventListener('keypress', function(event){
+    // Check if Enter key is pressed (key code 13)
+    if (event.keyCode === 13) {
+      event.preventDefault(); // Prevent the default behavior (e.g., form submission)
+      sendMessage(); // Call the sendMessage function
+    }
+  });
+
 
   // Response from consumer on the server
   socket.addEventListener("message", (event) => {
@@ -197,13 +211,13 @@ function websocket_handle(user, channel_id) {
     if (user.id == sender_id) {
       const div = document.createElement('div');
       div.classList.add('message');
-      div.classList.add('sent');
+      div.classList.add('parker');
       div.textContent = message;
       all_messeeji.appendChild(div);
     } else {
       const div = document.createElement('div');
       div.classList.add('message');
-      div.classList.add('received');
+      div.classList.add('stark');
       div.textContent = message;
       all_messeeji.appendChild(div);
     }
@@ -211,8 +225,8 @@ function websocket_handle(user, channel_id) {
   });
 }
 function scrollToBottom() {
-  var chatMessages = document.getElementById('chatMessages');
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+  var messages = document.getElementById('chat');
+  messages.scrollTop = chat.scrollHeight;
 }
 
 

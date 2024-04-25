@@ -1,4 +1,4 @@
-var list_all_users = document.querySelector(".right-sidebar");
+var list_all_user = document.querySelector(".right-sidebar");
 
 url_all_users = "search/@"; // Assuming this is the correct endpoint to fetch all users
 
@@ -6,7 +6,7 @@ function show_all_users() {
     fetch(url_all_users)
     .then(response => response.json())
     .then(data => {
-        console.log("all_users:", data);
+        // console.log("all_users:", data);
         data.list_users.forEach(function(user) {
             var url = ""; // You might want to define a URL to link to each user's profile
             var fullName = user.first_name + " " + user.last_name;
@@ -22,8 +22,8 @@ function show_all_users() {
             var newCard = document.createElement("div");
             newCard.innerHTML = a;
 
-            list_all_users.appendChild(newCard);
-            console.log(newCard)
+            list_all_user.appendChild(newCard);
+            // console.log(newCard)
         });
     })
     .catch(error => {
