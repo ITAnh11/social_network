@@ -20,6 +20,9 @@ class Reactions(Document):
             'user.id',
         ]
     }
+    
+    def setTypeReaction(self, type):
+        self.update(__raw__={'$set': {'type': type}})
 
 class ReactionNumber(EmbeddedDocument):
     total = fields.IntField(default=0)
@@ -88,3 +91,4 @@ class ReactionNumberInfo(Document):
         reactions.sort(key=lambda x: x['total'], reverse=True)
         
         return reactions
+    

@@ -70,6 +70,17 @@ class CreateReaction(APIView):
                          created_at=datetime.datetime.now(), 
                          updated_at=datetime.datetime.now())
     
+    def changeTypeReactionIfIsReacted(self, request, user_id, posts_id, comment_id):
+        checkIsReacted = IsReactedView().checkIsReacted(user_id, posts_id, comment_id)
+        
+        if checkIsReacted.get('is_reacted'):
+            reaction = checkIsReacted.get('reaction')
+            reaction.setTypeReaction(request.data.get('type'))
+            reaction.save()
+            return True
+            
+        return False
+    
     def post(self, request):
         user = getUser(request)
         
@@ -92,6 +103,9 @@ class CreateReaction(APIView):
         
         posts_id = int(request.data.get('posts_id'))
         comment_id = int(request.data.get('comment_id'))
+        
+        if self.changeTypeReactionIfIsReacted(request, user.id, posts_id, comment_id):
+            return Response({'success': 'Type reaction is changed'})
         
         try:
             reaction = self.createReaction(request)
@@ -165,15 +179,16 @@ class IsReactedView(APIView):
     def checkIsReacted(self, user_id, posts_id, comment_id):
         reaction = Reactions.objects(__raw__={  'to_posts_id': posts_id, 
                                                 'to_comment_id': comment_id,
-                                                'user.id': user_id})
+                                                'user.id': user_id}).first()
         
-        is_reacted = reaction.count() > 0
+        is_reacted = (reaction != None)
         result = {
             'is_reacted': is_reacted
         }
         
         if is_reacted:
-            result['type'] = reaction.first().type
+            result['type'] = reaction.type
+            result['reaction'] = reaction
         
         return result
     
