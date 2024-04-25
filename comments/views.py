@@ -5,8 +5,10 @@ from rest_framework.response import Response
 
 from mongoengine.queryset.visitor import Q
 
-from comments.models import Comments, UserComment
+from comments.models import Comments
 from .serializers import CommentsSerializer
+
+from userprofiles.models import UserBasicInfo
 
 from common_functions.common_function import getUser   
 
@@ -69,18 +71,16 @@ class GetCommentsForComment(APIView):
 
 class CreateComment(APIView):
     
-    def createUserComment(self, request):
-        user = json.loads(request.data.get('user'))
-        
-        return UserComment(id=user.get('id'), 
-                           name=user.get('name'), 
-                           avatar=user.get('avatar'))
+    def createUserBasicInfo(self, request):        
+        return UserBasicInfo(id=request.data.get('user_id'), 
+                           name=request.data.get('user_name'), 
+                           avatar=request.data.get('user_avatar'))
     
     def createComment(self, request):
-        return Comments(to_posts_id=request.data.get('to_posts_id'), 
-                        to_comment_id=request.data.get('to_comment_id'), 
+        return Comments(to_posts_id=request.data.get('posts_id'), 
+                        to_comment_id=request.data.get('comment_id'), 
                         content=request.data.get('content'), 
-                        user=self.createUserComment(request), 
+                        user=self.createUserBasicInfo(request), 
                         created_at=datetime.datetime.now(), 
                         updated_at=datetime.datetime.now())
     

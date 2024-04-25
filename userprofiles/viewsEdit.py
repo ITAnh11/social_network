@@ -61,6 +61,7 @@ class EditAvatarView(APIView):
             imageprofile.save()
             
             return Response({'success': 'Your avatar image updated successfully!',
+                             'avatar': ImageProfileSerializer(imageprofile).data.get('avatar'),
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
         
         except Exception as e:

@@ -19,10 +19,13 @@ from .models import UserProfile, ImageProfile, Image
 from .serializers import UserProfileSerializer, ImageProfileSerializer
 from .forms import ImageProfileForm
 
-from posts.models import Posts, MediaOfPosts
+from posts.models import Posts
 from posts.serializers import PostsSerializer, MediaOfPostsSerializer
 
 from posts.views import CreatePostsAfterSetMediaProfileView
+
+from posts.models import PostsInfo
+from posts.serializers import PostsInfoSerializer
 
 # from users.views import LoginView
 
@@ -101,7 +104,6 @@ class GetProfileView(APIView):
         except Exception as e:
             raise e
     
-       
 class SetUserProfileView(APIView):    
     # create a new user profile
     def post(self, request, user):
@@ -161,9 +163,11 @@ class GetPostsView(APIView):
         for post in posts:
             posts_data = PostsSerializer(post).data
             media_data = MediaOfPostsSerializer(post.mediaofposts_set.all(), many=True).data
+            posts_info = PostsInfo.objects(__raw__={'posts_id': post.id}).first()
             
             posts_data['media'] = media_data
             posts_data['user'] = userDataForPosts
+            posts_data['posts_info'] = PostsInfoSerializer(posts_info).data
 
             posts_data['created_at'] = getTimeDuration(post.created_at)
         
