@@ -15,6 +15,7 @@
       referrerpolicy="no-referrer"
     />
 
+    <link rel="stylesheet" href="{% static 'reactions/css/reaction.css' %}" />
     <link rel="stylesheet" href="{% static 'posts/css/gallery.css' %}" />
     <link rel="stylesheet" href="{% static 'posts/css/posts.css' %}" />
     <link rel="stylesheet" href="{% static 'posts/css/style.css' %}" />
@@ -125,6 +126,7 @@
               </div>
               <div><img src="${baseUrl + "images/comments.png"}" alt="">52</div>
               <div><img src="${baseUrl + "images/share.png"}" alt="">35</div>
+            </div>  
             </div>  
             <div class="post-profile-picture">
               <img src="${post.user.avatar}" alt="" />
@@ -248,5 +250,6 @@
       type="module"
     ></script>
     <script src="{% static 'posts/js/posts.js' %}" type="module"></script>
+    <script src="{% static 'reactions/js/reaction.js'%}"></script>
   </body>
 </html>

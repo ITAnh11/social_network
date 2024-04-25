@@ -316,3 +316,56 @@ function findActiveConversationIndex() {
 //   });
 // }
 
+
+// const url_conversation = '/chat/get_conversations'
+
+// function get_conversations(){
+//     fetch(url_conversation)
+//     .then(response => response.json())
+//     .then(data => {
+//       add_conversation(data);
+//       showConversationList();
+//       // console.log(conversations);
+//     })
+// }
+
+// function add_conversation(data){
+//     data.conversations.forEach(function(conversation){
+//         var newconv = {name: conversation.title, messages: []}
+//         conversations.push(newconv)
+//     })
+// }
+
+// get_conversations();
+
+// const conversationList = document.getElementById('conversationList');
+
+// // Populate conversation list
+// function showConversationList(){
+//   console.log(conversations);
+//   conversations.forEach(function(conversation, index){
+//     const li = document.createElement('li');
+//     li.textContent = conversation.name;
+//     li.addEventListener('click', () => {
+//       showConversation(index);
+//     });
+
+//     conversationList.appendChild(li);
+    
+//     // console.log(conversationList);
+//   });
+// }
+
+// Show conversation
+// function showConversation() {
+//   const conversation = 
+//   chatHeader.textContent = conversation.name;
+//   chatMessages.innerHTML = '';
+//   conversation.messages.forEach(function(message){
+//     const div = document.createElement('div');
+//     div.classList.add('message');
+//     div.textContent = message;
+//     chatMessages.appendChild(div);
+//   });
+// }
+
