@@ -3,7 +3,6 @@ from  django import forms
 from django.forms import ModelForm
 
 from .models import ImageProfile
-from .models import Image
 
 class ImageProfileForm(ModelForm):
     class Meta:
@@ -17,7 +16,3 @@ class ImageProfileForm(ModelForm):
                                                 )
         return imageprofile
     
-class ImageForm(forms.ModelForm):
-    class Meta:
-        model = Image
-        fields = ('file',)
