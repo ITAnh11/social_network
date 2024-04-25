@@ -150,6 +150,7 @@ form_submit.addEventListener('submit', function(event) {
         })
         .then(response => response.json())
         .then(data => {
+            console.log('Success:', data);
             render_post(data,"new");
         })
         .then(() => {
@@ -200,7 +201,7 @@ function showUploadPostsBox() {
     if (url.includes("userprofiles")) {
         if (localStorage.getItem('id') != params.get('id')) {
             posts_upload_box.remove();
-            console.log('remove');
+            console.log('remove posst upload box');
             return;
         }
     }
@@ -209,9 +210,10 @@ function showUploadPostsBox() {
 }
 
 
-showUploadPostsBox();
-set_user_post();
-
+setTimeout(() => {
+    showUploadPostsBox();
+    set_user_post();
+}, 2000);
 
 
 
