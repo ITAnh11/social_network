@@ -1,7 +1,7 @@
 var api_get_profile = '/userprofiles/get_profile/';
 
 function getUserProfile() {
-  if (localStorage.getItem('id') != null) {
+  if (localStorage.length > 0) {
     setUserProfileForNavbar();
     return;
   }
@@ -29,9 +29,10 @@ function setUserProfileForNavbar() {
 }
 
 function cacheUserprofile(data) {
-    localStorage.setItem('name', data.userprofile['first_name'] + " " + data.userprofile['last_name']);
-    localStorage.setItem('avatar', data.imageprofile['avatar']);
-    localStorage.setItem('id', data.imageprofile['user_id']);
+  console.log("nav", data);
+  localStorage.setItem('name', data.userprofile['first_name'] + " " + data.userprofile['last_name']);
+  localStorage.setItem('avatar', data.imageprofile['avatar']);
+  localStorage.setItem('id', data.imageprofile['user_id']);
 }
 
 getUserProfile();

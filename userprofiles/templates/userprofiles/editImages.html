@@ -7,16 +7,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Images</title>
     <link type="text/css" href="{%static 'userprofiles/css/editImages.css' %}" rel="stylesheet" />
+    <link type="text/css" href="{%static 'userprofiles/css/profile.css' %}" rel="stylesheet" />
     <!-- cropper css -->
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css">
+    {% comment %} <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css"> {% endcomment %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.css" integrity="sha512-087vysR/jM0N5cp13Vlp+ZF9wx6tKbvJLwPO8Iit6J7R+n7uIMMjg37dEgexOshDmDITHYY5useeSmfD1MYiQA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-  <div id="image-box">
-    <image src={{obj.file.url}} id="image" width="400px">
-  </div>  
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js"></script>
+  <div class="choose_img">
+    
+  </div>
+  <form id="form-editAvt" action="{% url 'userprofiles:editAvatar' %}" method="post" class="editAvt">
+    {% csrf_token %}
+    <div class="choose_img">
+      <div class="choose_avt">
+        <div class="file-input-avt">
+          <!-- Input file -->
+          <input type="file" id="avatar" accept="image/*">
+          <!-- Label tùy chỉnh -->
+          <label class="form-label" for="avatar" style="background-color: #46bf8d;">Choose your avt</label>
+        </div>
+
+        <!-- Khu vực hiển thị ảnh đã chọn -->
+        <div class="upload-avt-box" id="upload-avatar-box" style="border-radius: 100%; margin-bottom: 10px;"></div>
+        <input class="button" id="confirm-button-avt" type="submit" value="Confirm" style="display: none;" />
+        {% comment %} <button id="confirm-button" style="display: none;">Confirm</button> {% endcomment %}
+
+      </div>  
+  </form> 
+    <div class="divider"></div>
+  <form id="form-editCover" action="{% url 'userprofiles:editCover' %}" method="post" class="editCover">
+    {% csrf_token %}
+    <div class="choose_img">
+      <div class="choose_cover">
+        <div class="file-input-cover">
+          <!-- Input file -->
+          <input type="file" id="background" accept="image/*">
+          <!-- Label tùy chỉnh -->
+          <label class="form-label" for="background" style="background-color: #5b1044;">Choose your background</label>
+        </div>
+
+        <!-- Khu vực hiển thị ảnh đã chọn -->
+        <div class="upload-bg-box" id="upload-background-box" style="border-radius: 100%; margin-bottom: 10px;"></div>
+        <input class="button" id="confirm-button-bg" type="submit" value="Confirm" style="display: none;" />
+        {% comment %} <button id="confirm-button" style="display: none;">Confirm</button> {% endcomment %}
+      </div>
+  </form>
+  <div class="preview-place" id="preview-imageprofile-box">
+    <h5>Preview</h5>
+    <div id="cover_review">
+      {% comment %} <img id="img-background-preview" src="{%static 'userprofiles/images/avatar.png' %}" alt="image" style="width: 560px; height: 285px; object-fit: cover; position: relative;" /> {% endcomment %}
+    </div>
+    
+    <div id="avt_review">
+      {% comment %} <img id="img-avatar-preview" src="{%static 'userprofiles/images/avtVuong.png' %}" alt="image" style="width: 120px; height: 120px; border-radius: 100%; object-fit: cover;
+      position: relative; top: -45px; left: 20px;" /> {% endcomment %}
+    </div>
+
+  </div>
+  <div class="Cancel">
+    <a href="{% url 'userprofiles:profile' %}">
+      <button type="button" class="btn btn-default">Cancel</button>
+    </a>
+  </div>
+   
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.js" integrity="sha512-lR8d1BXfYQuiqoM/LeGFVtxFyspzWFTZNyYIiE5O2CcAGtTCRRUMLloxATRuLz8EmR2fYqdXYlrGh+D6TVGp3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  <script src="{%static 'userprofiles/js/editImages.js' %}"></script>
 </body>
 
 </html>

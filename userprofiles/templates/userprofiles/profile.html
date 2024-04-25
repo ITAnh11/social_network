@@ -24,7 +24,7 @@
             {% comment %} <img src="{%static 'userprofiles/images/cover.jpg' %}" class="coverImage" alt=""> {% endcomment %}
             <div class="edit-coverImage">
                 <img src="{%static 'userprofiles/images/camera.png' %}" alt="">
-                <a href="#" style="color: black;">Change your coverImage </a>
+                <a href="{% url 'userprofiles:editImagesPage' %}" style="color: black;">Change your coverImage </a>
             </div>
         </div>
         <div class="dashboard">
@@ -36,7 +36,10 @@
                 <!-- Popup hoặc menu chứa các lựa chọn -->
                 <div id="avatarOptions" class="avatar-options">
                     <button onclick="viewAvatar()">View Avatar</button>
-                    <button onclick="chooseAvatar()">Choose Avatar</button>
+                    <a href="{% url 'userprofiles:editImagesPage' %}">
+                        <button onclick="chooseAvatar()">Choose Avatar</button>
+                    </a>
+                    
                 </div>                                
                 <div class="left-dashboard-info">
                     <div id="userName2" class="userName">

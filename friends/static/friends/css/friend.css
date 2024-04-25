@@ -306,7 +306,7 @@ background-color:#b8babe;
   overflow: hidden;
 }
 .list_setting_btn_toggle{
-  max-height: 3000px;
+  max-height: 300px;
 }
 .choose_list_buton{
   flex: 1;
