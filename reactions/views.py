@@ -3,8 +3,16 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-from .models import Reactions, UserReaction
+from .models import Reactions
 from .serializers import ReactionsSerializer
+
+from posts.models import PostsInfo
+from posts.serializers import PostsInfoSerializer
+
+from comments.models import Comments
+from comments.serializers import CommentsSerializer
+
+from userprofiles.models import UserBasicInfo
 
 import datetime
 
@@ -24,38 +32,38 @@ class GetReactions(APIView):
         posts_id = int(request.data.get('posts_id'))
         comments_id = int(request.data.get('comment_id'))
         
-        reactions = None
-        
         if posts_id > 0:
-            reactions = Reactions.objects(__raw__={'to_posts_id': posts_id})
+            postsInfo = PostsInfo.objects(posts_id=posts_id).first()
+            if postsInfo is None:
+                return Response({'error': 'Posts not found'}, status=status.HTTP_404_NOT_FOUND)
+            print(PostsInfoSerializer(postsInfo).data)
+            reactionNumber = postsInfo.number_of_reactions
         elif comments_id > 0:
-            reactions = Reactions.objects(__raw__={'to_comment_id': comments_id})
+            comment = Comments.objects(__raw__={'id': comments_id}).first()
+            if comment is None:
+                return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
+            reactionNumber = comment.number_of_reactions
+            
+        top2MostReacted = reactionNumber.getTwoMostUseReactions()
         
-        # reactions = Reactions.objects(__raw__={'to_posts_id': 65})
-        
-        list_reactions = []
-        for reaction in reactions:
-            serializer = ReactionsSerializer(reaction)
-            list_reactions.append(serializer.data)
-        
+        print(top2MostReacted)
+            
         response = Response()
-        
         response.data = {
-            'reactions': list_reactions,
-            'count': len(list_reactions) or 0
+            'total': reactionNumber.total,
+            'top2MostReacted': top2MostReacted
         }
         return response
 
 class CreateReaction(APIView):
-    def createUserReaction(self, request):
-        user = json.loads(request.data.get('user'))
+    def createUserBasicInfo(self, request):
         
-        return UserReaction(id=user.get('id'), 
-                            name=user.get('name'), 
-                            avatar=user.get('avatar'))
+        return UserBasicInfo(id=request.data.get('user_id'), 
+                            name=request.data.get('user_name'), 
+                            avatar=request.data.get('user_avatar'))
     
     def createReaction(self, request):
-        return Reactions(user=self.createUserReaction(request), 
+        return Reactions(user=self.createUserBasicInfo(request), 
                          to_posts_id=request.data.get('posts_id'), 
                          to_comment_id=request.data.get('comment_id'), 
                          type=request.data.get('type'),
@@ -68,10 +76,39 @@ class CreateReaction(APIView):
         if user is None:
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
         
+        if request.data.get('type') not in ['like', 'love', 'haha', 'wow', 'sad', 'angry', 'care']:
+            return Response({'error': 'Invalid type'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if request.data.get('posts_id') is None and request.data.get('comment_id') is None:
+            return Response({'error': 'posts_id or comment_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if request.data.get('user_id') is None or request.data.get('user_name') is None or request.data.get('user_avatar') is None:
+            return Response({'error': 'user_id, user_name, user_avatar is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if request.data.get('user_id') != user.id:
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+        
         response = Response()
         
-        reaction = self.createReaction(request)
-        reaction.save()
+        posts_id = int(request.data.get('posts_id'))
+        comment_id = int(request.data.get('comment_id'))
+        
+        try:
+            reaction = self.createReaction(request)
+            reaction.save()
+            
+            if posts_id > 0:
+                postsInfo = PostsInfo.objects(posts_id=posts_id).first()
+                postsInfo.number_of_reactions.inc_reaction(reaction.type)
+                postsInfo.save()
+            elif comment_id > 0:
+                comment = Comments.objects(__raw__={'id': comment_id}).first()
+                comment.number_of_reactions.inc_reaction(reaction.type)
+                comment.save()
+                
+        except Exception as e:
+            print(e)
+            return Response({'error': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         serializer = ReactionsSerializer(reaction)
         
@@ -93,11 +130,25 @@ class DeleteReaction(APIView):
         posts_id = int(request.data.get('posts_id'))
         comment_id = int(request.data.get('comment_id'))
         
-        reaction =Reactions.objects(__raw__={'to_posts_id': posts_id, 
-                                             'to_comment_id': comment_id,
-                                                'user.id': user_id})
-        
-        reaction.delete()
+        try:
+            reaction = Reactions.objects(to_posts_id=posts_id, to_comment_id=comment_id, user={"id":user_id}).first()
+            
+            if reaction is None:
+                return Response({'error': 'Reaction not found'}, status=status.HTTP_404_NOT_FOUND)
+            
+            if posts_id > 0:
+                postsInfo = PostsInfo.objects(posts_id=posts_id).first()
+                postsInfo.number_of_reactions.dec_reaction(reaction.type)
+                postsInfo.save()
+            elif comment_id > 0:
+                comment = Comments.objects(__raw__={'id': comment_id}).first()
+                comment.number_of_reactions.dec_reaction(reaction.type)
+                comment.save()
+                
+            reaction.delete()
+        except Exception as e:
+            print(e)
+            return Response({'error': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         response.data = {
             'message': 'Reaction removed'
