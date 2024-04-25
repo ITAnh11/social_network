@@ -77,8 +77,8 @@ class CreateComment(APIView):
                            avatar=request.data.get('user_avatar'))
     
     def createComment(self, request):
-        return Comments(to_posts_id=request.data.get('to_posts_id'), 
-                        to_comment_id=request.data.get('to_comment_id'), 
+        return Comments(to_posts_id=request.data.get('posts_id'), 
+                        to_comment_id=request.data.get('comment_id'), 
                         content=request.data.get('content'), 
                         user=self.createUserBasicInfo(request), 
                         created_at=datetime.datetime.now(), 
