@@ -54,3 +54,13 @@ class Image(models.Model):
 
     def __str__(self):
         return str(self.pk)
+
+
+# model mongodb
+from django_mongoengine import fields, EmbeddedDocument
+
+class UserBasicInfo(EmbeddedDocument):
+    id = fields.IntField()
+    name = fields.StringField()
+    avatar = fields.StringField()
+    

@@ -21,7 +21,7 @@ function get_posts(){
     .then(response => response.json())
     .then(data => {
         render_post(data,"old");
-        // console.log(data);
+        console.log(data);
     })
 }
 

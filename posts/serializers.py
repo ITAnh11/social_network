@@ -10,3 +10,14 @@ class MediaOfPostsSerializer(serializers.ModelSerializer):
     class Meta:
         model = MediaOfPosts
         fields = ['id', 'media']
+        
+
+# Serializers for mongodb
+from rest_framework_mongoengine.serializers import DocumentSerializer
+from .models import PostsInfo
+
+class PostsInfoSerializer(DocumentSerializer):
+    class Meta:
+        model = PostsInfo
+        fields = ['number_of_reactions', 'number_of_comments', 'number_of_shares']
+    
