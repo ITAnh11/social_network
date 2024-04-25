@@ -4,6 +4,8 @@ function show_list_reaction(event){
 }
 
 
+//lấy số reaction
+api_get_reactions ="/reactions/get_reactions/";
 function setCountReaction(forWhat, idWhat){
     formData = new FormData();
     what = (forWhat == 'posts') ? 'posts_id' : 'comment_id';
@@ -15,12 +17,10 @@ function setCountReaction(forWhat, idWhat){
 
     fetch(api_get_reactions, {
         method: 'POST',
-        body: formData
+        body: formData,
     })
     .then(response => response.json())
     .then(data => {
-        // console.log(data);
-        count = data.count;
-        document.getElementById(`count-reaction-${forWhat}-${idWhat}`).textContent = count;
+        console.log(data);
     })
 }

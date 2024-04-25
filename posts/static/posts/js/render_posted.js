@@ -58,7 +58,10 @@ export function render_post(data,isOld){
                 </div>
                 <div class="post-reaction">
                     <div class="activity-icons">
-                        <div onmouseover="show_list_reaction(event)"><img  src="${baseUrl + "images/haha.png"}" alt="" id="count-reaction-posts-${post.id}">120</div>
+                        <div onmouseover="show_list_reaction(event)" >
+                            <img src="${baseUrl + "images/like0.png"}" alt="">
+                            <p id="count-reaction-posts-${post.id}">120<p> 
+                        </div>
                         <div><img src="${baseUrl + "images/comments.png"}" alt="">52</div>
                         <div><img src="${baseUrl + "images/share.png"}" alt="">35</div>
                     </div>
@@ -68,13 +71,13 @@ export function render_post(data,isOld){
                     
                     <div class="list_reaction">
                         <div class="reaction_btn">
-                            <img src="${baseUrl + "images/tim.png"}">
+                            <img src="${baseUrl + "images/love.png"}">
                         </div>
                         <div class="reaction_btn">
-                            <img src="${baseUrl + "images/like2.png"}">
+                            <img src="${baseUrl + "images/like.png"}">
                         </div>
                         <div class="reaction_btn">
-                            <img src="${baseUrl + "images/thuongthuong.png"}">
+                            <img src="${baseUrl + "images/care.png"}">
                         </div>
                         <div class="reaction_btn">
                             <img src="${baseUrl + "images/haha.png"}">
@@ -83,10 +86,10 @@ export function render_post(data,isOld){
                             <img src="${baseUrl + "images/wow.png"}">
                         </div>
                         <div class="reaction_btn">
-                            <img src="${baseUrl + "images/buon.png"}">
+                            <img src="${baseUrl + "images/sad.png"}">
                         </div>
                         <div class="reaction_btn">
-                            <img src="${baseUrl + "images/phanno.png"}">
+                            <img src="${baseUrl + "images/angry.png"}">
                         </div>
                     </div>
 
@@ -102,7 +105,7 @@ export function render_post(data,isOld){
                 var a = posted_area.children[0];
                 posted_area.insertBefore(posted,a);
             }
-            
+            setCountReaction("posts", post.id);
             var galleryContainerElement = posted.querySelector('.gallery-container');
             createLayoutImages(post.media, galleryContainerElement);
         }, 500 * index);
