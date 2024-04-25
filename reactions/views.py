@@ -178,7 +178,14 @@ class IsReactedView(APIView):
                                                 'to_comment_id': comment_id,
                                                 'user.id': user_id})
         
+        is_reacted = len(reaction) > 0
+        
         response.data = {
-            'is_reacted': len(reaction) > 0
+            'is_reacted': is_reacted
         }
+        
+        if is_reacted:
+            serializer = ReactionsSerializer(reaction.first())
+            response.data['type'] = serializer.data['type'] 
+            
         return response
