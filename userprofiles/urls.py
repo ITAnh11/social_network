@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ProfileView, EditImages, EditProfileView, EditStoryView, ListFriendsView, SetUserProfileView, SetImageProfileView, GetProfileView, GetPostsView, GetUserProfileBasicView, GetMutualFriendView, GetStatusFriend, GetFriendShip
+from .views import ProfileView, EditImages, EditProfileView, EditStoryView, ListFriendsView, SetUserProfileView, SetImageProfileView, GetProfileView, GetPostsView, GetUserProfileBasicView, GetMutualFriendView, GetStatusFriend
 
 from chat.views import ProfileDetail
 app_name = 'userprofiles'
