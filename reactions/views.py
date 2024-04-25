@@ -204,6 +204,10 @@ class IsReactedView(APIView):
         posts_id = int(request.data.get('posts_id'))
         comment_id = int(request.data.get('comment_id'))
         
-        response.data = self.checkIsReacted(user_id, posts_id, comment_id)
+        ret = self.checkIsReacted(user_id, posts_id, comment_id)
+        response.data = {
+            'is_reacted': ret.get('is_reacted'),
+            'type' : ret.get('type') or ''
+        }
             
         return response
