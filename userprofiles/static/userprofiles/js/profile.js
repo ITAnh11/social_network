@@ -6,13 +6,6 @@ const urlFromEditStory = document.body.getAttribute('link-url-editStory');
 fetch(api_get_profile)
     .then(response => response.json())
     .then(data => {
-<<<<<<< HEAD
-        // console.log(data);
-        set_user_data(data);
-=======
-
-        
->>>>>>> 9d1ed3a5da9d222853169947c2e181f424cd47db
         // edit profile
         // const urlToIg = "https://www.instagram.com/"
         var userName2 = document.getElementById('userName2');
