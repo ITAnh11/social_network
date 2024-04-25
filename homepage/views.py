@@ -9,8 +9,8 @@ import jwt
 
 from users.views import LogoutView
 
-from posts.models import Posts, MediaOfPosts
-from posts.serializers import PostsSerializer, MediaOfPostsSerializer
+from posts.models import Posts, PostsInfo
+from posts.serializers import PostsSerializer, MediaOfPostsSerializer, PostsInfoSerializer
 
 from userprofiles.serializers import UserProfileSerializer, ImageProfileSerializer
 
@@ -55,13 +55,16 @@ class GetPostsView(APIView):
                 "avatar": imageProfile.data.get('avatar')
             }
             
-
+            postsInfo = PostsInfo.objects(__raw__={'posts_id': post.id}).first()
+            
+            
             # media = posts.mediaofposts_set.all()
             media_data = MediaOfPostsSerializer(post.mediaofposts_set.all(), many=True).data
             
             posts_data['media'] = media_data
             posts_data['user'] = userDataForPosts
             posts_data['created_at'] = getTimeDuration(post.created_at)
+            posts_data['posts_info'] = PostsInfoSerializer(postsInfo).data
         
             data.append(posts_data)
             
