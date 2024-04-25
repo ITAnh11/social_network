@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{% static 'posts/css/posts.css' %}" />
     <link rel="stylesheet" href="{% static 'posts/css/style.css' %}" />
   </head>
-  <body data-base-url="{% static 'posts/' %}">
+  <body data-base-url="{% static 'posts/' %}" link-url-cmt="{%url 'comments:comments_test'%}">
     <div class="content-area">
       <div
         class="write-post-container"
