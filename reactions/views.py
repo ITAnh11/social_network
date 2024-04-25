@@ -162,6 +162,21 @@ class DeleteReaction(APIView):
         return response
 
 class IsReactedView(APIView):
+    def checkIsReacted(self, user_id, posts_id, comment_id):
+        reaction = Reactions.objects(__raw__={  'to_posts_id': posts_id, 
+                                                'to_comment_id': comment_id,
+                                                'user.id': user_id})
+        
+        is_reacted = reaction.count() > 0
+        result = {
+            'is_reacted': is_reacted
+        }
+        
+        if is_reacted:
+            result['type'] = reaction.first().type
+        
+        return result
+    
     def post(self, request):
         user = getUser(request)
         
@@ -174,18 +189,6 @@ class IsReactedView(APIView):
         posts_id = int(request.data.get('posts_id'))
         comment_id = int(request.data.get('comment_id'))
         
-        reaction = Reactions.objects(__raw__={  'to_posts_id': posts_id, 
-                                                'to_comment_id': comment_id,
-                                                'user.id': user_id})
-        
-        is_reacted = len(reaction) > 0
-        
-        response.data = {
-            'is_reacted': is_reacted
-        }
-        
-        if is_reacted:
-            serializer = ReactionsSerializer(reaction.first())
-            response.data['type'] = serializer.data['type'] 
+        response.data = self.checkIsReacted(user_id, posts_id, comment_id)
             
         return response
