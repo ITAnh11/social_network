@@ -45,6 +45,113 @@ class ProfileView(APIView):
         path = reverse('userprofiles:profile') + '?id=' + str(id_requested)
         
         return HttpResponseRedirect(path)
+
+def main_view(request):
+        obj = Image.objects.get(pk=1)
+        context = {'obj': obj}  
+        return render(request, 'userprofiles:editImages', context)
+
+class EditImages(APIView):
+    def get(self, request):
+        user = getUser(request)
+        print(user)                    
+        if not isinstance(user, User):
+            return HttpResponseRedirect(reverse('users:login'))
+        
+        if request.query_params.get('id'):
+            return render(request, 'userprofiles/editImages.html')
+        
+        id_requested = request.query_params.get('id') or user.id
+        
+        path = reverse('userprofiles:editImages') + '?id=' + str(id_requested)
+        
+        return HttpResponseRedirect(path)
+    
+class EditProfileView(APIView):
+    def get(self, request):
+        user = getUser(request)
+        # print(user)
+        if not isinstance(user, User):
+            return HttpResponseRedirect(reverse('users:login'))
+        
+        if request.query_params.get('id'):
+            if int(request.query_params.get('id')) != user.id:
+                return Response({'error': 'Unauthorized'}, status=401)
+            return render(request, 'userprofiles/editProfile.html')
+        
+        id_requested = request.query_params.get('id') or user.id
+        
+        path = reverse('userprofiles:editProfile') + '?id=' + str(id_requested)
+        
+        return HttpResponseRedirect(path)
+    
+    def post(self, request):
+        user = getUser(request)
+        
+        if not isinstance(user, User):
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        try:
+            userprofile = UserProfile.objects.get(user_id=user)
+            
+            first_name = request.data.get('first_name')
+            last_name = request.data.get('last_name')
+            
+            if not first_name or not last_name:
+                return Response({'warning': 'First name and last name are required!'}, status=404)
+            
+            userprofile.first_name = first_name
+            userprofile.last_name = last_name
+            userprofile.phone = request.data.get('phone') or ''
+            userprofile.birth_date = request.data.get('birth_date') or None
+        
+            userprofile.save()
+            
+            return Response({'success': 'User profile updated successfully!',
+                             'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=404)
+class EditStoryView(APIView):
+    def get(self, request):
+        user = getUser(request)
+        # print(user)
+        if not isinstance(user, User):
+            return HttpResponseRedirect(reverse('users:login'))
+        
+        if request.query_params.get('id'):
+            if int(request.query_params.get('id')) != user.id:
+                return Response({'error': 'Unauthorized'}, status=401) 
+            return render(request, 'userprofiles/editStory.html')
+        
+        id_requested = request.query_params.get('id') or user.id
+        
+        path = reverse('userprofiles:editStory') + '?id=' + str(id_requested)
+        
+        return HttpResponseRedirect(path)
+    def post(self, request):
+        print(request.data)
+        user = getUser(request)
+        
+        if not isinstance(user, User):
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        try:
+            userprofile = UserProfile.objects.get(user_id=user)
+            
+            userprofile.bio = request.data.get('bio')
+            userprofile.work = request.data.get('work')
+            userprofile.address_work = request.data.get('address_work')
+            userprofile.address = request.data.get('address')
+            userprofile.place_birth = request.data.get('place_birth')
+            userprofile.social_link = request.data.get('social_link')
+            
+            userprofile.save()
+            
+            return Response({'success': 'User profile updated successfully!',
+                             'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
+        except Exception as e:
+            return Response({'error': str(e)}, status=404)
         
 class ListFriendsView(APIView):
     def get(self, request):
@@ -116,7 +223,29 @@ class SetUserProfileView(APIView):
         userprofile.save()
 
         return Response({'message': 'User profile created successfully!'})
-class SetImageProfileView(APIView):    
+class SetImageProfileView(APIView):
+    # update user profile
+    def post(self, request):
+        user = getUser(request)
+        
+        if not isinstance(user, User):
+            return HttpResponseRedirect(reverse('users:login'))
+
+        imageprofile = ImageProfile.objects.filter(user_id=user).first()
+
+        if imageprofile:
+            imageprofile.avatar = request.FILES['avatar'] or None
+            imageprofile.background = request.FILES['background'] or None
+            imageprofile.save()
+            
+            if imageprofile.avatar:
+                CreatePostsAfterSetMediaProfileView().createAvatarPosts(user, imageprofile.avatar)
+            
+            if imageprofile.background:
+                CreatePostsAfterSetMediaProfileView().createBackgroundPosts(user, imageprofile.background)
+
+        return HttpResponseRedirect(reverse('userprofiles:profile'))
+    
     def post(self, request, user):
         imageProfileForm = ImageProfileForm(request.POST or None, request.FILES or None)
         if imageProfileForm.is_valid():
@@ -129,7 +258,6 @@ class SetImageProfileView(APIView):
                 CreatePostsAfterSetMediaProfileView().createBackgroundPosts(user, imageProfileForm.cleaned_data.get('background'))
                   
         return Response({'message': 'Image profile created successfully!'})
-    
 class GetPostsView(APIView):
     def get(self, request):
         
@@ -245,36 +373,10 @@ class GetStatusFriend(APIView):
         
         other_user_id = request.query_params.get('id') 
         
-        if user == other_user_id : 
-            return Response({'status_relationship': 'user'})
-        
-        status_relationship = FriendRequest.objects.filter(from_id=user, to_id=other_user_id).first()
-        
-        if not status_relationship :
-            return Response({'status_relationship': 'not_friend'})
+        status_relationship = get_object_or_404(FriendRequest, from_id = user, to_id = other_user_id)
         
         return Response({
             "status_relationship": status_relationship
         })
-
-class GetFriendShip(APIView):
-    def get(self, request):
-        user = getUser(request)
-        if not user:
-            return Response({'error': 'Unauthorized'}, status=401)
         
-        other_user_id = request.query_params.get('id') 
-        
-        others_user_friend = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
-        
-        data = []
-        for other_user_friend in others_user_friend:
-            
-            friend_ship = {
-                "friend_profile": getUserProfileForPosts(other_user_friend)
-            }
-            data.append(friend_ship)
-            
-        return Response({
-            "data": data
-        })
+    
