@@ -7,9 +7,6 @@ fetch(api_get_profile)
     .then(response => response.json())
     .then(data => {
 
-        
-        // edit profile
-        // const urlToIg = "https://www.instagram.com/"
         var userName2 = document.getElementById('userName2');
         userName2.innerHTML += `<h3>${data.userprofile['first_name'] + " " + data.userprofile['last_name']}</h3>`;
 

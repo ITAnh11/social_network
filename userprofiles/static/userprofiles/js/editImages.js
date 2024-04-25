@@ -134,7 +134,7 @@ document.getElementById('form-editAvt').addEventListener('submit', function(even
         .then(response => response.json())
         .then(data => {
             if (data['success']) {
-                console.log(data);
+                console.log("in anh",data); 
                 alert(data['success']);
             } else {
                 // handle error

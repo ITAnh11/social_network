@@ -237,7 +237,7 @@ class GetMutualFriendView(APIView):
                 "data": data
                 })
 
-class GetStatusFriend(APIView):
+class GetStatusFriendView(APIView):
     def get(self, request):
         user = getUser(request)
         if not user:
@@ -257,7 +257,7 @@ class GetStatusFriend(APIView):
             "status_relationship": status_relationship
         })
 
-class GetFriendShip(APIView):
+class GetFriendShipView(APIView):
     def get(self, request):
         user = getUser(request)
         if not user:

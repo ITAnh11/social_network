@@ -11,7 +11,7 @@ const posted_area = document.querySelector(".posted_area");
 const baseUrl = document.body.getAttribute('data-base-url');
 
 import { createLayoutImages } from './gallery.js';
-
+const urlFromCmt = document.body.getAttribute('link-url-cmt');
 //xử lí hover react_btn    
 // var a = event.target.parentNode.parentNode.querySelector(".list_reaction");
 // a.classList.toggle(".show_list_reaction");
@@ -59,7 +59,7 @@ export function render_post(data,isOld){
                 <div class="post-reaction">
                     <div class="activity-icons">
                         <div onmouseover="show_list_reaction(event)"><img  src="${baseUrl + "images/haha.png"}" alt="" id="count-reaction-posts-${post.id}">120</div>
-                        <div><img src="${baseUrl + "images/comments.png"}" alt="">52</div>
+                        <div><a href="${urlFromCmt}"><img src="${baseUrl + "images/comments.png"}" alt="">52</a></div>
                         <div><img src="${baseUrl + "images/share.png"}" alt="">35</div>
                     </div>
                     <div class="post-profile-picture">
