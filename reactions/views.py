@@ -32,26 +32,26 @@ class GetReactions(APIView):
         posts_id = int(request.data.get('posts_id'))
         comments_id = int(request.data.get('comment_id'))
         
+        topMostReacted = None
+        total = None
+        
         if posts_id > 0:
-            postsInfo = PostsInfo.objects(posts_id=posts_id).first()
+            postsInfo = PostsInfo.objects(__raw__={'posts_id': posts_id}).first()
             if postsInfo is None:
                 return Response({'error': 'Posts not found'}, status=status.HTTP_404_NOT_FOUND)
-            print(PostsInfoSerializer(postsInfo).data)
-            reactionNumber = postsInfo.number_of_reactions
+            topMostReacted = postsInfo.getMostUseReactions()
+            total = postsInfo.number_of_reactions.total
         elif comments_id > 0:
             comment = Comments.objects(__raw__={'id': comments_id}).first()
             if comment is None:
                 return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
-            reactionNumber = comment.number_of_reactions
-            
-        top2MostReacted = reactionNumber.getTwoMostUseReactions()
-        
-        print(top2MostReacted)
+            topMostReacted = comment.getMostUseReactions()
+            total = comment.number_of_reactions.total
             
         response = Response()
         response.data = {
-            'total': reactionNumber.total,
-            'top2MostReacted': top2MostReacted
+            'total': total,
+            'topMostReacted': topMostReacted,
         }
         return response
 
@@ -99,11 +99,11 @@ class CreateReaction(APIView):
             
             if posts_id > 0:
                 postsInfo = PostsInfo.objects(posts_id=posts_id).first()
-                postsInfo.number_of_reactions.inc_reaction(reaction.type)
+                postsInfo.inc_reaction(reaction.type)
                 postsInfo.save()
             elif comment_id > 0:
                 comment = Comments.objects(__raw__={'id': comment_id}).first()
-                comment.number_of_reactions.inc_reaction(reaction.type)
+                comment.inc_reaction(reaction.type)
                 comment.save()
                 
         except Exception as e:
@@ -129,20 +129,26 @@ class DeleteReaction(APIView):
         user_id = user.id
         posts_id = int(request.data.get('posts_id'))
         comment_id = int(request.data.get('comment_id'))
-        
+
         try:
-            reaction = Reactions.objects(to_posts_id=posts_id, to_comment_id=comment_id, user={"id":user_id}).first()
+            reaction = Reactions.objects(__raw__={'to_posts_id': posts_id, 
+                                                  'to_comment_id': comment_id, 
+                                                  'user.id': user_id}).first()
             
             if reaction is None:
                 return Response({'error': 'Reaction not found'}, status=status.HTTP_404_NOT_FOUND)
             
             if posts_id > 0:
-                postsInfo = PostsInfo.objects(posts_id=posts_id).first()
-                postsInfo.number_of_reactions.dec_reaction(reaction.type)
+                postsInfo = PostsInfo.objects(__raw__={'posts_id': posts_id}).first()
+                if postsInfo is None:
+                    return Response({'error': 'Posts Info not found'}, status=status.HTTP_404_NOT_FOUND)
+                postsInfo.dec_reaction(reaction.type)
                 postsInfo.save()
             elif comment_id > 0:
                 comment = Comments.objects(__raw__={'id': comment_id}).first()
-                comment.number_of_reactions.dec_reaction(reaction.type)
+                if comment is None:
+                    return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
+                comment.dec_reaction(reaction.type)
                 comment.save()
                 
             reaction.delete()

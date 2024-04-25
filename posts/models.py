@@ -1,7 +1,6 @@
 # models postgreSQL
 from django.db import models
 from users.models import User
-
 # Create your models here.
 class Posts(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -33,42 +32,32 @@ class MediaOfPosts(models.Model):
 
 
 # model mongodb      
-from django_mongoengine import fields, Document, EmbeddedDocument
-from mongoengine.fields import EmbeddedDocumentField
-from reactions.models import ReactionNumber
-class PostsInfo(Document):
+from django_mongoengine import fields
+from reactions.models import ReactionNumberInfo
+class PostsInfo(ReactionNumberInfo):
     id = fields.SequenceField(primary_key=True)
-    posts_id = fields.IntField()
-    number_of_comments = fields.IntField()
-    number_of_reactions = EmbeddedDocumentField(ReactionNumber)
-    number_of_shares = fields.IntField()
+    posts_id = fields.IntField(default=0)
+    number_of_comments = fields.IntField(default=0)
+    number_of_shares = fields.IntField(default=0)
     
     def __init__(self, *args, **values):
         super().__init__(*args, **values)
-        self.number_of_comments = 0
-        self.number_of_reactions = ReactionNumber()
-        self.number_of_shares = 0
-    
+
     def setPostsId(self, posts_id):
         self.posts_id = posts_id
-    
-    def inc_reaction(self, reaction):
-        self.number_of_reactions.inc_reaction(reaction)
-        
+       
     def inc_comment(self):
-        self.number_of_comments += 1
+        self.update(__raw__={'$inc': {'number_of_comments': 1}})
     
     def inc_share(self):
-        self.number_of_shares += 1
-        
-    def dec_reaction(self, reaction):
-        self.number_of_reactions.dec_reaction(reaction)
+        self.update(__raw__={'$inc': {'number_of_shares': 1}})
     
     def dec_comment(self):
-        self.number_of_comments -= 1
+        self.update(__raw__={'$inc': {'number_of_comments': -1}})        
     
     def dec_share(self):
-        self.number_of_shares -= 1
+        self.update(__raw__={'$inc': {'number_of_shares': -1}})
+        
     
     meta = {
         'db': 'social_network',
