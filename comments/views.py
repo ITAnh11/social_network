@@ -71,12 +71,10 @@ class GetCommentsForComment(APIView):
 
 class CreateComment(APIView):
     
-    def createUserBasicInfo(self, request):
-        user = json.loads(request.data.get('user'))
-        
-        return UserBasicInfo(id=user.get('id'), 
-                           name=user.get('name'), 
-                           avatar=user.get('avatar'))
+    def createUserBasicInfo(self, request):        
+        return UserBasicInfo(id=request.data.get('user_id'), 
+                           name=request.data.get('user_name'), 
+                           avatar=request.data.get('user_avatar'))
     
     def createComment(self, request):
         return Comments(to_posts_id=request.data.get('to_posts_id'), 
