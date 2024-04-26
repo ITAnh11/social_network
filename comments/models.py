@@ -1,41 +1,20 @@
-# from django_mongoengine import fields, Document, EmbeddedDocument
-# from mongoengine.fields import EmbeddedDocumentField
-
-# # class Comments(Document):
-# #     id = fields.SequenceField(primary_key=True)
-# #     user_id = fields.IntField()
-# #     content = fields.StringField()
-# #     to_posts_id = fields.IntField()
-# #     to_comment_id = fields.IntField()
-# #     created_at = fields.DateTimeField()
-# #     updated_at = fields.DateTimeField()
-    
-# #     meta = {
-# #         'db': 'social_network',
-# #         'collection': 'comments',
-# #         'indexes': [
-# #             'to_posts_id',
-# #             'to_comment_id'
-# #         ]
-# #     }
-    
-from django_mongoengine import fields, Document, EmbeddedDocument
+from django_mongoengine import fields
 from mongoengine.fields import EmbeddedDocumentField
+from reactions.models import ReactionNumberInfo 
+from userprofiles.models import UserBasicInfo
 
-
-class UserComment(EmbeddedDocument):
-    id = fields.IntField()
-    name = fields.StringField()
-    avatar = fields.StringField()
     
-class Comments(Document):
+class Comments(ReactionNumberInfo):
     id = fields.SequenceField(primary_key=True)
-    user = EmbeddedDocumentField(UserComment)
+    user = EmbeddedDocumentField(UserBasicInfo)
     content = fields.StringField()
     to_posts_id = fields.IntField()
     to_comment_id = fields.IntField()
     created_at = fields.DateTimeField()
-    updated_at = fields.DateTimeField()
+    updated_at = fields.DateTimeField()    
+    
+    def __init__(self, *args, **values):
+        super().__init__(*args, **values)
     
     meta = {
         'db': 'social_network',

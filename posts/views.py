@@ -1,29 +1,17 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.utils import timezone
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from users.models import User
+from .models import Posts, MediaOfPosts, PostsInfo
 
-from .models import Posts, MediaOfPosts
-
-from .serializers import PostsSerializer, MediaOfPostsSerializer
+from .serializers import PostsSerializer, MediaOfPostsSerializer, PostsInfoSerializer
 
 from common_functions.common_function import getUserProfileForPosts, getTimeDuration, getUser
 
 # Create your views here.
-
-class PostsPageView(APIView):
-    def get(self, request):
-        user = getUser(request)
-        
-        if not user:
-            return HttpResponseRedirect(reverse('users:login'))
-        
-        return render(request, 'posts/posts.html')
 class CreatePostsView(APIView):
     
     def post(self, request):
@@ -39,7 +27,7 @@ class CreatePostsView(APIView):
         if type(post) != Posts:
             return post
         
-        listMedia = self.createMediaOfPost(post, request.FILES.getlist('media'))
+        listMedia = self.createMediaOfPosts(post, request.FILES.getlist('media'))
         if type(listMedia) != list:
             post.delete()
             return listMedia    
@@ -47,13 +35,17 @@ class CreatePostsView(APIView):
         if len(listMedia) == 0 and not post.content:
             return Response({'error': 'No posts uploaded'}, status=400)
         
+        postsInfo = PostsInfo()
+        postsInfo.setPostsId(post.id)
+        postsInfo.save()
+        
         data = []
         
-               
         posts_data = PostsSerializer(post).data
         
         posts_data['media'] = MediaOfPostsSerializer(listMedia, many=True).data
         posts_data['user'] = getUserProfileForPosts(user)
+        posts_data['posts_info'] = PostsInfoSerializer(postsInfo).data
 
         posts_data['created_at'] = getTimeDuration(post.created_at)
         
@@ -78,8 +70,7 @@ class CreatePostsView(APIView):
         
         return post
     
-    def createMediaOfPost(self, post, media):
-        
+    def createMediaOfPosts(self, post, media):
         # print('media:', media)
         try:
             listMediaOfPosts = []
@@ -98,49 +89,102 @@ class CreatePostsView(APIView):
             for obj in listMediaOfPosts:
                 # print('saving media')
                 obj.save()
-        except:
+        except Exception as e:
             # print('cant save media')
+            print('createMediaOfPosts', e)
             return Response({'error': 'Error while saving media'}, status=400)
         
         return listMediaOfPosts
-class CreatePostsAfterSetMediaProfileView():
-    def createAvatarPosts(self, user, avatar):
-        # print('avatar:', avatar)
-        try:
-            post = Posts.objects.create(
-                user_id=user,
-                title='Set avatar',
-                content="Hello world",
-                status='public'
-            )
-            
-            ret = CreatePostsView().createMediaOfPost(post, [avatar])
-            if ret != True:
-                post.delete()
-                return ret
-            
-            post.save()
-        except:
-            # print('cant save post')
-            return Response({'error': 'Error while saving post'}, status=400)
     
-    def createBackgroundPosts(self, user, background):
-        # print('background:', background)
+class CreatePostsAfterSetImageProfileView():
+    def createUpdateImageProfilePosts(self, user, typeImage, image):
+        
+        # print('createUpdateImageProfilePosts', user, typeImage, image)
         try:
             post = Posts.objects.create(
                 user_id=user,
-                title='Set background',
-                content=None,
+                title=f"updated {typeImage} profile picture ",
+                content='',
                 status='public'
             )
-                        
-            ret = CreatePostsView().createMediaOfPost(post, [background])
-            if ret != True:
-                post.delete()
-                return ret
             
+            postsInfo = PostsInfo()
+            postsInfo.setPostsId(post.id)
+            
+            mediaOfPosts = self.createMediaOfPosts(post, image)
+            if type(mediaOfPosts) != MediaOfPosts:
+                post.delete()
+                return mediaOfPosts
+            
+            postsInfo.save()
             post.save()
-        except:
-            # print('cant save post')
+            
+        except Exception as e:
+            print('createUpdateImageProfilePosts', e)
             return Response({'error': 'Error while saving post'}, status=400)
         
+        return post
+    
+    def createMediaOfPosts(self, post, media):
+        try:
+            mediaOfPosts = MediaOfPosts.objects.create(
+                post_id=post,
+                media=media
+            )
+            
+            mediaOfPosts.save()
+        except Exception as e:
+            print('createMediaOfPosts', e)
+            return Response({'error': 'Error while saving media'}, status=400)
+        
+        return mediaOfPosts
+    
+class GetPostsPageView(APIView):
+    def get(self, request):
+        user = getUser(request)
+        
+        if not user:
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        params = request.GET
+        if not params.get('id'):
+            return Response({'error': 'No id provided'}, status=400)
+        
+        idPostsRequest = int(params.get('id'))
+        
+        try:
+            posts = Posts.objects.filter(id=idPostsRequest).first()
+            
+            # print(str(Posts.objects.filter(id=idPostsRequest).query.explain(using='default')))
+            
+        except Posts.DoesNotExist:
+            return Response({'error': 'No posts found'}, status=404)
+        
+        mediaOfPosts = MediaOfPosts.objects.filter(post_id=posts)
+        
+        # print(str(MediaOfPosts.objects.filter(post_id=posts).query.explain(using='default')))
+        
+        postsSerializer = PostsSerializer(posts)
+        mediaOfPostsSerializer = MediaOfPostsSerializer(mediaOfPosts, many=True)
+        
+        postsData = postsSerializer.data
+        postsData['media'] = mediaOfPostsSerializer.data
+        postsData['created_at'] = getTimeDuration(posts.created_at)
+        postsData['posts_info'] = self.getPostsInfo(posts)
+        
+        context = {
+            'posts': postsData
+        }
+        
+        print(postsData)
+        
+        return render(request, 'posts/posts_page.html', context=context)
+    
+    def getPostsInfo(self, posts):
+        try:
+            postsInfo = PostsInfo.objects(__raw__={'posts_id': posts.id}).first()
+        except PostsInfo.DoesNotExist:
+            return Response({'error': 'No posts info found'}, status=404)
+        
+        return PostsInfoSerializer(postsInfo).data
+    
