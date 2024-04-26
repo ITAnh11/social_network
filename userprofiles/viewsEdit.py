@@ -26,7 +26,7 @@ from common_functions.common_function import getUser, getTimeDuration, getUserPr
 
 import time
 
-class EditImagePage(APIView):
+class EditImagesPage(APIView):
     def get(self, request):
         user = getUser(request)
         print(user)                    
@@ -87,6 +87,7 @@ class EditCoverView(APIView):
             imageprofile.save()
             
             return Response({'success': 'Your cover image updated successfully!',
+                             'background': ImageProfileSerializer(imageprofile).data.get('background'),
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
         
         except Exception as e:

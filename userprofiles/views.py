@@ -15,7 +15,7 @@ from friends.models import Friendship, FriendRequest
 from users.serializers import UserSerializer
 from friends.serializers import FriendshipSerializer
 
-from .models import UserProfile, ImageProfile, Image
+from .models import UserProfile, ImageProfile
 from .serializers import UserProfileSerializer, ImageProfileSerializer
 from .forms import ImageProfileForm
 
