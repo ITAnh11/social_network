@@ -1,17 +1,11 @@
 from django.urls import path
-
-
-from .views import GetMutualFriendView, GetStatusFriendView, GetFriendShipView, ProfileView, ListFriendsView, SetUserProfileView, SetImageProfileView, GetProfileView, GetPostsView, GetUserProfileBasicView
-
-from .viewsEdit import EditImagesPage, EditAvatarView, EditCoverView, EditProfileView, EditStoryView
+from .views import ProfileView, EditImages, EditProfileView, EditStoryView, ListFriendsView, SetUserProfileView, SetImageProfileView, GetProfileView, GetPostsView, GetUserProfileBasicView, GetMutualFriendView, GetStatusFriend, GetFriendShip
 
 from chat.views import ProfileDetail
 app_name = 'userprofiles'
 urlpatterns = [
         path('', ProfileView.as_view(), name='profile'),
-        path('editImagesPage/', EditImagesPage.as_view(), name='editImagesPage'),
-        path('editAvatar/', EditAvatarView.as_view(), name='editAvatar'),
-        path('editCover/', EditCoverView.as_view(), name='editCover'),
+        path('editImages/', EditImages.as_view(), name='editImages'),
         path('editProfile/', EditProfileView.as_view(), name='editProfile'),
         path('editStory/', EditStoryView.as_view(), name='editStory'),
         path('listFriends/', ListFriendsView.as_view(), name='listFriends'),
@@ -21,11 +15,8 @@ urlpatterns = [
         path('get_posts/', GetPostsView.as_view(), name='get_posts'),
         path('get_profile_basic/', GetUserProfileBasicView.as_view(), name='get_profile_basic'),
         path('<int:pk>',ProfileDetail.as_view()),
-
-        path('get_statusfriend/', GetStatusFriendView.as_view(), name='get_statusfriend'), 
+        path('get_statusfriend/', GetStatusFriend.as_view(), name='get_statusfriend'), 
         path('get_mutualfriend/', GetMutualFriendView.as_view(), name='get_mutualfriend'),
-        path('get_friendship/', GetFriendShipView.as_view(), name='get_friendship'),
-
+        path('get_friendship/', GetFriendShip.as_view(), name='get_friendship'),
         
     ]
-#

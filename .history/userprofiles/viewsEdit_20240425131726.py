@@ -9,13 +9,16 @@ from rest_framework.response import Response
 import jwt 
 
 from users.models import User
+from users.serializers import UserSerializer
 
-from .models import UserProfile, ImageProfile
-from .serializers import ImageProfileSerializer
+from .models import UserProfile, ImageProfile, Image
+from .serializers import UserProfileSerializer, ImageProfileSerializer
 from .forms import ImageProfileForm
 
+from posts.models import Posts, MediaOfPosts
+from posts.serializers import PostsSerializer, MediaOfPostsSerializer
 
-from posts.views import CreatePostsAfterSetImageProfileView
+from posts.views import CreatePostsAfterSetMediaProfileView
 
 # from users.views import LoginView
 
@@ -23,7 +26,7 @@ from common_functions.common_function import getUser, getTimeDuration, getUserPr
 
 import time
 
-class EditImagesPage(APIView):
+class EditImagePage(APIView):
     def get(self, request):
         user = getUser(request)
         print(user)                    
@@ -31,8 +34,6 @@ class EditImagesPage(APIView):
             return HttpResponseRedirect(reverse('users:login'))
         
         if request.query_params.get('id'):
-            if int(request.query_params.get('id')) != user.id:
-                return Response({'error': 'Unauthorized'}, status=401)
             return render(request, 'userprofiles/editImages.html')
         
         id_requested = request.query_params.get('id') or user.id
@@ -42,6 +43,7 @@ class EditImagesPage(APIView):
         return HttpResponseRedirect(path)
 
 class EditAvatarView(APIView):
+    
     def post(self, request):
         user = getUser(request)
         
@@ -52,21 +54,13 @@ class EditAvatarView(APIView):
             imageprofile = ImageProfile.objects.get(user_id=user)
             
             avatar = request.data.get('avatar')
-            
-            imageprofileForm = ImageProfileForm(request.data, request.FILES)
-            if not imageprofileForm.is_valid():
-                return Response({'error': imageprofileForm.errors}, status=404)
-            
+            if not isinstance(user, User):
+                return Response({'error': 'Unauthorized'}, status=401)
+        
             imageprofile.avatar = avatar    
             imageprofile.save()
             
-            CreatePostsAfterSetImageProfileView().createUpdateImageProfilePosts(user, 
-                                                                                'avatar', 
-                                                                                imageprofile.avatar
-                                                                                )
-            
             return Response({'success': 'Your avatar image updated successfully!',
-                             'avatar': imageprofile.avatar.url,
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
         
         except Exception as e:
@@ -84,20 +78,14 @@ class EditCoverView(APIView):
             imageprofile = ImageProfile.objects.get(user_id=user)
             
             background = request.data.get('background')
+
+            if not isinstance(user, User):
+                return Response({'error': 'Unauthorized'}, status=401)
         
-            imageprofileForm = ImageProfileForm(request.data, request.FILES)
-            if not imageprofileForm.is_valid():
-                return Response({'error': imageprofileForm.errors}, status=404)
-                
             imageprofile.background = background    
             imageprofile.save()
             
-            CreatePostsAfterSetImageProfileView().createUpdateImageProfilePosts(user, 
-                                                                                'background', 
-                                                                                imageprofileForm.cleaned_data.get('background'))
-            
             return Response({'success': 'Your cover image updated successfully!',
-                             'background': ImageProfileSerializer(imageprofile).data.get('background'),
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
         
         except Exception as e:
@@ -149,7 +137,7 @@ class EditProfileView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=404)
         
-class EditStoryView(APIView):
+class EditProfileView(APIView):
     def get(self, request):
         user = getUser(request)
         # print(user)
