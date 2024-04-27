@@ -19,7 +19,7 @@
     grid-column: 3;         
     max-height: 100%;
     max-width: 100%;
-    overflow: auto;
+    /* overflow: auto; */
 }
 
 .slideshow-container img {
@@ -229,15 +229,29 @@ img {vertical-align: middle;}
 }
 
 /* box cmt */
-.commentBoxHidden {
-    display: none;
+
+
+.commentBox {
+    width: 100%; 
+    overflow: hidden; 
+    padding: 10px; 
+    margin-top: 10px; 
+    position: fixed;
+    bottom: 0;
 }
 
-#commentBox {
-    display: inline-block;
-    width: 100%; 
-    float: right; 
-    margin-top: 10px; 
+.commentButton {
+  width: 100px;
+  height: 40px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.commentButton:hover {
+  background-color: #0056b3;
 }
 
 .commentText {
