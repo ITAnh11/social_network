@@ -66,39 +66,45 @@ export function render_post(data,isOld){
                     </div>
                 </div>
                 
+                <div class="count-reactionPost" id="count-reaction-${post.id}">
+                    <div>
+                        <p id="count-reaction-posts-${post.id}">120</p>
+                    </div>
+                </div>
+
                 <div class="post-reaction">
                     <div class="activity-icons">
-                        <div onmouseover="show_list_reaction(event)" onclick="delete_reaction(event)">
-                            <img src="${baseUrl + "images/like3.png"}" id="reaction_img_${post.id}" alt="">
-                            <p id="count-reaction-posts-${post.id}"><p> 
+                        <div onmouseover="show_list_reaction_for_post(event)" onclick="delete_reaction_for_post(event)">
+                            <img src="${baseUrl + "images/like3.png"}" id="reaction_img_${post.id}" alt="" status="default"> 
                         </div>
                         <div><img src="${baseUrl + "images/comment.png"}" alt="">Comments</div>
                         <div><img src="${baseUrl + "images/share0.png"}" alt="">Share</div>
                     </div>
+
                     <div class="post-profile-picture">
                         <img src="${post.user.avatar}" alt=""> <i class=" fas fa-caret-down"></i>
                     </div>
-                    
-                    <div class="list_reaction">
-                        <div class="reaction_btn" onclick="create_reaction(event)">
-                            <img class"love" src="${baseUrl + "images/love.png"}">
+
+                    <div class="list_reactionPost">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                            <img class="love" src="${baseUrl + "images/love.png"}">
                         </div>
-                        <div class="reaction_btn" onclick="create_reaction(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
                             <img class="like" src="${baseUrl + "images/like.png"}">
                         </div>
-                        <div class="reaction_btn" onclick="create_reaction(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
                             <img class="care" src="${baseUrl + "images/care.png"}">
                         </div>
-                        <div class="reaction_btn" onclick="create_reaction(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
                             <img class="haha" src="${baseUrl + "images/haha.png"}">
                         </div>
-                        <div class="reaction_btn" onclick="create_reaction(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
                             <img class="wow" src="${baseUrl + "images/wow.png"}">
                         </div>
-                        <div class="reaction_btn" onclick="create_reaction(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
                             <img class="sad" src="${baseUrl + "images/sad.png"}">
                         </div>
-                        <div class="reaction_btn" onclick="create_reaction(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
                             <img class="angry" src="${baseUrl + "images/angry.png"}">
                         </div>
                     </div>
@@ -116,7 +122,7 @@ export function render_post(data,isOld){
                 posted_area.insertBefore(posted, a);
             }
             
-            setCountReaction("posts", post.id);
+            setCountReaction_for_post("posts", post.id);
             is_reacted_for_post(post.id);
 
             var galleryContainerElement = posted.querySelector('.gallery-container');
