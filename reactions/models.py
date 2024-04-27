@@ -23,7 +23,16 @@ class Reactions(Document):
     
     def setTypeReaction(self, type):
         self.update(__raw__={'$set': {'type': type}})
-
+        
+REACTION_FIELDS = {
+        'like': 'number_of_likes',
+        'love': 'number_of_loves',
+        'haha': 'number_of_hahas',
+        'wow': 'number_of_wows',
+        'sad': 'number_of_sads',
+        'angry': 'number_of_angrys',
+        'care': 'number_of_cares',
+    }
 class ReactionNumber(EmbeddedDocument):
     total = fields.IntField(default=0)
     number_of_likes = fields.IntField(default=0)
@@ -42,40 +51,29 @@ class ReactionNumberInfo(Document):
     }
     
     def inc_reaction(self, reaction):
-        if reaction == 'like':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_likes': 1}})
-        elif reaction == 'love':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_loves': 1}})
-        elif reaction == 'haha':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_hahas': 1}})
-        elif reaction == 'wow':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_wows': 1}})
-        elif reaction == 'sad':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_sads': 1}})
-        elif reaction == 'angry':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_angrys': 1}})
-        elif reaction == 'care':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_cares': 1}})
-        
-        self.update(__raw__={'$inc': {'number_of_reactions.total': 1}})
+        if reaction in REACTION_FIELDS:
+            self.update(__raw__={
+            '$inc': {
+                f'number_of_reactions.{REACTION_FIELDS[reaction]}': +1,
+                'number_of_reactions.total': +1
+            }
+        })
         
     def dec_reaction(self, reaction):
-        if reaction == 'like':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_likes': -1}})
-        elif reaction == 'love':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_loves': -1}})
-        elif reaction == 'haha':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_hahas': -1}})
-        elif reaction == 'wow':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_wows': -1}})
-        elif reaction == 'sad':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_sads': -1}})
-        elif reaction == 'angry':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_angrys': -1}})
-        elif reaction == 'care':
-            self.update(__raw__={'$inc': {'number_of_reactions.number_of_cares': -1}})
+        if reaction in REACTION_FIELDS:
+            self.update(__raw__={
+            '$inc': {
+                f'number_of_reactions.{REACTION_FIELDS[reaction]}': -1,
+                'number_of_reactions.total': -1
+            }
+        })
         
-        self.update(__raw__={'$inc': {'number_of_reactions.total': -1}})
+    def changeTypeReaction(self, currentType, newType):
+        self.update(__raw__= {'$inc': {
+            f'number_of_reactions.{REACTION_FIELDS[currentType]}': -1,
+            f'number_of_reactions.{REACTION_FIELDS[newType]}': 1,
+            }
+        })
     
     def getMostUseReactions(self):
         reactions = [

@@ -72,7 +72,7 @@ class GetCommentsForComment(APIView):
 class CreateComment(APIView):
     
     def createUserBasicInfo(self, request):        
-        return UserBasicInfo(id=request.data.get('user_id'), 
+        return UserBasicInfo(id=int(request.data.get('user_id')), 
                            name=request.data.get('user_name'), 
                            avatar=request.data.get('user_avatar'))
     

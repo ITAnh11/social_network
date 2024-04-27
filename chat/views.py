@@ -118,7 +118,7 @@ class GetChannels(APIView):
 class CreateMesseeji(APIView):
     def create(self, request):
         return Messeeji(
-            sender_id=request.data.get('user_id'),
+            sender_id=int(request.data.get('user_id')),
             channel_id=request.data.get('channel_id'),
             message_content=request.data.get('message_content'),
             status=request.data.get('status'),
