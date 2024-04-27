@@ -292,6 +292,7 @@ img.advertisement-image {
     background-color: var(--bg-color);
     width: 100%;
     padding: 20px;
+    padding-top: 0px;
     border-radius: 6px;
     position: relative;
     cursor: pointer;
@@ -306,7 +307,7 @@ img.advertisement-image {
     width: 45px;
     border-radius: 50%;
     margin-right: 10px;
-
+    margin-top: 10px;
 }
 
 .user-profile p {
@@ -355,15 +356,14 @@ img.advertisement-image {
 
 .status-field img {
     width: 100%;
-    margin-top: 15px;
     border-radius: 6px;
 }
 
 .status-field p {
     font-size: 14px;
-    margin: 20px 0px 5px 0px;
+    margin: 10px 0px 10px 0px;
     text-transform: capitalize;
-    color: #626262;
+    color: #000000;
     max-width: 700px;
     word-wrap: break-word;
 }
@@ -379,7 +379,8 @@ img.advertisement-image {
 }
 
 .activity-icons div img {
-    width: 18px;
+    height: 25px;
+    width: 25px;
     margin-right: 10px;
 }
 
@@ -387,7 +388,7 @@ img.advertisement-image {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 30px 10px;
+    margin: 10px 10px;
     margin-bottom: 0px;
 }
 

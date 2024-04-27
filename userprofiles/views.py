@@ -15,14 +15,14 @@ from friends.models import Friendship, FriendRequest
 from users.serializers import UserSerializer
 from friends.serializers import FriendshipSerializer
 
-from .models import UserProfile, ImageProfile, Image
+from .models import UserProfile, ImageProfile
 from .serializers import UserProfileSerializer, ImageProfileSerializer
 from .forms import ImageProfileForm
 
 from posts.models import Posts
 from posts.serializers import PostsSerializer, MediaOfPostsSerializer
 
-from posts.views import CreatePostsAfterSetMediaProfileView
+from posts.views import CreatePostsAfterSetImageProfileView
 
 from posts.models import PostsInfo
 from posts.serializers import PostsInfoSerializer
@@ -123,13 +123,7 @@ class SetImageProfileView(APIView):
         imageProfileForm = ImageProfileForm(request.POST or None, request.FILES or None)
         if imageProfileForm.is_valid():
             imageProfileForm.save(user)
-            
-            if imageProfileForm.cleaned_data.get('avatar'):
-                CreatePostsAfterSetMediaProfileView().createAvatarPosts(user, imageProfileForm.cleaned_data.get('avatar'))
-              
-            if imageProfileForm.cleaned_data.get('background'):
-                CreatePostsAfterSetMediaProfileView().createBackgroundPosts(user, imageProfileForm.cleaned_data.get('background'))
-                  
+                              
         return Response({'message': 'Image profile created successfully!'})
     
 class GetPostsView(APIView):
@@ -241,7 +235,7 @@ class GetMutualFriendView(APIView):
                 "data": data
                 })
 
-class GetStatusFriend(APIView):
+class GetStatusFriendView(APIView):
     def get(self, request):
         user = getUser(request)
         if not user:
@@ -261,7 +255,7 @@ class GetStatusFriend(APIView):
             "status_relationship": status_relationship
         })
 
-class GetFriendShip(APIView):
+class GetFriendShipView(APIView):
     def get(self, request):
         user = getUser(request)
         if not user:

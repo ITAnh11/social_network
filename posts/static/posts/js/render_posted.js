@@ -10,11 +10,10 @@ const posted_area = document.querySelector(".posted_area");
 
 const baseUrl = document.body.getAttribute('data-base-url');
 
-import { createLayoutImages } from './gallery.js';
-
 //xử lí hover react_btn    
 // var a = event.target.parentNode.parentNode.querySelector(".list_reaction");
 // a.classList.toggle(".show_list_reaction");
+
 
 function get_posts(){
     fetch(url_get_posts)
@@ -37,13 +36,23 @@ export function render_post(data,isOld){
                             <img src="${post.user.avatar}" alt="">
                         </a>
                         <div>
-                            <a href="/userprofiles/?id=${post.user.id}" style="text-decoration: none;">
+                            <div style="display: flex; align-items: center;">
+                            <div id="name-user-of-post">
+                                <a href="/userprofiles/?id=${post.user.id}" style="text-decoration: none;">
                                 <p>${post.user.name}</p>
-                            </a>
+                                </a>
+                            </div>
+                            <div
+                                id="title-of-posts"
+                                class="title-posts"
+                                style="padding-top: 4px;"
+                            >
+                                <small style="font-size: 13px; margin-left: 5px">
+                                ${((post.title) ? post.title : "")}
+                                </small>
+                            </div>
+                            </div>
                             <small>${post.created_at}</small>
-                        </div>
-                        <div class="title-posts" style="align-self: baseline; padding-top: 4px;">
-                                <small style="font-size: 15px; margin-left: 10px;">${((post.title) ? post.title : "")}</small>
                         </div>
                     </div>
 
@@ -56,37 +65,41 @@ export function render_post(data,isOld){
                     <div class="gallery-container">
                     </div>
                 </div>
+                
                 <div class="post-reaction">
                     <div class="activity-icons">
-                        <div onmouseover="show_list_reaction(event)"><img  src="${baseUrl + "images/haha.png"}" alt="" id="count-reaction-posts-${post.id}">120</div>
-                        <div><img src="${baseUrl + "images/comments.png"}" alt="">52</div>
-                        <div><img src="${baseUrl + "images/share.png"}" alt="">35</div>
+                        <div onmouseover="show_list_reaction(event)" onclick="delete_reaction(event)">
+                            <img src="${baseUrl + "images/like3.png"}" id="reaction_img_${post.id}" alt="">
+                            <p id="count-reaction-posts-${post.id}"><p> 
+                        </div>
+                        <div><img src="${baseUrl + "images/comment.png"}" alt="">Comments</div>
+                        <div><img src="${baseUrl + "images/share0.png"}" alt="">Share</div>
                     </div>
                     <div class="post-profile-picture">
                         <img src="${post.user.avatar}" alt=""> <i class=" fas fa-caret-down"></i>
                     </div>
                     
                     <div class="list_reaction">
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/tim.png"}">
+                        <div class="reaction_btn" onclick="create_reaction(event)">
+                            <img class"love" src="${baseUrl + "images/love.png"}">
                         </div>
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/like2.png"}">
+                        <div class="reaction_btn" onclick="create_reaction(event)">
+                            <img class="like" src="${baseUrl + "images/like.png"}">
                         </div>
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/thuongthuong.png"}">
+                        <div class="reaction_btn" onclick="create_reaction(event)">
+                            <img class="care" src="${baseUrl + "images/care.png"}">
                         </div>
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/haha.png"}">
+                        <div class="reaction_btn" onclick="create_reaction(event)">
+                            <img class="haha" src="${baseUrl + "images/haha.png"}">
                         </div>
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/wow.png"}">
+                        <div class="reaction_btn" onclick="create_reaction(event)">
+                            <img class="wow" src="${baseUrl + "images/wow.png"}">
                         </div>
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/buon.png"}">
+                        <div class="reaction_btn" onclick="create_reaction(event)">
+                            <img class="sad" src="${baseUrl + "images/sad.png"}">
                         </div>
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/phanno.png"}">
+                        <div class="reaction_btn" onclick="create_reaction(event)">
+                            <img class="angry" src="${baseUrl + "images/angry.png"}">
                         </div>
                     </div>
 
@@ -100,11 +113,14 @@ export function render_post(data,isOld){
             }
             else{
                 var a = posted_area.children[0];
-                posted_area.insertBefore(posted,a);
+                posted_area.insertBefore(posted, a);
             }
             
+            setCountReaction("posts", post.id);
+            is_reacted_for_post(post.id);
+
             var galleryContainerElement = posted.querySelector('.gallery-container');
-            createLayoutImages(post.media, galleryContainerElement);
+            createLayoutImages(post.media, galleryContainerElement, post.id);
         }, 500 * index);
 
     })

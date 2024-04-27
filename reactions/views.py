@@ -58,7 +58,7 @@ class GetReactions(APIView):
 class CreateReaction(APIView):
     def createUserBasicInfo(self, request):
         
-        return UserBasicInfo(id=request.data.get('user_id'), 
+        return UserBasicInfo(id=int(request.data.get('user_id')), 
                             name=request.data.get('user_name'), 
                             avatar=request.data.get('user_avatar'))
     
@@ -75,8 +75,18 @@ class CreateReaction(APIView):
         
         if checkIsReacted.get('is_reacted'):
             reaction = checkIsReacted.get('reaction')
-            reaction.setTypeReaction(request.data.get('type'))
+            currentType = reaction.type
+            newType = request.data.get('type')
+            
+            # change type reaction to new type
+            reaction.setTypeReaction(newType)
             reaction.save()
+            
+            # change number of type reactions
+            postInfo = PostsInfo.objects(__raw__={'posts_id' : posts_id}).first()
+            postInfo.changeTypeReaction(currentType, newType)
+            postInfo.save()
+            
             return True
             
         return False
@@ -96,7 +106,7 @@ class CreateReaction(APIView):
         if request.data.get('user_id') is None or request.data.get('user_name') is None or request.data.get('user_avatar') is None:
             return Response({'error': 'user_id, user_name, user_avatar is required'}, status=status.HTTP_400_BAD_REQUEST)
         
-        if request.data.get('user_id') != user.id:
+        if int(request.data.get('user_id')) != user.id:
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
         
         response = Response()
