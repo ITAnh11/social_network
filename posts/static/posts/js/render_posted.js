@@ -10,8 +10,6 @@ const posted_area = document.querySelector(".posted_area");
 
 const baseUrl = document.body.getAttribute('data-base-url');
 
-import { createLayoutImages } from './gallery.js';
-const urlFromCmt = document.body.getAttribute('link-url-cmt');
 //xử lí hover react_btn    
 // var a = event.target.parentNode.parentNode.querySelector(".list_reaction");
 // a.classList.toggle(".show_list_reaction");
@@ -114,14 +112,14 @@ export function render_post(data,isOld){
             }
             else{
                 var a = posted_area.children[0];
-                posted_area.insertBefore(posted,a);
+                posted_area.insertBefore(posted, a);
             }
             
             setCountReaction("posts", post.id);
             is_reacted_for_post(post.id);
 
             var galleryContainerElement = posted.querySelector('.gallery-container');
-            createLayoutImages(post.media, galleryContainerElement);
+            createLayoutImages(post.media, galleryContainerElement, post.id);
         }, 500 * index);
 
     })
