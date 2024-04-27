@@ -255,15 +255,16 @@
         </div>
       </div>
     </div>
-    <script
-      src="https://code.jquery.com/jquery-3.6.3.js"
+    <script src="https://code.jquery.com/jquery-3.6.3.js"
       integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
-      crossorigin="anonymous"
+      crossorigin="anonymous">
+    </script>
     {% csrf_token %}
     <script>
         var csrftoken = '{{ csrf_token }}';
     </script>
     <script src="{% static 'posts/js/gallery.js' %}"></script>
+    <script src="{% static 'reactions/js/reaction.js' %}"></script>
     <script
       src="{% static 'posts/js/render_posted.js' %}"
       type="module"

@@ -1,3 +1,4 @@
+const baseUrl = document.body.getAttribute('data-base-url');
 function show_list_reaction(event){
     var a = event.target.parentNode.parentNode.parentNode.querySelector(".list_reaction");
     a.classList.toggle("show_list_reaction");
@@ -23,7 +24,7 @@ function setCountReaction(forWhat, idWhat){
     .then(data => {
         console.log("so luong react:",data);
         count = data.total;
-        document.getElementById(`count-reaction-${forWhat}-${idWhat}`).textContent = count;
+        // document.getElementById(`count-reaction-${forWhat}-${idWhat}`).textContent = count;
     })
 }
 
@@ -43,6 +44,11 @@ function is_reacted_for_post(post_id){
     .then(response => response.json())
     .then(data => {
         console.log("myReaction:",data);
+        if(data.is_reacted === true){
+            a = document.getElementById(`reaction_img_${post_id}`);
+            console.log(a);
+            a.src = baseUrl + `images/${data.type}.png`;
+        }
     })
 }
 
@@ -69,6 +75,8 @@ function create_reaction(event){
     .then(response => response.json())
     .then(data => {
         console.log("tao react:",data);
+        a = document.getElementById(`reaction_img_${b.id}`);
+        a.src = baseUrl + `images/${type}.png`;
     })
 }
 
@@ -88,5 +96,7 @@ function delete_reaction(event){
     .then(response => response.json())
     .then(data => {
         console.log("sau khi xoa react:",data);
+        console.log("tao react:",data);
+        a = document.getElementById(`reaction_img_${b.id}`);
     })
 }

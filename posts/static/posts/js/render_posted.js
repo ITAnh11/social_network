@@ -14,6 +14,7 @@ const baseUrl = document.body.getAttribute('data-base-url');
 // var a = event.target.parentNode.parentNode.querySelector(".list_reaction");
 // a.classList.toggle(".show_list_reaction");
 
+
 function get_posts(){
     fetch(url_get_posts)
     .then(response => response.json())
@@ -68,11 +69,11 @@ export function render_post(data,isOld){
                 <div class="post-reaction">
                     <div class="activity-icons">
                         <div onmouseover="show_list_reaction(event)" onclick="delete_reaction(event)">
-                            <img src="${baseUrl + "images/like0.png"}" alt="">
-                            <p id="count-reaction-posts-${post.id}">120<p> 
+                            <img src="${baseUrl + "images/like3.png"}" id="reaction_img_${post.id}" alt="">
+                            <p id="count-reaction-posts-${post.id}"><p> 
                         </div>
-                        <div><img src="${baseUrl + "images/comments.png"}" alt="">Comments</div>
-                        <div><img src="${baseUrl + "images/share.png"}" alt="">Shares</div>
+                        <div><img src="${baseUrl + "images/comment.png"}" alt="">Comments</div>
+                        <div><img src="${baseUrl + "images/share0.png"}" alt="">Share</div>
                     </div>
                     <div class="post-profile-picture">
                         <img src="${post.user.avatar}" alt=""> <i class=" fas fa-caret-down"></i>
