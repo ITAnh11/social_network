@@ -147,10 +147,14 @@ class GetPostsPageView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         params = request.GET
-        if not params.get('id'):
-            return Response({'error': 'No id provided'}, status=400)
+        posts_id = params.get('posts_id')
+        image_id = params.get('image_id')
         
-        idPostsRequest = int(params.get('id'))
+        if not posts_id or not image_id:
+            return Response({'error': 'Invalid request'}, status=400)
+        
+        idPostsRequest = int(posts_id)
+        idImageRequest = int(image_id)
         
         try:
             posts = Posts.objects.filter(id=idPostsRequest).first()
@@ -173,7 +177,8 @@ class GetPostsPageView(APIView):
         postsData['posts_info'] = self.getPostsInfo(posts)
         
         context = {
-            'posts': postsData
+            'posts': postsData,
+            'image_id': idImageRequest,
         }
         
         print(postsData)
