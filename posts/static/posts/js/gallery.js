@@ -266,5 +266,5 @@ function clickImage(event) {
 
     url = '/posts/page/?posts_id=' + posts_id + '&image_id=' + image_id;
 
-    window.location.href = window.location.origin + url;
+    window.open(window.location.origin + url, '_blank');
 }

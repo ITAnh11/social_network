@@ -75,9 +75,9 @@ class CreatePostsView(APIView):
         try:
             listMediaOfPosts = []
             for file in media:
-                if not file.content_type.startswith('image') and not file.content_type.startswith('video'):
+                if not file.content_type.startswith('image'):
                     # print('not image or video')
-                    return Response({'error': 'File is not an image or video'}, status=400)
+                    return Response({'warning': 'File is not an image'}, status=400)
                 
                 mediaOfPosts = MediaOfPosts.objects.create(
                     post_id=post,
