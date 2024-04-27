@@ -34,39 +34,49 @@
                                 <div class="avatarImage" id="avatarImage">
 
                                 </div>
-                                {% comment %} <img src="{%static 'userprofiles/media/avatar.png' %}" alt="avatarImage"
-                                    class="d-block ui-w-80"> {% endcomment %}
+                                <div class="name_user" id="name_user">
+
+                                </div>
                                 <div class="media-body ml-4">
-                                    <label class="btn btn-outline-primary">
+                                    {% comment %} <label class="btn btn-outline-primary">
                                         Upload new avatar
                                         <input type="file" class="account-settings-fileinput">
-                                    </label> &nbsp;
-                                    <button type="button" class="btn btn-default md-btn-flat">Reset</button>
+                                    </label> &nbsp; {% endcomment %}
+                                    <button type="button" class="btn btn-default md-btn-flat"></button>
                                     <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
                                 </div>
                             </div>
                             <hr class="border-light m-0">
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label class="form-label">First Name</label>
-                                    <input type="text" class="form-control mb-1" id="firstName">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Email</label>
-                                    <input type="text" class="form-control mb-1" id="email">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Phone</label>
-                                    <input type="text" class="form-control" id="phone">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Birthday</label>
-                                    <input type="date" class="form-control" id="birthdate">
-                                </div>
+                                <form id="form-editProfile" action="{% url 'userprofiles:editProfile' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" class="form-control mb-1" id="firstName" name="first_name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" name="last_name">
+                                    </div>
+                                    {% comment %} <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <input type="text" class="form-control mb-1" id="email">
+                                    </div> {% endcomment %}
+                                    <div class="form-group">
+                                        <label class="form-label">Phone</label>
+                                        <input type="text" class="form-control" id="phone" name="phone">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Birthday</label>
+                                        <input type="date" class="form-control" id="birthdate" name="birth_date">
+                                    </div>
+                                    <div class="text-right mt-3">
+                                        <button type="submit" class="btn btn-primary">Save changes</button>&nbsp;
+                                        <a href="{% url 'userprofiles:profile' %}">
+                                            <button type="button" class="btn btn-default">Cancel</button>
+                                        </a>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="account-change-password">
@@ -82,6 +92,12 @@
                                 <div class="form-group">
                                     <label class="form-label">Repeat new password</label>
                                     <input type="password" class="form-control">
+                                </div>
+                                <div class="text-right mt-3">
+                                    <button type="button" class="btn btn-primary">Save changes</button>&nbsp;
+                                    <a href="{% url 'userprofiles:profile' %}">
+                                        <button type="button" class="btn btn-default">Cancel</button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -105,12 +121,7 @@
                 </div>
             </div>
         </div>
-        <div class="text-right mt-3">
-            <button type="button" class="btn btn-primary">Save changes</button>&nbsp;
-            <a href="{% url 'userprofiles:profile' %}">
-                <button type="button" class="btn btn-default">Cancel</button>
-            </a>
-        </div>
+        
     </div>
     {% comment %} <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script> {% endcomment %}
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>

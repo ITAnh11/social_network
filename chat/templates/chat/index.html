@@ -6,22 +6,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat App</title>
+  <link rel="stylesheet" href="{% static 'homepage/css/chat.css' %}">
   <link rel="stylesheet" href="{% static 'chat/css/chat.css' %}">
   <link rel="stylesheet" href="{% static 'chat/css/style.css' %}">
 </head>
 <body>
 
   <div class="container">
-    <div class="sidebar">
-      <h2>Messeeji</h2>
-      <input type="text" id="search" placeholder="Search...">
-      <ul id="userList">
-        <!-- Conversation list will be populated dynamically -->
-      </ul>
-    </div>
     <div class="chat" id="chatContainer">
-      <div id="chatHeader"></div>
-      <div id="chatMessages">
+      <div class="contact bar" id="chatHeader">
+        <img class="pic stark"></img>
+        <div class="name">
+          
+        </div>
+      </div>
+      <div class="messages" id="chat">
       </div>
 
       <div class="chatInput">

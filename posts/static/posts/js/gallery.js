@@ -1,5 +1,5 @@
 const TIME_DELAY_LOAD_IMAGE = 222;
-
+const urlFromCmt = document.body.getAttribute('link-url-cmt');
 export function createLayoutImages(images, galleryContainerElement) {
     const length = images.length;
     if (length === 1) {
@@ -19,6 +19,7 @@ export function createLayoutImages(images, galleryContainerElement) {
 
 function layout1(images, galleryContainerElement) {
     galleryContainerElement.innerHTML += `<img
+                href="${urlFromCmt}"
                 class="gallery-image gallery-normal-image"
                 src="${images[0].media}"
                 alt="Image"

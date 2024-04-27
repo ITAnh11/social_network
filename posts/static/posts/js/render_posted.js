@@ -11,7 +11,7 @@ const posted_area = document.querySelector(".posted_area");
 const baseUrl = document.body.getAttribute('data-base-url');
 
 import { createLayoutImages } from './gallery.js';
-
+const urlFromCmt = document.body.getAttribute('link-url-cmt');
 //xử lí hover react_btn    
 // var a = event.target.parentNode.parentNode.querySelector(".list_reaction");
 // a.classList.toggle(".show_list_reaction");
@@ -37,13 +37,23 @@ export function render_post(data,isOld){
                             <img src="${post.user.avatar}" alt="">
                         </a>
                         <div>
-                            <a href="/userprofiles/?id=${post.user.id}" style="text-decoration: none;">
+                            <div style="display: flex; align-items: center;">
+                            <div id="name-user-of-post">
+                                <a href="/userprofiles/?id=${post.user.id}" style="text-decoration: none;">
                                 <p>${post.user.name}</p>
-                            </a>
+                                </a>
+                            </div>
+                            <div
+                                id="title-of-posts"
+                                class="title-posts"
+                                style="padding-top: 4px;"
+                            >
+                                <small style="font-size: 13px; margin-left: 5px">
+                                ${((post.title) ? post.title : "")}
+                                </small>
+                            </div>
+                            </div>
                             <small>${post.created_at}</small>
-                        </div>
-                        <div class="title-posts" style="align-self: baseline; padding-top: 4px;">
-                                <small style="font-size: 15px; margin-left: 10px;">${((post.title) ? post.title : "")}</small>
                         </div>
                     </div>
 

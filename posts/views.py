@@ -27,7 +27,7 @@ class CreatePostsView(APIView):
         if type(post) != Posts:
             return post
         
-        listMedia = self.createMediaOfPost(post, request.FILES.getlist('media'))
+        listMedia = self.createMediaOfPosts(post, request.FILES.getlist('media'))
         if type(listMedia) != list:
             post.delete()
             return listMedia    
@@ -70,7 +70,7 @@ class CreatePostsView(APIView):
         
         return post
     
-    def createMediaOfPost(self, post, media):
+    def createMediaOfPosts(self, post, media):
         # print('media:', media)
         try:
             listMediaOfPosts = []
@@ -89,61 +89,56 @@ class CreatePostsView(APIView):
             for obj in listMediaOfPosts:
                 # print('saving media')
                 obj.save()
-        except:
+        except Exception as e:
             # print('cant save media')
+            print('createMediaOfPosts', e)
             return Response({'error': 'Error while saving media'}, status=400)
         
         return listMediaOfPosts
     
-class CreatePostsAfterSetMediaProfileView():
-    def createAvatarPosts(self, user, avatar):
+class CreatePostsAfterSetImageProfileView():
+    def createUpdateImageProfilePosts(self, user, typeImage, image):
+        
+        # print('createUpdateImageProfilePosts', user, typeImage, image)
         try:
             post = Posts.objects.create(
                 user_id=user,
-                title='Set avatar',
-                content="Hello world",
+                title=f"updated {typeImage} profile picture ",
+                content='',
                 status='public'
             )
             
-            ret = CreatePostsView().createMediaOfPost(post, [avatar])
-            if ret != True:
-                post.delete()
-                return ret
+            postsInfo = PostsInfo()
+            postsInfo.setPostsId(post.id)
             
-            postsInfo = self.createPostsInfo(post)
-            if type(postsInfo) != PostsInfo:
+            mediaOfPosts = self.createMediaOfPosts(post, image)
+            if type(mediaOfPosts) != MediaOfPosts:
                 post.delete()
-                return postsInfo
+                return mediaOfPosts
             
+            postsInfo.save()
             post.save()
-        except:
-            # print('cant save post')
+            
+        except Exception as e:
+            print('createUpdateImageProfilePosts', e)
             return Response({'error': 'Error while saving post'}, status=400)
+        
+        return post
     
-    def createBackgroundPosts(self, user, background):
-        # print('background:', background)
+    def createMediaOfPosts(self, post, media):
         try:
-            post = Posts.objects.create(
-                user_id=user,
-                title='Set background',
-                content=None,
-                status='public'
+            mediaOfPosts = MediaOfPosts.objects.create(
+                post_id=post,
+                media=media
             )
-                        
-            ret = CreatePostsView().createMediaOfPost(post, [background])
-            if ret != True:
-                post.delete()
-                return ret
             
-            postsInfo = self.createPostsInfo(post)
-            if type(postsInfo) != PostsInfo:
-                post.delete()
-                return postsInfo
-            
-            post.save()
-        except:
-            # print('cant save post')
-            return Response({'error': 'Error while saving post'}, status=400)
+            mediaOfPosts.save()
+        except Exception as e:
+            print('createMediaOfPosts', e)
+            return Response({'error': 'Error while saving media'}, status=400)
+        
+        return mediaOfPosts
+    
 class GetPostsPageView(APIView):
     def get(self, request):
         user = getUser(request)
