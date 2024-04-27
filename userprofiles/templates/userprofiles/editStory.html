@@ -11,6 +11,7 @@
   </head>
 
   <body>
+    {% comment %} <p>{{userprofile}}</p> {% endcomment %}
     <div class="col-md-9">
       <form id="form-editStory" action="{% url 'userprofiles:editStory' %}" method="post">
         {% csrf_token %}
@@ -20,37 +21,37 @@
               <div class="card-body">
                   <div class="form-group" class="intro-bio">
                       <label class="form-label"><i class="fas fa-user-circle"></i> Intro Bio</label>
-                      <input type="text" name="bio" class="form-control mb-1" id="intro-bio">
+                      <input type="text" name="bio" class="form-control mb-1" id="intro-bio" value="{{userprofile.bio}}">
                   </div>
                   <div class="form-group">
                       <label class="form-label"><i class="fas fa-briefcase"></i> Job</label>
-                      <input type="text" name="work" class="form-control" id="Job">
+                      <input type="text" name="work" class="form-control" id="Job" value="{{userprofile.work}}">
                   </div>
                   <div class="form-group">
                       <label class="form-label"><i class="fas fa-graduation-cap"></i> WorkPlace</label>
-                      <input type="text" name="address_work" class="form-control mb-1" id="workPlace">
+                      <input type="text" name="address_work" class="form-control mb-1" id="workPlace" value="{{userprofile.address_work}}">
                   </div>
                   <div class="form-group">
                       <label class="form-label"><i class="fas fa-home"></i> Current Residence</label>
-                      <input type="text" name="address" class="form-control" id="current-residence">
+                      <input type="text" name="address" class="form-control" id="current-residence" value="{{userprofile.address}}">
                   </div>
                   <div class="form-group">
                       <label class="form-label"><i class="fas fa-map-marker-alt"></i> From</label>
-                      <input type="text" name="place_birth" class="form-control" id="placeOfBirth">
+                      <input type="text" name="place_birth" class="form-control" id="placeOfBirth" value="{{userprofile.place_birth}}">
                   </div>
                   <div class="form-group">
                     <label class="form-label"><i class="fab fa-instagram"></i> Instagram</label>
-                    <input type="text" name="social_link" class="form-control" id="linkInstagram">
+                    <input type="text" name="social_link" class="form-control" id="linkInstagram" value="{{userprofile.social_link}}">
                 </div>
               </div>
           </div>
-      </div>
-      <div class="text-right mt-3">
-        <button type="submit" class="btn btn-primary">Save changes</button>&nbsp;
-        <a href="{% url 'userprofiles:profile' %}">
-            <button type="button" class="btn btn-default">Cancel</button>
-        </a>
-      </div>
+        </div>
+        <div class="text-right mt-3">
+          <button type="submit" class="btn btn-primary">Save changes</button>&nbsp;
+          <a href="{% url 'userprofiles:profile' %}">
+              <button type="button" class="btn btn-default">Cancel</button>
+          </a>
+        </div>
       </form>
     </div>
     

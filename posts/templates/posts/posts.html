@@ -20,9 +20,13 @@
     <link rel="stylesheet" href="{% static 'posts/css/posts.css' %}" />
     <link rel="stylesheet" href="{% static 'posts/css/style.css' %}" />
   </head>
-  <body data-base-url="{% static 'posts/' %}">
+  <body data-base-url="{% static 'posts/' %}" link-url-cmt="{%url 'comments:comments_test'%}">
     <div class="content-area">
-      <div class="write-post-container" id="posts-upload-box" style="display: none;">
+      <div
+        class="write-post-container"
+        id="posts-upload-box"
+        style="display: none"
+      >
         <div class="user-profile" id="posts-upload-userprofile">
           <img id="posts-upload-image-user" alt="" />
           <div>
@@ -64,72 +68,86 @@
 
       <div class="posted_area">
         <!-- khu vực đăng bài -->
-        <!-- <div class="status-field-container write-post-container">
+        <!-- <div
+          class="status-field-container write-post-container"
+          id="${post.id}"
+        >
           <div class="user-profile-box">
             <div class="user-profile">
-              <img src="${post.user.avatar}" alt="" />
+              <a
+                href="/userprofiles/?id=${post.user.id}"
+                style="text-decoration: none"
+              >
+                <img src="${post.user.avatar}" alt="" />
+              </a>
               <div>
-                <a
-                  href="/userprofiles/?id=${post.user.id}"
-                  style="text-decoration: none"
-                >
-                  <p>${post.user.name}</p>
-                </a>
+                <div style="display: flex; align-items: center;">
+                  <div id="name-user-of-post">
+                    <a href="/userprofiles/?id=${post.user.id}" style="text-decoration: none;">
+                      <p>Tún anh</p>
+                    </a>
+                  </div>
+                  <div
+                    id="title-of-posts"
+                    class="title-posts"
+                    style="padding-top: 4px;"
+                  >
+                    <small style="font-size: 13px; margin-left: 10px">
+                      title
+                    </small>
+                  </div>
+                </div>
                 <small>${post.created_at}</small>
               </div>
             </div>
+
             <div>
               <a href="#"><i class="fas fa-ellipsis-v"></i></a>
             </div>
           </div>
           <div class="status-field">
-            <p>hay</p>
-            <div class="gallery-container">
-              <img
-                class="gallery-image gallery-wide-image"
-                src="https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg"
-                alt="Northern Winter Sky Image"
-              />
-
-              <img
-                class="gallery-image gallery-wide-image"
-                src="https://images.pexels.com/photos/3933881/pexels-photo-3933881.jpeg"
-                alt="A River Flowing Image"
-              />
-
-              <img class="gallery-image"
-                src="https://images.pexels.com/photos/1142950/pexels-photo-1142950.jpeg"
-                alt="Shining Stars Image"
-              />
-
-              <img class="gallery-image"
-              src="https://images.pexels.com/photos/1142950/pexels-photo-1142950.jpeg"
-              alt="Shining Stars Image"
-            />
-
-            <div class="gallery-image-container gallery-image">
-              <img 
-                  class="gallery-image"
-                  src="https://images.pexels.com/photos/1142950/pexels-photo-1142950.jpeg"
-                  alt="Image"
-              />
-              <div class="gallery-image-overlay gallery-image">
-              </div>
-          </div>
-
-            </div>
+            <p>
+              ${(post.content !== undefined && post.content !== null &&
+              post.content !== "") ? post.content : ""}
+            </p>
+            <div class="gallery-container"></div>
           </div>
           <div class="post-reaction">
             <div class="activity-icons">
-              <div>
-                <img src="${baseUrl + "images/like-blue.png"}" alt="">120
+              <div onmouseover="show_list_reaction(event)">
+                <img src="${baseUrl + "images/haha.png"}" alt=""
+                id="count-reaction-posts-${post.id}">120
               </div>
               <div><img src="${baseUrl + "images/comments.png"}" alt="">52</div>
               <div><img src="${baseUrl + "images/share.png"}" alt="">35</div>
-            </div>  
+            </div>
             <div class="post-profile-picture">
               <img src="${post.user.avatar}" alt="" />
               <i class="fas fa-caret-down"></i>
+            </div>
+
+            <div class="list_reaction">
+              <div class="reaction_btn">
+                <img src="${baseUrl + "images/tim.png"}">
+              </div>
+              <div class="reaction_btn">
+                <img src="${baseUrl + "images/like2.png"}">
+              </div>
+              <div class="reaction_btn">
+                <img src="${baseUrl + "images/thuongthuong.png"}">
+              </div>
+              <div class="reaction_btn">
+                <img src="${baseUrl + "images/haha.png"}">
+              </div>
+              <div class="reaction_btn">
+                <img src="${baseUrl + "images/wow.png"}">
+              </div>
+              <div class="reaction_btn">
+                <img src="${baseUrl + "images/buon.png"}">
+              </div>
+              <div class="reaction_btn">
+                <img src="${baseUrl + "images/phanno.png"}">
+              </div>
             </div>
           </div>
         </div> -->
@@ -237,7 +255,7 @@
         </div>
       </div>
     </div>
-    <!-- <script
+    <script
       src="https://code.jquery.com/jquery-3.6.3.js"
       integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
       crossorigin="anonymous"
