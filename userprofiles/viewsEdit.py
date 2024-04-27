@@ -11,7 +11,7 @@ import jwt
 from users.models import User
 
 from .models import UserProfile, ImageProfile
-from .serializers import ImageProfileSerializer
+from .serializers import UserProfileSerializer
 from .forms import ImageProfileForm
 
 
@@ -23,7 +23,7 @@ from common_functions.common_function import getUser, getTimeDuration, getUserPr
 
 import time
 
-class EditImagePage(APIView):
+class EditImagesPage(APIView):
     def get(self, request):
         user = getUser(request)
         print(user)                    
@@ -131,7 +131,8 @@ class EditProfileView(APIView):
             
             first_name = request.data.get('first_name')
             last_name = request.data.get('last_name')
-            
+            print(first_name)
+            print(last_name)
             if not first_name or not last_name:
                 return Response({'warning': 'First name and last name are required!'}, status=404)
             
@@ -143,10 +144,32 @@ class EditProfileView(APIView):
             userprofile.save()
             
             return Response({'success': 'User profile updated successfully!',
+                             'name': userprofile.first_name + ' ' + userprofile.last_name,
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
         
         except Exception as e:
-            return Response({'error': str(e)}, status=404)
+            return Response({'error': str(e)}, status=404) 
+        # print(request.data)
+        # user = getUser(request)
+        
+        # if not isinstance(user, User):
+        #     return Response({'error': 'Unauthorized'}, status=401)
+        
+        # try:
+        #     userprofile = UserProfile.objects.get(user_id=user)
+            
+        #     userprofile.first_name = request.data.get('first_name')
+        #     userprofile.last_name = request.data.get('last_name')
+        #     userprofile.phone = request.data.get('phone') or ''
+        #     userprofile.birth_date = request.data.get('birth_date') or None
+        
+        #     userprofile.save()
+            
+        #     return Response({'success': 'User profile updated successfully!',
+        #                      'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
+        
+        # except Exception as e:
+        #     return Response({'error': str(e)}, status=404) 
         
 class EditStoryView(APIView):
     def get(self, request):
@@ -158,7 +181,14 @@ class EditStoryView(APIView):
         if request.query_params.get('id'):
             if int(request.query_params.get('id')) != user.id:
                 return Response({'error': 'Unauthorized'}, status=401) 
-            return render(request, 'userprofiles/editStory.html')
+            
+            userprofile = UserProfile.objects.get(user_id=user)
+
+            context = {
+                'userprofile': UserProfileSerializer(userprofile).data
+            }
+
+            return render(request, 'userprofiles/editStory.html', context=context)
         
         id_requested = request.query_params.get('id') or user.id
         
@@ -184,7 +214,7 @@ class EditStoryView(APIView):
             
             userprofile.save()
             
-            return Response({'success': 'User profile updated successfully!',
+            return Response({'success': 'User story updated successfully!',
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
         except Exception as e:
             return Response({'error': str(e)}, status=404)
