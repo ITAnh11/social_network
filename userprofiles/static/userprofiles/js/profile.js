@@ -97,3 +97,4 @@ function getStatusFriend(userId) {
 // Gọi hàm getStatusFriend với userId của người dùng khác
 var otherUserId = '1';
 getStatusFriend(otherUserId);
+
