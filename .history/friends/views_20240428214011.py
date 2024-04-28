@@ -347,7 +347,7 @@ class GetStatusFriendView(APIView):
             "status_relationship": status_relationship
         })
 
-class GetListFriendOfUserOtherView(APIView):
+class GetFriendShipOfUserOtherView(APIView):
     def get(self, request):
         user = getUser(request)
         if not user:

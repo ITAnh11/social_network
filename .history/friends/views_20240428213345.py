@@ -347,7 +347,7 @@ class GetStatusFriendView(APIView):
             "status_relationship": status_relationship
         })
 
-class GetListFriendOfUserOtherView(APIView):
+class GetFriendShipView(APIView):
     def get(self, request):
         user = getUser(request)
         if not user:
@@ -368,34 +368,3 @@ class GetListFriendOfUserOtherView(APIView):
         return Response({
             "data": data
         })
-        
-# class GetMutualFriendOfUserView(APIView):
-#         def get(self, request):
-#             user = getUser(request)
-#             if not user:
-#                 return Response({'error': 'Unauthorized'}, status=401)
-            
-#             other_user_id = request.get('user_id')    #lấy từ fe của các user
-            
-#             other_user = get_object_or_404(Friendship, id=other_user_id)
-            
-#             user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
-            
-#             other_user_friendships = Friendship.objects.filter(Q(user_id1=other_user.user_id1) | Q(user_id2=other_user.user_id2))
-            
-#             mutual_friendships = user_friendships.intersection(other_user_friendships)
-            
-#             data = []
-            
-#             for mutual_friendship in mutual_friendships:
-                
-#                 friend_profile = getUserProfileForPosts(mutual_friendship.user_id2) if user == mutual_friendship.user_id1 else getUserProfileForPosts(mutual_friendship.user_id1)
-                
-#                 data.append({
-#                 "mutual_friendship": FriendshipSerializer(mutual_friendship).data,
-#                 "friend_profile": friend_profile
-#                 })
-            
-#             return Response({
-#                 "data": data
-#                 })
