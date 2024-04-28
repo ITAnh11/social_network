@@ -4,5 +4,5 @@ from .models import Comments
 class CommentsSerializer(DocumentSerializer):
     class Meta:
         model = Comments
-        fields = '__all__'
+        fields = ['id', 'user', 'content', 'to_posts_id', 'to_comment_id', 'created_at']
     

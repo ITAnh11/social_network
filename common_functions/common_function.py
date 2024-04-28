@@ -21,16 +21,17 @@ def getUserProfileForPosts(user):
         return data
 
 def getTimeDuration(created_at):
-        time_duration = timezone.now() - created_at
-        if time_duration < timedelta(minutes=1):
-            return f'{time_duration.seconds} seconds ago'
-        elif time_duration < timedelta(hours=1):
-            return f'{time_duration.seconds//60} minutes ago'
-        elif time_duration < timedelta(days=1):
-            return f'{time_duration.seconds//3600} hours ago'
-        elif time_duration < timedelta(days=7):
-            return f'{time_duration.days} days ago'
-        return created_at.strftime('%d, %B %Y')
+    created_at = created_at.replace(tzinfo=timezone.utc)
+    time_duration = timezone.now() - created_at
+    if time_duration < timedelta(minutes=1):
+        return f'{time_duration.seconds} seconds ago'
+    elif time_duration < timedelta(hours=1):
+        return f'{time_duration.seconds//60} minutes ago'
+    elif time_duration < timedelta(days=1):
+        return f'{time_duration.seconds//3600} hours ago'
+    elif time_duration < timedelta(days=7):
+        return f'{time_duration.days} days ago'
+    return created_at.strftime('%d, %B %Y')
 
 def getUser(request):
     token = request.COOKIES.get('jwt')

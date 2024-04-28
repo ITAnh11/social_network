@@ -3,7 +3,6 @@ from mongoengine.fields import EmbeddedDocumentField
 from reactions.models import ReactionNumberInfo 
 from userprofiles.models import UserBasicInfo
 
-    
 class Comments(ReactionNumberInfo):
     id = fields.SequenceField(primary_key=True)
     user = EmbeddedDocumentField(UserBasicInfo)
