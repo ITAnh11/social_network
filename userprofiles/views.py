@@ -36,7 +36,7 @@ import time
 class ProfileView(APIView):
     def get(self, request):
         user = getUser(request)
-        print(user)
+        # print(user)
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
         

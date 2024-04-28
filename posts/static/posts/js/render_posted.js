@@ -10,11 +10,10 @@ const posted_area = document.querySelector(".posted_area");
 
 const baseUrl = document.body.getAttribute('data-base-url');
 
-import { createLayoutImages } from './gallery.js';
-const urlFromCmt = document.body.getAttribute('link-url-cmt');
 //xử lí hover react_btn    
 // var a = event.target.parentNode.parentNode.querySelector(".list_reaction");
 // a.classList.toggle(".show_list_reaction");
+
 
 function get_posts(){
     fetch(url_get_posts)
@@ -66,37 +65,47 @@ export function render_post(data,isOld){
                     <div class="gallery-container">
                     </div>
                 </div>
+                
+                <div class="count-reactionPost" id="count-reaction-${post.id}">
+                    <div>
+                        <p id="count-reaction-posts-${post.id}">120</p>
+                    </div>
+                </div>
+
                 <div class="post-reaction">
                     <div class="activity-icons">
-                        <div onmouseover="show_list_reaction(event)"><img  src="${baseUrl + "images/haha.png"}" alt="" id="count-reaction-posts-${post.id}">120</div>
-                        <div><a href="${urlFromCmt}"><img src="${baseUrl + "images/comments.png"}" alt="">52</a></div>
-                        <div><img src="${baseUrl + "images/share.png"}" alt="">35</div>
+                        <div onmouseover="show_list_reaction_for_post(event)" onclick="delete_reaction_for_post(event)">
+                            <img src="${baseUrl + "images/like3.png"}" id="reaction_img_${post.id}" alt="" status="default"> 
+                        </div>
+                        <div><img src="${baseUrl + "images/comment.png"}" alt="">Comments</div>
+                        <div><img src="${baseUrl + "images/share0.png"}" alt="">Share</div>
                     </div>
+
                     <div class="post-profile-picture">
                         <img src="${post.user.avatar}" alt=""> <i class=" fas fa-caret-down"></i>
                     </div>
-                    
-                    <div class="list_reaction">
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/tim.png"}">
+
+                    <div class="list_reactionPost">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                            <img class="love" src="${baseUrl + "images/love.png"}">
                         </div>
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/like2.png"}">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                            <img class="like" src="${baseUrl + "images/like.png"}">
                         </div>
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/thuongthuong.png"}">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                            <img class="care" src="${baseUrl + "images/care.png"}">
                         </div>
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/haha.png"}">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                            <img class="haha" src="${baseUrl + "images/haha.png"}">
                         </div>
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/wow.png"}">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                            <img class="wow" src="${baseUrl + "images/wow.png"}">
                         </div>
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/buon.png"}">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                            <img class="sad" src="${baseUrl + "images/sad.png"}">
                         </div>
-                        <div class="reaction_btn">
-                            <img src="${baseUrl + "images/phanno.png"}">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                            <img class="angry" src="${baseUrl + "images/angry.png"}">
                         </div>
                     </div>
 
@@ -110,11 +119,14 @@ export function render_post(data,isOld){
             }
             else{
                 var a = posted_area.children[0];
-                posted_area.insertBefore(posted,a);
+                posted_area.insertBefore(posted, a);
             }
             
+            setCountReaction_for_post("posts", post.id);
+            is_reacted_for_post(post.id);
+
             var galleryContainerElement = posted.querySelector('.gallery-container');
-            createLayoutImages(post.media, galleryContainerElement);
+            createLayoutImages(post.media, galleryContainerElement, post.id);
         }, 500 * index);
 
     })

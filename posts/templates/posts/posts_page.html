@@ -2,255 +2,146 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Comments</title>
-    <link rel="stylesheet" href="{%static 'comments/css/cmt.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet"> {% endcomment %}
+    <link rel="stylesheet" href="{%static 'comments/css/cmt.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    {% comment %}
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    {% endcomment %}
   </head>
 
   <body>
-    
     {% include 'navbar/navbar.html' %}
 
+    <p>{{posts}}</p>
     <div class="all_post">
       <div class="slideshow-container">
         <div class="mySlides fade">
           <div class="numbertext">1 / 3</div>
-          <img src="{%static 'comments/images/IMG_5194.JPG' %}" style="width:100%">
+          <img
+            src="{%static 'comments/images/IMG_5194.JPG' %}"
+            style="width: 100%"
+          />
         </div>
-        
+
         <div class="mySlides fade">
           <div class="numbertext">2 / 3</div>
-          <img src="{%static 'comments/images/IMG_5196.JPG' %}" style="width:100%">
+          <img
+            src="{%static 'comments/images/IMG_5196.JPG' %}"
+            style="width: 100%"
+          />
         </div>
-        
+
         <div class="mySlides fade">
           <div class="numbertext">3 / 3</div>
-          <img src="{%static 'comments/images/IMG_5197.JPG' %}" style="width:100%">
+          <img
+            src="{%static 'comments/images/IMG_5197.JPG' %}"
+            style="width: 100%"
+          />
         </div>
-        
+
         <a class="prev" onclick="plusSlides(-1)">❮</a>
         <a class="next" onclick="plusSlides(1)">❯</a>
-          {% comment %} <img src="{%static 'userprofiles/images/khabanh.jpg' %}" alt="images"> {% endcomment %}
+        {% comment %}
+        <img src="{%static 'userprofiles/images/khabanh.jpg' %}" alt="images" />
+        {% endcomment %}
       </div>
 
-      <div class="divider"></div> <!-- Kẻ dọc -->
+      <div class="divider"></div>
+      <!-- Kẻ dọc -->
       <div class="post_content">
-          {% comment %} <div class="info_post">
+        {% comment %}
+        <div class="info_post">
+          <div class="avt_user">
+            <img src="{%static 'userprofiles/images/avatar.img' %}" />
+          </div>
+          <p>Minh Tuan</p>
+        </div>
+        {% endcomment %}
+        <div class="info_user">
+          <div class="avt_user">
+            <img src="{%static 'userprofiles/images/avatar.png' %}" />
+          </div>
+          <div class="notif">
+            <h3 class="name_user">MinhTuan</h3>
+            <div class="time_notif" style="color: blue">6 minutes ago</div>
+          </div>
+        </div>
+
+        <div class="caption">
+          <!-- 
+          <img src="images/avatar.png" style="height: 20px; width: 20px" /> -->
+          <p>
+            [THÔNG BÁO: CHÍNH THỨC ĐÓNG ĐƠN CUỘC THI MÙA KỶ YẾU II] Vậy là sau
+            gần 3 tuần mở đơn đăng kí và nhận bài dự thi từ tất cả các bạn, hôm
+            nay, chúng tớ xin được chính thức thông báo ĐÓNG ĐƠN NHẬN ẤN PHẨM
+            cho cuộc thi "Mùa kỷ yếu II".
+          </p>
+        </div>
+
+        <div class="divider1"></div>
+
+        <div class="react">
+          <div class="heart">
+            <i class="fas fa-heart"></i>
+            <p>Heart</p>
+          </div>
+          <div class="comment_icon">
+            <i class="fas fa-comment"></i>
+            <p>Comment</p>
+          </div>
+          <div class="share">
+            <i class="fas fa-share"></i>
+            <p>Share</p>
+          </div>
+        </div>
+
+        <div class="divider1"></div>
+
+        <div class="comment_content" id="commentContent">
+          <!--Cmt of user-->
+          <!-- <div class="comment_setting">
+            <div class="bigCmt">
               <div class="avt_user">
-                <img src="{%static 'userprofiles/images/avatar.img' %}">
+                <img src="{%static 'userprofiles/images/khabanh.jpg' %}" />
               </div>
-              <p>Minh Tuan</p>
-          </div> {% endcomment %}
-          <div class="info_user">
-            <div class="avt_user">
-              <img src="{%static 'userprofiles/images/avatar.png' %}">
-            </div>
-            <div class="notif">
-                <h3 class="name_user">MinhTuan </h3>
-              <div class="time_notif" style="color: blue;">6 minutes ago</div>
-            </div>
-          </div>
-
-          <div class="caption">
-              {% comment %} <img src="images/avatar.png" style="height: 20px; width: 20px;"> {% endcomment %}
-              <p>[THÔNG BÁO: CHÍNH THỨC ĐÓNG ĐƠN CUỘC THI MÙA KỶ YẾU II]
-
-                Vậy là sau gần 3 tuần mở đơn đăng kí và nhận bài dự thi từ tất cả các 
-                bạn, hôm nay, chúng tớ xin được chính thức thông báo 
-                ĐÓNG ĐƠN NHẬN ẤN PHẨM cho cuộc thi "Mùa kỷ yếu II".</p>
-          </div>
-
-          <div class="divider1"></div>
-
-          <div class="react">
-            <div class="heart">
-              <i class="fas fa-heart"></i><p>Heart</p>
-            </div>
-            <div class="comment_icon">
-              <i class="fas fa-comment"></i><p>Comment</p>
-            </div>           
-            <div class="share">
-              <i class="fas fa-share"></i><p>Share</p>
-            </div>            
-          </div>
-
-          <div class="divider1"></div>  
-
-          <div class="comment_content">
-            {% comment %} <div class="avt_user">
-              <img src="{%static 'userprofiles/images/avatar.png' %}">
-            </div>
-            <div class="comment">
-              <div class="comment_real">
-                <h3 class="name_user">MinhTuan </h3>
-                <p class="comments_notif">Nhìn thích thật.</p>
+              <div class="cmt">
+                <h3 class="name_user">Hoang Phu</h3>
+                <p class="contentOfCmt">
+                  Trong cộng đồng fan anime toxic... Trong những thằng top 1 thì
+                  phải có one piece...
+                </p>
               </div>
-              <div class="status">
-                <div class="time_notif" style="color: blue;">6 minutes</div>
-                <div class="react_comment">
-                  <p>Like</p>
-                </div>
-                <div class="comment_reply">
-                  <p>Reply</p>
-                </div>
-              </div> {% endcomment %}          
-                          <div class="row">
-                            <div class="col">
-                              <div class="d-flex flex-start">
-                                <img class="rounded-circle shadow-1-strong me-3"
-                                  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(10).webp" alt="avatar" width="30"
-                                  height="30" />
-                                <div class="flex-grow-1 flex-shrink-1">
-                                  <div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                      <p class="mb-1">
-                                        Maria Smantha <span class="small">- 2 hours ago</span>
-                                      </p>
-                                      <a href="#!"><i class="fas fa-reply fa-xs"></i><span class="small"> reply</span></a>
-                                    </div>
-                                    <p class="small mb-0">
-                                      It is a long established fact that a reader will be distracted by
-                                      the readable content of a page.
-                                    </p>
-                                  </div>
-              
-                                  <div class="d-flex flex-start mt-4">
-                                    <a class="me-3" href="#">
-                                      <img class="rounded-circle shadow-1-strong"
-                                        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(11).webp" alt="avatar"
-                                        width="30" height="30" />
-                                    </a>
-                                    <div class="flex-grow-1 flex-shrink-1">
-                                      <div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                          <p class="mb-1">
-                                            Simona Disa <span class="small">- 3 hours ago</span>
-                                          </p>
-                                        </div>
-                                        <p class="small mb-0">
-                                          letters, as opposed to using 'Content here, content here',
-                                          making it look like readable English.
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </div>
-              
-                                  <div class="d-flex flex-start mt-4">
-                                    <a class="me-3" href="#">
-                                      <img class="rounded-circle shadow-1-strong"
-                                        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp" alt="avatar"
-                                        width="30" height="30" />
-                                    </a>
-                                    <div class="flex-grow-1 flex-shrink-1">
-                                      <div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                          <p class="mb-1">
-                                            John Smith <span class="small">- 4 hours ago</span>
-                                          </p>
-                                        </div>
-                                        <p class="small mb-0">
-                                          the majority have suffered alteration in some form, by
-                                          injected humour, or randomised words.
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-              
-                              <div class="d-flex flex-start mt-4">
-                                <img class="rounded-circle shadow-1-strong me-3"
-                                  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(12).webp" alt="avatar" width="30"
-                                  height="30" />
-                                <div class="flex-grow-1 flex-shrink-1">
-                                  <div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                      <p class="mb-1">
-                                        Natalie Smith <span class="small">- 2 hours ago</span>
-                                      </p>
-                                      <a href="#!"><i class="fas fa-reply fa-xs"></i><span class="small"> reply</span></a>
-                                    </div>
-                                    <p class="small mb-0">
-                                      The standard chunk of Lorem Ipsum used since the 1500s is
-                                      reproduced below for those interested. Sections 1.10.32 and
-                                      1.10.33.
-                                    </p>
-                                  </div>
-              
-                                  <div class="d-flex flex-start mt-4">
-                                    <a class="me-3" href="#">
-                                      <img class="rounded-circle shadow-1-strong"
-                                        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(31).webp" alt="avatar"
-                                        width="30" height="30" />
-                                    </a>
-                                    <div class="flex-grow-1 flex-shrink-1">
-                                      <div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                          <p class="mb-1">
-                                            Lisa Cudrow <span class="small">- 4 hours ago</span>
-                                          </p>
-                                        </div>
-                                        <p class="small mb-0">
-                                          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-                                          scelerisque ante sollicitudin commodo. Cras purus odio,
-                                          vestibulum in vulputate at, tempus viverra turpis.
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </div>
-              
-                                  <div class="d-flex flex-start mt-4">
-                                    <a class="me-3" href="#">
-                                      <img class="rounded-circle shadow-1-strong"
-                                        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(29).webp" alt="avatar"
-                                        width="30" height="30" />
-                                    </a>
-                                    <div class="flex-grow-1 flex-shrink-1">
-                                      <div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                          <p class="mb-1">
-                                            Maggie McLoan <span class="small">- 5 hours ago</span>
-                                          </p>
-                                        </div>
-                                        <p class="small mb-0">
-                                          a Latin professor at Hampden-Sydney College in Virginia,
-                                          looked up one of the more obscure Latin words, consectetur
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </div>
-              
-                                  <div class="d-flex flex-start mt-4">
-                                    <a class="me-3" href="#">
-                                      <img class="rounded-circle shadow-1-strong"
-                                        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(32).webp" alt="avatar"
-                                        width="30" height="30" />
-                                    </a>
-                                    <div class="flex-grow-1 flex-shrink-1">
-                                      <div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                          <p class="mb-1">
-                                            John Smith <span class="small">- 6 hours ago</span>
-                                          </p>
-                                        </div>
-                                        <p class="small mb-0">
-                                          Autem, totam debitis suscipit saepe sapiente magnam officiis
-                                          quaerat necessitatibus odio assumenda, perferendis quae iusto
-                                          labore laboriosam minima numquam impedit quam dolorem!
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        
             </div>
+          </div> -->
+          <div id="replyBox" class="replyBoxHidden" style="display: none">
+            <textarea
+              id="replyText"
+              class="replyText"
+              placeholder="Write your reply here..."
+            ></textarea>
+            <button onclick="postReply()">Post</button>
           </div>
+        </div>
+        <button class="showMoreComments" onclick="showMoreComments()">
+          More
+        </button>
+        <div id="commentBox" class="commentBox" >
+          <textarea
+            id="commentText"
+            class="commentText"
+            placeholder="Write your comment here..."
+          ></textarea>
+          <button posts_id="{{posts.id}}" type="click" onclick="postComment(event)" class="commentButton">Comment</button>
+        </div>
       </div>
     </div>
     <script src="{%static 'comments/js/cmt.js' %}"></script>

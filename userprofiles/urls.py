@@ -1,7 +1,7 @@
 from django.urls import path
 
 
-from .views import GetMutualFriendView, GetStatusFriendView, GetFriendShipView, ProfileView, ListFriendsView, SetUserProfileView, SetImageProfileView, GetProfileView, GetPostsView, GetUserProfileBasicView
+from .views import ProfileView, ListFriendsView, SetUserProfileView, SetImageProfileView, GetProfileView, GetPostsView, GetUserProfileBasicView
 
 from .viewsEdit import EditImagesPage, EditAvatarView, EditCoverView, EditProfileView, EditStoryView
 
@@ -22,9 +22,9 @@ urlpatterns = [
         path('get_profile_basic/', GetUserProfileBasicView.as_view(), name='get_profile_basic'),
         path('<int:pk>',ProfileDetail.as_view()),
 
-        path('get_statusfriend/', GetStatusFriendView.as_view(), name='get_statusfriend'), 
-        path('get_mutualfriend/', GetMutualFriendView.as_view(), name='get_mutualfriend'),
-        path('get_friendship/', GetFriendShipView.as_view(), name='get_friendship'),
+        # path('get_statusfriend/', GetStatusFriendView.as_view(), name='get_statusfriend'), 
+        # path('get_mutualfriend/', GetMutualFriendView.as_view(), name='get_mutualfriend'),
+        # path('get_friendship/', GetFriendShipView.as_view(), name='get_friendship'),
 
         
     ]

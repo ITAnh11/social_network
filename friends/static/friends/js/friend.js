@@ -108,6 +108,12 @@ function request_button(event){
     }
 }
 
+
+//xử lí remove_btn_friendrequest
+function remove_btn_friendrequest(event){
+    event.target.parentNode.parentNode.remove();
+}
+
 //xử lí chọn danh sách button
 const list_setting_btn = document.querySelector(".list_setting_btn");
 const choose_list_btn = document.querySelector(".setting-btn");
@@ -223,7 +229,7 @@ function show_suggest_friend(){
                 </a>
                 <div class="card1-button">
                     <button class="button1" onclick="request_button(event)">Thêm bạn bè</button>
-                    <button class="button2">Xóa</button>
+                    <button class="button2" onclick="remove_btn_friendrequest(event)">Xóa</button>
                 </div>
             </div>`
             var newDiv = document.createElement("div");
