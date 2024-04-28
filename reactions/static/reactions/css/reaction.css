@@ -1,5 +1,5 @@
 
-.list_reaction{
+.list_reactionPost{
     background-color: rgb(255, 255, 255);
     position: absolute;
     height: 45px;
@@ -15,14 +15,34 @@
     margin-left: -20px;
     transition: max-width 0.3s;
 }
-.show_list_reaction{
+.show_list_reactionPost{
     max-width: 280px;
 }
-.reaction_btn{
+.reaction_btnPost{
     display: flex;
     height: 35px;
     transition: 0.5s;
 }
-.reaction_btn:hover{
+.reaction_btnPost:hover{
     height: 50px;
+}
+
+.count-reactionPost{
+    width: 100%; 
+    display: flex; 
+    border-bottom: 1px solid rgb(172, 171, 171);
+    height: 40px;
+    overflow: hidden; 
+    align-items: center;
+    padding-left: 10px;
+}
+.top1-react-in-post{
+    width: 27px;
+    height: 27px;
+}
+.top2-react-in-post{
+    width: 27px;
+    height: 27px; 
+    position: relative; 
+    left: -13px;
 }
