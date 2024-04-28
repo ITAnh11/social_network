@@ -150,8 +150,14 @@ form_submit.addEventListener('submit', function(event) {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:', data);
-            render_post(data,"new");
+            if (data['warning'] != null) {
+                alert(data['warning']);
+            } else if (data['error'] != null) {
+                alert(data['error']);
+            } else {
+                console.log('Success:', data);
+                render_post(data,"new");
+            }
         })
         .then(() => {
             resetValueUpload();
