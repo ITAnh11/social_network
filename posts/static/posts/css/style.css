@@ -379,7 +379,8 @@ img.advertisement-image {
 }
 
 .activity-icons div img {
-    width: 18px;
+    height: 25px;
+    width: 25px;
     margin-right: 10px;
 }
 
