@@ -240,8 +240,10 @@ window.addEventListener('beforeunload', function (event) {
 function markPostsAsViewed(postIds) {
     // Gửi yêu cầu AJAX đến máy chủ để đánh dấu bài đăng đã xem
 
-    formData = new FormData()
-    postIds.forEach(postId => formData.append('list_posts_id', postId))
+    formData = new FormData();
+    postIds.forEach(postId => {
+        formData.append('post_ids[]', postId);
+    });
 
     fetch(url_mark_as_watched, {
         'method': 'POST',
