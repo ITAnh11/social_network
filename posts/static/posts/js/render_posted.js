@@ -21,7 +21,7 @@ function get_posts() {
 function render_post(data, isOld) {
     currentNumberOfPosts += data.posts.length;
     // console.log(data.posts)
-    document.body.style.overflow = 'hidden';
+    // document.body.style.overflow = 'hidden';
     
 
     data.posts.forEach(function (post, index) {
@@ -126,10 +126,10 @@ function render_post(data, isOld) {
             var galleryContainerElement = posted.querySelector('.gallery-container');
             createLayoutImages(post.media, galleryContainerElement, post.id);
 
-            // After the last post is rendered, re-enable scrolling
-            if (index === Math.floor(data.posts.length / 3)) {
-                document.body.style.overflow = '';
-            }
+            // // After the last post is rendered, re-enable scrolling
+            // if (index === Math.floor(data.posts.length / 3)) {
+            //     document.body.style.overflow = '';
+            // }
         }, 500 * index);
 
     })

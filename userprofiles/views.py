@@ -127,7 +127,7 @@ class SetImageProfileView(APIView):
         return Response({'message': 'Image profile created successfully!'})
     
 class GetPostsView(APIView):
-    def get(self, request):
+    def post(self, request):
         
         start_time = time.time()
         
@@ -152,7 +152,18 @@ class GetPostsView(APIView):
         
         userDataForPosts = getUserProfileForPosts(userRequest)
         
-        posts = Posts.objects.filter(user_id=userRequest).prefetch_related('mediaofposts_set').order_by('-created_at')[:10] 
+        num_posts = Posts.objects.count()
+        currentNumberOfPosts = int(request.data.get('current_number_of_posts'))
+
+        if currentNumberOfPosts >= num_posts:
+            return Response({'error': 'No more posts available'}, status=400)
+        # print(num_posts, currentNumberOfPosts)
+
+        posts = Posts.objects.filter(user_id=userRequest).prefetch_related('user_id__userprofile_set', 
+                                               'user_id__imageprofile_set', 
+                                               'mediaofposts_set').order_by('-created_at')[currentNumberOfPosts:currentNumberOfPosts+10]
+        
+        # posts = Posts.objects.filter(user_id=userRequest).prefetch_related('mediaofposts_set').order_by('-created_at')[:10] 
         
         for post in posts:
             posts_data = PostsSerializer(post).data
