@@ -21,7 +21,7 @@ function setCountReaction_for_post(forWhat, idWhat){
     })
     .then(response => response.json())
     .then(data => {
-        // console.log("so luong react:",data);
+        console.log("so luong react:",data);
         count = data.total;
         document.getElementById(`count-reaction-${forWhat}-${idWhat}`).textContent = count;
         var a = document.getElementById(`count-reaction-${idWhat}`);
@@ -81,7 +81,7 @@ function create_reaction_for_post(event){
     formData.append('user_id',localStorage.getItem('id'));
     formData.append('user_name',localStorage.getItem('name'));
     formData.append('user_avatar',localStorage.getItem('avatar'));
-    formData.append('posts_id',b.id);
+    formData.append('posts_id',b.getAttribute("posts_id"));
     formData.append('comment_id',-1);
     formData.append('type',type);
     formData.append('csrfmiddlewaretoken', csrftoken);
@@ -90,7 +90,7 @@ function create_reaction_for_post(event){
         method: 'POST',
         body: formData,
     })
-    a = document.getElementById(`reaction_img_${b.id}`);
+    a = document.getElementById(`reaction_img_${b.getAttribute("posts_id")}`);
     a.src = baseUrl + `images/${type}.png`;
     a.setAttribute("status",type);
 }
@@ -102,12 +102,12 @@ function delete_reaction_for_post(event){
     formData.append('user_id',localStorage.getItem('id'));
     formData.append('user_name',localStorage.getItem('name'));
     formData.append('user_avatar',localStorage.getItem('avatar'));
-    formData.append('posts_id',b.id);
+    formData.append('posts_id',b.getAttribute("posts_id"));
     formData.append('comment_id',-1);
     formData.append('type',"like");
     formData.append('csrfmiddlewaretoken', csrftoken);
 
-    a = document.getElementById(`reaction_img_${b.id}`);
+    a = document.getElementById(`reaction_img_${b.getAttribute("posts_id")}`);
     if(a.getAttribute('status') !== `default`){
         fetch(url_delete_react,{
             method: "POST",
