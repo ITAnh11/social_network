@@ -333,7 +333,8 @@ class GetStatusFriendView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        other_user_id = request.query_params.get('id') 
+        other_user_id = request.query_params.get('id')
+        print(other_user_id); 
         
         if user == other_user_id : 
             return Response({'status_relationship': 'user'})
