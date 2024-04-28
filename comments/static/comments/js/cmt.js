@@ -60,6 +60,25 @@ document.getElementById('commentBox').addEventListener('click', function(event) 
   });
 });
 
+function postComment() {
+  var commentText = document.getElementById('commentText').value;
+  var newComment = {
+    id: localStorage.getItem('id'),
+    content: commentText,
+    created_at: new Date(),
+    user: {
+      name: localStorage.getItem('name'), 
+      avatar: localStorage.getItem('avatar'),
+    }
+  };
+  var comments = getCommentsFromLocalStorage();
+  comments.push(newComment);
+
+  saveCommentsToLocalStorage(comments);
+
+  render_comment({ comments: [newComment] });
+}
+
 function render_comment(data){ {
   data.comments.forEach(comment => {
       var comment_id = comment.id;
@@ -92,7 +111,7 @@ function render_comment(data){ {
                           class="replyText"
                           placeholder="Write your reply here..."
                         ></textarea>
-                        <button onclick="postReply(event)" type="click" class="sendReplyButton">Reply</button>
+                        <button comment_id="${comment_id}" onclick="postReply(event)" type="submit" class="sendReplyButton">Reply</button>
                       </div>
                       <div id="replyContent" class="replyContent">
 
@@ -113,87 +132,15 @@ function getCommentsFromLocalStorage() {
   return comments ? JSON.parse(comments) : [];
 }
 
-function postComment() {
-  var commentText = document.getElementById('commentText').value;
-  var newComment = {
-    id: localStorage.getItem('id'),
-    content: commentText,
-    created_at: new Date(),
-    user: {
-      name: localStorage.getItem('name'), 
-      avatar: localStorage.getItem('avatar'),
-    }
-  };
-  var comments = getCommentsFromLocalStorage();
-  comments.push(newComment);
-
-  saveCommentsToLocalStorage(comments);
-
-  render_comment({ comments: [newComment] });
-}
-
 // When the page loads, render comments from local storage
 window.onload = function() {
   var comments = getCommentsFromLocalStorage();
   render_comment({ comments: comments });
+
+  var list_comments = getRepliesFromLocalStorage();
+  render_reply({ list_comments : list_comments });
 };
 
-function login(email, password) {
-  // Thực hiện gửi yêu cầu đăng nhập đến máy chủ
-  fetch('/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ email: email, password: password })
-  })
-  .then(response => {
-    if (response.ok) {
-      // Nếu đăng nhập thành công, lưu thông tin đăng nhập vào localStorage
-      return response.json();
-    } else {
-      throw new Error('Đăng nhập không thành công');
-    }
-  })
-  .then(data => {
-    // Lưu thông tin đăng nhập vào localStorage
-    localStorage.setItem('user_id', data.user_id);
-    localStorage.setItem('email', data.email);
-
-    // Gọi hàm showAllComments() để hiển thị tất cả các comments
-    showAllComments();
-
-    // Hiển thị thông báo hoặc chuyển hướng đến trang chính
-    alert('Đăng nhập thành công');
-  })
-  .catch(error => {
-    // Xử lý lỗi và hiển thị thông báo lỗi cho người dùng
-    console.error('Đăng nhập không thành công:', error);
-    alert('Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.');
-  });
-}
-
-// Hàm đăng xuất
-function logout() {
-  // Xóa thông tin đăng nhập khỏi localStorage
-  localStorage.removeItem('user_id');
-  localStorage.removeItem('email');
-
-  // Xóa các comments hiện tại trên giao diện
-  var commentContent = document.getElementById('commentContent');
-  commentContent.innerHTML = '';
-
-  // Hiển thị thông báo hoặc chuyển hướng đến trang chính
-  alert('Đăng xuất thành công');
-}
-
-function showAllComments() {
-  // Lấy danh sách tất cả các comments từ localStorage
-  var comments = getCommentsFromLocalStorage();
-
-  // Hiển thị tất cả các comments trên giao diện
-  render_comment({ comments: comments });
-}
 
 //Reply box js
 
@@ -202,131 +149,106 @@ function toggleReplyBox() {
   replyBox.classList.toggle("replyBoxHidden");
 }
 
-// document.getElementById('replyBox').addEventListener('click', function(event) {
-//   event.preventDefault(); // prevent form submission
-//   // console.log(event.target.getAttribute('posts_id'));
-//   // collect form data
-//   const formData = new FormData();
+document.getElementById('replyBox').addEventListener('submit', function(event) {
+  event.preventDefault(); 
+  const formData = new FormData();
   
-//   const content = document.getElementById('replyText').value;
-//   // console.log(content);
-//   formData.append('content', content);
-//   formData.append('posts_id', event.target.getAttribute('posts_id'));
-//   formData.append('user_id', localStorage.getItem('id'));
-//   formData.append('user_name', localStorage.getItem('name'));
-//   formData.append('user_avatar', localStorage.getItem('avatar'));
-//   formData.append('comment_id', -1);
-//   // formData.append('csrfmiddlewaretoken', csrftoken);
+  const content = document.getElementById('replyText').value;
+  console.log(content);
+  formData.append('content', content);
+  formData.append('comment_id', comment_id);
 
-//   Promise.all([
+  Promise.all([
       
-//   ]).then(() => {
-//       // make a POST request to the server
-//     fetch('/comments/get_comments_for_comment/', {
-//           method: 'POST',
-//           body: formData,
-//       })
-//       .then(response => response.json())
-//       .then(data => {
-//           if (data['success']) {
-//               // console.log(data);
-//               alert(data['success']);
-//           } else {
-//               // handle error
-//               alert(data['warning']);
-//           }
-//       })
-//       .catch(error => console.error('Error:', error));
-//   });
-// });
+  ]).then(() => {
+      
+    fetch('/comments/get_comments_for_comment/', {
+          method: 'POST',
+          body: formData,
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data['success']) {
+              // console.log(data);
+              alert(data['success']);
+          } else {
+              // handle error
+              alert(data['warning']);
+          }
+      })
+      .catch(error => console.error('Error:', error));
+  });
+});
 
-// function render_comment(data){ {
+function postReply() {
+  var replyText = document.getElementById('replyText').value;
+  var newReply = {
+    id: localStorage.getItem('id'),
+    content: replyText,
+    created_at: new Date(),
+    user: {
+      name: localStorage.getItem('name'), 
+      avatar: localStorage.getItem('avatar'),
+    }
+  };
+  var list_comments = getRepliesFromLocalStorage();
+  list_comments.push(newReply);
 
-//   data.comments.forEach(comment => {
-//       var comment_id = comment.id;
-//       var content = comment.content;
-//       var created_at = comment.created_at;
-//       var user = comment.user;
+  saveRepliesToLocalStorage(list_comments);
 
-//       var comment = `<div id="comment-${comment_id}" class="comment_setting" style="margin-left: 20px;">
-//                         <div class="avt_user">
-//                             <img src="${user.avatar}" alt="">
-//                         </div>
-//                         <div class="cmt">
-//                             <h3 class="name_user">${user.name}</h3>
-//                             <p class="contentOfCmt">${content}</p>
-//                         </div>
-//                       </div>
-//                       <div class="reactOfUser">
-//                         <div class="time">
-//                           6 minutes ago 
-//                         </div>
-//                         <div class="reply" id="replyButton">
-//                           <button class="replyButton" onClick="toggleReplyBox()">
-//                             <p>Reply</p>
-//                           </button>
-//                         </div>
-//                       </div>
-//                       <div id="replyBox" class="replyBoxHidden">
-//                         <textarea
-//                           id="replyText"
-//                           class="replyText"
-//                           placeholder="Write your reply here..."
-//                         ></textarea>
-//                         <button onclick="postReply(event)" type="click" class="sendReplyButton">Reply</button>
-//                       </div>`;
-//       var replyContent = document.getElementById('replyContent');
-//       replyContent.innerHTML += comment;
-//   });
+  render_reply({ list_comments: [newReply] });
+}
+
+function render_reply(data){ {
+
+  data.list_comments.forEach(dataComment => {
+      var dataComment_id = dataComment.id;
+      var content = dataComment.content;
+      var created_at = dataComment.created_at;
+      var user = dataComment.user;
+
+      var dataComment =   `<div id="reply-${dataComment_id}" class="reply_setting" style="margin-left: 20px;">
+                            <div class="avt_user">
+                                <img src="${user.avatar}" alt="">
+                            </div>
+                            <div class="cmt">
+                                <h3 class="name_user">${user.name}</h3>
+                                <p class="contentOfCmt">${content}</p>
+                            </div>
+                          </div>
+                          <div class="reactOfUser">
+                            <div class="time">
+                              6 minutes ago 
+                            </div>
+                            <div class="reply" id="replyButton">
+                              <button class="replyButton" onClick="toggleReplyBox()">
+                                <p>Reply</p>
+                              </button>
+                            </div>
+                          </div>
+                          <div id="replyBox" class="replyBoxHidden">
+                            <textarea
+                              id="replyText"
+                              class="replyText"
+                              placeholder="Write your reply here..."
+                            ></textarea>
+                            <button onclick="postReply(event)" type="click" class="sendReplyButton">Reply</button>
+                          </div>
+                          <div class="replyContent">
+
+                          </div>`;
+      var replyContent = document.getElementById('replyContent');
+      replyContent.innerHTML += dataComment;
+  });
   
-//   }
-// }
+  }
+}
 
-// function getCommentsFromLocalStorage() {
-//   var comments = localStorage.getItem('comments');
-//   return comments ? JSON.parse(comments) : [];
-// }
+function saveRepliesToLocalStorage(list_comments) {
+  localStorage.setItem('list_comments', JSON.stringify(list_comments));
+}
 
-// function saveCommentsToLocalStorage(comments) {
-//   localStorage.setItem('comments', JSON.stringify(comments));
-// }
-
-// function postComment() {
-//   var commentText = document.getElementById('replyText').value;
-//   var newComment = {
-//     id: localStorage.getItem('id'),
-//     content: commentText,
-//     created_at: new Date(),
-//     user: {
-//       name: localStorage.getItem('name'), 
-//       avatar: localStorage.getItem('avatar'),
-//     }
-//   };
-//   var comments = getCommentsFromLocalStorage();
-//   comments.push(newComment);
-
-//   saveCommentsToLocalStorage(comments);
-
-//   render_comment({ comments: [newComment] });
-// }
-
-// function postReply() {
-//   var replyText = document.getElementById("replyText").value;
-//   if (replyText.trim() !== "") {
-//     var replyContent = document.getElementById("commentContent");
-//     var newReply = document.createElement("div");
-//     newReply.classList.add("comment_setting");
-//     newReply.innerHTML = `
-//       <div class="avt_user">
-//         <img src="{%static 'userprofiles/images/avatar.png' %}">
-//       </div>
-//       <div class="cmt"> 
-//         <h3 class="name_user">MinhTuan</h3>
-//         <p class="contentOfCmt">${replyText}</p>
-//       </div>
-//     `;
-//     replyContent.appendChild(newReply);
-//     document.getElementById("replyText").value = ""; 
-//     document.getElementById("replyBox").style.display = "none"; 
-//   }
-// }
+function getRepliesFromLocalStorage() {
+  var list_comments = localStorage.getItem('list_comments');
+  return list_comments ? JSON.parse(list_comments) : [];
+}
