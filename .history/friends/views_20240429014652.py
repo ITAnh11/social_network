@@ -342,11 +342,10 @@ class GetStatusFriendView(APIView):
         status_relationship = FriendRequest.objects.filter(Q(from_id=user, to_id=other_user_id) | Q(from_id=other_user_id, to_id=user)).values_list('status', flat=True).first()
         print(status_relationship)
         if status_relationship == 'accepted':
+            print('ok')
             return Response({'status_relationship': 'accepted'})
         elif status_relationship == 'denied':
             return Response({'status_relationship': 'denied'})
-        elif status_relationship == 'pending':
-            return Response({'status_relationship': 'pending'})
         return Response({
             "status_relationship": 'not_friend'
         })

@@ -345,8 +345,6 @@ class GetStatusFriendView(APIView):
             return Response({'status_relationship': 'accepted'})
         elif status_relationship == 'denied':
             return Response({'status_relationship': 'denied'})
-        elif status_relationship == 'pending':
-            return Response({'status_relationship': 'pending'})
         return Response({
             "status_relationship": 'not_friend'
         })
