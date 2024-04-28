@@ -9,7 +9,7 @@ import jwt
 
 from users.views import LogoutView
 
-from posts.models import Posts, PostsInfo
+from posts.models import Posts, PostsInfo, PostIsWatched
 from posts.serializers import PostsSerializer, MediaOfPostsSerializer, PostsInfoSerializer
 
 from userprofiles.serializers import UserProfileSerializer, ImageProfileSerializer
@@ -41,20 +41,17 @@ class GetPostsView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
+        currentNumberOfPosts = self.checkEnableLoadMore(request)
+        
+        if currentNumberOfPosts == -1:
+            print('No more posts')
+            return Response({'error': 'No more posts'}, status=400)
+        
         reponse = Response()
         
         data = []
-        
-        num_posts = Posts.objects.count()
-        currentNumberOfPosts = int(request.data.get('current_number_of_posts'))
-        
-        if currentNumberOfPosts >= num_posts:
-            return Response({'error': 'No more posts available'}, status=400)
-        # print(num_posts, currentNumberOfPosts)
-     
-        posts = Posts.objects.prefetch_related('user_id__userprofile_set', 
-                                               'user_id__imageprofile_set', 
-                                               'mediaofposts_set').order_by('-created_at')[currentNumberOfPosts:currentNumberOfPosts+10]
+
+        posts = self.filterPosts(user.id, currentNumberOfPosts)
 
         try: 
             for post in posts:
@@ -89,3 +86,38 @@ class GetPostsView(APIView):
         }
 
         return reponse
+    
+    def checkEnableLoadMore(self, request):
+        try:
+            
+            num_posts = Posts.objects.count()
+            currentNumberOfPosts = int(request.data.get('current_number_of_posts'))
+            
+            if currentNumberOfPosts >= num_posts:
+                return -1
+        except Exception as e:
+            print(e)
+            return -1
+
+        return currentNumberOfPosts
+    
+    def filterPosts(self, user_id, currentNumberOfPosts):
+        try:
+            # posts = Posts.objects.prefetch_related('user_id__userprofile_set', 
+            #                                    'user_id__imageprofile_set', 
+            #                                    'mediaofposts_set').order_by('-created_at')[currentNumberOfPosts:currentNumberOfPosts+10]
+        
+            posts = Posts.objects.raw(f"""
+                                    SELECT posts_posts.*, posts_postiswatched.user_id_id 
+                                    FROM posts_posts
+                                    FULL JOIN public.posts_postiswatched ON posts_postiswatched.post_id_id = posts_posts.id
+                                    WHERE posts_postiswatched.user_id_id = {user_id} or posts_postiswatched.user_id_id is null
+                                    ORDER BY (posts_postiswatched.user_id_id IS NULL) DESC, posts_posts.created_at DESC
+                                    LIMIT 10 OFFSET {currentNumberOfPosts}
+                                    """)
+
+            
+        except Exception as e:
+            print(e)
+            return []
+        return posts
