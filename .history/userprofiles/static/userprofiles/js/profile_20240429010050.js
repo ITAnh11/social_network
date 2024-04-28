@@ -28,7 +28,7 @@ fetch(api_get_profile)
             // Người dùng không phải là chủ sở hữu, kiểm tra trạng thái quan hệ bạn bè
 
             // Gọi API để kiểm tra trạng thái quan hệ bạn bè với người dùng khác
-            fetch('/friends/get_statusfriend/?id=' + id_user)
+            fetch('http://127.0.0.1:8000/friends/get_statusfriend/?id=' + id_user)
                 .then(response => response.json())
                 .then(data => {
                     // Kiểm tra trạng thái quan hệ bạn bè
@@ -40,6 +40,9 @@ fetch(api_get_profile)
                     } else if (data.status_relationship === 'pending') {
                         // Hiển thị nút gửi lời mời kết bạn
                         editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-check"></i> Sent Friend Request</button>`;
+                    } else if (data.status_relationship === 'friend') {
+                        // Hiển thị nút hủy kết bạn
+                        editProfile.innerHTML = `<button type="button" onclick="cancelFriendRequest(${id_user})"> <i class="fas fa-user-friends"></i> Unfriend</button>`;
                     } else if (data.status_relationship === 'accepted') {
                         editProfile.innerHTML = `<button type="button" onclick="cancelFriendRequest(${id_user})"> <i class="fas fa-user-friends"></i> Friend</button>`;
                     } 

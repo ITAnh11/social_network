@@ -5,7 +5,7 @@ from django.db.models import Q
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import serializers
+
 import jwt, datetime
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -339,16 +339,13 @@ class GetStatusFriendView(APIView):
         if user == other_user_id : 
             return Response({'status_relationship': 'user'})
         
-        status_relationship = FriendRequest.objects.filter(Q(from_id=user, to_id=other_user_id) | Q(from_id=other_user_id, to_id=user)).values_list('status', flat=True).first()
-        print(status_relationship)
-        if status_relationship == 'accepted':
-            return Response({'status_relationship': 'accepted'})
-        elif status_relationship == 'denied':
-            return Response({'status_relationship': 'denied'})
-        elif status_relationship == 'pending':
-            return Response({'status_relationship': 'pending'})
+        status_relationship = FriendRequest.objects.filter(from_id=user, to_id=other_user_id).first()
+        
+        if not status_relationship :
+            return Response({'status_relationship': 'not_friend'})
+        
         return Response({
-            "status_relationship": 'not_friend'
+            "status_relationship": status_relationship
         })
 
 class GetListFriendOfUserOtherView(APIView):

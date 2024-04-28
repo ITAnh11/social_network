@@ -40,6 +40,9 @@ fetch(api_get_profile)
                     } else if (data.status_relationship === 'pending') {
                         // Hiển thị nút gửi lời mời kết bạn
                         editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-check"></i> Sent Friend Request</button>`;
+                    } else if (data.status_relationship === 'friend') {
+                        // Hiển thị nút hủy kết bạn
+                        editProfile.innerHTML = `<button type="button" onclick="cancelFriendRequest(${id_user})"> <i class="fas fa-user-friends"></i> Unfriend</button>`;
                     } else if (data.status_relationship === 'accepted') {
                         editProfile.innerHTML = `<button type="button" onclick="cancelFriendRequest(${id_user})"> <i class="fas fa-user-friends"></i> Friend</button>`;
                     } 
