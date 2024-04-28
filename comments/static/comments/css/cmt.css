@@ -159,12 +159,12 @@ img {vertical-align: middle;}
 
 .comment_content {
   max-width: 100%;
+  display: block;
 }
 .comment_setting {
   width: 50px;
   max-width: 50px;
-  /* width: 450px;
-  max-width: 450px; */
+  margin-bottom: 0px;
 }
 
 .avt_user img {
@@ -172,22 +172,6 @@ img {vertical-align: middle;}
   height: 50px; 
   overflow: hidden; 
   border-radius: 50%; 
-}
-
-/* .comment_setting {
-  display: flex;
-  flex-direction: row;
-} */
-
-.bigCmt {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.reactionContainer {
-  display: flex;
-  flex-direction: column;
 }
 
 .name_user {
@@ -201,21 +185,6 @@ img {vertical-align: middle;}
   background-color: #f0f0f0; /* Màu nền của thẻ div */
   width: 70%; /* Độ rộng của đoạn văn bản trong thẻ p */
   overflow: hidden; /* Ngăn chặn văn bản vượt qua phạm vi */
-}
-
-.reactCmt {
-  display: flex;
-  justify-content: space-between;
-}
-
-.reactCmt > div {
-  display: flex;
-  align-items: center;   
-}
-
-.reactCmt > div > i {
-  margin-right: 5px;
-  vertical-align: middle;
 }
 
 .contentOfCmt {
@@ -257,4 +226,40 @@ img {vertical-align: middle;}
 .commentText {
     width: 100%; 
     height: 100px; 
+}
+
+.reactOfUser {
+  margin-top: 0px;
+  margin-left: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.time,
+.reply {
+  padding: 0;
+  margin: 0;
+}
+
+.time {
+  margin-right: 20px;
+}
+
+.replyButton {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+/* reply css */
+.replyBoxHidden {
+  display: none;
+}
+
+.sendReplyButton {
+  background-color: #0056b3;
+}
+
+.reply_setting {
+  display: flex;
 }

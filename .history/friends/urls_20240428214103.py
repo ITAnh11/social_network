@@ -14,5 +14,5 @@ urlpatterns = [
     path('get_mutualfriend/',GetMutualFriendView.as_view(), name='get_mutualfriend'), #lay ds cac ban be chung cua 2 user
     path('get_suggestionfriend/',GetSuggestionFriendView.as_view(), name='get_suggestionfriend'), # dsach gợi ý kết bạn
     path('get_statusfriend/',GetStatusFriendView.as_view(), name='get_statusfriend'),# lấy status từ friendrequest giữa user và other_user
-    path('get_listfriendofuserother/',GetListFriendOfUserOtherView.as_view(), name='get_listfriendofuserother'), # list friend của other_user
+    path('get_listfriendofuserother/',GetListFriendOfUserOtherView.as_view(), name='get_friendshipofuserother'), # friend của other_user
 ]

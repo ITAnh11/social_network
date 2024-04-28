@@ -5,7 +5,7 @@ from django.db.models import Q
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import serializers
+
 import jwt, datetime
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -333,25 +333,21 @@ class GetStatusFriendView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        other_user_id = request.query_params.get('id')
-        print(other_user_id); 
+        other_user_id = request.query_params.get('id') 
         
         if user == other_user_id : 
             return Response({'status_relationship': 'user'})
         
-        status_relationship = FriendRequest.objects.filter(Q(from_id=user, to_id=other_user_id) | Q(from_id=other_user_id, to_id=user)).values_list('status', flat=True).first()
-        print(status_relationship)
-        if status_relationship == 'accepted':
-            return Response({'status_relationship': 'accepted'})
-        elif status_relationship == 'denied':
-            return Response({'status_relationship': 'denied'})
-        elif status_relationship == 'pending':
-            return Response({'status_relationship': 'pending'})
+        status_relationship = FriendRequest.objects.filter(from_id=user, to_id=other_user_id).first()
+        
+        if not status_relationship :
+            return Response({'status_relationship': 'not_friend'})
+        
         return Response({
-            "status_relationship": 'not_friend'
+            "status_relationship": status_relationship
         })
 
-class GetListFriendOfUserOtherView(APIView):
+class GetFriendShipOfUserOtherView(APIView):
     def get(self, request):
         user = getUser(request)
         if not user:
@@ -372,34 +368,3 @@ class GetListFriendOfUserOtherView(APIView):
         return Response({
             "data": data
         })
-        
-# class GetMutualFriendOfUserView(APIView):
-#         def get(self, request):
-#             user = getUser(request)
-#             if not user:
-#                 return Response({'error': 'Unauthorized'}, status=401)
-            
-#             other_user_id = request.get('user_id')    #lấy từ fe của các user
-            
-#             other_user = get_object_or_404(Friendship, id=other_user_id)
-            
-#             user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
-            
-#             other_user_friendships = Friendship.objects.filter(Q(user_id1=other_user.user_id1) | Q(user_id2=other_user.user_id2))
-            
-#             mutual_friendships = user_friendships.intersection(other_user_friendships)
-            
-#             data = []
-            
-#             for mutual_friendship in mutual_friendships:
-                
-#                 friend_profile = getUserProfileForPosts(mutual_friendship.user_id2) if user == mutual_friendship.user_id1 else getUserProfileForPosts(mutual_friendship.user_id1)
-                
-#                 data.append({
-#                 "mutual_friendship": FriendshipSerializer(mutual_friendship).data,
-#                 "friend_profile": friend_profile
-#                 })
-            
-#             return Response({
-#                 "data": data
-#                 })
