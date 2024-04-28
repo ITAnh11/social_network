@@ -259,3 +259,7 @@ img {vertical-align: middle;}
 .sendReplyButton {
   background-color: #0056b3;
 }
+
+.reply_setting {
+  display: flex;
+}
