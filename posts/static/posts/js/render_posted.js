@@ -2,6 +2,7 @@
 const params = (new URL(document.location)).searchParams;
 const url_user_post = '/userprofiles/get_posts/?id=' + ((params.get('id') !== null) ? params.get('id') : '');
 const url_homepage_post = '/homepage/get_posts/';
+const url_mark_as_watched = '/posts/mark_as_watched/';
 
 const is_in_homepage = (window.location.pathname == '/') ? true : false;
 const url_get_posts = (is_in_homepage == false) ? url_user_post : url_homepage_post;
@@ -19,11 +20,14 @@ function get_posts() {
 //render_post
 function render_post(data, isOld) {
     currentNumberOfPosts += data.posts.length;
-    console.log(data.posts)
+    // console.log(data.posts)
+    document.body.style.overflow = 'hidden';
+    
+
     data.posts.forEach(function (post, index) {
         setTimeout(function () {
             var newDiv =
-                `<div class="status-field-container write-post-container" id="posts-${post.id}">
+                `<div class="status-field-container write-post-container" id="posts-${post.id}" posts_id="${post.id}">
                 <div class="user-profile-box">
                     <div class="user-profile">
                         <a href="/userprofiles/?id=${post.user.id}" style="text-decoration: none;">
@@ -122,8 +126,9 @@ function render_post(data, isOld) {
             var galleryContainerElement = posted.querySelector('.gallery-container');
             createLayoutImages(post.media, galleryContainerElement, post.id);
 
-            if (is_in_homepage) {
-                addEventIsWatched(post);
+            // After the last post is rendered, re-enable scrolling
+            if (index === Math.floor(data.posts.length / 3)) {
+                document.body.style.overflow = '';
             }
         }, 500 * index);
 
@@ -131,9 +136,15 @@ function render_post(data, isOld) {
 }
 
 
+
 let isLoading = false; // Biến trạng thái để kiểm soát việc đang tải dữ liệu hay không
 
 window.addEventListener('scroll', () => {
+
+    if (is_in_homepage) {
+        checkPostInView();
+    }
+
     // Nếu đang trong quá trình tải dữ liệu, không thực hiện gì cả
     if (isLoading) return;
 
@@ -197,14 +208,49 @@ function clickCommentBtn(event) {
     window.open(window.location.origin + url, '_blank');
 }
 
-function addEventIsWatched(post) {
-    console.log('addEventIsWatched')
-    document.getElementById(`posts-${post.id}`).addEventListener(
-        'scroll',
-        function (event) {
-            console.log("scroll", post.id)
+let viewedPosts = [];
+
+function checkPostInView() {
+    // Lặp qua mỗi bài đăng
+    document.querySelectorAll('.status-field-container').forEach(post => {
+        if (post.getAttribute('is_watched') === 'true') {
+            return;
         }
-    )
+        // Kiểm tra xem bài đăng có nằm trong phạm vi hiển thị không
+        const rect = post.getBoundingClientRect();
+        if (
+            rect.top >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+        ) {
+            // Bài đăng hiện được hiển thị trên màn hình, đánh dấu nó là đã xem
+            const postId = post.getAttribute('posts_id');
+            viewedPosts.push(postId);
+            post.setAttribute('is_watched', 'true');
+        }
+    });
+}
+
+// Gửi danh sách các bài đăng đã xem đến server khi người dùng thoát khỏi trang
+window.addEventListener('beforeunload', function (event) {
+    if (viewedPosts.length > 0) {
+        markPostsAsViewed(viewedPosts);
+    }
+});
+
+function markPostsAsViewed(postIds) {
+    // Gửi yêu cầu AJAX đến máy chủ để đánh dấu bài đăng đã xem
+
+    formData = new FormData()
+    postIds.forEach(postId => formData.append('list_posts_id', postId))
+
+    fetch(url_mark_as_watched, {
+        'method': 'POST',
+        'body': formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+        })
 }
 
 get_posts();
