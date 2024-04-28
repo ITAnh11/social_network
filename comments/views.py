@@ -20,15 +20,11 @@ import json
 class CommentsTestView(APIView):
     def get(self, request):
         return render(request, 'comments/comment_t.html')
-    
-class CommentsDemoView(APIView):
-    def get(self, request):
-        return render(request, 'comments/comment.html')
 
 class GetCommentsForPost(APIView):
     def post(self, request):
         
-        print(request.data)
+        # print(request.data)
         
         response = Response()
         
@@ -100,7 +96,7 @@ class CreateComment(APIView):
         comment.save()
         
         response.data = {
-            "success": "Comment created successfully",
+            # "success": "Comment created successfully",
             "comments": [CommentsSerializer(comment).data]
         }
         
