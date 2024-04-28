@@ -225,6 +225,7 @@ function checkPostInView() {
             // Bài đăng hiện được hiển thị trên màn hình, đánh dấu nó là đã xem
             const postId = post.getAttribute('posts_id');
             viewedPosts.push(postId);
+            markPostsAsViewed([postId]);
             post.setAttribute('is_watched', 'true');
         }
     });
