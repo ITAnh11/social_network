@@ -332,14 +332,14 @@ class GetStatusFriendView(APIView):
         user = getUser(request)
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
-        
-        other_user_id = request.query_params.get('id')
-        print(other_user_id); 
-        
+
+        other_user_id = request.query_params.get('id') 
+        print('status: ',other_user_id)
         if user == other_user_id : 
             return Response({'status_relationship': 'user'})
         
-        status_relationship = FriendRequest.objects.filter(from_id=user, to_id=other_user_id).first()
+        status_relationship = FriendRequest.objects.filter(Q(from_id=user, to_id=other_user_id) | Q(from_id=other_user_id, to_id=user))
+             
         
         if not status_relationship :
             return Response({'status_relationship': 'not_friend'})
