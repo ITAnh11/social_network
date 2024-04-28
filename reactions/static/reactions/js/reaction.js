@@ -1,4 +1,3 @@
-const baseUrl = document.body.getAttribute('data-base-url');
 function show_list_reaction_for_post(event){
     var a = event.target.parentNode.parentNode.parentNode.querySelector(".list_reactionPost");
     a.classList.toggle("show_list_reactionPost");
@@ -22,7 +21,7 @@ function setCountReaction_for_post(forWhat, idWhat){
     })
     .then(response => response.json())
     .then(data => {
-        console.log("so luong react:",data);
+        // console.log("so luong react:",data);
         count = data.total;
         document.getElementById(`count-reaction-${forWhat}-${idWhat}`).textContent = count;
         var a = document.getElementById(`count-reaction-${idWhat}`);
@@ -64,7 +63,7 @@ function is_reacted_for_post(post_id){
     })
     .then(response => response.json())
     .then(data => {
-        console.log("myReaction:",data);
+        // console.log("myReaction:",data);
         if(data.is_reacted === true){
             a = document.getElementById(`reaction_img_${post_id}`);
             a.src = baseUrl + `images/${data.type}.png`;
