@@ -127,7 +127,7 @@ class SetImageProfileView(APIView):
         return Response({'message': 'Image profile created successfully!'})
     
 class GetPostsView(APIView):
-    def get(self, request):
+    def post(self, request):
         
         start_time = time.time()
         
@@ -150,10 +150,18 @@ class GetPostsView(APIView):
         if not userRequest:
             return Response({'error': 'User not found'}, status=404)
         
+        currentNumberOfPosts = int(request.data.get('current_number_of_posts'))
+        
         userDataForPosts = getUserProfileForPosts(userRequest)
+                
+        num_posts = Posts.objects.filter(user_id=userRequest).count()
         
-        posts = Posts.objects.filter(user_id=userRequest).prefetch_related('mediaofposts_set').order_by('-created_at')[:10] 
-        
+        if currentNumberOfPosts >= num_posts:
+            return Response({'error': 'No more posts available'}, status=400)
+        print(num_posts, currentNumberOfPosts)
+
+        posts = Posts.objects.filter(user_id=userRequest).prefetch_related('mediaofposts_set').order_by('-created_at')[currentNumberOfPosts: currentNumberOfPosts + 10]
+                        
         for post in posts:
             posts_data = PostsSerializer(post).data
             media_data = MediaOfPostsSerializer(post.mediaofposts_set.all(), many=True).data
@@ -242,6 +250,7 @@ class GetStatusFriendView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         other_user_id = request.query_params.get('id') 
+        print(other_user_id);
         
         if user == other_user_id : 
             return Response({'status_relationship': 'user'})

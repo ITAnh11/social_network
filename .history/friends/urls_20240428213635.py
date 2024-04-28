@@ -1,5 +1,5 @@
 from django.urls import path
-from.views import FriendsRequestsView, SentFriendRequestView, RevokeFriendRequestView, AcceptFriendRequestView, DenineFriendRequestView, DeleteFriendShip, GetSentFriendRequestsView, GetReceivedFriendRequestsView, GetListFriendView, GetMutualFriendView, GetSuggestionFriendView, GetListFriendOfUserOtherView, GetStatusFriendView
+from.views import FriendsRequestsView, SentFriendRequestView, RevokeFriendRequestView, AcceptFriendRequestView, DenineFriendRequestView, DeleteFriendShip, GetSentFriendRequestsView, GetReceivedFriendRequestsView, GetListFriendView, GetMutualFriendView, GetSuggestionFriendView, GetFriendShipOfUserOtherView, GetStatusFriendView
 app_name = 'friends'
 urlpatterns = [
     path('',FriendsRequestsView.as_view(), name="friend"),
@@ -13,6 +13,6 @@ urlpatterns = [
     path('get_listfriend/',GetListFriendView.as_view(), name="get_listfriend"),#lay danh sach ban be
     path('get_mutualfriend/',GetMutualFriendView.as_view(), name='get_mutualfriend'), #lay ds cac ban be chung cua 2 user
     path('get_suggestionfriend/',GetSuggestionFriendView.as_view(), name='get_suggestionfriend'), # dsach gợi ý kết bạn
-    path('get_statusfriend/',GetStatusFriendView.as_view(), name='get_statusfriend'),# lấy status từ friendrequest giữa user và other_user
-    path('get_listfriendofuserother/',GetListFriendOfUserOtherView.as_view(), name='get_listfriendofuserother'), # list friend của other_user
+    path('get_statusfriend/',GetStatusFriendView.as_view(), name='get_statusfriend'),
+    path('get_friendshipofuserother/',GetFriendShipOfUserOtherView.as_view(), name='get_friendshipofuserother'),
 ]
