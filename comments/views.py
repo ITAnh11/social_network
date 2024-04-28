@@ -98,7 +98,7 @@ class CreateComment(APIView):
         comment.save()
         
         response.data = {
-            # "success": "Comment created successfully",
+            "success": "Comment created successfully",
             "comments": [CommentsSerializer(comment).data]
         }
         
