@@ -10,7 +10,7 @@ from .serializers import CommentsSerializer
 
 from userprofiles.models import UserBasicInfo
 
-from common_functions.common_function import getUser   
+from common_functions.common_function import getUser, getTimeDuration
 
 import datetime
 import json
@@ -20,15 +20,11 @@ import json
 class CommentsTestView(APIView):
     def get(self, request):
         return render(request, 'comments/comment_t.html')
-    
-class CommentsDemoView(APIView):
-    def get(self, request):
-        return render(request, 'comments/comment.html')
 
 class GetCommentsForPost(APIView):
     def post(self, request):
         
-        print(request.data)
+        # print(request.data)
         
         response = Response()
         
@@ -40,9 +36,10 @@ class GetCommentsForPost(APIView):
         
         list_comments = []
         for comment in comments:
-            serializer = CommentsSerializer(comment)
-            # print(serializer.data)
-            list_comments.append(serializer.data)
+            dataComment = CommentsSerializer(comment).data
+            dataComment['created_at'] = getTimeDuration(comment.created_at)
+            
+            list_comments.append(dataComment)
         
         response.data = {
             'comments': list_comments
@@ -59,9 +56,10 @@ class GetCommentsForComment(APIView):
         
         list_comments = []
         for comment in comments:
-            serializer = CommentsSerializer(comment)
-            # print(serializer.data)
-            list_comments.append(serializer.data)
+            dataComment = CommentsSerializer(comment).data
+            dataComment['created_at'] = getTimeDuration(comment.created_at)
+            
+            list_comments.append(dataComment)
         
         response.data = {
             'comments': list_comments

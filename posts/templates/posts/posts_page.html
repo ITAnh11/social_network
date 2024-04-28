@@ -21,7 +21,7 @@
   <body>
     {% include 'navbar/navbar.html' %}
 
-    <p>{{posts}}</p>
+    {% comment %} <p>{{posts}}</p> {% endcomment %}
     <div class="all_post">
       <div class="slideshow-container">
         <div class="mySlides fade">
@@ -107,29 +107,7 @@
         <div class="divider1"></div>
 
         <div class="comment_content" id="commentContent">
-          <!--Cmt of user-->
-          <!-- <div class="comment_setting">
-            <div class="bigCmt">
-              <div class="avt_user">
-                <img src="{%static 'userprofiles/images/khabanh.jpg' %}" />
-              </div>
-              <div class="cmt">
-                <h3 class="name_user">Hoang Phu</h3>
-                <p class="contentOfCmt">
-                  Trong cộng đồng fan anime toxic... Trong những thằng top 1 thì
-                  phải có one piece...
-                </p>
-              </div>
-            </div>
-          </div> -->
-          <div id="replyBox" class="replyBoxHidden" style="display: none">
-            <textarea
-              id="replyText"
-              class="replyText"
-              placeholder="Write your reply here..."
-            ></textarea>
-            <button onclick="postReply()">Post</button>
-          </div>
+          
         </div>
         <button class="showMoreComments" onclick="showMoreComments()">
           More
@@ -140,7 +118,7 @@
             class="commentText"
             placeholder="Write your comment here..."
           ></textarea>
-          <button posts_id="{{posts.id}}" type="click" onclick="postComment(event)" class="commentButton">Comment</button>
+          <button post_id="{{posts.id}}" type="click" onclick="postComment(event)" class="commentButton">Comment</button>
         </div>
       </div>
     </div>
