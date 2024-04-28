@@ -18,7 +18,7 @@ fetch(api_get_profile)
         var editProfile = document.getElementById('editProfile');
         var editStoryButton = document.getElementById('editStoryButton');
         var id_user = data.userprofile['user_id'];
-        
+
         if (data.isOwner === true) {
             editProfile.innerHTML = `<button type="button" id="editProfileReal"> <i class="far fa-edit"></i><a href="${urlFromEditProfile}" style="text-decoration: none; color: white;">Edit your profile</a></button>`;
             editStoryButton.innerHTML += `<a href="${urlFromEditStory}" class="editStory">
@@ -51,14 +51,4 @@ fetch(api_get_profile)
         var social_link = document.getElementById('social_link');
         social_link.innerHTML += `<a href="https://www.instagram.com/${data.userprofile['social_link']}/"><p>${data.userprofile['social_link']}</p></a>`;
         // social_link.innerHTML  += `<a href=></a>${data.userprofile['social_link']}`;
-        //
-        profile = document.getElementById('profile');
-        profile.innerHTML += `<h3>Login with: ${data.user['email']}</h3>`     
-        profile.innerHTML += `<h3>Bio: ${data.userprofile['bio']}</h3>`
-        profile.innerHTML += `<img src="${data.imageprofile['avatar']}" alt="avatar" srcset="" style="border-radius: 100%; width: 200px; height: 200px; object-fit: cover;">`;
-        profile.innerHTML += `<img src="${data.imageprofile['background']}" alt="background" srcset="" style="width: 640px; height: 360px; object-fit: cover;">`;
-        
     })
-
-    //dgdj
-    
