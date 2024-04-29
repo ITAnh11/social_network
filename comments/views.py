@@ -17,10 +17,6 @@ import json
 
 # Create your views here.
 
-class CommentsTestView(APIView):
-    def get(self, request):
-        return render(request, 'comments/comment_t.html')
-
 class GetCommentsForPost(APIView):
     def post(self, request):
         
@@ -32,7 +28,7 @@ class GetCommentsForPost(APIView):
         
         # print(type(posts_id))
         
-        comments = Comments.objects(__raw__={'to_posts_id': posts_id})
+        comments = Comments.objects(__raw__={'to_posts_id': posts_id, 'to_comment_id': -1})
         
         list_comments = []
         for comment in comments:

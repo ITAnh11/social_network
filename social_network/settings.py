@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'channels',
     'mess',
     'navbar',
+    'notifications',
 ]
 
 MIDDLEWARE = [

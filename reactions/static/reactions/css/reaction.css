@@ -15,6 +15,7 @@
     margin-bottom: 100px;
     margin-left: -20px;
     transition: max-width 0.3s;
+    overflow: hidden;
 }
 .show_list_reactionPost{
     max-width: 280px;

@@ -38,6 +38,8 @@ urlpatterns = [
     path("send_message/", views.SendMessage.as_view()),
     path("search/<username>", views.SearchUser.as_view()),
     
+    path('notifications/', include('notifications.urls')),
+    
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
