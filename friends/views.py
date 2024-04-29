@@ -77,13 +77,11 @@ class AcceptFriendRequestView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        # print(request.data)
         
         try:
                 friend_request_id = request.data.get('id')
                 friend_request = get_object_or_404(FriendRequest, id = friend_request_id)
                 
-                #friend_request.status = 'pending'
                 friend_request.status = 'accepted'
                 friend_request.save()
                 
@@ -91,7 +89,7 @@ class AcceptFriendRequestView(APIView):
                 user_id1 = user,
                 user_id2 = friend_request.from_id                 
                 )
-                # Friendship.objects.all().delete()  
+
                 friend_ship.save()    
                  
                 data = []
@@ -102,13 +100,11 @@ class AcceptFriendRequestView(APIView):
                 data.append(accepted_friend_request)
                 return Response ({
                     'accepted_friend_request': data,
-                    'message': 'Friend request processed successfully'
+                    'success': 'Friend request processed successfully'
                     })
-                # return Response({'message': 'Friend request processed successfully'})
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)
-            
 
 class DenineFriendRequestView(APIView):
     def post(self, request):
@@ -127,7 +123,7 @@ class DenineFriendRequestView(APIView):
                 friend_request.status = 'denined'
                 friend_request.save()  
                 
-                return Response({'message': 'Friend request processed successfully'})
+                return Response({'success': 'Friend request processed successfully'})
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)
@@ -443,9 +439,9 @@ class AcceptFriendRequestProfileView(APIView):
                 data.append(accepted_friend_request)
                 return Response ({
                     'accepted_friend_request': data,
-                    'message': 'Friend request processed successfully'
+                    'success': 'Friend request processed successfully'
                     })
-                # return Response({'message': 'Friend request processed successfully'})
+                # return Response({'success': 'Friend request processed successfully'})
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)
@@ -467,7 +463,8 @@ class DenineFriendRequestProfileView(APIView):
                 friend_request.status = 'denined'
                 friend_request.save()  
                 
-                return Response({'message': 'Friend request processed successfully'})
+                return Response({'success': 'Friend request processed successfully',
+                                 'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)
