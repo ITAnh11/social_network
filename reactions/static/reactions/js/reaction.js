@@ -21,29 +21,33 @@ function setCountReaction_for_post(forWhat, idWhat){
     })
     .then(response => response.json())
     .then(data => {
-        // console.log("so luong react:",data);
+        console.log("so luong react:",data);
         count = data.total;
         document.getElementById(`count-reaction-${forWhat}-${idWhat}`).textContent = count;
-        var a = document.getElementById(`count-reaction-${idWhat}`);
+        var iconTopReactionsContainer = document.getElementById(`icon-top-reactions-container-${idWhat}`);
+        iconTopReactionsContainer.innerHTML = '';
+        
         if(data.topMostReacted[0].total !== 0 && data.topMostReacted[1].total !== 0){
+
+            var top2_react = document.createElement('img');
+            top2_react.classList.add("top2-react-in-post");
+            top2_react.src = `${baseUrl + `images/${data.topMostReacted[1].type}.png`}`;
+
+            iconTopReactionsContainer.insertBefore(top2_react, iconTopReactionsContainer.firstChild);
+
 
             var top1_react = document.createElement('img');
             top1_react.classList.add("top1-react-in-post");
             top1_react.src = `${baseUrl + `images/${data.topMostReacted[0].type}.png`}`;
             
+            iconTopReactionsContainer.insertBefore(top1_react, iconTopReactionsContainer.firstChild);
+        }
+        else if(data.topMostReacted[1].total !== 0){
             var top2_react = document.createElement('img');
             top2_react.classList.add("top2-react-in-post");
             top2_react.src = `${baseUrl + `images/${data.topMostReacted[1].type}.png`}`;
 
-            a.insertBefore(top2_react,a.firstChild);
-            a.insertBefore(top1_react,a.firstChild);
-        }
-        else if(data.topMostReacted[0].total !== 0){
-            var top1_react = document.createElement('img');
-            top1_react.classList.add("top1-react-in-post");
-            top1_react.src = `${baseUrl + `images/${data.topMostReacted[0].type}.png`}`;
-
-            a.insertBefore(top1_react,a.firstChild);
+            iconTopReactionsContainer.insertBefore(top2_react, iconTopReactionsContainer.firstChild);
         }
     })
 }
@@ -81,7 +85,7 @@ function create_reaction_for_post(event){
     formData.append('user_id',localStorage.getItem('id'));
     formData.append('user_name',localStorage.getItem('name'));
     formData.append('user_avatar',localStorage.getItem('avatar'));
-    formData.append('posts_id',b.id);
+    formData.append('posts_id',b.getAttribute('posts_id'));
     formData.append('comment_id',-1);
     formData.append('type',type);
     formData.append('csrfmiddlewaretoken', csrftoken);
@@ -90,9 +94,22 @@ function create_reaction_for_post(event){
         method: 'POST',
         body: formData,
     })
-    a = document.getElementById(`reaction_img_${b.id}`);
-    a.src = baseUrl + `images/${type}.png`;
-    a.setAttribute("status",type);
+    .then(response => response.json())
+    .then(data => {
+        console.log("da react:",data);
+        if (data['success']) {
+            a = document.getElementById(`reaction_img_${b.getAttribute('posts_id')}`);
+            a.src = baseUrl + `images/${type}.png`;
+            a.setAttribute("status",type);
+        }
+        })
+    .then(() => {
+        setCountReaction_for_post('posts', b.getAttribute('posts_id'));
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+    
 }
 
 url_delete_react = "/reactions/delete_reaction/";
@@ -102,12 +119,12 @@ function delete_reaction_for_post(event){
     formData.append('user_id',localStorage.getItem('id'));
     formData.append('user_name',localStorage.getItem('name'));
     formData.append('user_avatar',localStorage.getItem('avatar'));
-    formData.append('posts_id',b.id);
+    formData.append('posts_id',b.getAttribute('posts_id'));
     formData.append('comment_id',-1);
     formData.append('type',"like");
     formData.append('csrfmiddlewaretoken', csrftoken);
 
-    a = document.getElementById(`reaction_img_${b.id}`);
+    a = document.getElementById(`reaction_img_${b.getAttribute('posts_id')}`);
     if(a.getAttribute('status') !== `default`){
         fetch(url_delete_react,{
             method: "POST",
