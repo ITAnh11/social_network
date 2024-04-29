@@ -140,8 +140,8 @@ class DeleteFriendShip(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         try:
-            friendship_id = request.data.get('id')
-            friendship = get_object_or_404(Friendship,Q(user_id1=friendship_id, user_id2=user) | Q(user_id1=user, user_id2=friendship_id))
+            friendship_id = request.get('id')
+            friendship = get_object_or_404(Friendship, id = friendship_id)
             
             friendship.delete()
         except Friendship.DoesNotExist:
