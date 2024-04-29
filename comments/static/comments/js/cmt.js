@@ -86,7 +86,7 @@ function render_comment(data){ {
       var created_at = comment.created_at;
       var user = comment.user;
 
-      var comment = `<div id="comment-${comment_id}" class="comment_setting">
+      var comment = `<div id="comment-${comment_id}" class="comment_setting" cmt_id="${comment_id}">
                         <div class="avt_user">
                             <img src="${user.avatar}" alt="">
                         </div>
@@ -102,6 +102,9 @@ function render_comment(data){ {
                         <div class="reply" id="replyButton">
                           <button class="replyButton" onClick="toggleReplyBox()">
                             <p>Reply</p>
+                          </button>
+                          <button class="replyButton">
+                            <p>React</p>
                           </button>
                         </div>
                       </div>
