@@ -2,6 +2,8 @@ var api_get_profile = '/userprofiles/get_profile/?id=' + (new URL(document.locat
 // console.log(api_get_profile);
 const urlFromEditProfile = document.body.getAttribute('link-url-editProfile');
 const urlFromEditStory = document.body.getAttribute('link-url-editStory');
+const urlProfile = document.body.getAttribute('link-profile');
+const urlListFr = document.body.getAttribute('link-listFr');
 
 // thu hồi lời mời kết bạn 
 function revokeFriendRequest(id_user) {
@@ -176,12 +178,24 @@ fetch(api_get_profile)
 
         var avatarContainer = document.getElementById('avatarContainer');
         avatarContainer.innerHTML += `<img src ="${data.imageprofile['avatar']}" alt="avatar" class="dashboard-img" id="dashboard-img">`;
-
-        // Kiểm tra nếu người dùng là chủ sở hữu của trang cá nhân
+       
+        var id_user = data.userprofile['user_id'];
+        
+        var listChoose = document.getElementById('listChoose');
+        if (data.isOwner === true) {
+            listChoose.innerHTML = `<ul class="profile-menu" id="profile_menu">
+                                        <li><a href="${urlProfile}">Posts</a></li>
+                                        <li><a href="${urlListFr}">Friends</a></li>
+                                    </ul>`
+        } else {
+            listChoose.innerHTML = `<ul class="profile-menu" id="profile_menu">
+                                        <li><a href="${urlProfile}">Posts</a></li>
+                                        <li><a href="${urlListFr}">Friends</a></li>
+                                    </ul>`
+        }
 
         var editProfile = document.getElementById('editProfile');
-        var editStoryButton = document.getElementById('editStoryButton');
-        var id_user = data.userprofile['user_id'];
+        var editStoryButton = document.getElementById('editStoryButton');    
 
         if (data.isOwner === true) {
             // Hiển thị nút chỉnh sửa thông tin cá nhân

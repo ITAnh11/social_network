@@ -15,7 +15,7 @@
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 </head>
 
-<body link-url-editProfile="{% url 'userprofiles:editProfile' %}" link-url-editStory="{%url 'userprofiles:editStory'%}">
+<body link-profile="{% url 'userprofiles:profile' %}" link-listFr="{% url 'userprofiles:listFriends' %}" link-url-editProfile="{% url 'userprofiles:editProfile' %}" link-url-editStory="{%url 'userprofiles:editStory'%}">
     {% include 'navbar/navbar.html' %}
     <!-- profile-page -->
 
@@ -62,12 +62,8 @@
                 </div>
                 <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
             </div>
-            <div class="list-choose">
-                <ul class="profile-menu">
-                    <li><a href="{% url 'userprofiles:profile' %}">Posts</a></li>
-                    {% comment %} <li><a href="{% url 'userprofiles:about' %}">Giới thiệu</a></li> {% endcomment %}
-                    <li><a href="{% url 'userprofiles:listFriends' %}">Friends</a></li>
-                </ul>
+            <div class="list-choose" id="listChoose">
+                
             </div>
         </div>
 
