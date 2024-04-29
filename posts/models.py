@@ -31,6 +31,17 @@ class MediaOfPosts(models.Model):
         ]
 
 
+class PostIsWatched(models.Model):
+    post_id = models.ForeignKey(Posts, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_watched = models.BooleanField(default=False)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['post_id', 'user_id'])
+        ]
+        unique_together = ('post_id', 'user_id')
+
 # model mongodb      
 from django_mongoengine import fields
 from reactions.models import ReactionNumberInfo
