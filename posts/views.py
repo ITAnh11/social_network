@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Posts, MediaOfPosts, PostsInfo
+from .models import Posts, MediaOfPosts, PostsInfo, PostIsWatched
 
 from .serializers import PostsSerializer, MediaOfPostsSerializer, PostsInfoSerializer
 
@@ -75,9 +75,10 @@ class CreatePostsView(APIView):
         try:
             listMediaOfPosts = []
             for file in media:
-                if not file.content_type.startswith('image') and not file.content_type.startswith('video'):
+                if not file.content_type.startswith('image'):
                     # print('not image or video')
-                    return Response({'error': 'File is not an image or video'}, status=400)
+                                        return Response({'warning': 'File is not an image'}, status=400)
+
                 
                 mediaOfPosts = MediaOfPosts.objects.create(
                     post_id=post,
@@ -193,3 +194,40 @@ class GetPostsPageView(APIView):
         
         return PostsInfoSerializer(postsInfo).data
     
+class MarkPostAsWatchedView(APIView):
+    def post(self, request):
+        user = getUser(request)
+        
+        if not user:
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        data = request.data
+        # print('data', data)
+        post_ids = data.getlist('post_ids[]')
+        
+        # print('post_ids', post_ids)
+        
+        for post_id in post_ids:
+        
+            if not post_id:
+                continue
+            
+            idPostsRequest = int(post_id)
+            
+            try:
+                posts = Posts.objects.filter(id=idPostsRequest).first()
+            except Posts.DoesNotExist:
+                continue
+            
+            postIsWatched = PostIsWatched.objects.filter(post_id=posts, user_id=user).first()
+            if postIsWatched:
+                continue
+            
+            postIsWatched = PostIsWatched.objects.create(
+                post_id=posts,
+                user_id=user,
+                is_watched=True
+            )
+            postIsWatched.save()
+        
+        return Response({'success': 'Post is marked as watched!'})

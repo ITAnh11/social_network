@@ -264,7 +264,7 @@ function clickImage(event) {
     posts_id = event.target.getAttribute('posts_id');
     image_id = event.target.getAttribute('image_id');
 
-    url = 'posts/page/?posts_id=' + posts_id + '&image_id=' + image_id;
+    url = '/posts/page/?posts_id=' + posts_id + '&image_id=' + image_id;
 
-    window.location.href = url;
+    window.open(window.location.origin + url, '_blank');
 }

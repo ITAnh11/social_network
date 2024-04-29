@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{% static 'posts/css/posts.css' %}" />
     <link rel="stylesheet" href="{% static 'posts/css/style.css' %}" />
   </head>
-  <body data-base-url="{% static 'posts/' %}" link-url-cmt="{%url 'comments:comments_test'%}">
+  <body data-base-url="{% static 'posts/' %}" link-url-cmt="{%url 'posts:posts_page'%}">
     <div class="content-area">
       <div
         class="write-post-container"
@@ -152,9 +152,9 @@
           </div>
         </div> -->
       </div>
-      <button type="button" class="btn-LoadMore" onclick="LoadMoreToggle()">
+      <!-- <button type="button" class="btn-LoadMore" onclick="LoadMoreToggle()">
         Load More
-      </button>
+      </button> -->
     </div>
 
     <div class="overlay">
@@ -267,9 +267,8 @@
     <script src="{% static 'reactions/js/reaction.js' %}"></script>
     <script
       src="{% static 'posts/js/render_posted.js' %}"
-      type="module"
     ></script>
-    <script src="{% static 'posts/js/posts.js' %}" type="module"></script>
+    <script src="{% static 'posts/js/posts.js' %}"></script>
     <script src="{% static 'reactions/js/reaction.js'%}"></script>
   </body>
 </html>
