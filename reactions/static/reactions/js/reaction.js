@@ -42,12 +42,12 @@ function setCountReaction_for_post(forWhat, idWhat){
             
             iconTopReactionsContainer.insertBefore(top1_react, iconTopReactionsContainer.firstChild);
         }
-        else if(data.topMostReacted[1].total !== 0){
-            var top2_react = document.createElement('img');
-            top2_react.classList.add("top2-react-in-post");
-            top2_react.src = `${baseUrl + `images/${data.topMostReacted[1].type}.png`}`;
+        else if(data.topMostReacted[0].total !== 0){
+            var top1_react = document.createElement('img');
+            top1_react.classList.add("top1-react-in-post");
+            top1_react.src = `${baseUrl + `images/${data.topMostReacted[0].type}.png`}`;
 
-            iconTopReactionsContainer.insertBefore(top2_react, iconTopReactionsContainer.firstChild);
+            iconTopReactionsContainer.insertBefore(top1_react, iconTopReactionsContainer.firstChild);
         }
     })
 }
@@ -97,11 +97,9 @@ function create_reaction_for_post(event){
     .then(response => response.json())
     .then(data => {
         console.log("da react:",data);
-        if (data['success']) {
-            a = document.getElementById(`reaction_img_${b.getAttribute('posts_id')}`);
-            a.src = baseUrl + `images/${type}.png`;
-            a.setAttribute("status",type);
-        }
+        a = document.getElementById(`reaction_img_${b.getAttribute('posts_id')}`);
+        a.src = baseUrl + `images/${type}.png`;
+        a.setAttribute("status",type);
         })
     .then(() => {
         setCountReaction_for_post('posts', b.getAttribute('posts_id'));
@@ -130,17 +128,29 @@ function delete_reaction_for_post(event){
             method: "POST",
             body: formData,
         })
-        console.log("da huy");
-        a.src = `${baseUrl + "images/like3.png"}`;
-        a.setAttribute("status","default");
+        .then(response => response.json())
+        .then(data => {
+            console.log("da huy:",data);
+            a.src = baseUrl + `images/like3.png`;
+            a.setAttribute("status","default");
+        })
+        .then(() => {
+            setCountReaction_for_post('posts', b.getAttribute('posts_id'));
+        })
     }
     else{
         fetch(url_creat_react,{
             method:"POST",
             body: formData,
         })
-        console.log("an like");
-        a.src = baseUrl + `images/like.png`;
-        a.setAttribute("status","like");
+        .then(response => response.json())
+        .then(data => {
+            console.log("da react:",data);
+            a.src = baseUrl + `images/like.png`;
+            a.setAttribute("status","like");
+        })
+        .then(() => {
+            setCountReaction_for_post('posts', b.getAttribute('posts_id'));
+        })
     }
 }
