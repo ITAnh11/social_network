@@ -1,4 +1,5 @@
 
+/* reaction cho bai post */
 .list_reactionPost{
     background-color: rgb(255, 255, 255);
     position: absolute;
@@ -46,3 +47,5 @@
     position: relative; 
     left: -13px;
 }
+
+/* reaction cho comment */
