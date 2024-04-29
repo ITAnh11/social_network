@@ -74,7 +74,7 @@ function render_post(data, isOld) {
 
                 <div class="post-reaction">
                     <div class="activity-icons">
-                        <div onmouseover="show_list_reaction_for_post(event)" onclick="delete_reaction_for_post(event)">
+                        <div onmouseleave="remove_list_reaction_for_post(event)" onmouseenter="show_list_reaction_for_post(event)" onclick="delete_reaction_for_post(event)">
                             <img src="${baseUrl + "images/like3.png"}" id="reaction_img_${post.id}" alt="" status="default"> 
                         </div>
                         <div onclick="clickCommentBtn(event)" posts_id="${post.id}"><img src="${baseUrl + "images/comment.png"}" alt="">Comments</div>
@@ -85,26 +85,26 @@ function render_post(data, isOld) {
                         <img src="${post.user.avatar}" alt=""> <i class=" fas fa-caret-down"></i>
                     </div>
 
-                    <div class="list_reactionPost">
-                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                    <div class="list_reactionPost" onmouseenter="is_reacting(event)" onmouseleave="is_not_reacting(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
                             <img class="love" src="${baseUrl + "images/love.png"}">
                         </div>
-                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
                             <img class="like" src="${baseUrl + "images/like.png"}">
                         </div>
-                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
                             <img class="care" src="${baseUrl + "images/care.png"}">
                         </div>
-                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
                             <img class="haha" src="${baseUrl + "images/haha.png"}">
                         </div>
-                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
                             <img class="wow" src="${baseUrl + "images/wow.png"}">
                         </div>
-                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
                             <img class="sad" src="${baseUrl + "images/sad.png"}">
                         </div>
-                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)">
+                        <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
                             <img class="angry" src="${baseUrl + "images/angry.png"}">
                         </div>
                     </div>
