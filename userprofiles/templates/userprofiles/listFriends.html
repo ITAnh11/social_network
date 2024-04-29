@@ -66,30 +66,37 @@
             </ul>
         </div>
       </div>
-
+      {% comment %} <button onclick="showListFriends()">
+        showListFriends
+      </button> {% endcomment %}
         <!-- list friends-->
-        <div class="list-friends">
-          {% comment %} <div class="first-row">
-            <p>Bạn bè</p>
-            <div class="right-align">
-              <p>Lời mời kết bạn</p>
-              <p>Tìm bạn bè</p>
-              <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
-            </div>
-          </div> {% endcomment %}
-      
-            <div class="moreFriends">
-              <button>
-                <p>More Friends</p>
-              </button>
-            </div>
+      <div class="list-friends">
+        {% comment %} <div fi>
+
+        </div> {% endcomment %}
+        {% comment %} <div class="first-row">
+          <p>Bạn bè</p>
+          <div class="right-align">
+            <p>Lời mời kết bạn</p>
+            <p>Tìm bạn bè</p>
+            <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
           </div>
-        </div>
+        </div>  {% endcomment %}
+    
+        {% comment %} <div class="moreFriends">
+          <button>
+            <p>More Friends</p>
+          </button>
+        </div> {% endcomment %}
+      </div>
     </div>
     <footer id="footer">
         
     </footer>
-    
+    {% csrf_token %}
+    <script>
+        var csrftoken = '{{ csrf_token }}';
+    </script>   
     <script src="{%static 'userprofiles/js/editAvt.js' %}" ></script>
     <script src="{%static 'userprofiles/js/listFr.js' %}" ></script>
     <script src="{%static 'userprofiles/js/profile.js' %}" ></script>
