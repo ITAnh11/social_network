@@ -65,6 +65,8 @@ function render_post(data, isOld) {
                 </div>
                 
                 <div class="count-reactionPost" id="count-reaction-${post.id}">
+                    <div id="icon-top-reactions-container-${post.id}">
+                    </div>
                     <div>
                         <p id="count-reaction-posts-${post.id}">120</p>
                     </div>
