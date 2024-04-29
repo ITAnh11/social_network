@@ -1,6 +1,32 @@
+let isHovered = false;
+let hoverTimeout;
+//xử lí hover vao các nút react
 function show_list_reaction_for_post(event){
     var a = event.target.parentNode.parentNode.parentNode.querySelector(".list_reactionPost");
-    a.classList.toggle("show_list_reactionPost");
+    hoverTimeout = setTimeout(() => {
+        a.classList.add("show_list_reactionPost");
+    }, 500);
+}
+//khi chuột rời khỏi nút
+function remove_list_reaction_for_post(event){
+    clearTimeout(hoverTimeout);
+    var a = event.target.parentNode.parentNode.parentNode.querySelector(".list_reactionPost");
+    setTimeout(() => {
+        if(isHovered !== true){
+            a.classList.remove("show_list_reactionPost");
+        }
+    }, 500);
+}
+//khi đang react
+function is_reacting(event){
+    isHovered = true;
+}
+//khi chuột đi ra khỏi thanh react
+function is_not_reacting(event){
+    isHovered = false;
+    setTimeout(() => {
+        event.target.classList.remove("show_list_reactionPost");
+    },1000);
 }
 
 
