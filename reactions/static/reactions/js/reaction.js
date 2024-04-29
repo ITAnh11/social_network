@@ -107,7 +107,6 @@ function create_reaction_for_post(event){
     .catch(error => {
         console.error('Error:', error);
     });
-    
 }
 
 url_delete_react = "/reactions/delete_reaction/";
@@ -123,6 +122,7 @@ function delete_reaction_for_post(event){
     formData.append('csrfmiddlewaretoken', csrftoken);
 
     a = document.getElementById(`reaction_img_${b.getAttribute('posts_id')}`);
+  
     if(a.getAttribute('status') !== `default`){
         fetch(url_delete_react,{
             method: "POST",
