@@ -141,7 +141,6 @@ class DeleteFriendShip(APIView):
         
         try:
             friendship_id = request.data.get('id')
-            
             friendship = get_object_or_404(Friendship,Q(user_id1=friendship_id, user_id2=user) | Q(user_id1=user, user_id2=friendship_id))
             friendrequest = get_object_or_404(FriendRequest,Q(from_id=user, to_id=friendship_id) | Q(from_id=friendship_id, to_id=user))
             
