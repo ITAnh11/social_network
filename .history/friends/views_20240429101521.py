@@ -343,9 +343,9 @@ class GetStatusFriendView(APIView):
         status_relationship_2_1 = FriendRequest.objects.filter(from_id=other_user_id, to_id=user).values_list('status', flat=True).first()
         
         print(status_relationship_1_2, status_relationship_2_1)
-        if status_relationship_1_2 == 'accepted' or status_relationship_2_1 == 'accepted' :
+        if status_relationship_1_2 == 'accepted' | status_relationship_2_1 == 'accepted' :
             return Response({'status_relationship': 'accepted'})
-        elif status_relationship_1_2 == 'denied' or status_relationship_2_1 == 'denied':
+        elif status_relationship_1_2 == 'denied' | status_relationship_2_1 == 'denied':
             return Response({'status_relationship': 'denied'})
         elif status_relationship_1_2 == 'pending' :
             return Response({'status_relationship': 'friendrequestfromuser'})

@@ -24,11 +24,6 @@ fetch(api_get_profile)
         if (data.isOwner === true) {
             // Hiển thị nút chỉnh sửa thông tin cá nhân
             editProfile.innerHTML = `<button type="button" id="editProfileReal"> <i class="far fa-edit"></i><a href="${urlFromEditProfile}" style="text-decoration: none; color: white;">Edit your profile</a></button>`;
-            editStoryButton.innerHTML +=`<a href="${urlFromEditStory}" class="editStory">
-                                            <button type="button" class="edit-story-btn">
-                                                    <i class="far fa-edit"></i> Edit your story
-                                            </button>
-                                         </a>`;
         } else {
             // Người dùng không phải là chủ sở hữu, kiểm tra trạng thái quan hệ bạn bè
 
@@ -45,10 +40,6 @@ fetch(api_get_profile)
                     } else if (data.status_relationship === 'friendrequestfromuser') {
                         // Hiển thị nút gửi lời mời kết bạn
                         editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-check"></i> Sent Friend Request</button>`;
-                    } else if (data.status_relationship === 'friendrequestfromuser') {
-                        editProfile.innerHTML = `<button type="button" onclick="revokeFriendRequest(${id_user})"> <i class="fas fa-check"></i> Sent Friend Request</button>`; 
-                    } else if (data.status_relationship === 'friendrequesttouser') {
-                        editProfile.innerHTML = `<button type="button" onclick="cancelFriendRequest(${id_user})"> <i class="fas fa-user-friends"></i>Phan hoi</button>`;
                     } else if (data.status_relationship === 'accepted') {
                         editProfile.innerHTML = `<button type="button" onclick="cancelFriendRequest(${id_user})"> <i class="fas fa-user-friends"></i> Friend</button>`;
                     } 
