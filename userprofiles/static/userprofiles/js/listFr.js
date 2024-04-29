@@ -78,7 +78,7 @@ function showListFriends(id_user) {
                     console.log("abc",Friend_list);
                     Friend_list.appendChild(list_friend);
                     data.data.forEach(function(friend_ship){
-                        var url = `/userprofiles/listFriends/?id=${friend_ship.friend_profile.id}`;
+                        var url = `/userprofiles/?id=${friend_ship.friend_profile.id}`;
                         var a =`<a href="${url}" style="text-decoration: none;color:black;">
                                     <div class="card" id="${friend_ship.friend_profile.id}">
                                         <div class="card-img">
