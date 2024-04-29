@@ -100,7 +100,7 @@ class AcceptFriendRequestView(APIView):
                 data.append(accepted_friend_request)
                 return Response ({
                     'accepted_friend_request': data,
-                    'message': 'Friend request processed successfully'
+                    'success': 'Friend request processed successfully'
                     })
             
         except:
@@ -123,7 +123,7 @@ class DenineFriendRequestView(APIView):
                 friend_request.status = 'denined'
                 friend_request.save()  
                 
-                return Response({'message': 'Friend request processed successfully'})
+                return Response({'success': 'Friend request processed successfully'})
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)
@@ -436,9 +436,9 @@ class AcceptFriendRequestProfileView(APIView):
                 data.append(accepted_friend_request)
                 return Response ({
                     'accepted_friend_request': data,
-                    'message': 'Friend request processed successfully'
+                    'success': 'Friend request processed successfully'
                     })
-                # return Response({'message': 'Friend request processed successfully'})
+                # return Response({'success': 'Friend request processed successfully'})
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)
@@ -460,7 +460,8 @@ class DenineFriendRequestProfileView(APIView):
                 friend_request.status = 'denined'
                 friend_request.save()  
                 
-                return Response({'message': 'Friend request processed successfully'})
+                return Response({'success': 'Friend request processed successfully',
+                                 'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)

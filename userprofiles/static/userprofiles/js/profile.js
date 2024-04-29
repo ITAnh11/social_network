@@ -15,15 +15,20 @@ function revokeFriendRequest(id_user) {
     })
     .then(response => {
         if (response.ok) {
-            editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Send Friend Request</button>`;
+            editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Add Friend</button>`;
             return response.json();
         } else {
             throw new Error('Failed to revoke friend request');
         }
     })
     .then(data => {
-        console.log(data);
+        if (data['success']) {
+            console.log(data);
         // data.status_relationship = 'not_friend';
+        } else {
+            // handle error
+            alert(data['warning']);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
@@ -50,8 +55,12 @@ function sentFriendRequest(id_user) {
         }
     })
     .then(data => {
-        console.log(data);
-        // data.status_relationship = 'friendrequestfromuser';
+        if (data['success']) {
+            console.log(data);
+        } else {
+            // handle error
+            alert(data['warning']);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
@@ -66,7 +75,7 @@ function acceptFriendRequest(id_user) {
     formdata.append("id", id_user);
     formdata.append("csrfmiddlewaretoken", csrftoken);
 
-    fetch('/friends/accept_friendrequest/', {
+    fetch('/friends/accept_friendrequestprofile/', {
         method: 'POST',
         body: formdata,
     })
@@ -79,8 +88,12 @@ function acceptFriendRequest(id_user) {
         }
     })
     .then(data => {
-        console.log(data);
-        // data.status_relationship = 'accepted';
+        if (data['success']) {
+            console.log(data);
+        } else {
+            // handle error
+            alert(data['warning']);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
@@ -94,21 +107,25 @@ function deninedFriendRequest(id_user) {
     formdata.append("id", id_user);
     formdata.append("csrfmiddlewaretoken", csrftoken);
 
-    fetch('/friends/denine_friendrequest/', {
+    fetch('/friends/denine_friendrequestprofile/', {
         method: 'POST',
         body: formdata,
     })
     .then(response => {
         if (response.ok) {
-            editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Send Friend Request</button>`;
+            editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Add Friend</button>`;
             return response.json();
         } else {
             throw new Error('Failed to deny friend request');
         }
     })
     .then(data => {
-        console.log(data);
-        // data.status_relationship = 'denined';
+        if (data['success']) {
+            console.log(data);
+        } else {
+            // handle error
+            alert(data['warning']);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
@@ -127,15 +144,19 @@ function cancelFriendRequest(id_user) {
     })
     .then(response => {
         if (response.ok) {
-            editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Send Friend Request</button>`;
+            editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Add Friend</button>`;
             return response.json();
         } else {
             throw new Error('Failed to cancel friend request');
         }
     })
     .then(data => {
-        console.log(data);
-        // data.status_relationship = 'not_friend';
+        if (data['success']) {
+            console.log(data);
+        } else {
+            // handle error
+            alert(data['warning']);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
@@ -181,7 +202,7 @@ fetch(api_get_profile)
                     if (data.status_relationship === 'user') {
                         editProfile.innerHTML = `<button type="button" id="editProfileReal"> <i class="far fa-edit"></i><a href="${urlFromEditProfile}" style="text-decoration: none; color: white;">Edit your profile</a></button>`;
                     } else if (data.status_relationship === 'not_friend' || data.status_relationship === 'denied') {
-                        editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Send Friend Request</button>`;
+                        editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Add Friend</button>`;
                     } else if (data.status_relationship === 'friendrequestfromuser') {
                         editProfile.innerHTML = `<button type="button" onclick="revokeFriendRequest(${id_user})"> <i class="fas fa-check"></i> Sent Friend Request</button>`; 
                     } else if (data.status_relationship === 'friendrequesttouser') {
