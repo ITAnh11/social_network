@@ -78,6 +78,9 @@ class CreateReaction(APIView):
             currentType = reaction.type
             newType = request.data.get('type')
             
+            if currentType == newType:
+                return True
+            
             # change type reaction to new type
             reaction.setTypeReaction(newType)
             reaction.save()
