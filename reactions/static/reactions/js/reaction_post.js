@@ -18,11 +18,11 @@ function remove_list_reaction_for_post(event){
     }, 500);
 }
 //khi đang react
-function is_reacting(event){
+function is_reacting_post(event){
     isHovered = true;
 }
 //khi chuột đi ra khỏi thanh react
-function is_not_reacting(event){
+function is_not_reacting_post(event){
     isHovered = false;
     setTimeout(() => {
         event.target.classList.remove("show_list_reactionPost");

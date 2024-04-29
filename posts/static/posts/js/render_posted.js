@@ -85,7 +85,7 @@ function render_post(data, isOld) {
                         <img src="${post.user.avatar}" alt=""> <i class=" fas fa-caret-down"></i>
                     </div>
 
-                    <div class="list_reactionPost" onmouseenter="is_reacting(event)" onmouseleave="is_not_reacting(event)">
+                    <div class="list_reactionPost" onmouseenter="is_reacting_post(event)" onmouseleave="is_not_reacting_post(event)">
                         <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
                             <img class="love" src="${baseUrl + "images/love.png"}">
                         </div>
