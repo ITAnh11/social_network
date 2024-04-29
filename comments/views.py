@@ -34,6 +34,7 @@ class GetCommentsForPost(APIView):
         for comment in comments:
             dataComment = CommentsSerializer(comment).data
             dataComment['created_at'] = getTimeDuration(comment.created_at)
+            dataComment['most_use_reactions'] = comment.getMostUseReactions()
             
             list_comments.append(dataComment)
         
@@ -54,6 +55,8 @@ class GetCommentsForComment(APIView):
         for comment in comments:
             dataComment = CommentsSerializer(comment).data
             dataComment['created_at'] = getTimeDuration(comment.created_at)
+            dataComment['most_use_reactions'] = comment.getMostUseReactions()
+
             
             list_comments.append(dataComment)
         
@@ -93,9 +96,14 @@ class CreateComment(APIView):
         comment = self.createComment(request)
         comment.save()
         
+        dataComment = CommentsSerializer(comment).data
+        dataComment['created_at'] = 'Just now'
+        dataComment['most_use_reactions'] = comment.getMostUseReactions()
+
+        
         response.data = {
             "success": "Comment created successfully",
-            "comments": [CommentsSerializer(comment).data]
+            "comments": [dataComment]
         }
         
         return response
