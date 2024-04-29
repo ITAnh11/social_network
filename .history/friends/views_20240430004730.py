@@ -370,7 +370,7 @@ class GetListFriendOfUserOtherView(APIView):
         for other_user_friend in others_user_friend:
             
             friend_ship = {
-                "friend_profile": getUserProfileForPosts(other_user_friend.user_id1) if other_user_id==other_user_friend.user_id2 else getUserProfileForPosts(other_user_friend.user_id2)
+                "friend_profile": getUserProfileForPosts(other_user_friend)
             }
             data.append(friend_ship)
             
