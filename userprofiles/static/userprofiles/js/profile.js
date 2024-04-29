@@ -133,12 +133,12 @@ function deninedFriendRequest(id_user) {
     });
 }
 // Huỷ kết bạn
-function cancelFriendRequest(id_user) {
+function deleteFriendShip(id_user) {
     var formdata = new FormData();
     formdata.append("id", id_user);
     formdata.append("csrfmiddlewaretoken", csrftoken);
 
-    fetch('/friends/cancel_friendrequest/', {
+    fetch('/friends/delete_friendship/', {
         method: 'POST',
         body: formdata,
     })
@@ -215,7 +215,7 @@ fetch(api_get_profile)
                                                     Denined
                                                 </button>`;
                     } else if (data.status_relationship === 'accepted') {
-                        editProfile.innerHTML = `<button type="button" onclick="cancelFriendRequest(${id_user})"> <i class="fas fa-user-friends"></i> Friend</button>`;
+                        editProfile.innerHTML = `<button type="button" onclick="deleteFriendShip(${id_user})"> <i class="fas fa-user-friends"></i> Friend</button>`;
                     } 
                 })
                 .catch(error => {
