@@ -343,9 +343,9 @@ class GetStatusFriendView(APIView):
         status_relationship_2_1 = FriendRequest.objects.filter(from_id=other_user_id, to_id=user).values_list('status', flat=True).first()
         
         print(status_relationship_1_2, status_relationship_2_1)
-        if status_relationship_1_2 == 'accepted' or status_relationship_2_1 == 'accepted' :
+        if status_relationship_1_2 == 'accepted' | status_relationship_2_1 == 'accepted' :
             return Response({'status_relationship': 'accepted'})
-        elif status_relationship_1_2 == 'denied' or status_relationship_2_1 == 'denied':
+        elif status_relationship_1_2 == 'denied' | status_relationship_2_1 == 'denied':
             return Response({'status_relationship': 'denied'})
         elif status_relationship_1_2 == 'pending' :
             return Response({'status_relationship': 'friendrequestfromuser'})
@@ -407,64 +407,3 @@ class GetListFriendOfUserOtherView(APIView):
 #             return Response({
 #                 "data": data
 #                 })
-
-class AcceptFriendRequestProfileView(APIView):
-    def post(self, request):
-        user = getUser(request)
-        
-        if not user:
-            return Response({'error': 'Unauthorized'}, status=401)
-        
-        # print(request.data)
-        
-        try:
-                from_user_id = request.data.get('id')
-                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user)
-                
-                #friend_request.status = 'pending'
-                friend_request.status = 'accepted'
-                friend_request.save()
-                
-                friend_ship = Friendship.objects.create(
-                user_id1 = user,
-                user_id2 = friend_request.from_id                 
-                )
-                # Friendship.objects.all().delete()  
-                friend_ship.save()    
-                 
-                data = []
-                
-                accepted_friend_request = {
-                "friend_profile" : getUserProfileForPosts(friend_request.from_id)
-                }
-                data.append(accepted_friend_request)
-                return Response ({
-                    'accepted_friend_request': data,
-                    'message': 'Friend request processed successfully'
-                    })
-                # return Response({'message': 'Friend request processed successfully'})
-            
-        except:
-            return Response({'error': 'Error while saving friend request'}, status=400)
-    
-class DenineFriendRequestProfileView(APIView):
-    def post(self, request):
-        user = getUser(request)
-        
-        if not user:
-            return Response({'error': 'Unauthorized'}, status=401)
-        
-        # print(request.data)
-        
-        try:
-                from_user_id = request.data.get('id')
-                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user)
-                
-                #friend_request.status = 'pending'
-                friend_request.status = 'denined'
-                friend_request.save()  
-                
-                return Response({'message': 'Friend request processed successfully'})
-            
-        except:
-            return Response({'error': 'Error while saving friend request'}, status=400)
