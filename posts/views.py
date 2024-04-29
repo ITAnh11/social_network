@@ -184,7 +184,7 @@ class GetPostsPageView(APIView):
         
         print(postsData)
         
-        return render(request, 'posts/posts_page.html', context=context)
+        return render(request, 'posts/posts_page_t.html', context=context)
     
     def getPostsInfo(self, posts):
         try:
