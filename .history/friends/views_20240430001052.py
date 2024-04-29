@@ -37,7 +37,7 @@ class SentFriendRequestView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         to_user_id = request.data.get('id')
-        print(request.data)
+        #print(request.data)
         to_user = get_object_or_404(User, id = to_user_id)
         try:
             friend_request = FriendRequest.objects.create(
@@ -302,7 +302,7 @@ class GetMutualFriendView(APIView):
             
             other_user_id = request.query_params.get('id')    #lấy từ fe của user kia, fe gửi lên sever id profile của người đó
             
-            # print(other_user_id)
+            print(other_user_id)
             other_user = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id)) # user_id1, user_id2
             
             user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
@@ -361,16 +361,15 @@ class GetListFriendOfUserOtherView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         other_user_id = request.query_params.get('id') 
-        # other_user_id = request.data.get('id')
-        print(other_user_id)    
-       # others_user_friend = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
-        others_user_friend = Friendship.objects.filter(Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
-        print('hi: ',others_user_friend)
+        
+        others_user_friend = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
+        print(other_user_friend)
+        
         data = []
         for other_user_friend in others_user_friend:
             
             friend_ship = {
-                "friend_profile": getUserProfileForPosts(other_user_friend.user_id1) if other_user_id==other_user_friend.user_id2 else getUserProfileForPosts(other_user_friend.user_id2)
+                "friend_profile": getUserProfileForPosts(other_user_friend)
             }
             data.append(friend_ship)
             
