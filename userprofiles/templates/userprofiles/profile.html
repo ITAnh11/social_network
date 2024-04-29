@@ -38,8 +38,7 @@
                     <button onclick="viewAvatar()">View Avatar</button>
                     <a href="{% url 'userprofiles:editImagesPage' %}">
                         <button onclick="chooseAvatar()">Choose Avatar</button>
-                    </a>
-                    
+                    </a>                   
                 </div>                                
                 <div class="left-dashboard-info">
                     <div id="userName2" class="userName">
@@ -205,6 +204,10 @@
     </footer>
     
     {% comment %} <script src="{%static 'userprofiles/js/function.js' %}" ></script> {% endcomment %}
+    {% csrf_token %}
+    <script>
+        var csrftoken = '{{ csrf_token }}';
+    </script>
     <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="{%static 'userprofiles/js/editAvt.js' %}" ></script>
     <script src="{%static 'userprofiles/js/profile.js' %}" ></script>
