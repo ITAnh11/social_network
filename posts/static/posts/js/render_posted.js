@@ -67,11 +67,10 @@ function render_post(data, isOld) {
                 <div class="count-reactionPost" id="count-reaction-${post.id}">
                     <div id="icon-top-reactions-container-${post.id}">
                     </div>
-                    <div>
-                        <p id="count-reaction-posts-${post.id}">120</p>
+                    <div id="count-reaction-posts-${post.id}" style="align-items: center;">
+                        120
                     </div>
                 </div>
-
                 <div class="post-reaction">
                     <div class="activity-icons">
                         <div onmouseleave="remove_list_reaction_for_post(event)" onmouseenter="show_list_reaction_for_post(event)" onclick="delete_reaction_for_post(event)">
