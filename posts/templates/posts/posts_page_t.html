@@ -1,0 +1,229 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comments</title>
+    <link rel="stylesheet" href="{%static 'posts/css/posts_page.css'%}" />
+    <link rel="stylesheet" href="{%static 'reactions/css/reaction.css'%}" />
+  </head>
+
+  <body>
+    {% include 'navbar/navbar.html' %}
+    <div class="posts-container">
+      <div class="main-posts">
+        <div class="left-part-posts">
+          <!-- Slideshow container -->
+          <div class="slideshow-container">
+            <!-- Full-width images with number and caption text -->
+            <div class="all-my-slide">
+              <div class="mySlides">
+                <div class="numbertext">1 / 3</div>
+                <img
+                  src="https://www.w3schools.com/howto/img_nature_wide.jpg"
+                  class="img-slide-posts"
+                />
+              </div>
+
+              <div class="mySlides">
+                <div class="numbertext">2 / 3</div>
+                <img
+                  src="https://i.pinimg.com/236x/f0/d6/f5/f0d6f5f1d78a908b4e4676a5d28428d6.jpg"
+                  class="img-slide-posts"
+                />
+              </div>
+
+              <div class="mySlides">
+                <div class="numbertext">3 / 3</div>
+                <img
+                  src="https://platinumlist.net/guide/wp-content/uploads/2023/03/c0e9c490-b7e7-47a6-9c43-3e10e8ddc9cb-4445-dubai-img-worlds-of-adventure-tickets-08-1024x639.jpg"
+                  class="img-slide-posts"
+                />
+              </div>
+            </div>
+
+            <!-- Next and previous buttons -->
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+          </div>
+          <br />
+        </div>
+        <div class="right-part-posts" style="overflow-y: auto; max-height: 100%;">
+          <div class="posts-content-container">
+            <div class="posts-content">
+              <div class="post-header">
+                <div class="user-profile-box">
+                  <div class="user-profile">
+                    <a
+                      href="/userprofiles/?id=${post.user.id}"
+                      style="text-decoration: none"
+                    >
+                      <img src="${post.user.avatar}" alt="" />
+                    </a>
+                    <div>
+                      <div style="display: flex; align-items: center">
+                        <div id="name-user-of-post">
+                          <a
+                            href="/userprofiles/?id=${post.user.id}"
+                            style="text-decoration: none"
+                          >
+                            <p>${post.user.name}</p>
+                          </a>
+                        </div>
+                        <div
+                          id="title-of-posts"
+                          class="title-posts"
+                          style="padding-top: 4px"
+                        >
+                          <small style="font-size: 13px; margin-left: 5px">
+                            ${((post.title) ? post.title : "")}
+                          </small>
+                        </div>
+                      </div>
+                      <small>${post.created_at}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="status-field" style="margin: 10px;">
+                <p>
+                  ${(post.content !== undefined && post.content !== nu
+                  ${(post.content !== undefined && post.content !== null &&
+                  post.content !== "") ? post.content : ""} ${(post.content !==
+                  undefi${(post.content !== undefined && post.content !== null
+                  && post.content !== "") ? post.content : ""} ${(post.content
+                  !== undefined && post.content !== null && post.content !== "")
+                  ? post.content : ""}ned && post.content !== null &&
+                  post.content !== "") ? post.content : ""}ll && post.content
+                  !== "") ? post.content : ""}${(post.content !== undefined &&
+                  post.content !== null && post.content !== "") ? post.content :
+                  ""}${(post.content !== undefined && post.content !== null &&
+                  post.content !== "") ? post.content : ""}${(post.content !==
+                  undefined && post.content !== null && post.content !== "") ?
+                  post.content : ""}${(post.content !== undefined &&
+                  post.content !== null && post.content !== "") ? post.content :
+                  ""}${(post.content !== undefined && post.content !== null &&
+                  post.content !== "") ? post.content : ""}${(post.content !==
+                  undefined && post.content !== null && post.content !== "") ?
+                  post.content : ""}${(post.content !== undefined &&
+                  post.content !== null && post.content !== "") ? post.content :
+                  ""}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="post-reaction" style="border-top: solid 1px; border-bottom: solid 1px;">
+            <div class="activity-icons" style="display: flex;">
+              <div
+                onmouseleave="remove_list_reaction_for_post(event)"
+                onmouseenter="show_list_reaction_for_post(event)"
+                onclick="delete_reaction_for_post(event)"
+              >
+                <img
+                  src="{% static 'posts/images/like3.png' %}"
+                  id="reaction_img_${post.id}"
+                  alt=""
+                  status="default"
+                  style="width: 30px"
+                />
+              </div>
+              <div onclick="clickCommentBtn(event)" posts_id="${post.id}">
+                <img
+                  src="{% static 'posts/images/comment.png' %}"
+                  alt=""
+                  style="width: 30px"
+                />Comments
+              </div>
+              <div>
+                <img
+                  src="{% static 'posts/images/share0.png' %}"
+                  alt=""
+                  style="width: 30px"
+                />Share
+              </div>
+            </div>
+
+            <div
+              class="list_reactionPost"
+              onmouseenter="is_reacting(event)"
+              onmouseleave="is_not_reacting(event)"
+            >
+              <div
+                class="reaction_btnPost"
+                onclick="create_reaction_for_post(event)"
+              >
+                <img class="love" src="{% static 'posts/images/love.png' %}" />
+              </div>
+              <div
+                class="reaction_btnPost"
+                onclick="create_reaction_for_post(event)"
+              >
+                <img class="like" src="{% static 'posts/images/like.png' %}" />
+              </div>
+              <div
+                class="reaction_btnPost"
+                onclick="create_reaction_for_post(event)"
+              >
+                <img class="care" src="{% static 'posts/images/care.png' %}" />
+              </div>
+              <div
+                class="reaction_btnPost"
+                onclick="create_reaction_for_post(event)"
+              >
+                <img class="haha" src="{% static 'posts/images/haha.png' %}" />
+              </div>
+              <div
+                class="reaction_btnPost"
+                onclick="create_reaction_for_post(event)"
+              >
+                <img class="wow" src="{% static 'posts/images/wow.png' %}" />
+              </div>
+              <div
+                class="reaction_btnPost"
+                onclick="create_reaction_for_post(event)"
+              >
+                <img class="sad" src="{% static 'posts/images/sad.png' %}" />
+              </div>
+              <div
+                class="reaction_btnPost"
+                onclick="create_reaction_for_post(event)"
+              >
+                <img
+                  class="angry"
+                  src="{% static 'posts/images/angry.png' %}"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="comments-container">
+            {% include 'comments/comment.html' %}
+            <div
+              class="mt-3 d-flex flex-row align-items-center p-3 comment-form-color"
+              style="position: sticky; bottom: 0px; background-color: white;"
+            >
+              <img
+                src="https://i.imgur.com/zQZSWrt.jpg"
+                width="40"
+                class="rounded-circle mr-3"
+                style="object-fit: cover; margin-right: 10px"
+              />
+              <div class="comment-box" style="display: flex; justify-content: center; align-items: center; min-width: 90%;">
+                <textarea
+                class="comment-form-control"
+                placeholder="Enter your comment..."
+                style=""
+              ></textarea>
+              <img src="{%static 'comments/images/paper-plane.png'%}" alt="" srcset="" style="width: 20px; height: 20px; margin-left: 5px;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{%static 'posts/js/posts_page.js'%}"></script>
+  </body>
+</html>
