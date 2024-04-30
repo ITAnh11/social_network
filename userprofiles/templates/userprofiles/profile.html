@@ -15,7 +15,7 @@
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 </head>
 
-<body link-profile="{% url 'userprofiles:profile' %}" link-listFr="{% url 'userprofiles:listFriends' %}" link-url-editProfile="{% url 'userprofiles:editProfile' %}" link-url-editStory="{%url 'userprofiles:editStory'%}">
+<body link-url-editProfile="{% url 'userprofiles:editProfile' %}" link-url-editStory="{%url 'userprofiles:editStory'%}">
     {% include 'navbar/navbar.html' %}
     <!-- profile-page -->
 
@@ -40,28 +40,33 @@
                         <button onclick="chooseAvatar()">Choose Avatar</button>
                     </a>                   
                 </div>                                
-                <div class="left-dashboard-info">
+                <div class="left-dashboard-info" id="left_dashboard_info">
                     <div id="userName2" class="userName">
 
                     </div>
-                    <p>446 Friends</p>
-                    <div class="mutual-friend-images">
+                    <div id="numberOfFr">
+
+                    </div>
+                    {% comment %} <p>446 Friends</p> {% endcomment %}
+                    <div class="mutual-friend-images" id="mutualFriendImages">
+                        {% comment %} <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                         <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                         <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                         <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                        <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                        <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                        <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt=""> {% endcomment %}
                     </div>
                 </div>
             </div>
             <div class="right-dashboard-info">
                 <div class="right-dashboard-info-top">
+                    <!-- Nút kết bạn -->
                     <div class="editProfile" id="editProfile">
                         
                     </div>                     
                 </div>
                 <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
             </div>
+            <!-- Chọn sang trang cá nhân hay trang listFr người dùng -->
             <div class="list-choose" id="listChoose">
                 
             </div>
@@ -118,49 +123,16 @@
 
                 <!-- all friends of user -->
                 <div class="left-profile-sidebar-top gallery">
-                    <div class="heading-link profile-heading-link">
+                    <div class="heading-link profile-heading-link" id="heading-link profile-heading-link">
                         <h4>Friends</h4>
-                        <a href="{% url 'userprofiles:listFriends' %}">All Friends</a>
+                        <!-- allFr chuyển sang trang fullFr của người dùng -->
+                        {% comment %} <a href="{% url 'userprofiles:listFriends' %}">All Friends</a> {% endcomment %}
                     </div>
 
                     <div class="gallery-photos">
+                        <!-- listFr trang cá nhân -->
                         <div class="gallery-photos-rowFirst listFrOfUserprofile" id="listFrOfUserprofile">
-                            {% comment %} <div class="first-friend">
-                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                                <p>Vuong1</p>
-                            </div>
-                            <div class="second-friend">
-                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                                <p>Vuong2</p>
-                            </div>
-                            <div class="third-friend">
-                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                                <p>Vuong3</p>
-                            </div>
-                            <div class="forth-friend">
-                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                                <p>Vuong4</p>
-                            </div>
-                            <div class="fifth-friend">
-                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                                <p>Vuong5</p>
-                            </div>
-                            <div class="sixth-friend">
-                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                                <p>Vuong6</p>
-                            </div>
-                            <div class="seventh-friend">
-                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                                <p>Vuong7</p>
-                            </div>
-                            <div class="eighth-friend">
-                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                                <p>Vuong8</p>
-                            </div>
-                            <div class="ninth-friend">
-                                <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                                <p>Vuong9</p>
-                            </div> {% endcomment %}
+                            
                         </div>
                     </div>
                 </div>
