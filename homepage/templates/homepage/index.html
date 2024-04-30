@@ -32,15 +32,16 @@
         {% include 'posts/posts.html' %}
         <!-- sidebar------------ -->
         <div class="right-sidebar">
-          
+          <div class="chat-container"> 
             <div class="heading-link">
                 <h4>Conversation</h4>
-                <a href="">Hide Chat</a>
+                <a href="#" id="toggleChat">Hide Chat</a>
                 <ul id="userList">
                   <!-- Conversation list will be populated dynamically -->
                 </ul>
             </div>
-            <!-- {% include 'chat/index.html' %}           1 -->
+            {% include 'chat/index.html' %}       
+            </div>
         </div> 
     </div>
     <footer id="footer">

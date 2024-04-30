@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat App</title>
   <link rel="stylesheet" href="{% static 'homepage/css/chat.css' %}">
-  <link rel="stylesheet" href="{% static 'chat/css/chat.css' %}">
+  {% comment %} <link rel="stylesheet" href="{% static 'chat/css/chat.css' %}"> {% endcomment %}
   <link rel="stylesheet" href="{% static 'chat/css/style.css' %}">
 </head>
 <body>
@@ -22,11 +22,12 @@
       </div>
       <div class="messages" id="chat">
       </div>
-
-      <div class="chatInput">
-        <input type="text" id="messageInput" placeholder="Type a message...">
-        <button id="sendMessageBtn">Send</button>
-      </div>
+        
+        <div class="chatInput input">
+          <input type="text" id="messageInput" placeholder="Type a message...">
+          <button id="sendMessageBtn"><i class="fa fa-paper-plane"></i></button>
+        </div>
+   
     </div>
   </div>
   <script src="{% static 'chat/js/chat.js' %}"></script>

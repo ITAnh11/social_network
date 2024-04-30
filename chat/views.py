@@ -385,7 +385,9 @@ class SearchUser(generics.ListAPIView):
             )
         
         serializer = UserInfoSerializer(users, many=True)
-        return Response({"list_users" : serializer.data})
+        return Response({
+            "list_users" : serializer.data,
+            "current_user" : getUser(request),})
 
 def index(request):
     return render(request, "chat/index.html")

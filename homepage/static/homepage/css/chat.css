@@ -70,6 +70,25 @@ html {
   transition: all 1s;
   box-shadow: 0 0 8rem 0 rgba(0, 0, 0, 0.1), 0rem 2rem 4rem -3rem rgba(0, 0, 0, 0.5);
 }
+.chat-container {
+  position: fixed;
+  bottom: 20px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+  z-index: 999; /* Ensure it's above other elements */
+  transition: bottom 0.3s ease-in-out; /* Smooth transition */
+}
+
+.chat-container.closed {
+  bottom: -500px; /* Move chat box off-screen when closed */
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+  .chat-container {
+      right: 10px; /* Adjust for smaller screens */
+  }
+}
+
 .chat .contact.bar {
   flex-basis: 3.5rem;
   flex-shrink: 0;

@@ -3,10 +3,9 @@ const chatHeader = document.getElementById('chatHeader');
 const all_messeeji = document.getElementById('chat');
 const messageInput = document.getElementById('messageInput');
 const sendMessageBtn = document.getElementById('sendMessageBtn');
-// const searchInput = document.getElementById('search');
 const list_all_users = document.getElementById("userList");
-var conversations = [
-];
+
+var activeChannels = {};
 
 var url_all_users = "/search/@"; // Assuming this is the correct endpoint to fetch all users
 var url_get_channel = "chat/create_channel/"
@@ -14,10 +13,11 @@ function show_all_users() {
   fetch(url_all_users)
   .then(response => response.json())
   .then(data => {
+      current_user = data.current_user;
+      console.log(current_user)
       // console.log("all_users:", data);
       data.list_users.forEach(function(user) {
           console.log(user);
-          var url = ""; // You might want to define a URL to link to each user's profile
           var fullName = user.first_name + " " + user.last_name;
           var li = document.createElement('li');
           li.textContent = fullName;
@@ -28,9 +28,6 @@ function show_all_users() {
             // Send POST request
             createChannel(user)
               .then(channel_id => {
-                console.log('Channel ID:', channel_id);
-                // You can use channel_id here
-                console.log("channel id: ", channel_id);
                 showChannel(user, channel_id);
               })
               .catch(error => {
@@ -111,6 +108,15 @@ function showChannel(user, channel_id) {
   get_all_messeeji(user, channel_id);
   websocket_handle(user, channel_id);
 }
+//add a single message to div all_messeeji
+function addMessage(message, sender) {
+  const div = document.createElement('div');
+  div.classList.add('message');
+  div.classList.add(sender);
+  div.textContent = message;
+  all_messeeji.appendChild(div);
+}
+
 // show all message with given channel_id
 const url_all_messeeji = '/chat/get_messeeji/'
 function get_all_messeeji(user, channel_id){
@@ -128,23 +134,12 @@ function get_all_messeeji(user, channel_id){
   })
   .then(response => response.json())
   .then(data => {
-      // console.log("all_users:", data);
       data.data.forEach(function(messeeji) {
-          // console.log(messeeji);
-          if (user.id == messeeji.sender_id) {
-            const div = document.createElement('div');
-            div.classList.add('message');
-            div.classList.add('parker');
-            div.textContent = messeeji.message_content;
-            all_messeeji.appendChild(div);
+          if (user.id != messeeji.sender_id) {
+            addMessage(messeeji.message_content, 'parker')
           } else {
-            const div = document.createElement('div');
-            div.classList.add('message');
-            div.classList.add('stark');
-            div.textContent = messeeji.message_content;
-            all_messeeji.appendChild(div);
+            addMessage(messeeji.message_content, 'stark')
           }
-          
       });
       scrollToBottom()
   })
@@ -178,6 +173,7 @@ function websocket_handle(user, channel_id) {
             'sender_id': user.id,
         })
     );
+    console,log("user id is:", user.id)
   }
   // Form submit listener
   document.getElementById('sendMessageBtn').addEventListener('click', function(event){
@@ -192,8 +188,6 @@ function websocket_handle(user, channel_id) {
       sendMessage(); // Call the sendMessage function
     }
   });
-
-
   // Response from consumer on the server
   socket.addEventListener("message", (event) => {
     const messageData = JSON.parse(event.data)['data'];
@@ -206,20 +200,11 @@ function websocket_handle(user, channel_id) {
     if (sender_id == user.id){
         document.getElementById('messageInput').value = '';
     }
-
     // Append the message to the chatbox
-    if (user.id == sender_id) {
-      const div = document.createElement('div');
-      div.classList.add('message');
-      div.classList.add('parker');
-      div.textContent = message;
-      all_messeeji.appendChild(div);
+    if (user.id != sender_id) {
+      addMessage(message, 'parker');
     } else {
-      const div = document.createElement('div');
-      div.classList.add('message');
-      div.classList.add('stark');
-      div.textContent = message;
-      all_messeeji.appendChild(div);
+      addMessage(message, 'stark');
     }
     scrollToBottom();
   });
@@ -228,144 +213,3 @@ function scrollToBottom() {
   var messages = document.getElementById('chat');
   messages.scrollTop = chat.scrollHeight;
 }
-
-
-
-// // Send message
-// sendMessageBtn.addEventListener('click', () => {
-//   const message = messageInput.value;
-//   if (message.trim() !== '') {
-//     const activeConversationIndex = findActiveConversationIndex();
-//     conversations[activeConversationIndex].messages.push(message);
-//     showConversation(activeConversationIndex);
-//     messageInput.value = '';
-//   }
-// });
-
-// Search functionality
-searchInput.addEventListener('input', () => {
-  const searchTerm = searchInput.value.toLowerCase();
-  conversationList.innerHTML = '';
-  conversations.forEach((conversation, index) => {
-    if (conversation.name.toLowerCase().includes(searchTerm)) {
-      const li = document.createElement('li');
-      li.textContent = conversation.name;
-      li.addEventListener('click', () => {
-        showConversation(index);
-      });
-      conversationList.appendChild(li);
-    }
-  });
-});
-
-// Helper function to find active conversation index
-function findActiveConversationIndex() {
-  const activeConversationName = chatHeader.textContent;
-  return conversations.findIndex(conversation => conversation.name === activeConversationName);
-}
-
-// const url_conversation = '/chat/get_conversations'
-
-// function get_conversations(){
-//     fetch(url_conversation)
-//     .then(response => response.json())
-//     .then(data => {
-//       add_conversation(data);
-//       showConversationList();
-//       // console.log(conversations);
-//     })
-// }
-
-// function add_conversation(data){
-//     data.conversations.forEach(function(conversation){
-//         var newconv = {name: conversation.title, messages: []}
-//         conversations.push(newconv)
-//     })
-// }
-
-// get_conversations();
-
-// const conversationList = document.getElementById('conversationList');
-
-// // Populate conversation list
-// function showConversationList(){
-//   console.log(conversations);
-//   conversations.forEach(function(conversation, index){
-//     const li = document.createElement('li');
-//     li.textContent = conversation.name;
-//     li.addEventListener('click', () => {
-//       showConversation(index);
-//     });
-
-//     conversationList.appendChild(li);
-    
-//     // console.log(conversationList);
-//   });
-// }
-
-// Show conversation
-// function showConversation() {
-//   const conversation = 
-//   chatHeader.textContent = conversation.name;
-//   chatMessages.innerHTML = '';
-//   conversation.messages.forEach(function(message){
-//     const div = document.createElement('div');
-//     div.classList.add('message');
-//     div.textContent = message;
-//     chatMessages.appendChild(div);
-//   });
-// }
-
-
-// const url_conversation = '/chat/get_conversations'
-
-// function get_conversations(){
-//     fetch(url_conversation)
-//     .then(response => response.json())
-//     .then(data => {
-//       add_conversation(data);
-//       showConversationList();
-//       // console.log(conversations);
-//     })
-// }
-
-// function add_conversation(data){
-//     data.conversations.forEach(function(conversation){
-//         var newconv = {name: conversation.title, messages: []}
-//         conversations.push(newconv)
-//     })
-// }
-
-// get_conversations();
-
-// const conversationList = document.getElementById('conversationList');
-
-// // Populate conversation list
-// function showConversationList(){
-//   console.log(conversations);
-//   conversations.forEach(function(conversation, index){
-//     const li = document.createElement('li');
-//     li.textContent = conversation.name;
-//     li.addEventListener('click', () => {
-//       showConversation(index);
-//     });
-
-//     conversationList.appendChild(li);
-    
-//     // console.log(conversationList);
-//   });
-// }
-
-// Show conversation
-// function showConversation() {
-//   const conversation = 
-//   chatHeader.textContent = conversation.name;
-//   chatMessages.innerHTML = '';
-//   conversation.messages.forEach(function(message){
-//     const div = document.createElement('div');
-//     div.classList.add('message');
-//     div.textContent = message;
-//     chatMessages.appendChild(div);
-//   });
-// }
-
