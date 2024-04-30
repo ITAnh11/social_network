@@ -7,7 +7,7 @@ function show_list_reaction_for_post(event){
     var a = event.target.parentNode.parentNode.parentNode.querySelector(".list_reactionPost");
     hoverTimeout = setTimeout(() => {
         a.classList.add("show_list_reactionPost");
-    }, 500);
+    }, 750);
 }
 //khi chuột rời khỏi nút
 function remove_list_reaction_for_post(event){
