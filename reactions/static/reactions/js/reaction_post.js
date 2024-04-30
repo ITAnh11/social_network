@@ -52,7 +52,7 @@ function setCountReaction_for_post(forWhat, idWhat){
         console.log("so luong react:",data);
         count = data.total;
         document.getElementById(`count-reaction-${forWhat}-${idWhat}`).textContent = count;
-        var iconTopReactionsContainer = document.getElementById(`icon-top-reactions-container-${idWhat}`);
+        var iconTopReactionsContainer = document.getElementById(`icon-top-reactions-post-container-${idWhat}`);
         iconTopReactionsContainer.innerHTML = '';
         
         if(data.topMostReacted[0].total !== 0 && data.topMostReacted[1].total !== 0){
@@ -108,7 +108,6 @@ url_creat_react = "/reactions/create_reaction/";
 function create_reaction_for_post(event){
     var type = event.target.className;
     var b = event.target.parentNode.parentNode.parentNode.parentNode;
-
     formData = new FormData();
     formData.append('user_id',localStorage.getItem('id'));
     formData.append('user_name',localStorage.getItem('name'));

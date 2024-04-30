@@ -17,10 +17,11 @@
     <link rel="stylesheet" href="{%static 'posts/css/style.css'%}" />
   </head>
 
-  <body>
+  <body data-base-url="{% static 'posts/' %}" post_id="{{post.id}}">
     <!-- <p>{{post}}</p>
     <p>{{image_id}}</p> -->
     {% include 'navbar/navbar.html' %}
+    
     <div class="posts-container">
       <div class="main-posts">
         <div class="left-part-posts">
@@ -69,7 +70,7 @@
           <br />
         </div>
         <div class="right-part-posts">
-          <div class="posts-content-container">
+          <div class="posts-content-container" posts_id = "{{post.id}}">
             <div class="posts-content">
               <div class="post-header">
                 <div class="user-profile-box">
@@ -111,104 +112,46 @@
             </div>
 
             <div class="count-reactionPost" id="count-reaction-{{post.id}}">
-              <div id="icon-top-reactions-container-{{post.id}}"></div>
-              <div>
-                <p id="count-reaction-posts-{{post.id}}"></p>
+              <div id="icon-top-reactions-post-container-{{post.id}}"></div>
+              <div id="count-reaction-posts-{{post.id}}">
+                120
               </div>
             </div>
             <div class="post-reaction">
-              <div class="activity-icons" style="display: flex">
-                <div
-                  onmouseleave="remove_list_reaction_for_post(event)"
-                  onmouseenter="show_list_reaction_for_post(event)"
-                  onclick="delete_reaction_for_post(event)"
-                >
-                  <img
-                    src="{% static 'posts/images/like3.png' %}"
-                    id="reaction_img_{{post.id}}"
-                    alt=""
-                    status="default"
-                    style="width: 30px"
-                  />
+              <div class="activity-icons" style="display: flex;">
+                <div onmouseleave="remove_list_reaction_for_post(event)" onmouseenter="show_list_reaction_for_post(event)" onclick="delete_reaction_for_post(event)">
+                  <img src="{% static 'posts/images/like3.png' %}" id="reaction_img_{{post.id}}" alt="" status="default" style="width: 30px">
                 </div>
-                <div onclick="clickCommentBtn(event)" posts_id="{{post.id}}">
-                  <img
-                    src="{% static 'posts/images/comment.png' %}"
-                    alt=""
-                    style="width: 30px"
-                  />Comments
+                <div onclick="clickCommentBtn(event)" posts_id="{{posts.id}}">
+                  <img src="{% static 'posts/images/comment.png' %}" alt="" style="width: 30px">Comments
                 </div>
                 <div>
-                  <img
-                    src="{% static 'posts/images/share0.png' %}"
-                    alt=""
-                    style="width: 30px"
-                  />Share
+                  <img src="{% static 'posts/images/share0.png' %}" alt="" style="width: 30px">Share
                 </div>
               </div>
-
-              <div
-                class="list_reactionPost"
-                onmouseenter="is_reacting_post(event)"
-                onmouseleave="is_not_reacting_post(event)"
-              >
-                <div
-                  class="reaction_btnPost"
-                  onclick="create_reaction_for_post(event)"
-                >
-                  <img
-                    class="love"
-                    src="{% static 'posts/images/love.png' %}"
-                  />
-                </div>
-                <div
-                  class="reaction_btnPost"
-                  onclick="create_reaction_for_post(event)"
-                >
-                  <img
-                    class="like"
-                    src="{% static 'posts/images/like.png' %}"
-                  />
-                </div>
-                <div
-                  class="reaction_btnPost"
-                  onclick="create_reaction_for_post(event)"
-                >
-                  <img
-                    class="care"
-                    src="{% static 'posts/images/care.png' %}"
-                  />
-                </div>
-                <div
-                  class="reaction_btnPost"
-                  onclick="create_reaction_for_post(event)"
-                >
-                  <img
-                    class="haha"
-                    src="{% static 'posts/images/haha.png' %}"
-                  />
-                </div>
-                <div
-                  class="reaction_btnPost"
-                  onclick="create_reaction_for_post(event)"
-                >
-                  <img class="wow" src="{% static 'posts/images/wow.png' %}" />
-                </div>
-                <div
-                  class="reaction_btnPost"
-                  onclick="create_reaction_for_post(event)"
-                >
-                  <img class="sad" src="{% static 'posts/images/sad.png' %}" />
-                </div>
-                <div
-                  class="reaction_btnPost"
-                  onclick="create_reaction_for_post(event)"
-                >
-                  <img
-                    class="angry"
-                    src="{% static 'posts/images/angry.png' %}"
-                  />
-                </div>
+  
+              <div class="list_reactionPost" onmouseenter="is_reacting_post(event)" onmouseleave="is_not_reacting_post(event)">
+                  <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
+                      <img class="love" src="{% static 'posts/images/love.png' %}">
+                  </div>
+                  <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
+                      <img class="like" src="{% static 'posts/images/like.png' %}">
+                  </div>
+                  <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
+                      <img class="care" src="{% static 'posts/images/care.png' %}">
+                  </div>
+                  <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
+                      <img class="haha" src="{% static 'posts/images/haha.png' %}">
+                  </div>
+                  <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
+                      <img class="wow" src="{% static 'posts/images/wow.png' %}">
+                  </div>
+                  <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
+                      <img class="sad" src="{% static 'posts/images/sad.png' %}">
+                  </div>
+                  <div class="reaction_btnPost" onclick="create_reaction_for_post(event)" >
+                      <img class="angry" src="{% static 'posts/images/angry.png' %}">
+                  </div>
               </div>
             </div>
           </div>
@@ -266,6 +209,7 @@
     </script>
     <script src="{%static 'posts/js/posts_page.js'%}"></script>
     <script src="{%static 'reactions/js/reaction_post.js'%}"></script>
+    <script src="{%static 'reactions/js/reaction_cmt.js'%}"></script>
     <script src="{%static 'comments/js/comment.js'%}"></script>
     
   </body>
