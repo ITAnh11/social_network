@@ -20,68 +20,68 @@
           <div class="comment-card">
             <div class="mt-2">
               <div class="d-flex flex-row p-3">
-                <img
-                  src=""
+                <a href="/userprofiles/?id=" style="text-decoration: none;">
+                  <img
+                  src="${commentUser.avatar}"
                   width="40"
                   height="40"
                   class="rounded-circle mr-3"
                   style="object-fit: cover; margin-right: 10px"
                 />
-
+                </a>
+                
+          
                 <div class="w-100">
                   <div
                     class="d-flex justify-content-between align-items-center"
                   >
                     <div class="d-flex flex-row align-items-center">
-                      <span class="mr-2">Brian selter</span>
+                      <a href="/userprofiles/?id=" style="text-decoration: none;">
+                        <span class="mr-2">${commentUser.name}</span>
+                      </a>
                     </div>
-                    <small>12h ago</small>
                   </div>
-
+          
                   <p class="text-justify comment-comment-text mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam
+                    ${(commentContent === null) ? "" : commentContent}
                   </p>
-
+          
                   <div class="d-flex flex-row comment-user-feed">
+                  <small style="margin-right: 20px;" >${commentCreatedAt}</small>
                     <span
-                      class="comment-wish"
-                      style="margin-right: 10px; font-size: 14px"
+                      class="comment-wish text-action"
+                      style="margin-right: 20px; font-size: 14px"
                       >Like</span
                     >
-                    <span class="ml-3">Reply</span>
+                    <span class="ml-3 text-action" style="cursor: pointer;" onclick="visibleReplyBoxComment()">Reply</span>
                   </div>
-
+          
                   <div id="commented-container">
                     <p
-                      class="view-all-reply-btn"
-                      style="margin-right: 10px; font-size: 14px"
+                      class="view-all-reply-btn text-action"
+                      style="margin-right: 10px; font-size: 14px; margin: 0px 0px 0px 0px; cursor: pointer;"
+                      onclick="getCommentsForComment(event)"
+                      is_view="false"
+                      comment_id="${commentId}"
                     >
                       View all reply
                     </p>
-
-                    <div class="list-replied-">
-                      
+          
+                    <div id="list-replied-${commentId}">
                     </div>
                   </div>
-
+          
                   <div
-                    class="mt-3 d-flex flex-row align-items-center p-3 comment-form-color"
-                    style="
-                      position: sticky;
-                      bottom: 0px;
-                      background-color: white;
-                    "
+                    class="d-none flex-row align-items-center p-3 comment-form-color"
+                    id="reply-box-comment-${commentId}"
                   >
                     <img
-                      src="https://i.imgur.com/zQZSWrt.jpg"
+                      src="${USER_AVATAR}"
                       width="40"
                       class="rounded-circle mr-3"
                       style="object-fit: cover; margin-right: 10px"
                     />
                     <div
-                      class="comment-box"
                       style="
                         display: flex;
                         justify-content: center;
@@ -92,97 +92,15 @@
                       <textarea
                         class="comment-form-control"
                         placeholder="Enter your comment..."
-                        style=""
+                        id="comment-input-comment-${commentId}"
                       ></textarea>
                       <img
-                        src="{%static 'comments/images/paper-plane.png'%}"
+                        src="/static/comments/images/paper-plane.png"
                         alt=""
                         srcset=""
                         style="width: 20px; height: 20px; margin-left: 5px"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="d-flex flex-row p-3">
-                <img
-                  src="data:image/jpeg;base64,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"
-                  width="40"
-                  height="40"
-                  class="rounded-circle mr-3"
-                  style="object-fit: cover; margin-right: 10px"
-                />
-
-                <div class="w-100">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
-                    <div class="d-flex flex-row align-items-center">
-                      <span class="mr-2">Brian selter</span>
-                    </div>
-                    <small>12h ago</small>
-                  </div>
-
-                  <p class="text-justify comment-comment-text mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam
-                  </p>
-
-                  <div class="d-flex flex-row comment-user-feed">
-                    <span
-                      class="comment-wish"
-                      style="margin-right: 10px; font-size: 14px"
-                      >Like</span
-                    >
-                    <span class="ml-3">Reply</span>
-                  </div>
-
-                  <div id="commented-container">
-                    <p
-                      class="view-all-reply-btn"
-                      style="margin-right: 10px; font-size: 14px"
-                    >
-                      View all reply
-                    </p>
-
-                    <div class="list-commented"></div>
-                  </div>
-
-                  <div
-                    class="mt-3 d-flex flex-row align-items-center p-3 comment-form-color"
-                    style="
-                      position: sticky;
-                      bottom: 0px;
-                      background-color: white;
-                    "
-                  >
-                    <img
-                      src="https://i.imgur.com/zQZSWrt.jpg"
-                      width="40"
-                      class="rounded-circle mr-3"
-                      style="object-fit: cover; margin-right: 10px"
-                    />
-                    <div
-                      class="comment-box"
-                      style="
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        min-width: 90%;
-                      "
-                    >
-                      <textarea
-                        class="comment-form-control"
-                        placeholder="Enter your comment..."
-                        style=""
-                      ></textarea>
-                      <img
-                        src="{%static 'comments/images/paper-plane.png'%}"
-                        alt=""
-                        srcset=""
-                        style="width: 20px; height: 20px; margin-left: 5px"
+                        onclick="creatCommentForComment(event)"
+                        comment_id="${commentId}"
                       />
                     </div>
                   </div>
