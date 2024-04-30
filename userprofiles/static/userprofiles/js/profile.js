@@ -193,7 +193,7 @@ fetch(api_get_profile)
         var editProfile = document.getElementById('editProfile');
         var editStoryButton = document.getElementById('editStoryButton');  
         var numberOfFr = document.getElementById('numberOfFr');  
-       
+
         if (data.isOwner === true) {
             // Hiển thị nút chỉnh sửa thông tin cá nhân
             editProfile.innerHTML = `<button type="button" id="editProfileReal"> <i class="far fa-edit"></i><a href="${urlFromEditProfile}" style="text-decoration: none; color: white;">Edit your profile</a></button>`;
@@ -205,12 +205,12 @@ fetch(api_get_profile)
             editCoverImage.innerHTML += `<img src="{%static 'userprofiles/images/camera.png' %}" alt="">
                                         <a href="{% url 'userprofiles:editImagesPage' %}" style="color: black;">Change your coverImage </a>`
                                         ;                            
-            fetch(`/friends/get_statusfriend/?id=${id_user}`)
+            fetch(`/friends/get_listfriendofuserother/?id=${id_user}`)
             .then(response => response.json())
             .then(data => {
                     
                 var numberOfFriends = data.number_of_friends;
-                
+                console.log(data.number_of_friends);
                 if (numberOfFr) {
                     numberOfFr.innerHTML = `<p>${numberOfFriends} friends</p>`;
                 } else {
@@ -222,14 +222,6 @@ fetch(api_get_profile)
             fetch(`/friends/get_statusfriend/?id=${id_user}`)
                 .then(response => response.json())
                 .then(data => {
-                           
-                    var numberOfFriends = data.number_of_friends;
-                    
-                    if (numberOfFr) {
-                        numberOfFr.innerHTML = `<p>${numberOfFriends} friends</p>`;
-                    } else {
-                        console.log('Phần tử có id là "numberOfFr" không tồn tại.');
-                    }
                     
                     // numberOfFr.innerHTML += `<p>{number} friends</p>`
                     // Kiểm tra trạng thái quan hệ bạn bè
@@ -255,9 +247,28 @@ fetch(api_get_profile)
                 .catch(error => {
                     console.error('Error:', error);
                 });
+                
         }
-        
 
+        if (data.isOwner === false) {
+            fetch(`/friends/get_listfriendofuserother/?id=${id_user}`)
+                .then(response => response.json())
+                .then(data => {
+                    
+                    // numberOfFr.innerHTML += `<p>{number} friends</p>`
+                    // Kiểm tra trạng thái quan hệ bạn bè
+                    var numberOfFriends = data.number_of_friends;
+                    console.log(data.number_of_friends);
+                    if (numberOfFr) {
+                        numberOfFr.innerHTML = `<p>${numberOfFriends} friends</p>`;
+                    } else {
+                        console.log('Phần tử có id là "numberOfFr" không tồn tại.');
+                    } 
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
 
         // edit story
         var intro_bio = document.getElementById('intro_bio');
