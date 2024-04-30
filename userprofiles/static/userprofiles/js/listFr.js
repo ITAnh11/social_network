@@ -25,19 +25,13 @@ function showListFriends(id_user) {
             if (!id_user) {
                 id_user = data.userprofile['user_id'];
             }
-            // var id_user = data.userprofile['user_id'];
             // Thực hiện fetch để lấy danh sách bạn bè của user có id_user
             fetch('/friends/get_listfriendofuserother/?id=' + id_user)
                 .then(response => response.json())
                 .then(data => {
                     console.log("user_id:",id_user);
                     console.log("friend_list:",data);
-                    // var list_friend = document.createElement("div");
-                    // list_friend.className = "card-list";
-                    // var Friend_list = document.querySelector(".list-friends");
                     var Friend_list = document.getElementById('list_friends_userprofile')
-                    console.log("abc",Friend_list);
-                    // Friend_list.appendChild(list_friend);
                     data.data.forEach(function(friend_ship){
                         var url = `/userprofiles/?id=${friend_ship.friend_profile.id}`;
                         var a =`<a href="${url}" style="text-decoration: none;color:black;">
@@ -50,13 +44,43 @@ function showListFriends(id_user) {
                                                 <p>${friend_ship.friend_profile.name}</p>
                                             </div>
                                         </div>
-                                    </div>                            
+                                    </div>                              
+                                </a>`;
+
+                        
+                        Friend_list.innerHTML += a;
+                    })  
+                });
+        });
+}
+
+function showListFriendsOfUserprofile(id_user) {
+    // Thực hiện fetch để lấy dữ liệu userprofile từ api_get_profile
+    fetch(api_get_profile)
+        .then(response => response.json())
+        .then(data => {
+            // Lấy id_user từ dữ liệu userprofile nếu không được truyền vào từ bên ngoài
+            if (!id_user) {
+                id_user = data.userprofile['user_id'];
+            }
+            // Thực hiện fetch để lấy danh sách bạn bè của user có id_user
+            fetch('/friends/get_listfriendofuserother/?id=' + id_user)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("user_id:",id_user);
+                    console.log("friend_list:",data);
+                    var listFr_Userprofile = document.getElementById('listFrOfUserprofile')
+
+                    data.data.forEach(function(friend_ship){
+                        var url = `/userprofiles/?id=${friend_ship.friend_profile.id}`;
+                        var a =`<a href="${url}" style="text-decoration: none;color:black;">
+                                    <div class="first-friend">
+                                        <img src="${friend_ship.friend_profile.avatar}" alt="">
+                                        <p>${friend_ship.friend_profile.name}</p>
+                                    </div>                                
                                 </a>`;
                         
-                        // var newCard = document.createElement("div");
-                        // newCard.innerHTML = a;
-                        // list_friend.appendChild(newCard);
-                        Friend_list.innerHTML += a;
+                        listFr_Userprofile.innerHTML += a;
                     })  
                 });
         });
@@ -67,5 +91,6 @@ document.addEventListener("DOMContentLoaded", function() {
     var id_user = getUserIdFromUrl();
 
     showListFriends(id_user);
+    showListFriendsOfUserprofile(id_user);
 });
 
