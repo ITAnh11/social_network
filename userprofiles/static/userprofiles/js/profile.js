@@ -2,8 +2,6 @@ var api_get_profile = '/userprofiles/get_profile/?id=' + (new URL(document.locat
 // console.log(api_get_profile);
 const urlFromEditProfile = document.body.getAttribute('link-url-editProfile');
 const urlFromEditStory = document.body.getAttribute('link-url-editStory');
-const urlProfile = document.body.getAttribute('link-profile');
-const urlListFr = document.body.getAttribute('link-listFr');
 
 // thu hồi lời mời kết bạn 
 function revokeFriendRequest(id_user) {
@@ -134,6 +132,7 @@ function deninedFriendRequest(id_user) {
         // Xử lý lỗi nếu cần
     });
 }
+
 // Huỷ kết bạn
 function deleteFriendShip(id_user) {
     var formdata = new FormData();
@@ -170,33 +169,31 @@ fetch(api_get_profile)
     .then(response => response.json())
     .then(data => {
 
+        var id_user = data.userprofile['user_id'];
+
         var userName2 = document.getElementById('userName2');
         userName2.innerHTML += `<h3>${data.userprofile['first_name'] + " " + data.userprofile['last_name']}</h3>`;
 
         var coverImage = document.getElementById('coverImage');
         coverImage.innerHTML += `<img src ="${data.imageprofile['background']}" alt="coverImage" class="coverImage">`;
 
+        var editCoverImage = document.getElementById('editCoverImage');
         var avatarContainer = document.getElementById('avatarContainer');
         avatarContainer.innerHTML += `<img src ="${data.imageprofile['avatar']}" alt="avatar" class="dashboard-img" id="dashboard-img">`;
-       
-        var id_user = data.userprofile['user_id'];
-        
+
         var listChoose = document.getElementById('listChoose');
-        if (data.isOwner === true) {
-            listChoose.innerHTML = `<ul class="profile-menu" id="profile_menu">
-                                        <li><a href="${urlProfile}">Posts</a></li>
-                                        <li><a href="${urlListFr}">Friends</a></li>
+        listChoose.innerHTML = `<ul class="profile-menu" id="profile_menu">
+                                        <li><a href="/userprofiles/?id=${id_user}">Posts</a></li>
+                                        <li><a href="/userprofiles/listFriends/?id=${id_user}">Friends</a></li>
                                     </ul>`
-        } else {
-            listChoose.innerHTML = `<ul class="profile-menu" id="profile_menu">
-                                        <li><a href="${urlProfile}">Posts</a></li>
-                                        <li><a href="${urlListFr}">Friends</a></li>
-                                    </ul>`
-        }
+
+        var listFr_page = document.getElementById('heading-link profile-heading-link');
+        listFr_page.innerHTML += `<a href="/userprofiles/listFriends/?id=${id_user}">All Friends</a>`;
 
         var editProfile = document.getElementById('editProfile');
-        var editStoryButton = document.getElementById('editStoryButton');    
-
+        var editStoryButton = document.getElementById('editStoryButton');  
+        var numberOfFr = document.getElementById('numberOfFr');  
+       
         if (data.isOwner === true) {
             // Hiển thị nút chỉnh sửa thông tin cá nhân
             editProfile.innerHTML = `<button type="button" id="editProfileReal"> <i class="far fa-edit"></i><a href="${urlFromEditProfile}" style="text-decoration: none; color: white;">Edit your profile</a></button>`;
@@ -205,13 +202,36 @@ fetch(api_get_profile)
                                                     <i class="far fa-edit"></i> Edit your story
                                             </button>
                                          </a>`;
+            editCoverImage.innerHTML += `<img src="{%static 'userprofiles/images/camera.png' %}" alt="">
+                                        <a href="{% url 'userprofiles:editImagesPage' %}" style="color: black;">Change your coverImage </a>`
+                                        ;                            
+            fetch(`/friends/get_statusfriend/?id=${id_user}`)
+            .then(response => response.json())
+            .then(data => {
+                    
+                var numberOfFriends = data.number_of_friends;
+                
+                if (numberOfFr) {
+                    numberOfFr.innerHTML = `<p>${numberOfFriends} friends</p>`;
+                } else {
+                    console.log('Phần tử có id là "numberOfFr" không tồn tại.');
+                }
+            })
         } else {
-            // Người dùng không phải là chủ sở hữu, kiểm tra trạng thái quan hệ bạn bè
-
             // Gọi API để kiểm tra trạng thái quan hệ bạn bè với người dùng khác
-            fetch('/friends/get_statusfriend/?id=' + id_user)
+            fetch(`/friends/get_statusfriend/?id=${id_user}`)
                 .then(response => response.json())
                 .then(data => {
+                           
+                    var numberOfFriends = data.number_of_friends;
+                    
+                    if (numberOfFr) {
+                        numberOfFr.innerHTML = `<p>${numberOfFriends} friends</p>`;
+                    } else {
+                        console.log('Phần tử có id là "numberOfFr" không tồn tại.');
+                    }
+                    
+                    // numberOfFr.innerHTML += `<p>{number} friends</p>`
                     // Kiểm tra trạng thái quan hệ bạn bè
                     if (data.status_relationship === 'user') {
                         editProfile.innerHTML = `<button type="button" id="editProfileReal"> <i class="far fa-edit"></i><a href="${urlFromEditProfile}" style="text-decoration: none; color: white;">Edit your profile</a></button>`;

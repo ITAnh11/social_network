@@ -29,7 +29,7 @@
     height: auto;
 }
 
-.comment-c-badge{
+/* .comment-c-badge{
 	background-color: #35b69f;
     color: white;
     height: 20px;
@@ -40,20 +40,25 @@
     justify-content: center;
     align-items: center;
     margin-top: 2px;
+} */
+
+.comment-background {
+    background-color: #F0F2F5;
+    padding: 5px 20px;
+    border-radius: 18px;
+    max-width: fit-content;
 }
 
 .comment-comment-text{
 	font-size: 13px;
+    word-wrap: break-word;
+    max-width: 300px;
 }
-
-.comment-wish{
-}
-
 
 .comment-user-feed{
 
-	    font-size: 14px;
-	    margin-top: 12px;
+	font-size: 14px;
+	margin-top: 5px;
 }
 
 .text-action:hover{

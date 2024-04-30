@@ -12,7 +12,7 @@ setImageForCommentForPost();
 
 function renderComments(data, idElement) {
   var commentedELement = document.getElementById(idElement);
-  data.comments.forEach(function(comment, index) {
+  data.comments.forEach(function (comment, index) {
     var commentId = comment.id;
     var commentContent = comment.content;
     var commentCreatedAt = comment.created_at;
@@ -20,35 +20,78 @@ function renderComments(data, idElement) {
 
     setTimeout(() => {
       // Code to be executed after 1 second delay
-      var html = `<div class="d-flex flex-row p-3">
-      <img
-        src="${commentUser.avatar}"
-        width="40"
-        height="40"
-        class="rounded-circle mr-3"
-        style="object-fit: cover; margin-right: 10px"
-      />
+      var html = `<div class="d-flex flex-row p-2">
+      <a href="/userprofiles/?id=${commentUser.id}" style="text-decoration: none;">
+                  <img
+                  src="${commentUser.avatar}"
+                  width="40"
+                  height="40"
+                  class="rounded-circle mr-3"
+                  style="object-fit: cover; margin-right: 5px; margin-top: 5px"
+                />
+                </a>
 
       <div class="w-100">
-        <div
+      <div class="comment-background">
+      <div
           class="d-flex justify-content-between align-items-center"
         >
           <div class="d-flex flex-row align-items-center">
-            <span class="mr-2">${commentUser.name}</span>
+          <a href="/userprofiles/?id=${commentUser.id}" style="text-decoration: none;">
+          <span class="mr-2">${commentUser.name}</span>
+        </a>
           </div>
         </div>
 
         <p class="text-justify comment-comment-text mb-0">
           ${(commentContent === null) ? "" : commentContent}
         </p>
+      </div>
+        
 
         <div class="d-flex flex-row comment-user-feed">
         <small style="margin-right: 20px;" >${commentCreatedAt}</small>
-          <span
-            class="comment-wish text-action"
-            style="margin-right: 20px; font-size: 14px"
-            >Like</span
+
+          <div id="icon-top-reactions-comment-container-${commentId}"></div>
+          <div id="count-reaction-comment-${commentId}" style="margin-right: 5px;">
+            120
+          </div>
+
+          <span class="comment-wish text-action" style="margin-right: 20px; font-size: 14px;cursor: pointer;" 
+          onmouseleave="remove_list_reaction_for_post(event)" 
+          onmouseenter="show_list_reaction_for_post(event)" 
+          onclick="delete_reaction_for_cmt(event)"
+          status="default"
+          id="react-cmt-${commentId}"
+          comment_id="${commentId}"
           >
+            React
+          </span>
+          
+          <div class="list_reactionPost" onmouseenter="is_reacting_post(event)" onmouseleave="is_not_reacting_post(event)" comment_id="${commentId}">
+            <div class="reaction_btnPost" onclick="create_reaction_for_cmt(event)" >
+                <img class="love" src="${baseUrl + `images/love.png`}">
+            </div>
+            <div class="reaction_btnPost" onclick="create_reaction_for_cmt(event)" >
+                <img class="like" src="${baseUrl + `images/like.png`}">
+            </div>
+            <div class="reaction_btnPost" onclick="create_reaction_for_cmt(event)" >
+                <img class="care" src="${baseUrl + `images/care.png`}">
+            </div>
+            <div class="reaction_btnPost" onclick="create_reaction_for_cmt(event)" >
+                <img class="haha" src="${baseUrl + `images/haha.png`}">
+            </div>
+            <div class="reaction_btnPost" onclick="create_reaction_for_cmt(event)" >
+                <img class="wow" src="${baseUrl + `images/wow.png`}">
+            </div>
+            <div class="reaction_btnPost" onclick="create_reaction_for_cmt(event)" >
+                <img class="sad" src="${baseUrl + `images/sad.png`}">
+            </div>
+            <div class="reaction_btnPost" onclick="create_reaction_for_cmt(event)" >
+                <img class="angry" src="${baseUrl + `images/angry.png`}">
+            </div>
+          </div>
+
           <span class="ml-3 text-action" style="cursor: pointer;" onclick="visibleReplyBoxComment(${commentId})">Reply</span>
         </div>
 
@@ -104,6 +147,8 @@ function renderComments(data, idElement) {
     </div>`;
 
       commentedELement.insertAdjacentHTML('beforeend', html);
+      setCountReaction_for_cmt("comment", commentId);
+      is_reacted_for_cmt(commentId);
     }, index * 100);
   });
 }
@@ -216,6 +261,7 @@ function getCommentsForComment(event) {
       console.log('Success:', data);
       renderComments(data, `list-replied-${commentId}`);
       event.target.setAttribute("is_view", "true");
+      event.target.style.display = "none";
     });
 }
 

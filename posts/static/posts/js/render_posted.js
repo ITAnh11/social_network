@@ -9,8 +9,6 @@ const url_get_posts = (is_in_homepage == false) ? url_user_post : url_homepage_p
 
 const posted_area = document.querySelector(".posted_area");
 
-const baseUrl = document.body.getAttribute('data-base-url');
-
 let currentNumberOfPosts = 0;
 
 function get_posts() {
@@ -65,7 +63,7 @@ function render_post(data, isOld) {
                 </div>
                 
                 <div class="count-reactionPost" id="count-reaction-${post.id}">
-                    <div id="icon-top-reactions-container-${post.id}">
+                    <div id="icon-top-reactions-post-container-${post.id}">
                     </div>
                     <div id="count-reaction-posts-${post.id}" style="align-items: center;">
                         120
@@ -107,7 +105,7 @@ function render_post(data, isOld) {
                             <img class="angry" src="${baseUrl + "images/angry.png"}">
                         </div>
                     </div>
-
+                    
                 </div>
             </div>`
             var posted = document.createElement("div");
