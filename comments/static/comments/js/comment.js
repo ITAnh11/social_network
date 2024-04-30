@@ -12,7 +12,7 @@ setImageForCommentForPost();
 
 function renderComments(data, idElement) {
   var commentedELement = document.getElementById(idElement);
-  data.comments.forEach(function(comment, index) {
+  data.comments.forEach(function (comment, index) {
     var commentId = comment.id;
     var commentContent = comment.content;
     var commentCreatedAt = comment.created_at;
@@ -21,20 +21,24 @@ function renderComments(data, idElement) {
     setTimeout(() => {
       // Code to be executed after 1 second delay
       var html = `<div class="d-flex flex-row p-3">
-      <img
-        src="${commentUser.avatar}"
-        width="40"
-        height="40"
-        class="rounded-circle mr-3"
-        style="object-fit: cover; margin-right: 10px"
-      />
+      <a href="/userprofiles/?id=${commentUser.id}" style="text-decoration: none;">
+                  <img
+                  src="${commentUser.avatar}"
+                  width="40"
+                  height="40"
+                  class="rounded-circle mr-3"
+                  style="object-fit: cover; margin-right: 10px"
+                />
+                </a>
 
       <div class="w-100">
         <div
           class="d-flex justify-content-between align-items-center"
         >
           <div class="d-flex flex-row align-items-center">
-            <span class="mr-2">${commentUser.name}</span>
+          <a href="/userprofiles/?id=${commentUser.id}" style="text-decoration: none;">
+          <span class="mr-2">${commentUser.name}</span>
+        </a>
           </div>
         </div>
 
