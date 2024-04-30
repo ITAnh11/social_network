@@ -27,7 +27,9 @@ SECRET_KEY = 'django-insecure-tq@z^zzy63%i6(+)=4l6vr2-g2p^#ba6&*-$u3b)d(bjb&(evb
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 # Application definition
 
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework', # pip install djangorestframework
     'corsheaders', # pip install django-cors-headers
     'django_mongoengine',
+    # 'debug_toolbar',
     'homepage',
     'users',
     'posts',
@@ -58,6 +61,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -121,6 +125,16 @@ MONGODB_DATABASES = {
         # "password": "mongo_password",  # replace with your password
     }
 }
+
+# CACHES = {
+#     "default" : {
+#         "BACKEND" : "django_redis.cache.RedisCache",
+#         "LOCATION" : "redis://0.0.0.0:6379",
+#         "OPTIONS" : {
+#             "CLIENT_CLASS" : "django_redis.client.DefaultClient"
+#         } 
+#     }
+# }
 
 import mongoengine
 

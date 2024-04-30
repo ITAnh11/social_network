@@ -55,6 +55,38 @@ html {
   color: white;
 }
 
+.contact-list {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+}
+
+.contact {
+  display: flex;
+  align-items: center; /* Align items horizontally */
+  padding: 10px;
+  border-bottom: 1px solid #ccc; /* Optional: Add a border between contacts */
+}
+
+.contact:last-child {
+  border-bottom: none; /* Remove border for the last contact */
+}
+
+.contact .pic {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.contact .contact-info {
+  margin-left: 10px;
+}
+
+.contact .badge {
+  margin-left: auto; /* Push the badge to the right */
+}
+
+
 .chat {
   margin-top: 5px;
   position: relative;
@@ -181,8 +213,13 @@ html {
 .chat .input input:placeholder {
   color: #999;
 }
-.pic.stark {
-  background-color: #999;
+.avt {
+  position: absolute;
+  left: 0;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
 }
 
 .chat.hide{

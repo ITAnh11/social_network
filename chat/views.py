@@ -24,6 +24,7 @@ from .models import Conversation, Message, Channel, Messeeji, UserMess, Particip
 from common_functions.common_function import getUserProfileForPosts, getTimeDuration, getUser
 from django.shortcuts import render, redirect
 from mongoengine.errors import DoesNotExist
+# from django.views.decorators.cache import cache_page
 
 class MesseejiView():
     pass 
@@ -33,15 +34,10 @@ class ChatTestView(APIView):
     def post(self, request):
         username = request.POST.get('username')
         # channel = request.POST['channel']
-        print('post called')
         try:
-            print(username)
             list_users = SearchUser.search(SearchUser, username)
-            print("list users:", list_users)
             user_ids = [user.user_id.id for user in list_users]
-            print(user_ids)
             list_channels = Channel.objects(user_id__in=user_ids)
-            print(list_channels)
             
             # return ChatTestView.showAllChannel(request, list_channels)
             return render(request, "chat/index.html")
@@ -60,11 +56,6 @@ class ChatTestView(APIView):
         response.data = {
             'channel' : data
         }
-        # print('show all channel available')
-        # print("data",data)
-        # print("respone_data:", response.data)
-        # print(response)
-
         return response
 
     def get(self, request):
@@ -152,10 +143,10 @@ class CreateChannel(APIView):
             part_user2 = Participants.objects(user_id=user_id2)
             channels_user1 = [participant.channel_id for participant in part_user1]
             channels_user2 = [participant.channel_id for participant in part_user2]
-            # print(f"channel2: {channels_user2}")
+
             # Find common channels between the two users
             common_channels = set(channels_user1) & set(channels_user2)
-            # print(f"result: {common_channels}")
+
             if common_channels:
                 channel = Channel.objects(channel_id=list(common_channels)[0])
                 return True, channel
@@ -168,21 +159,16 @@ class CreateChannel(APIView):
         user = getUser(request)
         user_id = user.id
         target_id = request.data.get('target_id')
-        print(target_id)
         existed_channel = self.check_existing_channel(user_id, target_id)
-        print(f"check channel res: {existed_channel}")
-        print(existed_channel[0])
         if existed_channel[0]:
-            print(f"existed a channel between {user_id} and {target_id}")
             output_channel = existed_channel[1].first()
             return False, output_channel
         else:
-            print("let's create a new channel!")
             new_channel =  Channel(
                 created_at = datetime.datetime.now(),
                 capacity = 2,
             )
-            print(f"new channel: {new_channel}")
+
             part_user = Participants(
                 user_id = user_id,
                 channel_id = new_channel.id,
@@ -191,14 +177,10 @@ class CreateChannel(APIView):
                 user_id = target_id,
                 channel_id = new_channel.id
             )
-            print(f"creating new_channel {new_channel}")
-            print(f"creating part_user {part_user}")
-            print(f"creating part_target {part_target}")
             new_channel.save()
 
             part_user.save()
             part_target.save()
-            print("create completed!")
         return True, new_channel
     
     def post(self, request):
@@ -268,7 +250,6 @@ class ConversationView(APIView):
         data = []
         for conv in convs:
             conv_data = ConversationSerializer(conv).data
-            print(conv_data)
             data.append(conv_data)
 
         response.data = {
@@ -356,25 +337,20 @@ class SearchUser(generics.ListAPIView):
     serializer_class = UserInfoSerializer
     queryset = UserProfile.objects.all()
     # permission_classes = [IsAuthenticated]
-
+    # @cache_page(60*15)
     def search(self, username):
         users = []
         if(username != '@'):
-            # print(UserProfile.objects.all())
             users = UserProfile.objects.filter(
                 Q(user_id__email__icontains=username) |
                 Q(first_name__icontains=username) |
                 Q(last_name__icontains=username) 
-                # &-Q(user=logged_in_user),
             )
         else:
             users = UserProfile.objects.filter()
         return users
-
     def list(self, request, *args, **kwargs):
-        print("list func called")
         username = self.kwargs['username']
-        # logged_in_user = self.request.user
         users = self.search(username)
         current_user_id = getUser(request).id
         users = [user for user in users if user.id != current_user_id]
@@ -384,10 +360,23 @@ class SearchUser(generics.ListAPIView):
                 status=status.HTTP_404_NOT_FOUND
             )
         
+        data = []
         serializer = UserInfoSerializer(users, many=True)
+    
+        for index, user in enumerate(users):
+            user_img = getUserProfileForPosts(User.objects.filter(id=user.id).first())['avatar']
+            user_data = serializer.data[index]  # Get serialized data for the current user
+    
+            # Append the avatar to the user data
+            user_data['avatar'] = user_img
+    
+            data.append(user_data)
+    
         return Response({
-            "list_users" : serializer.data,
-            "current_user" : getUser(request),})
+            "list_users" : data,
+            "current_user" : getUser(request).id,
+        })
+
 
 def index(request):
     return render(request, "chat/index.html")

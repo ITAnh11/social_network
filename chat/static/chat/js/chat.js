@@ -5,7 +5,10 @@ const messageInput = document.getElementById('messageInput');
 const sendMessageBtn = document.getElementById('sendMessageBtn');
 const list_all_users = document.getElementById("userList");
 
-var activeChannels = {};
+const socketMap = {};
+var inActiveSocket = null;
+
+var current_user;
 
 var url_all_users = "/search/@"; // Assuming this is the correct endpoint to fetch all users
 var url_get_channel = "chat/create_channel/"
@@ -18,26 +21,56 @@ function show_all_users() {
       // console.log("all_users:", data);
       data.list_users.forEach(function(user) {
           console.log(user);
+          // var fullName = user.first_name + " " + user.last_name;
+          // var li = document.createElement('div');
+          // li.textContent = fullName;
+
           var fullName = user.first_name + " " + user.last_name;
-          var li = document.createElement('li');
-          li.textContent = fullName;
 
-          li.addEventListener('click', () => {
-            // Show channel logic here
+          // Create the elements
+          var divContact = document.createElement('div');
+          divContact.className = 'contact';
+          divContact.setAttribute('data-user-id', user.id);
 
+          var img = document.createElement('img');
+          img.className = 'pic';
+          img.setAttribute('src', user.avatar); // Set the source for the image
+
+          var divContactInfo = document.createElement('div');
+          divContactInfo.className = 'contact-info';
+
+          var divName = document.createElement('div');
+          divName.className = 'name';
+          divName.textContent = fullName;
+
+          var divMessage = document.createElement('div');
+          divMessage.className = 'message';
+          divMessage.textContent = 'Last message';
+
+          var divBadge = document.createElement('div');
+          divBadge.className = 'badge';
+          divBadge.textContent = '3'; // Example unread message count
+
+          // Append elements to each other
+          divContactInfo.appendChild(divName);
+          divContactInfo.appendChild(divMessage);
+          divContact.appendChild(img);
+          divContact.appendChild(divContactInfo);
+          divContact.appendChild(divBadge);
+
+          divContact.addEventListener('click', () => {
             // Send POST request
             createChannel(user)
               .then(channel_id => {
                 showChannel(user, channel_id);
+
               })
               .catch(error => {
                 // Handle error
                 console.error('Failed to create channel:', error);
               });
-            
           });
-
-          list_all_users.appendChild(li);
+          list_all_users.appendChild(divContact);
           // console.log(li)
       });
   })
@@ -51,7 +84,6 @@ function createChannel(user) {
   return new Promise((resolve, reject) => {
     // Get the CSRF token from the cookies
     const csrftoken = getCookie('csrftoken');
-
     var postData = {
       target_id: user.id,  // Assuming user id is required for the post request
       // Add any other data needed for the post request
@@ -102,9 +134,13 @@ show_all_users();
 
 // show channel when click on Username
 function showChannel(user, channel_id) {
+
   var full_name = user.first_name + " " + user.last_name;
   chatHeader.textContent = full_name;
-  chat.innerHTML = '';
+  var img = document.createElement('img');
+  img.className = 'avt';
+  img.setAttribute('src', user.avatar);
+  chatHeader.appendChild(img); 
   get_all_messeeji(user, channel_id);
   websocket_handle(user, channel_id);
 }
@@ -120,6 +156,7 @@ function addMessage(message, sender) {
 // show all message with given channel_id
 const url_all_messeeji = '/chat/get_messeeji/'
 function get_all_messeeji(user, channel_id){
+  all_messeeji.innerHTML = '';
   const csrftoken = getCookie('csrftoken');
   var postData = {
     channel_id : channel_id,
@@ -135,7 +172,7 @@ function get_all_messeeji(user, channel_id){
   .then(response => response.json())
   .then(data => {
       data.data.forEach(function(messeeji) {
-          if (user.id != messeeji.sender_id) {
+          if (current_user == messeeji.sender_id) {
             addMessage(messeeji.message_content, 'parker')
           } else {
             addMessage(messeeji.message_content, 'stark')
@@ -149,47 +186,71 @@ function get_all_messeeji(user, channel_id){
   });
 }
 
+// Gắn sự kiện cho nút gửi tin nhắn
+sendMessageBtn.addEventListener('click', function(event) {
+  if (inActiveSocket != null) {
+    event.preventDefault();
+    sendMessage();
+  }
+});
+
+messageInput.addEventListener('keypress', function(event) {
+  if ((event.keyCode === 13) && (inActiveSocket != null)) {
+    event.preventDefault();
+    sendMessage();
+  }
+});
+
+function sendMessage() {
+  const message = messageInput.value.trim();
+  if (!message) return;
+  socketMap[inActiveSocket].send(
+      JSON.stringify({
+          'message_content': message,
+          'channel_id': inActiveSocket,
+          'sender_id': current_user,
+      })
+  );
+}
+
 // HANDLE WEBSOCKET
 function websocket_handle(user, channel_id) {
+
+  if (socketMap[inActiveSocket]) {
+    // Close the existing WebSocket connection
+    socketMap[inActiveSocket].close();
+    console.log("Closed existing WebSocket connection for channel:", inActiveSocket);
+  }
+
   const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
   const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/${channel_id}/`;
-  const socket = new WebSocket(wsEndpoint);
+  socketMap[channel_id] = new WebSocket(wsEndpoint);
+
+  inActiveSocket = channel_id;
   // Successful connection event
-  socket.onopen = (event) => {
+  socketMap[channel_id].onopen = (event) => {
     console.log("WebSocket connection opened!");
   };
   // Socket disconnect event
-  socket.onclose = (event) => {
+  socketMap[channel_id].onclose = (event) => {
     console.log("WebSocket connection closed!");
   };  
 
-  function sendMessage() {
-    const message = document.getElementById('messageInput').value;
-    if (message == "") return 
-    socket.send(
-        JSON.stringify({
-            'message_content': message,
-            'channel_id': channel_id,
-            'sender_id': user.id,
-        })
-    );
-    console,log("user id is:", user.id)
-  }
-  // Form submit listener
-  document.getElementById('sendMessageBtn').addEventListener('click', function(event){
-    event.preventDefault();
-    sendMessage()
-  });
+  // // Form submit listener
+  // document.getElementById('sendMessageBtn').addEventListener('click', function(event){
+  //   event.preventDefault();
+  //   sendMessage()
+  // });
 
-  document.getElementById('messageInput').addEventListener('keypress', function(event){
-    // Check if Enter key is pressed (key code 13)
-    if (event.keyCode === 13) {
-      event.preventDefault(); // Prevent the default behavior (e.g., form submission)
-      sendMessage(); // Call the sendMessage function
-    }
-  });
+  // document.getElementById('messageInput').addEventListener('keypress', function(event){
+  //   // Check if Enter key is pressed (key code 13)
+  //   if (event.keyCode === 13) {
+  //     event.preventDefault(); // Prevent the default behavior (e.g., form submission)
+  //     sendMessage(); // Call the sendMessage function
+  //   }
+  // });
   // Response from consumer on the server
-  socket.addEventListener("message", (event) => {
+  socketMap[channel_id].addEventListener("message", (event) => {
     const messageData = JSON.parse(event.data)['data'];
     console.log(messageData);
 
@@ -197,11 +258,11 @@ function websocket_handle(user, channel_id) {
     var message = messageData['message_content'];
 
     // Empty the message input field after the message has been sent
-    if (sender_id == user.id){
+    if (sender_id == current_user){
         document.getElementById('messageInput').value = '';
     }
     // Append the message to the chatbox
-    if (user.id != sender_id) {
+    if (current_user == sender_id) {
       addMessage(message, 'parker');
     } else {
       addMessage(message, 'stark');
