@@ -1,6 +1,32 @@
+let isHovered = false;
+let hoverTimeout;
+//xử lí hover vao các nút react
 function show_list_reaction_for_post(event){
     var a = event.target.parentNode.parentNode.parentNode.querySelector(".list_reactionPost");
-    a.classList.toggle("show_list_reactionPost");
+    hoverTimeout = setTimeout(() => {
+        a.classList.add("show_list_reactionPost");
+    }, 500);
+}
+//khi chuột rời khỏi nút
+function remove_list_reaction_for_post(event){
+    clearTimeout(hoverTimeout);
+    var a = event.target.parentNode.parentNode.parentNode.querySelector(".list_reactionPost");
+    setTimeout(() => {
+        if(isHovered !== true){
+            a.classList.remove("show_list_reactionPost");
+        }
+    }, 500);
+}
+//khi đang react
+function is_reacting_post(event){
+    isHovered = true;
+}
+//khi chuột đi ra khỏi thanh react
+function is_not_reacting_post(event){
+    isHovered = false;
+    setTimeout(() => {
+        event.target.classList.remove("show_list_reactionPost");
+    },1000);
 }
 
 
@@ -21,29 +47,33 @@ function setCountReaction_for_post(forWhat, idWhat){
     })
     .then(response => response.json())
     .then(data => {
-        // console.log("so luong react:",data);
+        console.log("so luong react:",data);
         count = data.total;
         document.getElementById(`count-reaction-${forWhat}-${idWhat}`).textContent = count;
-        var a = document.getElementById(`count-reaction-${idWhat}`);
+        var iconTopReactionsContainer = document.getElementById(`icon-top-reactions-container-${idWhat}`);
+        iconTopReactionsContainer.innerHTML = '';
+        
         if(data.topMostReacted[0].total !== 0 && data.topMostReacted[1].total !== 0){
+
+            var top2_react = document.createElement('img');
+            top2_react.classList.add("top2-react-in-post");
+            top2_react.src = `${baseUrl + `images/${data.topMostReacted[1].type}.png`}`;
+
+            iconTopReactionsContainer.insertBefore(top2_react, iconTopReactionsContainer.firstChild);
+
 
             var top1_react = document.createElement('img');
             top1_react.classList.add("top1-react-in-post");
             top1_react.src = `${baseUrl + `images/${data.topMostReacted[0].type}.png`}`;
             
-            var top2_react = document.createElement('img');
-            top2_react.classList.add("top2-react-in-post");
-            top2_react.src = `${baseUrl + `images/${data.topMostReacted[1].type}.png`}`;
-
-            a.insertBefore(top2_react,a.firstChild);
-            a.insertBefore(top1_react,a.firstChild);
+            iconTopReactionsContainer.insertBefore(top1_react, iconTopReactionsContainer.firstChild);
         }
         else if(data.topMostReacted[0].total !== 0){
             var top1_react = document.createElement('img');
             top1_react.classList.add("top1-react-in-post");
             top1_react.src = `${baseUrl + `images/${data.topMostReacted[0].type}.png`}`;
 
-            a.insertBefore(top1_react,a.firstChild);
+            iconTopReactionsContainer.insertBefore(top1_react, iconTopReactionsContainer.firstChild);
         }
     })
 }
@@ -81,7 +111,7 @@ function create_reaction_for_post(event){
     formData.append('user_id',localStorage.getItem('id'));
     formData.append('user_name',localStorage.getItem('name'));
     formData.append('user_avatar',localStorage.getItem('avatar'));
-    formData.append('posts_id',b.id);
+    formData.append('posts_id',b.getAttribute('posts_id'));
     formData.append('comment_id',-1);
     formData.append('type',type);
     formData.append('csrfmiddlewaretoken', csrftoken);
@@ -90,9 +120,19 @@ function create_reaction_for_post(event){
         method: 'POST',
         body: formData,
     })
-    a = document.getElementById(`reaction_img_${b.id}`);
-    a.src = baseUrl + `images/${type}.png`;
-    a.setAttribute("status",type);
+    .then(response => response.json())
+    .then(data => {
+        console.log("da react:",data);
+        a = document.getElementById(`reaction_img_${b.getAttribute('posts_id')}`);
+        a.src = baseUrl + `images/${type}.png`;
+        a.setAttribute("status",type);
+        })
+    .then(() => {
+        setCountReaction_for_post('posts', b.getAttribute('posts_id'));
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 url_delete_react = "/reactions/delete_reaction/";
@@ -102,28 +142,41 @@ function delete_reaction_for_post(event){
     formData.append('user_id',localStorage.getItem('id'));
     formData.append('user_name',localStorage.getItem('name'));
     formData.append('user_avatar',localStorage.getItem('avatar'));
-    formData.append('posts_id',b.id);
+    formData.append('posts_id',b.getAttribute('posts_id'));
     formData.append('comment_id',-1);
     formData.append('type',"like");
     formData.append('csrfmiddlewaretoken', csrftoken);
 
-    a = document.getElementById(`reaction_img_${b.id}`);
+    a = document.getElementById(`reaction_img_${b.getAttribute('posts_id')}`);
+  
     if(a.getAttribute('status') !== `default`){
         fetch(url_delete_react,{
             method: "POST",
             body: formData,
         })
-        console.log("da huy");
-        a.src = `${baseUrl + "images/like3.png"}`;
-        a.setAttribute("status","default");
+        .then(response => response.json())
+        .then(data => {
+            console.log("da huy:",data);
+            a.src = baseUrl + `images/like3.png`;
+            a.setAttribute("status","default");
+        })
+        .then(() => {
+            setCountReaction_for_post('posts', b.getAttribute('posts_id'));
+        })
     }
     else{
         fetch(url_creat_react,{
             method:"POST",
             body: formData,
         })
-        console.log("an like");
-        a.src = baseUrl + `images/like.png`;
-        a.setAttribute("status","like");
+        .then(response => response.json())
+        .then(data => {
+            console.log("da react:",data);
+            a.src = baseUrl + `images/like.png`;
+            a.setAttribute("status","like");
+        })
+        .then(() => {
+            setCountReaction_for_post('posts', b.getAttribute('posts_id'));
+        })
     }
 }

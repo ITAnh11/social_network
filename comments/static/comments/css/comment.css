@@ -1,0 +1,61 @@
+.comment-card{
+
+	background-color: #fff;
+	border: none;
+}
+
+.comment-form-color{
+    background-color: none;
+}
+
+.comment-form-control{
+    width: 100%;
+	height: 40px;
+	border-radius: 25px;
+    text-align: left;
+    padding-left: 10px;
+    resize: vertical; /* Allow the user to resize the textarea vertically */
+    overflow: auto; /* Add a scrollbar if the content is too long */
+}
+
+.comment-form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #35b69f;
+    outline: 0;
+    box-shadow: none;
+    text-indent: 10px;
+    white-space: pre-wrap;
+    height: auto;
+}
+
+.comment-c-badge{
+	background-color: #35b69f;
+    color: white;
+    height: 20px;
+    font-size: 11px;
+    width: 92px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.comment-comment-text{
+	font-size: 13px;
+}
+
+.comment-wish{
+}
+
+
+.comment-user-feed{
+
+	    font-size: 14px;
+	    margin-top: 12px;
+}
+
+.text-action:hover{
+    text-decoration: underline;
+}

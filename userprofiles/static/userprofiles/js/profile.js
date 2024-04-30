@@ -2,10 +2,174 @@ var api_get_profile = '/userprofiles/get_profile/?id=' + (new URL(document.locat
 // console.log(api_get_profile);
 const urlFromEditProfile = document.body.getAttribute('link-url-editProfile');
 const urlFromEditStory = document.body.getAttribute('link-url-editStory');
+const urlProfile = document.body.getAttribute('link-profile');
+const urlListFr = document.body.getAttribute('link-listFr');
+
+// thu hồi lời mời kết bạn 
+function revokeFriendRequest(id_user) {
+    var formdata = new FormData();
+    formdata.append("id", id_user);
+    formdata.append("csrfmiddlewaretoken", csrftoken);
+
+    fetch('/friends/revoke_friendrequest/', {
+        method: 'POST',
+        body: formdata,
+    })
+    .then(response => {
+        if (response.ok) {
+            editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Add Friend</button>`;
+            return response.json();
+        } else {
+            throw new Error('Failed to revoke friend request');
+        }
+    })
+    .then(data => {
+        if (data['success']) {
+            console.log(data);
+        // data.status_relationship = 'not_friend';
+        } else {
+            // handle error
+            alert(data['warning']);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Xử lý lỗi nếu cần
+    });
+}
+
+// ấn gửi kết bạn cho người khác
+function sentFriendRequest(id_user) {
+    var formdata = new FormData();
+    formdata.append("id", id_user);
+    formdata.append("csrfmiddlewaretoken", csrftoken);
+
+    fetch('/friends/sent_friendrequest/', {
+        method: 'POST',
+        body: formdata,
+    })
+    .then(response => {
+        if (response.ok) {
+            editProfile.innerHTML = `<button type="button" onclick="revokeFriendRequest(${id_user})"> <i class="fas fa-check"></i> Sent Friend Request</button>`;
+            return response.json();
+        } else {
+            throw new Error('Failed to sent friend request');
+        }
+    })
+    .then(data => {
+        if (data['success']) {
+            console.log(data);
+        } else {
+            // handle error
+            alert(data['warning']);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Xử lý lỗi nếu cần
+    });
+}
+
+// Đồng ý kết bạn 
+function acceptFriendRequest(id_user) {
+    console.log(id_user);
+    var formdata = new FormData();
+    formdata.append("id", id_user);
+    formdata.append("csrfmiddlewaretoken", csrftoken);
+
+    fetch('/friends/accept_friendrequestprofile/', {
+        method: 'POST',
+        body: formdata,
+    })
+    .then(response => {
+        if (response.ok) {
+            editProfile.innerHTML = `<button type="button" onclick="cancelFriendRequest(${id_user})"> <i class="fas fa-user-friends"></i>Friend</button>`;
+            return response.json();
+        } else {
+            throw new Error('Failed to accept friend request');
+        }
+    })
+    .then(data => {
+        if (data['success']) {
+            console.log(data);
+        } else {
+            // handle error
+            alert(data['warning']);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Xử lý lỗi nếu cần
+    });
+}
+
+// Không chấp nhận kết bạn
+function deninedFriendRequest(id_user) {
+    var formdata = new FormData();
+    formdata.append("id", id_user);
+    formdata.append("csrfmiddlewaretoken", csrftoken);
+
+    fetch('/friends/denine_friendrequestprofile/', {
+        method: 'POST',
+        body: formdata,
+    })
+    .then(response => {
+        if (response.ok) {
+            editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Add Friend</button>`;
+            return response.json();
+        } else {
+            throw new Error('Failed to deny friend request');
+        }
+    })
+    .then(data => {
+        if (data['success']) {
+            console.log(data);
+        } else {
+            // handle error
+            alert(data['warning']);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Xử lý lỗi nếu cần
+    });
+}
+// Huỷ kết bạn
+function deleteFriendShip(id_user) {
+    var formdata = new FormData();
+    formdata.append("id", id_user);
+    formdata.append("csrfmiddlewaretoken", csrftoken);
+
+    fetch('/friends/delete_friendship/', {
+        method: 'POST',
+        body: formdata,
+    })
+    .then(response => {
+        if (response.ok) {
+            editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Add Friend</button>`;
+            return response.json();
+        } else {
+            throw new Error('Failed to cancel friend request');
+        }
+    })
+    .then(data => {
+        if (data['success']) {
+            console.log(data);
+        } else {
+            // handle error
+            alert(data['warning']);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Xử lý lỗi nếu cần
+    });
+}
 
 fetch(api_get_profile)
     .then(response => response.json())
     .then(data => {
+
         var userName2 = document.getElementById('userName2');
         userName2.innerHTML += `<h3>${data.userprofile['first_name'] + " " + data.userprofile['last_name']}</h3>`;
 
@@ -13,17 +177,34 @@ fetch(api_get_profile)
         coverImage.innerHTML += `<img src ="${data.imageprofile['background']}" alt="coverImage" class="coverImage">`;
 
         var avatarContainer = document.getElementById('avatarContainer');
-        avatarContainer.innerHTML += `<img src ="${data.imageprofile['avatar']}" alt="avatar" class="dashboard-img">`;
-
-        // Kiểm tra nếu người dùng là chủ sở hữu của trang cá nhân
+        avatarContainer.innerHTML += `<img src ="${data.imageprofile['avatar']}" alt="avatar" class="dashboard-img" id="dashboard-img">`;
+       
+        var id_user = data.userprofile['user_id'];
+        
+        var listChoose = document.getElementById('listChoose');
+        if (data.isOwner === true) {
+            listChoose.innerHTML = `<ul class="profile-menu" id="profile_menu">
+                                        <li><a href="${urlProfile}">Posts</a></li>
+                                        <li><a href="${urlListFr}">Friends</a></li>
+                                    </ul>`
+        } else {
+            listChoose.innerHTML = `<ul class="profile-menu" id="profile_menu">
+                                        <li><a href="${urlProfile}">Posts</a></li>
+                                        <li><a href="${urlListFr}">Friends</a></li>
+                                    </ul>`
+        }
 
         var editProfile = document.getElementById('editProfile');
-        var editStoryButton = document.getElementById('editStoryButton');
-        var id_user = data.userprofile['user_id'];
+        var editStoryButton = document.getElementById('editStoryButton');    
 
         if (data.isOwner === true) {
             // Hiển thị nút chỉnh sửa thông tin cá nhân
             editProfile.innerHTML = `<button type="button" id="editProfileReal"> <i class="far fa-edit"></i><a href="${urlFromEditProfile}" style="text-decoration: none; color: white;">Edit your profile</a></button>`;
+            editStoryButton.innerHTML +=`<a href="${urlFromEditStory}" class="editStory">
+                                            <button type="button" class="edit-story-btn">
+                                                    <i class="far fa-edit"></i> Edit your story
+                                            </button>
+                                         </a>`;
         } else {
             // Người dùng không phải là chủ sở hữu, kiểm tra trạng thái quan hệ bạn bè
 
@@ -35,19 +216,28 @@ fetch(api_get_profile)
                     if (data.status_relationship === 'user') {
                         editProfile.innerHTML = `<button type="button" id="editProfileReal"> <i class="far fa-edit"></i><a href="${urlFromEditProfile}" style="text-decoration: none; color: white;">Edit your profile</a></button>`;
                     } else if (data.status_relationship === 'not_friend' || data.status_relationship === 'denied') {
-                        // Hiển thị nút gửi lời mời kết bạn
-                        editProfile.innerHTML = `<button type="button" onclick="sendFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Send Friend Request</button>`;
+                        editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-user-plus"></i> Add Friend</button>`;
                     } else if (data.status_relationship === 'friendrequestfromuser') {
-                        // Hiển thị nút gửi lời mời kết bạn
-                        editProfile.innerHTML = `<button type="button" onclick="sentFriendRequest(${id_user})"> <i class="fas fa-check"></i> Sent Friend Request</button>`;
+                        editProfile.innerHTML = `<button type="button" onclick="revokeFriendRequest(${id_user})"> <i class="fas fa-check"></i> Sent Friend Request</button>`; 
+                    } else if (data.status_relationship === 'friendrequesttouser') {
+                        editProfile.innerHTML =`<button type="button" onclick="acceptFriendRequest(${id_user})">
+                                                    <i class="fas fa-check"></i>
+                                                    Accept
+                                                </button>
+                                                <button type="button" onclick="deninedFriendRequest(${id_user})">
+                                                    <i class="fas fa-times"></i>
+                                                    Denined
+                                                </button>`;
                     } else if (data.status_relationship === 'accepted') {
-                        editProfile.innerHTML = `<button type="button" onclick="cancelFriendRequest(${id_user})"> <i class="fas fa-user-friends"></i> Friend</button>`;
+                        editProfile.innerHTML = `<button type="button" onclick="deleteFriendShip(${id_user})"> <i class="fas fa-user-friends"></i> Friend</button>`;
                     } 
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         }
+        
+
 
         // edit story
         var intro_bio = document.getElementById('intro_bio');
@@ -69,29 +259,4 @@ fetch(api_get_profile)
         social_link.innerHTML += `<a href="https://www.instagram.com/${data.userprofile['social_link']}/"><p>${data.userprofile['social_link']}</p></a>`;
         // social_link.innerHTML  += `<a href=></a>${data.userprofile['social_link']}`;
     })
-
-function getStatusFriend(userId) {
-    // Gửi yêu cầu API để kiểm tra trạng thái bạn bè giữa người dùng hiện tại và người dùng có ID là 'userId'
-    fetch('http://127.0.0.1:8000/userprofiles/?id=' + userId)
-        .then(response => response.json())
-        .then(data => {
-            // Xử lý kết quả trả về từ API
-            if (data.status_relationship === 'user') {
-                console.log('Bạn đang xem trang của chính mình.');
-            } else if (data.status_relationship === 'not_friend') {
-                console.log('Bạn và người này chưa là bạn bè.');
-                // Thực hiện các hành động khi hai người chưa là bạn bè
-            } else {
-                console.log('Bạn và người này đã là bạn bè.');
-                // Thực hiện các hành động khi hai người đã là bạn bè
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
-// Gọi hàm getStatusFriend với userId của người dùng khác
-var otherUserId = '1';
-getStatusFriend(otherUserId);
 

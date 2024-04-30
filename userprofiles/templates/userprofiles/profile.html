@@ -15,7 +15,7 @@
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 </head>
 
-<body link-url-editProfile="{% url 'userprofiles:editProfile' %}" link-url-editStory="{%url 'userprofiles:editStory'%}">
+<body link-profile="{% url 'userprofiles:profile' %}" link-listFr="{% url 'userprofiles:listFriends' %}" link-url-editProfile="{% url 'userprofiles:editProfile' %}" link-url-editStory="{%url 'userprofiles:editStory'%}">
     {% include 'navbar/navbar.html' %}
     <!-- profile-page -->
 
@@ -38,8 +38,7 @@
                     <button onclick="viewAvatar()">View Avatar</button>
                     <a href="{% url 'userprofiles:editImagesPage' %}">
                         <button onclick="chooseAvatar()">Choose Avatar</button>
-                    </a>
-                    
+                    </a>                   
                 </div>                                
                 <div class="left-dashboard-info">
                     <div id="userName2" class="userName">
@@ -63,12 +62,8 @@
                 </div>
                 <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
             </div>
-            <div class="list-choose">
-                <ul class="profile-menu">
-                    <li><a href="{% url 'userprofiles:profile' %}">Posts</a></li>
-                    {% comment %} <li><a href="{% url 'userprofiles:about' %}">Giới thiệu</a></li> {% endcomment %}
-                    <li><a href="{% url 'userprofiles:listFriends' %}">Friends</a></li>
-                </ul>
+            <div class="list-choose" id="listChoose">
+                
             </div>
         </div>
 
@@ -205,6 +200,10 @@
     </footer>
     
     {% comment %} <script src="{%static 'userprofiles/js/function.js' %}" ></script> {% endcomment %}
+    {% csrf_token %}
+    <script>
+        var csrftoken = '{{ csrf_token }}';
+    </script>
     <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="{%static 'userprofiles/js/editAvt.js' %}" ></script>
     <script src="{%static 'userprofiles/js/profile.js' %}" ></script>

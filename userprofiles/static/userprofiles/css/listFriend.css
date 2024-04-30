@@ -648,9 +648,11 @@ footer#footer {
     background-color: #e0e0e0;
 }
 
-.list-friends {
+.listFriendsUserprofile {
   border: 2px solid black; /* Tạo khung viền đen cho .list-friends */
   padding: 10px; /* Thêm padding để tạo khoảng cách giữa khung viền và nội dung bên trong */
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .first-row {
@@ -679,7 +681,7 @@ footer#footer {
   margin-left: auto; /* Đẩy phần tử chứa dấu 3 chấm về bên phải */
 }
 
-.second-row .someFriends {
+.someFriends {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 10px;
@@ -695,18 +697,18 @@ footer#footer {
 }
 
 .imgFriend {
-  width: 100px; /* Chiều rộng của khung avt */
-  height: 100px; /* Chiều cao của khung avt */
-  border: 1px solid black; /* Khung viền */
-  border-radius: 5px; /* Bo tròn góc khung avt */
-  overflow: hidden; /* Ẩn phần vượt ra ngoài của hình ảnh */
+  width: 100px; 
+  height: 100px; 
+  border: 1px solid black; 
+  border-radius: 5px; 
+  /* overflow: hidden;  */
   margin-right: 10px;
 }
 
 .imgFriend img {
-  width: 100%; /* Đảm bảo hình ảnh điền đầy khung avt */
-  height: 100%; /* Đảm bảo hình ảnh điền đầy khung avt */
-  object-fit: cover; /* Hiển thị hình ảnh mà không bị căn chỉnh */
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
 }
 
 .in4Friend {
@@ -716,8 +718,8 @@ footer#footer {
 }
 
 .in4Friend p {
-  font-size: 12px; /* Kích thước chữ cho số bạn chung */
-  color: gray; /* Màu chữ cho số bạn chung */
+  font-size: 18px; 
+  color: gray; 
 }
 
 .moreFriends {

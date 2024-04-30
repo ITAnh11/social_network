@@ -17,10 +17,6 @@ import json
 
 # Create your views here.
 
-class CommentsTestView(APIView):
-    def get(self, request):
-        return render(request, 'comments/comment_t.html')
-
 class GetCommentsForPost(APIView):
     def post(self, request):
         
@@ -32,12 +28,13 @@ class GetCommentsForPost(APIView):
         
         # print(type(posts_id))
         
-        comments = Comments.objects(__raw__={'to_posts_id': posts_id})
+        comments = Comments.objects(__raw__={'to_posts_id': posts_id, 'to_comment_id': -1})
         
         list_comments = []
         for comment in comments:
             dataComment = CommentsSerializer(comment).data
             dataComment['created_at'] = getTimeDuration(comment.created_at)
+            dataComment['most_use_reactions'] = comment.getMostUseReactions()
             
             list_comments.append(dataComment)
         
@@ -58,6 +55,8 @@ class GetCommentsForComment(APIView):
         for comment in comments:
             dataComment = CommentsSerializer(comment).data
             dataComment['created_at'] = getTimeDuration(comment.created_at)
+            dataComment['most_use_reactions'] = comment.getMostUseReactions()
+
             
             list_comments.append(dataComment)
         
@@ -97,9 +96,14 @@ class CreateComment(APIView):
         comment = self.createComment(request)
         comment.save()
         
+        dataComment = CommentsSerializer(comment).data
+        dataComment['created_at'] = 'Just now'
+        dataComment['most_use_reactions'] = comment.getMostUseReactions()
+
+        
         response.data = {
             "success": "Comment created successfully",
-            "comments": [CommentsSerializer(comment).data]
+            "comments": [dataComment]
         }
         
         return response
