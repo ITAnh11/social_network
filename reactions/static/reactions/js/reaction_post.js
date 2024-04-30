@@ -1,5 +1,7 @@
 let isHovered = false;
 let hoverTimeout;
+const baseUrl = document.body.getAttribute('data-base-url');
+
 //xử lí hover vao các nút react
 function show_list_reaction_for_post(event){
     var a = event.target.parentNode.parentNode.parentNode.querySelector(".list_reactionPost");
