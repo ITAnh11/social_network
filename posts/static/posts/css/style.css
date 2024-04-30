@@ -390,6 +390,7 @@ img.advertisement-image {
     justify-content: space-between;
     margin: 10px 10px;
     margin-bottom: 0px;
+    cursor: pointer;
 }
 
 .post-profile-picture img {
