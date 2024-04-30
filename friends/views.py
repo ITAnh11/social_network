@@ -37,7 +37,7 @@ class SentFriendRequestView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         to_user_id = request.data.get('id')
-        #print(request.data)
+        print(request.data)
         to_user = get_object_or_404(User, id = to_user_id)
         try:
             friend_request = FriendRequest.objects.create(
@@ -77,13 +77,11 @@ class AcceptFriendRequestView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        # print(request.data)
         
         try:
                 friend_request_id = request.data.get('id')
                 friend_request = get_object_or_404(FriendRequest, id = friend_request_id)
                 
-                #friend_request.status = 'pending'
                 friend_request.status = 'accepted'
                 friend_request.save()
                 
@@ -91,7 +89,7 @@ class AcceptFriendRequestView(APIView):
                 user_id1 = user,
                 user_id2 = friend_request.from_id                 
                 )
-                # Friendship.objects.all().delete()  
+
                 friend_ship.save()    
                  
                 data = []
@@ -102,13 +100,11 @@ class AcceptFriendRequestView(APIView):
                 data.append(accepted_friend_request)
                 return Response ({
                     'accepted_friend_request': data,
-                    'message': 'Friend request processed successfully'
+                    'success': 'Friend request processed successfully'
                     })
-                # return Response({'message': 'Friend request processed successfully'})
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)
-            
 
 class DenineFriendRequestView(APIView):
     def post(self, request):
@@ -127,7 +123,7 @@ class DenineFriendRequestView(APIView):
                 friend_request.status = 'denined'
                 friend_request.save()  
                 
-                return Response({'message': 'Friend request processed successfully'})
+                return Response({'success': 'Friend request processed successfully'})
             
         except:
             return Response({'error': 'Error while saving friend request'}, status=400)
@@ -140,9 +136,12 @@ class DeleteFriendShip(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         try:
-            friendship_id = request.get('id')
-            friendship = get_object_or_404(Friendship, id = friendship_id)
+            friendship_id = request.data.get('id')
             
+            friendship = get_object_or_404(Friendship,Q(user_id1=friendship_id, user_id2=user) | Q(user_id1=user, user_id2=friendship_id))
+            friendrequest = get_object_or_404(FriendRequest,Q(from_id=user, to_id=friendship_id) | Q(from_id=friendship_id, to_id=user))
+            
+            friendrequest.delete()
             friendship.delete()
         except Friendship.DoesNotExist:
             return Response({'error': 'Friendship not found'}, status=404)
@@ -303,7 +302,7 @@ class GetMutualFriendView(APIView):
             
             other_user_id = request.query_params.get('id')    #lấy từ fe của user kia, fe gửi lên sever id profile của người đó
             
-            print(other_user_id)
+            # print(other_user_id)
             other_user = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id)) # user_id1, user_id2
             
             user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
@@ -362,14 +361,23 @@ class GetListFriendOfUserOtherView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         other_user_id = request.query_params.get('id') 
-        
-        others_user_friend = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
-        
+        # other_user_id = request.data.get('id')    
+       # others_user_friend = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
+        others_user_friend = Friendship.objects.filter(Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
+
         data = []
         for other_user_friend in others_user_friend:
-            
+            user_id = User.objects.filter(id=other_user_id).values_list('email', flat=True).first()
+        
+            if user_id == str(other_user_friend.user_id2):
+                friend_id = other_user_friend.user_id1
+                print('ok') 
+            else :
+                friend_id = other_user_friend.user_id2
+                print('okkkk') 
+
             friend_ship = {
-                "friend_profile": getUserProfileForPosts(other_user_friend)
+                "friend_profile": getUserProfileForPosts(friend_id)
             }
             data.append(friend_ship)
             
@@ -407,3 +415,82 @@ class GetListFriendOfUserOtherView(APIView):
 #             return Response({
 #                 "data": data
 #                 })
+
+class AcceptFriendRequestProfileView(APIView):
+    def post(self, request):
+        user = getUser(request)
+        
+        if not user:
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        # print(request.data)
+        
+        try:
+                from_user_id = request.data.get('id')
+                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user)
+                
+                #friend_request.status = 'pending'
+                friend_request.status = 'accepted'
+                friend_request.save()
+                
+                friend_ship = Friendship.objects.create(
+                user_id1 = user,
+                user_id2 = friend_request.from_id                 
+                )
+                # Friendship.objects.all().delete()  
+                friend_ship.save()    
+                 
+                data = []
+                
+                accepted_friend_request = {
+                "friend_profile" : getUserProfileForPosts(friend_request.from_id)
+                }
+                data.append(accepted_friend_request)
+                return Response ({
+                    'accepted_friend_request': data,
+                    'success': 'Friend request processed successfully'
+                    })
+                # return Response({'success': 'Friend request processed successfully'})
+            
+        except:
+            return Response({'error': 'Error while saving friend request'}, status=400)
+    
+class DenineFriendRequestProfileView(APIView):
+    def post(self, request):
+        user = getUser(request)
+        
+        if not user:
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        # print(request.data)
+        
+        try:
+                from_user_id = request.data.get('id')
+                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user)
+                
+                #friend_request.status = 'pending'
+                friend_request.status = 'denined'
+                friend_request.save()  
+                
+                return Response({'success': 'Friend request processed successfully',
+                                 'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
+            
+        except:
+            return Response({'error': 'Error while saving friend request'}, status=400)
+        
+# class DeleteFriendShipProfile(APIView):
+#     def post(self, request):
+#         user = getUser(request)
+        
+#         if not user:
+#             return Response({'error': 'Unauthorized'}, status=401)
+        
+#         try:
+#             friend_id = request.data.get('id')
+#             friendship = get_object_or_404(Friendship, id = friendship_id)
+            
+#             friendship.delete()
+#         except Friendship.DoesNotExist:
+#             return Response({'error': 'Friendship not found'}, status=404)
+         
+#         return Response({'success': 'Friendship deleted successfully'})

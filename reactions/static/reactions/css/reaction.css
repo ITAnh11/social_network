@@ -1,4 +1,5 @@
 
+/* reaction cho bai post */
 .list_reactionPost{
     background-color: rgb(255, 255, 255);
     position: absolute;
@@ -14,6 +15,7 @@
     margin-bottom: 100px;
     margin-left: -20px;
     transition: max-width 0.3s;
+    overflow: hidden;
 }
 .show_list_reactionPost{
     max-width: 280px;
@@ -46,3 +48,5 @@
     position: relative; 
     left: -13px;
 }
+
+/* reaction cho comment */

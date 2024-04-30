@@ -35,7 +35,7 @@ class GetReactions(APIView):
         topMostReacted = None
         total = None
         
-        if posts_id > 0:
+        if comments_id < 0:
             postsInfo = PostsInfo.objects(__raw__={'posts_id': posts_id}).first()
             if postsInfo is None:
                 return Response({'error': 'Posts not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -77,6 +77,9 @@ class CreateReaction(APIView):
             reaction = checkIsReacted.get('reaction')
             currentType = reaction.type
             newType = request.data.get('type')
+            
+            if currentType == newType:
+                return True
             
             # change type reaction to new type
             reaction.setTypeReaction(newType)
@@ -121,7 +124,7 @@ class CreateReaction(APIView):
             reaction = self.createReaction(request)
             reaction.save()
             
-            if posts_id > 0:
+            if comment_id < 0:
                 postsInfo = PostsInfo.objects(posts_id=posts_id).first()
                 postsInfo.inc_reaction(reaction.type)
                 postsInfo.save()
@@ -162,7 +165,7 @@ class DeleteReaction(APIView):
             if reaction is None:
                 return Response({'error': 'Reaction not found'}, status=status.HTTP_404_NOT_FOUND)
             
-            if posts_id > 0:
+            if comment_id < 0:
                 postsInfo = PostsInfo.objects(__raw__={'posts_id': posts_id}).first()
                 if postsInfo is None:
                     return Response({'error': 'Posts Info not found'}, status=status.HTTP_404_NOT_FOUND)
