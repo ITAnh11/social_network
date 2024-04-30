@@ -99,7 +99,9 @@
 */
 .right-part-posts {
     height: 100%;
-    width: 30%;
+    width: 35%;
+    position: relative;
+    padding-left: 13px;
     /* display: flex;
     flex-direction: column;
     justify-content: left;

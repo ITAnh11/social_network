@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="{%static 'reactions/css/reaction.css'%}" />
     <link rel="stylesheet" href="{%static 'posts/css/style.css'%}" />
   </head>
-
-  <body>
+  <body data-base-url="{% static 'posts/' %}">
     {% include 'navbar/navbar.html' %}
     <div class="posts-container">
       <div class="main-posts">
@@ -114,19 +113,19 @@
               </div>
             </div>
 
-            <div class="count-reactionPost" id="count-reaction-${post.id}">
-              <div id="icon-top-reactions-container-${post.id}">
+            <div class="count-reactionPost" id="count-reaction-{{posts.id}}">
+              <div id="icon-top-reactions-container-{{posts.id}}">
               </div>
-              <div>
-                  <p id="count-reaction-posts-${post.id}">120</p>
+              <div id="count-reaction-posts-{{posts.id}}">
+                  120
               </div>
             </div>
             <div class="post-reaction">
               <div class="activity-icons" style="display: flex;">
                 <div onmouseleave="remove_list_reaction_for_post(event)" onmouseenter="show_list_reaction_for_post(event)" onclick="delete_reaction_for_post(event)">
-                  <img src="{% static 'posts/images/like3.png' %}" id="reaction_img_${post.id}" alt="" status="default" style="width: 30px">
+                  <img src="{% static 'posts/images/like3.png' %}" id="reaction_img_{{posts.id}}" alt="" status="default" style="width: 30px">
                 </div>
-                <div onclick="clickCommentBtn(event)" posts_id="${post.id}">
+                <div onclick="clickCommentBtn(event)" posts_id="{{posts.id}}">
                   <img src="{% static 'posts/images/comment.png' %}" alt="" style="width: 30px">Comments
                 </div>
                 <div>
@@ -185,7 +184,12 @@
         </div>
       </div>
     </div>
+    {% csrf_token %}
+    <script>
+        var csrftoken = '{{ csrf_token }}';
+    </script>
     <script src="{%static 'reactions/js/reaction_post.js'%}"></script>
+    <script src="{%static 'reactions/js/reaction_cmt.js'%}"></script>
     <script src="{%static 'posts/js/posts_page.js'%}"></script>
   </body>
 </html>
