@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.utils import timezone
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,9 +12,6 @@ from .serializers import CommentsSerializer
 from userprofiles.models import UserBasicInfo
 
 from common_functions.common_function import getUser, getTimeDuration
-
-import datetime
-import json
 
 # Create your views here.
 
@@ -78,8 +76,8 @@ class CreateComment(APIView):
                         to_comment_id=request.data.get('comment_id'), 
                         content=request.data.get('content'), 
                         user=self.createUserBasicInfo(request), 
-                        created_at=datetime.datetime.now(), 
-                        updated_at=datetime.datetime.now())
+                        created_at=timezone.now(), 
+                        updated_at=timezone.now())
     
     def post(self, request):
         user = getUser(request)

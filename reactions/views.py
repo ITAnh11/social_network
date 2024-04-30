@@ -2,6 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from django.utils import timezone
+
 
 from .models import Reactions
 from .serializers import ReactionsSerializer
@@ -14,10 +16,9 @@ from comments.serializers import CommentsSerializer
 
 from userprofiles.models import UserBasicInfo
 
-import datetime
-
-import json
 from common_functions.common_function import getUser
+
+from notifications.views import createReactNotification
 
 # Create your views here.
 class GetReactions(APIView):
@@ -67,8 +68,8 @@ class CreateReaction(APIView):
                          to_posts_id=request.data.get('posts_id'), 
                          to_comment_id=request.data.get('comment_id'), 
                          type=request.data.get('type'),
-                         created_at=datetime.datetime.now(), 
-                         updated_at=datetime.datetime.now())
+                         created_at=timezone.now(), 
+                         updated_at=timezone.now())
     
     def changeTypeReactionIfIsReacted(self, request, user_id, posts_id, comment_id):
         checkIsReacted = IsReactedView().checkIsReacted(user_id, posts_id, comment_id)
@@ -84,6 +85,8 @@ class CreateReaction(APIView):
             # change type reaction to new type
             reaction.setTypeReaction(newType)
             reaction.save()
+            
+            createReactNotification(reaction)
             
             # change number of type reactions
             postInfo = PostsInfo.objects(__raw__={'posts_id' : posts_id}).first()
@@ -123,6 +126,8 @@ class CreateReaction(APIView):
         try:
             reaction = self.createReaction(request)
             reaction.save()
+            
+            createReactNotification(reaction)
             
             if comment_id < 0:
                 postsInfo = PostsInfo.objects(posts_id=posts_id).first()
