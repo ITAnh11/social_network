@@ -1,12 +1,12 @@
 from rest_framework_mongoengine.serializers import DocumentSerializer
-from .models import Reactions, ReactionNumber
+from .models import Reactions, ReactionNumberInfo
 
 class ReactionsSerializer(DocumentSerializer):
     class Meta:
         model = Reactions
         fields = '__all__'
 
-class ReactionNumberSerializer(DocumentSerializer):
+class ReactionNumberInfoSerializer(DocumentSerializer):
     class Meta:
-        model = ReactionNumber
+        model = ReactionNumberInfo
         fields = '__all__'

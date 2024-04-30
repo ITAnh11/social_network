@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import Posts, MediaOfPosts, PostsInfo, PostIsWatched
+from users.models import User
 
 from .serializers import PostsSerializer, MediaOfPostsSerializer, PostsInfoSerializer
 
@@ -166,6 +167,7 @@ class GetPostsPageView(APIView):
             return Response({'error': 'No posts found'}, status=404)
         
         mediaOfPosts = MediaOfPosts.objects.filter(post_id=posts)
+        userOfPosts = User.objects.filter(id=posts.user_id.id).first()
         
         # print(str(MediaOfPosts.objects.filter(post_id=posts).query.explain(using='default')))
         
@@ -176,15 +178,16 @@ class GetPostsPageView(APIView):
         postsData['media'] = mediaOfPostsSerializer.data
         postsData['created_at'] = getTimeDuration(posts.created_at)
         postsData['posts_info'] = self.getPostsInfo(posts)
+        postsData['user'] = getUserProfileForPosts(userOfPosts)
         
         context = {
-            'posts': postsData,
+            'post': postsData,
             'image_id': idImageRequest,
         }
         
-        print(postsData)
+        # print(postsData)
         
-        return render(request, 'posts/posts_page_t.html', context=context)
+        return render(request, 'posts/posts_page.html', context=context)
     
     def getPostsInfo(self, posts):
         try:

@@ -6,90 +6,99 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-xrJd3FWN0edZsvYOti2oZVrY02JzSXY5Jz6An+5KjpOb2Ry4LlQwUCYh1SU+65t4uV9iJKmbO7uUTFKWPtDzVg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link type="text/css" href="{%static 'userprofiles/css/listFriend.css' %}" rel="stylesheet" />
     <link type="text/css" href="{%static 'userprofiles/css/profile.css' %}" rel="stylesheet" />
     <title>Profle - ListFriend</title>
-    <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>   
 </head>
 
-<body>
-    {%include 'navbar/navbar.html' %}
+<body link-url-editProfile="{% url 'userprofiles:editProfile' %}" link-url-editStory="{%url 'userprofiles:editStory'%}">
+  {% include 'navbar/navbar.html' %}
+  <!-- profile-page -->
 
-    <!-- profile-page -->
-
-    <div class="profile-container">
+  <div class="profile-container">
       <div class="cover" id="coverImage">
-        {% comment %} <img src="{%static 'userprofiles/images/cover.jpg' %}" class="coverImage" alt=""> {% endcomment %}
-        <div class="edit-coverImage">
-            <img src="{%static 'userprofiles/images/camera.png' %}" alt="">
-            <a href="#" style="color: black;">Change your coverImage </a>
-        </div>
+          {% comment %} <img src="{%static 'userprofiles/images/cover.jpg' %}" class="coverImage" alt=""> {% endcomment %}
+          <div class="edit-coverImage">
+              <img src="{%static 'userprofiles/images/camera.png' %}" alt="">
+              <a href="{% url 'userprofiles:editImagesPage' %}" style="color: black;">Change your coverImage </a>
+          </div>
       </div>
       <div class="dashboard">
-        <div class="left-dashboard">
-            <div class="avatar-container" id="avatarContainer">
-                {% comment %} <img src="{%static 'userprofiles/images/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage"> {% endcomment %}
-            </div>
-            
-            <!-- Popup hoặc menu chứa các lựa chọn -->
-            <div id="avatarOptions" class="avatar-options">
-                <button onclick="viewAvatar()">View Avatar</button>
-                <button onclick="chooseAvatar()">Choose Avatar</button>
-            </div>                                
-            <div class="left-dashboard-info">
-                <div id="userName2" class="userName">
+          <div class="left-dashboard">
+              <div class="avatar-container" id="avatarContainer">
+                  {% comment %} <img src="{%static 'userprofiles/images/avatar.png' %}" class="dashboard-img" alt="Avatar" id="avatarImage"> {% endcomment %}
+              </div>
+              
+              <!-- Popup hoặc menu chứa các lựa chọn -->
+              <div id="avatarOptions" class="avatar-options">
+                  <button onclick="viewAvatar()">View Avatar</button>
+                  <a href="{% url 'userprofiles:editImagesPage' %}">
+                      <button onclick="chooseAvatar()">Choose Avatar</button>
+                  </a>                   
+              </div>                                
+              <div class="left-dashboard-info" id="left_dashboard_info">
+                  <div id="userName2" class="userName">
 
-                </div>
-                <p>446 Friends</p>
-                <div class="mutual-friend-images">
-                    <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                    <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                    <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                    <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                    <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="right-dashboard-info">
-            <div class="right-dashboard-info-top">
-                <div class="editProfile" id="editProfile">
-                    
-                </div>                     
-            </div>
-            <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
-        </div>
-        <div class="list-choose">
-            <ul class="profile-menu">
-                <li><a href="{% url 'userprofiles:profile' %}">Posts</a></li>
-                {% comment %} <li><a href="{% url 'userprofiles:about' %}">Giới thiệu</a></li> {% endcomment %}
-                <li><a href="{% url 'userprofiles:listFriends' %}">Friends</a></li>
-            </ul>
-        </div>
+                  </div>
+                  <div id="numberOfFr">
+
+                  </div>
+                  {% comment %} <p>446 Friends</p> {% endcomment %}
+                  <div class="mutual-friend-images" id="mutualFriendImages">
+                      {% comment %} <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
+                      <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt=""> {% endcomment %}
+                  </div>
+              </div>
+          </div>
+          <div class="right-dashboard-info">
+              <div class="right-dashboard-info-top">
+                  <!-- Nút kết bạn -->
+                  <div class="editProfile" id="editProfile">
+                      
+                  </div>                     
+              </div>
+              <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
+          </div>
+          <!-- Chọn sang trang cá nhân hay trang listFr người dùng -->
+          <div class="list-choose" id="listChoose">
+              
+          </div>
       </div>
 
-        <!-- list friends-->
-        <div class="list-friends">
-          {% comment %} <div class="first-row">
-            <p>Bạn bè</p>
-            <div class="right-align">
-              <p>Lời mời kết bạn</p>
-              <p>Tìm bạn bè</p>
-              <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
-            </div>
-          </div> {% endcomment %}
-      
-            <div class="moreFriends">
-              <button>
-                <p>More Friends</p>
-              </button>
-            </div>
+      <div class="listFriendsUserprofile" id="list_friends_userprofile">
+        {% comment %} <div fi>
+
+        </div> {% endcomment %}
+        {% comment %} <div class="first-row">
+          <p>Bạn bè</p>
+          <div class="right-align">
+            <p>Lời mời kết bạn</p>
+            <p>Tìm bạn bè</p>
+            <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
           </div>
-        </div>
+        </div>  {% endcomment %}
+    
+        {% comment %} <div class="moreFriends">
+          <button>
+            <p>More Friends</p>
+          </button>
+        </div> {% endcomment %}
+      </div>
     </div>
     <footer id="footer">
         
     </footer>
-    
+    {% csrf_token %}
+    <script>
+        var csrftoken = '{{ csrf_token }}';
+    </script>   
+    <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="{%static 'userprofiles/js/editAvt.js' %}" ></script>
     <script src="{%static 'userprofiles/js/listFr.js' %}" ></script>
     <script src="{%static 'userprofiles/js/profile.js' %}" ></script>
