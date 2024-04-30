@@ -4,24 +4,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Feisubukku</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="{% static 'comments/css/comment.css' %}" />
+    <title>Comments</title>
     <link rel="stylesheet" href="{%static 'posts/css/posts_page.css'%}" />
     <link rel="stylesheet" href="{%static 'reactions/css/reaction.css'%}" />
     <link rel="stylesheet" href="{%static 'posts/css/style.css'%}" />
   </head>
-
-  <body data-base-url="{% static 'posts/' %}" post_id="{{post.id}}">
-    <!-- <p>{{post}}</p>
-    <p>{{image_id}}</p> -->
+  <body data-base-url="{% static 'posts/' %}">
     {% include 'navbar/navbar.html' %}
-    
     <div class="posts-container">
       <div class="main-posts">
         <div class="left-part-posts">
@@ -29,16 +18,7 @@
           <div class="slideshow-container">
             <!-- Full-width images with number and caption text -->
             <div class="all-my-slide">
-              {% for media in post.media %}
               <div class="mySlides">
-                <div class="numbertext">
-                  {{forloop.counter}} / {{post.media|length}}
-                </div>
-                <img src="{{media.media}}" class="img-slide-posts" />
-              </div>
-              {% endfor %}
-
-              <!-- <div class="mySlides">
                 <div class="numbertext">1 / 3</div>
                 <img
                   src="https://www.w3schools.com/howto/img_nature_wide.jpg"
@@ -60,7 +40,7 @@
                   src="https://platinumlist.net/guide/wp-content/uploads/2023/03/c0e9c490-b7e7-47a6-9c43-3e10e8ddc9cb-4445-dubai-img-worlds-of-adventure-tickets-08-1024x639.jpg"
                   class="img-slide-posts"
                 />
-              </div> -->
+              </div>
             </div>
 
             <!-- Next and previous buttons -->
@@ -69,26 +49,26 @@
           </div>
           <br />
         </div>
-        <div class="right-part-posts">
-          <div class="posts-content-container" posts_id = "{{post.id}}">
+        <div class="right-part-posts" style="overflow-y: auto; max-height: 100%;">
+          <div class="posts-content-container">
             <div class="posts-content">
               <div class="post-header">
                 <div class="user-profile-box">
                   <div class="user-profile">
                     <a
-                      href="/userprofiles/?id={{post.user.id}}"
+                      href="/userprofiles/?id=${post.user.id}"
                       style="text-decoration: none"
                     >
-                      <img src="{{post.user.avatar}}" alt="" />
+                      <img src="${post.user.avatar}" alt="" />
                     </a>
                     <div>
                       <div style="display: flex; align-items: center">
                         <div id="name-user-of-post">
                           <a
-                            href="/userprofiles/?id={{post.user.id}}"
+                            href="/userprofiles/?id=${post.user.id}"
                             style="text-decoration: none"
                           >
-                            <p>{{post.user.name}}</p>
+                            <p>${post.user.name}</p>
                           </a>
                         </div>
                         <div
@@ -97,30 +77,53 @@
                           style="padding-top: 4px"
                         >
                           <small style="font-size: 13px; margin-left: 5px">
-                            {% if post.title %} {{post.title}} {% endif %}
+                            ${((post.title) ? post.title : "")}
                           </small>
                         </div>
                       </div>
-                      <small>{{post.created_at}}</small>
+                      <small>${post.created_at}</small>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="status-field" style="margin: 10px">
-                <p>{% if post.content %} {{post.content}} {% endif %}</p>
+              <div class="status-field" style="margin: 10px;">
+                <p>
+                  ${(post.content !== undefined && post.content !== nu
+                  ${(post.content !== undefined && post.content !== null &&
+                  post.content !== "") ? post.content : ""} ${(post.content !==
+                  undefi${(post.content !== undefined && post.content !== null
+                  && post.content !== "") ? post.content : ""} ${(post.content
+                  !== undefined && post.content !== null && post.content !== "")
+                  ? post.content : ""}ned && post.content !== null &&
+                  post.content !== "") ? post.content : ""}ll && post.content
+                  !== "") ? post.content : ""}${(post.content !== undefined &&
+                  post.content !== null && post.content !== "") ? post.content :
+                  ""}${(post.content !== undefined && post.content !== null &&
+                  post.content !== "") ? post.content : ""}${(post.content !==
+                  undefined && post.content !== null && post.content !== "") ?
+                  post.content : ""}${(post.content !== undefined &&
+                  post.content !== null && post.content !== "") ? post.content :
+                  ""}${(post.content !== undefined && post.content !== null &&
+                  post.content !== "") ? post.content : ""}${(post.content !==
+                  undefined && post.content !== null && post.content !== "") ?
+                  post.content : ""}${(post.content !== undefined &&
+                  post.content !== null && post.content !== "") ? post.content :
+                  ""}
+                </p>
               </div>
             </div>
 
-            <div class="count-reactionPost" id="count-reaction-{{post.id}}">
-              <div id="icon-top-reactions-post-container-{{post.id}}"></div>
-              <div id="count-reaction-posts-{{post.id}}">
-                120
+            <div class="count-reactionPost" id="count-reaction-{{posts.id}}">
+              <div id="icon-top-reactions-container-{{posts.id}}">
+              </div>
+              <div id="count-reaction-posts-{{posts.id}}">
+                  120
               </div>
             </div>
             <div class="post-reaction">
               <div class="activity-icons" style="display: flex;">
                 <div onmouseleave="remove_list_reaction_for_post(event)" onmouseenter="show_list_reaction_for_post(event)" onclick="delete_reaction_for_post(event)">
-                  <img src="{% static 'posts/images/like3.png' %}" id="reaction_img_{{post.id}}" alt="" status="default" style="width: 30px">
+                  <img src="{% static 'posts/images/like3.png' %}" id="reaction_img_{{posts.id}}" alt="" status="default" style="width: 30px">
                 </div>
                 <div onclick="clickCommentBtn(event)" posts_id="{{posts.id}}">
                   <img src="{% static 'posts/images/comment.png' %}" alt="" style="width: 30px">Comments
@@ -157,46 +160,24 @@
           </div>
 
           <div class="comments-container">
-            <div class="container" style="padding: 0px">
-              <div class="row height d-flex align-items-center">
-                <div class="col-md-7" style="width: 100%; padding: 0">
-                  <div class="comment-card">
-                    <div class="mt-2" id="commented-posts-{{post.id}}"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+            {% include 'comments/comment.html' %}
             <div
               class="mt-3 d-flex flex-row align-items-center p-3 comment-form-color"
-              style="position: sticky; bottom: 0px; background-color: white"
+              style="position: sticky; bottom: 0px; background-color: white;"
             >
               <img
-                src=""
+                src="https://i.imgur.com/zQZSWrt.jpg"
                 width="40"
                 class="rounded-circle mr-3"
                 style="object-fit: cover; margin-right: 10px"
-                id="comment-post-avatar-user"
               />
-              <div
-                class="comment-box"
-                style="
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  min-width: 90%;
-                "
-              >
+              <div class="comment-box" style="display: flex; justify-content: center; align-items: center; min-width: 90%;">
                 <textarea
-                  class="comment-form-control"
-                  placeholder="Enter your comment..."
-                  id="comment-input-post-{{post.id}}"
-                ></textarea>
-                <img
-                  src="{%static 'comments/images/paper-plane.png'%}"
-                  style="width: 20px; height: 20px; margin-left: 5px; cursor: pointer"
-                  onclick="creatCommentForPost(event)"
-                />
+                class="comment-form-control"
+                placeholder="Enter your comment..."
+                style=""
+              ></textarea>
+              <img src="{%static 'comments/images/paper-plane.png'%}" alt="" srcset="" style="width: 20px; height: 20px; margin-left: 5px;">
               </div>
             </div>
           </div>
@@ -207,10 +188,9 @@
     <script>
         var csrftoken = '{{ csrf_token }}';
     </script>
-    <script src="{%static 'posts/js/posts_page.js'%}"></script>
     <script src="{%static 'reactions/js/reaction_post.js'%}"></script>
     <script src="{%static 'reactions/js/reaction_cmt.js'%}"></script>
-    <script src="{%static 'comments/js/comment.js'%}"></script>
-    
+    <script src="{%static 'posts/js/posts_page.js'%}"></script>
   </body>
 </html>
+

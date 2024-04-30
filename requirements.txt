@@ -20,4 +20,6 @@ django_mongoengine
 django-rest-framework-mongoengine
 django-redis
 django-debug-toolbar
+redis
+celery
 
