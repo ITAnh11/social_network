@@ -43,7 +43,7 @@ class GetReactions(APIView):
             topMostReacted = postsInfo.getMostUseReactions()
             total = postsInfo.number_of_reactions.total
         elif comments_id > 0:
-            comment = Comments.objects(__raw__={'id': comments_id}).first()
+            comment = Comments.objects(__raw__={'_id': comments_id}).first()
             if comment is None:
                 return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
             topMostReacted = comment.getMostUseReactions()
@@ -134,7 +134,7 @@ class CreateReaction(APIView):
                 postsInfo.inc_reaction(reaction.type)
                 postsInfo.save()
             elif comment_id > 0:
-                comment = Comments.objects(__raw__={'id': comment_id}).first()
+                comment = Comments.objects(__raw__={'_id': comment_id}).first()
                 comment.inc_reaction(reaction.type)
                 comment.save()
                 
@@ -177,7 +177,7 @@ class DeleteReaction(APIView):
                 postsInfo.dec_reaction(reaction.type)
                 postsInfo.save()
             elif comment_id > 0:
-                comment = Comments.objects(__raw__={'id': comment_id}).first()
+                comment = Comments.objects(__raw__={'_id': comment_id}).first()
                 if comment is None:
                     return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
                 comment.dec_reaction(reaction.type)
