@@ -20,7 +20,7 @@ function renderComments(data, idElement) {
 
     setTimeout(() => {
       // Code to be executed after 1 second delay
-      var html = `<div class="d-flex flex-row p-3">
+      var html = `<div class="d-flex flex-row p-2">
       <a href="/userprofiles/?id=${commentUser.id}" style="text-decoration: none;">
                   <img
                   src="${commentUser.avatar}"
@@ -32,7 +32,8 @@ function renderComments(data, idElement) {
                 </a>
 
       <div class="w-100">
-        <div
+      <div class="comment-background">
+      <div
           class="d-flex justify-content-between align-items-center"
         >
           <div class="d-flex flex-row align-items-center">
@@ -45,6 +46,8 @@ function renderComments(data, idElement) {
         <p class="text-justify comment-comment-text mb-0">
           ${(commentContent === null) ? "" : commentContent}
         </p>
+      </div>
+        
 
         <div class="d-flex flex-row comment-user-feed">
         <small style="margin-right: 20px;" >${commentCreatedAt}</small>
@@ -220,6 +223,7 @@ function getCommentsForComment(event) {
       console.log('Success:', data);
       renderComments(data, `list-replied-${commentId}`);
       event.target.setAttribute("is_view", "true");
+      event.target.style.display = "none";
     });
 }
 
