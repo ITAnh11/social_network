@@ -46,7 +46,7 @@ function renderComments(data, idElement) {
         <small style="margin-right: 20px;" >${commentCreatedAt}</small>
           <span
             class="comment-wish text-action"
-            style="margin-right: 20px; font-size: 14px"
+            style="margin-right: 20px; font-size: 14px;cursor: pointer;"
             >Like</span
           >
           <span class="ml-3 text-action" style="cursor: pointer;" onclick="visibleReplyBoxComment(${commentId})">Reply</span>
