@@ -57,9 +57,10 @@ function renderComments(data, idElement) {
           <span class="comment-wish text-action" style="margin-right: 20px; font-size: 14px;cursor: pointer;" 
           onmouseleave="remove_list_reaction_for_post(event)" 
           onmouseenter="show_list_reaction_for_post(event)" 
-          onclick="delete_reaction_for_post(event)"
+          onclick="delete_reaction_for_cmt(event)"
           status="default"
           id="react-cmt-${commentId}"
+          comment_id="${commentId}"
           >
             React
           </span>
@@ -143,7 +144,8 @@ function renderComments(data, idElement) {
     </div>`;
 
       commentedELement.insertAdjacentHTML('beforeend', html);
-      //setCountReaction_for_cmt("comment", commentId);
+      setCountReaction_for_cmt("comment", commentId);
+      is_reacted_for_cmt(commentId);
     }, index * 100);
   });
 }
