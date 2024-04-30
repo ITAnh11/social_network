@@ -190,11 +190,11 @@ function show_list_friend(){
             var url = `/userprofiles/?id=${friend.friend_profile.id}`;
             var a = `
             <a href="${url}" style="text-decoration: none;color:black;">
-                <div class="card" id="${friend.friend_profile.id}">
-                    <div class="card-img">
+                <div class="card0" id="${friend.friend_profile.id}">
+                    <div class="card0-img">
                         <img style="display: flex; width: 100%; height: 100%;" src="${friend.friend_profile.avatar}" alt="Card Image">
                     </div>
-                    <div class="card-content">
+                    <div class="card0-content">
                         <h3>${friend.friend_profile.name}</h3>
                     </div>
                 </div>
