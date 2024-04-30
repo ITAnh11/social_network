@@ -27,7 +27,7 @@ function renderComments(data, idElement) {
                   width="40"
                   height="40"
                   class="rounded-circle mr-3"
-                  style="object-fit: cover; margin-right: 10px"
+                  style="object-fit: cover; margin-right: 5px; margin-top: 5px"
                 />
                 </a>
 
