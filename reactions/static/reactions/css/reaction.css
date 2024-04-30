@@ -50,3 +50,13 @@
 }
 
 /* reaction cho comment */
+.top1-react-in-cmt{
+    width: 20px;
+    height: 20px;
+}
+.top2-react-in-cmt{
+    width: 20px;
+    height: 20px; 
+    position: relative; 
+    left: -10px;
+}
