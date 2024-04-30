@@ -36,11 +36,11 @@
                 <button onclick="viewAvatar()">View Avatar</button>
                 <button onclick="chooseAvatar()">Choose Avatar</button>
             </div>                                
-            <div class="left-dashboard-info">
+            <div class="left-dashboard-info" id="left-dashboard-info">
                 <div id="userName2" class="userName">
 
                 </div>
-                <p>446 Friends</p>
+                {% comment %} <p>446 Friends</p> {% endcomment %}
                 <div class="mutual-friend-images">
                     <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
                     <img src="{%static 'userprofiles/images/avtVuong.png' %}" alt="">
@@ -58,18 +58,11 @@
             </div>
             <div class="right-div-single-logo"> <a href="#"> <i class="fas fa-ellipsis-h"></i></a></div>
         </div>
-        <div class="list-choose">
-            <ul class="profile-menu">
-                <li><a href="{% url 'userprofiles:profile' %}">Posts</a></li>
-                {% comment %} <li><a href="{% url 'userprofiles:about' %}">Giới thiệu</a></li> {% endcomment %}
-                <li><a href="{% url 'userprofiles:listFriends' %}">Friends</a></li>
-            </ul>
+        <div class="list-choose" id="listChoose">
+            
         </div>
       </div>
-      {% comment %} <button onclick="showListFriends()">
-        showListFriends
-      </button> {% endcomment %}
-        <!-- list friends-->
+
       <div class="listFriendsUserprofile" id="list_friends_userprofile">
         {% comment %} <div fi>
 
@@ -97,6 +90,7 @@
     <script>
         var csrftoken = '{{ csrf_token }}';
     </script>   
+    <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="{%static 'userprofiles/js/editAvt.js' %}" ></script>
     <script src="{%static 'userprofiles/js/listFr.js' %}" ></script>
     <script src="{%static 'userprofiles/js/profile.js' %}" ></script>

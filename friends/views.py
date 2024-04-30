@@ -364,25 +364,25 @@ class GetListFriendOfUserOtherView(APIView):
         # other_user_id = request.data.get('id')    
        # others_user_friend = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
         others_user_friend = Friendship.objects.filter(Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
-
         data = []
         for other_user_friend in others_user_friend:
             user_id = User.objects.filter(id=other_user_id).values_list('email', flat=True).first()
         
             if user_id == str(other_user_friend.user_id2):
                 friend_id = other_user_friend.user_id1
-                print('ok') 
+                # print('ok') 
             else :
                 friend_id = other_user_friend.user_id2
-                print('okkkk') 
+                # print('okkkk') 
 
             friend_ship = {
                 "friend_profile": getUserProfileForPosts(friend_id)
             }
             data.append(friend_ship)
-            
+        
         return Response({
-            "data": data
+            "data": data,
+            "number_of_friends": len(data)
         })
         
 # class GetMutualFriendOfUserView(APIView):
