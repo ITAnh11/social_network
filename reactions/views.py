@@ -31,19 +31,19 @@ class GetReactions(APIView):
         # print(request.data)
         
         posts_id = int(request.data.get('posts_id'))
-        comments_id = int(request.data.get('comment_id'))
+        comment_id = int(request.data.get('comment_id'))
         
         topMostReacted = None
         total = None
         
-        if comments_id < 0:
+        if comment_id < 0:
             postsInfo = PostsInfo.objects(__raw__={'posts_id': posts_id}).first()
             if postsInfo is None:
                 return Response({'error': 'Posts not found'}, status=status.HTTP_404_NOT_FOUND)
             topMostReacted = postsInfo.getMostUseReactions()
             total = postsInfo.number_of_reactions.total
-        elif comments_id > 0:
-            comment = Comments.objects(__raw__={'_id': comments_id}).first()
+        elif comment_id > 0:
+            comment = Comments.objects(__raw__={'_id': comment_id}).first()
             if comment is None:
                 return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
             topMostReacted = comment.getMostUseReactions()
@@ -79,6 +79,8 @@ class CreateReaction(APIView):
             currentType = reaction.type
             newType = request.data.get('type')
             
+            print(currentType, newType)
+            
             if currentType == newType:
                 return True
             
@@ -89,9 +91,15 @@ class CreateReaction(APIView):
             createReactNotification(reaction)
             
             # change number of type reactions
-            postInfo = PostsInfo.objects(__raw__={'posts_id' : posts_id}).first()
-            postInfo.changeTypeReaction(currentType, newType)
-            postInfo.save()
+            is_for_posts = comment_id < 0
+            if is_for_posts:
+                postInfo = PostsInfo.objects(__raw__={'posts_id' : posts_id}).first()
+                postInfo.changeTypeReaction(currentType, newType)
+                postInfo.save()
+            elif is_for_posts == False:
+                comment = Comments.objects(__raw__={'_id': comment_id}).first()
+                comment.changeTypeReaction(currentType, newType)
+                comment.save()
             
             return True
             

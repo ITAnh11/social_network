@@ -70,11 +70,15 @@ class ReactionNumberInfo(Document):
         })
         
     def changeTypeReaction(self, currentType, newType):
-        self.update(__raw__= {'$inc': {
-            f'number_of_reactions.{REACTION_FIELDS[currentType]}': -1,
-            f'number_of_reactions.{REACTION_FIELDS[newType]}': 1,
-            }
-        })
+        try:
+            print(currentType, newType)
+            self.update(__raw__= {'$inc': {
+                f'number_of_reactions.{REACTION_FIELDS[currentType]}': -1,
+                f'number_of_reactions.{REACTION_FIELDS[newType]}': 1,
+                }
+            })
+        except Exception as e:
+            print("changeTypeReaction", e)
     
     def getMostUseReactions(self):
         reactions = [
