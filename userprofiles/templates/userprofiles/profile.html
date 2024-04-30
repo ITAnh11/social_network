@@ -22,9 +22,9 @@
     <div class="profile-container">
         <div class="cover" id="coverImage">
             {% comment %} <img src="{%static 'userprofiles/images/cover.jpg' %}" class="coverImage" alt=""> {% endcomment %}
-            <div class="edit-coverImage">
-                <img src="{%static 'userprofiles/images/camera.png' %}" alt="">
-                <a href="{% url 'userprofiles:editImagesPage' %}" style="color: black;">Change your coverImage </a>
+            <div class="edit-coverImage" id="editCoverImage">
+                {% comment %} <img src="{%static 'userprofiles/images/camera.png' %}" alt="">
+                <a href="{% url 'userprofiles:editImagesPage' %}" style="color: black;">Change your coverImage </a> {% endcomment %}
             </div>
         </div>
         <div class="dashboard">

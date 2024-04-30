@@ -177,6 +177,7 @@ fetch(api_get_profile)
         var coverImage = document.getElementById('coverImage');
         coverImage.innerHTML += `<img src ="${data.imageprofile['background']}" alt="coverImage" class="coverImage">`;
 
+        var editCoverImage = document.getElementById('editCoverImage');
         var avatarContainer = document.getElementById('avatarContainer');
         avatarContainer.innerHTML += `<img src ="${data.imageprofile['avatar']}" alt="avatar" class="dashboard-img" id="dashboard-img">`;
 
@@ -201,6 +202,9 @@ fetch(api_get_profile)
                                                     <i class="far fa-edit"></i> Edit your story
                                             </button>
                                          </a>`;
+            editCoverImage.innerHTML += `<img src="{%static 'userprofiles/images/camera.png' %}" alt="">
+                                        <a href="{% url 'userprofiles:editImagesPage' %}" style="color: black;">Change your coverImage </a>`
+                                        ;                            
             fetch(`/friends/get_statusfriend/?id=${id_user}`)
             .then(response => response.json())
             .then(data => {
