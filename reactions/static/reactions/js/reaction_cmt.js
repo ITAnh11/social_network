@@ -127,7 +127,7 @@ function delete_reaction_for_cmt(event){
             a.setAttribute("status","default");
         })
         .then(() => {
-            setCountReaction_for_post('comment', b.getAttribute("comment_id"));
+            setCountReaction_for_cmt('comment', b.getAttribute("comment_id"));
         })
     }
     else{
@@ -141,7 +141,7 @@ function delete_reaction_for_cmt(event){
             a.setAttribute("status","like");
         })
         .then(() => {
-            setCountReaction_for_post('comment', b.getAttribute("comment_id"));
+            setCountReaction_for_cmt('comment', b.getAttribute("comment_id"));
         })
     }
 }
