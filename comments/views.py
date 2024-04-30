@@ -11,6 +11,8 @@ from .serializers import CommentsSerializer
 
 from userprofiles.models import UserBasicInfo
 
+from notifications.views import createCommentNotification
+
 from common_functions.common_function import getUser, getTimeDuration
 
 # Create your views here.
@@ -93,6 +95,8 @@ class CreateComment(APIView):
         
         comment = self.createComment(request)
         comment.save()
+        
+        createCommentNotification(comment)
         
         dataComment = CommentsSerializer(comment).data
         dataComment['created_at'] = 'Just now'
