@@ -39,6 +39,14 @@ class CommentNotifications(Notifications):
         super().__init__(*args, **values)
 
 class AddFriendNotifications(Notifications):
+    id_friend_request = fields.IntField()
+    status_request = fields.StringField(default='pending')
     
     def __init__(self, *args, **values):
         super().__init__(*args, **values)
+        
+    def setAccept(self):
+        self.update(__raw__={'$set': {'status_request': 'accepted'}})
+    
+    def setDecline(self):
+        self.update(__raw__={'$set': {'status_request': 'declined'}})
