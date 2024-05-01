@@ -2,6 +2,7 @@ from .models import ReactNotifitions, CommentNotifications, AddFriendNotificatio
 from posts.models import Posts
 from comments.models import Comments
 from users.models import User
+from userprofiles.models import UserProfile, UserBasicInfo, ImageProfile
 
 from .serializers import ReactNotifitionsSerializer, CommentNotificationsSerializer, AddFriendNotificationsSerializer
 
@@ -102,20 +103,27 @@ def createCommentNotification(forcomment):
     except Exception as e:
         print("createCommentNotification", e)
 
-def createAddFriendNotification(forFriend):
+def createAddFriendNotification(forFriendRequest):
     try:
-        content = f'sent you a friend request'
+        content = f'sent you a friend request.'
+        
+        userprofile = UserProfile.objects.get(user_id=forFriendRequest.from_id)
+        imageprofile = ImageProfile.objects.get(user_id=forFriendRequest.from_id)
+        userbasicinfo = UserBasicInfo(id=userprofile.user_id.id, 
+                                      name=f'{userprofile.first_name} {userprofile.last_name}', 
+                                      avatar=imageprofile.avatar.url)
         
         notification = AddFriendNotifications(type='add_friend', 
-                         user=forFriend.user, 
+                         user=userbasicinfo, 
                          content=content, 
-                         to_user_id=forFriend.to_user_id, 
-                         created_at=forFriend.created_at) 
+                         id_friend_request=forFriendRequest.id,
+                         status_request=forFriendRequest.status,
+                         to_user_id=forFriendRequest.to_id.id, 
+                         created_at=forFriendRequest.created_at) 
         
         notification.save() 
     except Exception as e:
         print("createAddFriendNotification", e)
-
 
 class GetNotifications(APIView):
     def get(self, request):

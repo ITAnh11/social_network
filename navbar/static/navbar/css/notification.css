@@ -1,0 +1,148 @@
+/* css for notification */
+.notification_wrap {
+	position: absolute;
+    width: 500px;
+    margin: 120px auto 0;
+    top: -75px;
+    right: -41px;
+}
+
+.notification_icon {
+    margin: 0 auto;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    background-color: #dddddd;
+    border-radius: 50%;
+    padding: 10px;
+	cursor: pointer;
+}
+
+.icon-notification-bell {
+	width: 30px;
+	height: 30px;
+}
+
+.notification_wrap .notification_icon .fa-bell {
+	cursor: pointer;
+}
+
+.notification_wrap .dropdown-notification {
+	width: 400px;
+	height: auto;
+	background: #fff;
+	border-radius: 5px;
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.125);
+	margin: 15px auto 0;
+	padding: 15px;
+	position: relative;
+	display: none;
+	box-shadow: 0px 0px 20px 0px #00000082;
+	max-height: 69vh;
+    overflow-y: auto;
+}
+
+.notification_wrap .dropdown-notification .notify_item {
+	padding: 10px 0;
+	border-bottom: 1px solid #dbdaff;
+	display: grid;
+	grid-template-columns: 1fr 7fr;
+	grid-template-rows: 1fr;
+	grid-column-gap: 0px;
+	grid-row-gap: 0px;
+	cursor: pointer;
+}
+
+.notification_wrap .dropdown-notification .notify_item:hover
+.notify_img .icon-type-notification{
+	transform: scale(1.5);
+	transition: transform 0.5s ease;
+}
+
+.notification_wrap .dropdown-notification .notify_item:last-child {
+	border-bottom: 0px;
+}
+
+.notification_wrap .dropdown-notification .notify_item .notify_info {
+	display: block;
+	/* or inline-block */
+	width: 100%;
+	/* or any fixed value, or use max-width */
+}
+
+.notification_wrap .dropdown-notification .notify_item .notify_img {
+	margin-right: 10px;
+}
+.notify_item .notify_img .user-notification {
+	position: relative;
+	display: flex;
+}
+.notify_img .icon-type-notification {
+	position: absolute;
+    right: -6px;
+    width: 25px;
+    bottom: -5px;
+}
+
+.notify_img .img-user-notification {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+
+.notification_wrap .dropdown-notification .notify_item .notify_info .notify_time {
+	color: #c5c5e6;
+	font-size: 12px;
+}
+
+.notification_wrap .dropdown-notification .notify_item .notify_info .content-notification {
+	font-size: 14px;
+	margin: 0px;
+}
+
+.notification_wrap .dropdown-notification .notify_item .notify_info .name-user-notification {
+	font-weight: bold;
+	color: #1155b9;
+}
+
+.notification_wrap .dropdown-notification:before {
+	content: "";
+	position: absolute;
+	top: -30px;
+	left: 50%;
+	transform: translateX(-50%);
+	/* border: 15px solid; */
+	border-color: transparent transparent #fff transparent;
+}
+
+.notification_wrap .dropdown-notification.active-notification {
+	display: block;
+}
+
+.btn-notification-addfriend {
+	color: #fff;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.accept-color-addfriend {
+	background-color: #3b88fc;
+}
+
+.accept-color-addfriend:hover {
+	background-color: #1155b9;
+}
+
+.decline-color-addfriend {
+	background-color: #949494;
+}
+
+.decline-color-addfriend:hover {
+	background-color: #777777;
+}
+
+.btn-notification-addfriend-container {
+	margin-left: 10px;
+}

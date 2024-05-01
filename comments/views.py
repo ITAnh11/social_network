@@ -13,7 +13,7 @@ from userprofiles.models import UserBasicInfo
 
 from notifications.views import createCommentNotification
 
-from common_functions.common_function import getUser, getTimeDuration
+from common_functions.common_function import getUser, getTimeDurationForComment
 
 # Create your views here.
 
@@ -33,7 +33,7 @@ class GetCommentsForPost(APIView):
         list_comments = []
         for comment in comments:
             dataComment = CommentsSerializer(comment).data
-            dataComment['created_at'] = getTimeDuration(comment.created_at)
+            dataComment['created_at'] = getTimeDurationForComment(comment.created_at)
             dataComment['most_use_reactions'] = comment.getMostUseReactions()
             
             list_comments.append(dataComment)
@@ -54,7 +54,7 @@ class GetCommentsForComment(APIView):
         list_comments = []
         for comment in comments:
             dataComment = CommentsSerializer(comment).data
-            dataComment['created_at'] = getTimeDuration(comment.created_at)
+            dataComment['created_at'] = getTimeDurationForComment(comment.created_at)
             dataComment['most_use_reactions'] = comment.getMostUseReactions()
 
             
