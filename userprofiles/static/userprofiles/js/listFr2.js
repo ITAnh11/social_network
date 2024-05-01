@@ -187,21 +187,14 @@ fetch(api_get_profile)
                                         <li><a href="/userprofiles/listFriends/?id=${id_user}">Friends</a></li>
                                     </ul>`
 
-        var listFr_page = document.getElementById('heading-link profile-heading-link');
-        listFr_page.innerHTML += `<a href="/userprofiles/listFriends/?id=${id_user}">All Friends</a>`;
 
         var editProfile = document.getElementById('editProfile');
-        var editStoryButton = document.getElementById('editStoryButton');  
         var numberOfFr = document.getElementById('numberOfFr');  
 
         if (data.isOwner === true) {
             // Hiển thị nút chỉnh sửa thông tin cá nhân
             editProfile.innerHTML = `<button type="button" id="editProfileReal"> <i class="far fa-edit"></i><a href="${urlFromEditProfile}" style="text-decoration: none; color: white;">Edit your profile</a></button>`;
-            editStoryButton.innerHTML +=`<a href="${urlFromEditStory}" class="editStory">
-                                            <button type="button" class="edit-story-btn">
-                                                    <i class="far fa-edit"></i> Edit your story
-                                            </button>
-                                         </a>`;
+
             editCoverImage.innerHTML += `<a href="/userprofiles/editImagesPage/?id=${id_user}" style="color: black;">
                                             Change your coverImage 
                                         </a>`;                            
@@ -271,24 +264,5 @@ fetch(api_get_profile)
                 });
         }
 
-        // edit story
-        var intro_bio = document.getElementById('intro_bio');
-        intro_bio.innerHTML += `<p>${data.userprofile['bio']}</p>`;
-
-        var work = document.getElementById('work');
-        work.innerHTML += `${data.userprofile['work']}`;
-
-        var address_work = document.getElementById('address_work');
-        address_work.innerHTML += `${data.userprofile['address_work']}`;
-
-        var address = document.getElementById('address');
-        address.innerHTML += `${data.userprofile['address']}`;
-
-        var place_birth = document.getElementById('place_birth');
-        place_birth.innerHTML += `${data.userprofile['place_birth']}`;
-
-        var social_link = document.getElementById('social_link');
-        social_link.innerHTML += `<a href="https://www.instagram.com/${data.userprofile['social_link']}/"><p>${data.userprofile['social_link']}</p></a>`;
-        // social_link.innerHTML  += `<a href=></a>${data.userprofile['social_link']}`;
     })
 
