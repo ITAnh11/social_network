@@ -448,6 +448,10 @@ class AcceptFriendRequestProfileView(APIView):
                 friend_request.status = 'accepted'
                 friend_request.save()
                 
+                addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request.id}).first()
+                addfriendNotification.setAccept()
+                addfriendNotification.save()
+                
                 friend_ship = Friendship.objects.create(
                 user_id1 = user,
                 user_id2 = friend_request.from_id                 
@@ -486,6 +490,10 @@ class DenineFriendRequestProfileView(APIView):
                 #friend_request.status = 'pending'
                 friend_request.status = 'denined'
                 friend_request.save()  
+                
+                addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request.id}).first()
+                addfriendNotification.setDecline()
+                addfriendNotification.save()
                 
                 return Response({'success': 'Friend request processed successfully',
                                  'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
