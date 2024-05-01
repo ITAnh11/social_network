@@ -84,7 +84,6 @@ function showListFriendsOfUserprofile(id_user) {
                 .then(data => {
                     // console.log("user_id:",id_user);
                     console.log("friend_list:",data);
-                    
                     var listFr_Userprofile = document.getElementById('listFrOfUserprofile')
 
                     data.data.forEach(function(friend_ship){
