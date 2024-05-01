@@ -15,16 +15,16 @@
     <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 </head>
 
-<body link-url-editProfile="{% url 'userprofiles:editProfile' %}" link-url-editStory="{%url 'userprofiles:editStory'%}">
+<body link-editImages="{% url 'userprofiles:editImagesPage' %}" link-url-editProfile="{% url 'userprofiles:editProfile' %}" link-url-editStory="{%url 'userprofiles:editStory'%}">
     {% include 'navbar/navbar.html' %}
     <!-- profile-page -->
 
     <div class="profile-container">
         <div class="cover" id="coverImage">
             {% comment %} <img src="{%static 'userprofiles/images/cover.jpg' %}" class="coverImage" alt=""> {% endcomment %}
-            <div class="edit-coverImage">
-                <img src="{%static 'userprofiles/images/camera.png' %}" alt="">
-                <a href="{% url 'userprofiles:editImagesPage' %}" style="color: black;">Change your coverImage </a>
+            <div class="edit-coverImage" id="editCoverImage">
+                {% comment %} <img src="{%static 'userprofiles/images/camera.png' %}" alt=""> {% endcomment %}
+                {% comment %} <a href="{% url 'userprofiles:editImagesPage' %}" style="color: black;">Change your coverImage </a> {% endcomment %}
             </div>
         </div>
         <div class="dashboard">
@@ -35,10 +35,10 @@
                 
                 <!-- Popup hoặc menu chứa các lựa chọn -->
                 <div id="avatarOptions" class="avatar-options">
-                    <button onclick="viewAvatar()">View Avatar</button>
-                    <a href="{% url 'userprofiles:editImagesPage' %}">
-                        <button onclick="chooseAvatar()">Choose Avatar</button>
-                    </a>                   
+                    {% comment %} <button onclick="viewAvatar()">View Avatar</button> {% endcomment %}
+                    <div id="chooseAvatarButton">
+
+                    </div>                  
                 </div>                                
                 <div class="left-dashboard-info" id="left_dashboard_info">
                     <div id="userName2" class="userName">
