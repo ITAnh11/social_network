@@ -20,4 +20,5 @@ django_mongoengine
 django-rest-framework-mongoengine
 redis
 celery
+channels_redis
 
