@@ -123,12 +123,12 @@ class ChangePasswordView(APIView):
         
         old_password = request.data.get('current_password')
         new_password = request.data.get('new_password')
-        comfirm_password = request.data.get('comfirm_password')
+        confirm_password = request.data.get('confirm_password')
         
         if not user.check_password(old_password):
             return Response({'warning': 'Current password is incorrect!'})
         
-        if new_password != comfirm_password:
+        if new_password != confirm_password:
             return Response({'warning': 'Password and comfirm password not match!'})
         
         if not UserSerializer().check_password(new_password):

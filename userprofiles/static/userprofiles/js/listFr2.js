@@ -198,18 +198,6 @@ fetch(api_get_profile)
             editCoverImage.innerHTML += `<a href="/userprofiles/editImagesPage/?id=${id_user}" style="color: black;">
                                             Change your coverImage 
                                         </a>`;                            
-            fetch(`/friends/get_listfriendofuserother/?id=${id_user}`)
-            .then(response => response.json())
-            .then(data => {
-                    
-                var numberOfFriends = data.number_of_friends;
-                console.log(data.number_of_friends);
-                if (numberOfFr) {
-                    numberOfFr.innerHTML = `<p>${numberOfFriends} friends</p>`;
-                } else {
-                    console.log('Phần tử có id là "numberOfFr" không tồn tại.');
-                }
-            })
         } else {
 
             // Gọi API để kiểm tra trạng thái quan hệ bạn bè với người dùng khác
@@ -243,17 +231,17 @@ fetch(api_get_profile)
                 });
                 
         }
-
-        if (data.isOwner === false) {
-            fetch(`/friends/get_listfriendofuserother/?id=${id_user}`)
+        
+        //Hiển thị số lượng bạn bè
+        fetch(`/friends/get_listfriendofuserother/?id=${id_user}`)
                 .then(response => response.json())
                 .then(data => {
                     
-                    // numberOfFr.innerHTML += `<p>{number} friends</p>`
-                    // Kiểm tra trạng thái quan hệ bạn bè
                     var numberOfFriends = data.number_of_friends;
                     console.log(data.number_of_friends);
-                    if (numberOfFr) {
+                    if (numberOfFriends <= 1) {
+                        numberOfFr.innerHTML = `<p>${numberOfFriends} friend</p>`;
+                    } else if (numberOfFriends > 1) {
                         numberOfFr.innerHTML = `<p>${numberOfFriends} friends</p>`;
                     } else {
                         console.log('Phần tử có id là "numberOfFr" không tồn tại.');
@@ -262,7 +250,6 @@ fetch(api_get_profile)
                 .catch(error => {
                     console.error('Error:', error);
                 });
-        }
 
     })
 
