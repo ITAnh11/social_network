@@ -85,7 +85,7 @@ class AcceptFriendRequestView(APIView):
         
         try:
                 friend_request_id = int(request.data.get('id'))
-                friend_request = get_object_or_404(FriendRequest, id = friend_request_id, status='pending')
+                friend_request = get_object_or_404(FriendRequest, id = friend_request_id)
                 
                 friend_request.status = 'accepted'
                 friend_request.save()
@@ -127,7 +127,7 @@ class DenineFriendRequestView(APIView):
         
         try:
                 friend_request_id = int(request.data.get('id'))
-                friend_request = get_object_or_404(FriendRequest, id = friend_request_id, status='pending')
+                friend_request = get_object_or_404(FriendRequest, id = friend_request_id)
                 
                 #friend_request.status = 'pending'
                 friend_request.status = 'denined'
@@ -154,7 +154,7 @@ class DeleteFriendShip(APIView):
             friendship_id = request.data.get('id')
             
             friendship = get_object_or_404(Friendship,Q(user_id1=friendship_id, user_id2=user) | Q(user_id1=user, user_id2=friendship_id))
-            friendrequest = get_object_or_404(FriendRequest,Q(from_id=user, to_id=friendship_id) | Q(from_id=friendship_id, to_id=user), status='accepted')
+            friendrequest = get_object_or_404(FriendRequest,Q(from_id=user, to_id=friendship_id) | Q(from_id=friendship_id, to_id=user))
             
             friendrequest.delete()
             friendship.delete()
@@ -353,8 +353,8 @@ class GetStatusFriendView(APIView):
         if user == other_user_id : 
             return Response({'status_relationship': 'user'})
         
-        status_relationship_1_2 = FriendRequest.objects.filter(from_id=user, to_id=other_user_id).values_list('status', flat=True).order_by('-id').first()
-        status_relationship_2_1 = FriendRequest.objects.filter(from_id=other_user_id, to_id=user).values_list('status', flat=True).order_by('-id').first()
+        status_relationship_1_2 = FriendRequest.objects.filter(from_id=user, to_id=other_user_id).values_list('status', flat=True).first()
+        status_relationship_2_1 = FriendRequest.objects.filter(from_id=other_user_id, to_id=user).values_list('status', flat=True).first()
         
         print(status_relationship_1_2, status_relationship_2_1)
         if status_relationship_1_2 == 'accepted' or status_relationship_2_1 == 'accepted' :
@@ -442,7 +442,7 @@ class AcceptFriendRequestProfileView(APIView):
         
         try:
                 from_user_id = request.data.get('id')
-                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user, status='pending')
+                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user)
                 
                 #friend_request.status = 'pending'
                 friend_request.status = 'accepted'
@@ -485,7 +485,7 @@ class DenineFriendRequestProfileView(APIView):
         
         try:
                 from_user_id = request.data.get('id')
-                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user, status = 'pending')
+                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user)
                 
                 #friend_request.status = 'pending'
                 friend_request.status = 'denined'
