@@ -22,4 +22,5 @@ django-redis
 django-debug-toolbar
 redis
 celery
+channels_redis
 
