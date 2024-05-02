@@ -67,6 +67,7 @@ class RevokeFriendRequestView(APIView):
             to_id = request.data.get('id')
             #print(to_id)
             friend_request = get_object_or_404(FriendRequest, from_id=user, to_id=to_id, status='pending')
+            print(friend_request)
             
             friend_request.delete()
             #print(user)
@@ -442,7 +443,7 @@ class AcceptFriendRequestProfileView(APIView):
         
         try:
                 from_user_id = request.data.get('id')
-                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user, status='pending')
+                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user)
                 
                 #friend_request.status = 'pending'
                 friend_request.status = 'accepted'
@@ -485,7 +486,7 @@ class DenineFriendRequestProfileView(APIView):
         
         try:
                 from_user_id = request.data.get('id')
-                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user, status = 'pending')
+                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user)
                 
                 #friend_request.status = 'pending'
                 friend_request.status = 'denined'
