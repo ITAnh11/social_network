@@ -51,22 +51,6 @@ function showListFriends(id_user) {
                                 </a>`;
 
                         Friend_list.innerHTML += a;
-                    // list Fr trang cá nhân
-                    // data.data.forEach(function(friend_ship){
-                       
-                    //     var url = `/userprofiles/?id=${friend_ship.friend_profile.id}`;
-                    //     var listFr_Userprofile = document.getElementById('listFrOfUserprofile');
-                    //     var a =`<a href="${url}" style="text-decoration: none;color:black;">
-                    //                     <div class="first-friend">
-                    //                         <img src="${friend_ship.friend_profile.avatar}" alt="">
-                    //                         <p>${friend_ship.friend_profile.name}</p>
-                    //                     </div>                                
-                    //                 </a>`;
-                                    
-                    //         if (listFr_Userprofile.children.length < 9) {
-                    //             listFr_Userprofile.innerHTML += a;
-                    //         }
-                    //     })
                     })  
                 });
         });

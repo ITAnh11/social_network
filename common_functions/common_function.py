@@ -33,6 +33,23 @@ def getTimeDuration(created_at):
         return f'{time_duration.days} days ago'
     return created_at.strftime('%d, %B %Y')
 
+def getTimeDurationForComment(created_at):
+    created_at = created_at.replace(tzinfo=timezone.utc)
+    time_duration = timezone.now() - created_at
+    if time_duration < timedelta(minutes=1):
+        return f'{time_duration.seconds} s'
+    elif time_duration < timedelta(hours=1):
+        return f'{time_duration.seconds//60} m'
+    elif time_duration < timedelta(days=1):
+        return f'{time_duration.seconds//3600} h'
+    elif time_duration < timedelta(days=7):
+        return f'{time_duration.days} d'
+    elif time_duration < timedelta(days=30):
+        return f'{time_duration.days//7} w'
+    elif time_duration < timedelta(days=365):
+        return f'{time_duration.days//30} m'
+    return f'{time_duration.days//365} y'
+
 def getUser(request):
     token = request.COOKIES.get('jwt')
     

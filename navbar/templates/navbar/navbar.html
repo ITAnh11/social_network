@@ -1,12 +1,14 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
     <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet"> -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -14,18 +16,30 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-    <link type="text/css" href="{%static 'navbar/css/navbar.css' %}" rel="stylesheet" />
+    <link
+      type="text/css"
+      href="{%static 'navbar/css/navbar.css' %}"
+      rel="stylesheet"
+    />
+    <link
+      type="text/css"
+      href="{%static 'navbar/css/notification.css' %}"
+      rel="stylesheet"
+    />
     <title>Profle - Socialbook</title>
-    
-</head>
-<body>
-  <nav class="big_navbar">
-    <ul>
-        <li> <a href="{% url 'homepage:homepage' %}" id="fb"> <i class="fab fa-facebook-f    "></i> </a> </li>
+  </head>
+  <body>
+    <nav class="big_navbar">
+      <ul>
+        <li>
+          <a href="{% url 'homepage:homepage' %}" id="fb">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+        </li>
         <!-- <li> <button id="search_btn" class="tooltip" data-tooltip="Search"> <i class="fas fa-search    "></i> </button> </li> -->
         <div class="search-box">
-          <img src="{% static 'userprofiles/images/search.png' %}" alt="">
-          <input id="search-input" type="text" placeholder="Search">
+          <img src="{% static 'userprofiles/images/search.png' %}" alt="" />
+          <input id="search-input" type="text" placeholder="Search" />
         </div>
         <!-- <div class="search-list">
             <div style="display: flex;flex-direction: row;align-items: center;">
@@ -46,149 +60,244 @@
             </a>
         </div> -->
         <li id="space2"></li>
-        
-        <li> <a class="active" data-tooltip="Home" href="{% url 'homepage:homepage' %}" id="home"> <img src="{%static 'navbar/images/home.png' %}" style="height:35px; width:35px;"> </a> </li>
-        <li> <a class="" data-tooltip="Group" href="#" id="group"> <img src="{%static 'navbar/images/group.png' %}" style="height:35px; width:35px;"> </a></li>
-        <li> <a class="" data-tooltip="Watch" href="#" id="tv"> <img src="{%static 'navbar/images/tv.png' %}" style="width:35px; height:35px"> </a> </li>
-        <li> <a class="" data-tooltip="Friend" href="{% url 'friends:friend' %}" id="friend"> <img src="{%static 'navbar/images/add-friend.png' %}" style="height:35px; width:35px" > </a> </li>
+
+        <li>
+          <a
+            class="active"
+            data-tooltip="Home"
+            href="{% url 'homepage:homepage' %}"
+            id="home"
+          >
+            <img
+              src="{%static 'navbar/images/home.png' %}"
+              style="height: 35px; width: 35px"
+            />
+          </a>
+        </li>
+        <li>
+          <a class="" data-tooltip="Group" href="#" id="group">
+            <img
+              src="{%static 'navbar/images/group.png' %}"
+              style="height: 35px; width: 35px"
+            />
+          </a>
+        </li>
+        <li>
+          <a class="" data-tooltip="Watch" href="#" id="tv">
+            <img
+              src="{%static 'navbar/images/tv.png' %}"
+              style="width: 35px; height: 35px"
+            />
+          </a>
+        </li>
+        <li>
+          <a
+            class=""
+            data-tooltip="Friend"
+            href="{% url 'friends:friend' %}"
+            id="friend"
+          >
+            <img
+              src="{%static 'navbar/images/add-friend.png' %}"
+              style="height: 35px; width: 35px"
+            />
+          </a>
+        </li>
         <li id="space1"></li>
         <!-- <li> <button class="tooltip" data-tooltip="Add" id="btn_plus"><i class="fas fa-plus    "></i></button> </li> -->
-        <li> <button class="" data-tooltip="Message" id="btn_msg"><i class="fab fa-facebook-messenger    "></i></button></li>
-        <li onclick="ListNotifToggle()"> <button class=" button_notif" data-tooltip="Notification" id="btn_bell" > <i class="fas fa-bell    "></i></button></li>
+        <li>
+          <button class="" data-tooltip="Message" id="btn_msg">
+            <i class="fab fa-facebook-messenger"></i>
+          </button>
+        </li>
+        <li>
+          <div style="position: relative">
+            <div class="notification_icon">
+              <img
+                class="icon-notification-bell"
+                src="/static/navbar/images/notification-bell-off.png"
+              />
+            </div>
+            <img
+              class="icon-notification-dot"
+              style="
+                width: 12px;
+                height: 12px;
+                position: absolute;
+                top: 5px;
+                right: 0px;
+              "
+              src="/static/navbar/images/notification-dot.png"
+            />
+          </div>
+        </li>
         <!--notif-->
-        
+
         <div class="profile-image online" onclick="UserSettingToggle()">
-            <div class="profileImage">
-                
-            </div>
-          
+          <div class="profileImage"></div>
         </div>
-    </ul>
-    <!--style="display: none;"-->
-    <div class="list_notif">
-        {% comment %} <div class="container my-5 py-5 text-dark">
-            <div class="col-md-12 col-lg-10 col-xl-8"> {% endcomment %}
-              <div class="d-flex justify-content-between align-items-center mb-4 notif_header">
-                <h4 class="text-dark mb-0" style="font-size: 25px;">Notification </h4><p>(4)</p>
-                {% comment %} <div class="card">
-                  <div class="card-body p-2 d-flex align-items-center">
-                    <h6 class="text-primary fw-bold small mb-0 me-1">Comments "ON"</h6>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
-                      <label class="form-check-label" for="flexSwitchCheckChecked"></label>
-                    </div>
-                  </div>
-                </div> {% endcomment %}
+      </ul>
+      <!--style="display: none;"-->
+      <div class="notification_wrap">
+        <div class="dropdown-notification">
+          <div class="notify_item">
+            <div class="notify_img">
+              <div class="user-notification">
+                <img
+                  class="img-user-notification"
+                  src="https://i.pinimg.com/236x/27/8e/aa/278eaa9bb32d232b07405461bb7883bd.jpg"
+                  alt="profile_pic"
+                  style="width: 50px; border-radius: 50%"
+                />
+                <img
+                  src="/static/posts/images/haha.png"
+                  class="icon-type-notification"
+                />
               </div>
-      
-              <div class="card mb-3">
-                <div class="card-body">
-                  <div class="d-flex flex-start comment_setting">
-                    <div class="avt_user">
-                      <img src="{%static 'userprofiles/images/avatar.png' %}">
-                    </div>
-                    <div class="notif">
-                      <div class="content_notif">
-                        <h3 class="name_user">MinhTuan </h3>
-                        <p class="comments_notif"> Commented on your post.</p>
-                      </div>
-                      <div class="time_notif" style="color: blue;">6 minutes</div>
-                    </div>
-                    
-                  </div>
-                </div>
+            </div>
+            <div class="notify_info">
+              <p class="content-notification">
+                <span class="name-user-notification">Tuan Anh</span> react like
+                to your post: sj od inv isg tg fh hffhfhjjjhgjkgjhjhhjdfdhdh...
+              </p>
+              <span class="notify_time">10 minutes ago</span>
+            </div>
+          </div>
+          <div class="notify_item">
+            <div class="notify_img">
+              <div class="user-notification">
+                <img
+                  class="img-user-notification"
+                  src="https://i.pinimg.com/236x/27/8e/aa/278eaa9bb32d232b07405461bb7883bd.jpg"
+                  alt="profile_pic"
+                  style="width: 50px; border-radius: 50%"
+                />
+                <img
+                  src="/static/navbar/images/speech-bubble.png"
+                  class="icon-type-notification"
+                />
               </div>
+            </div>
+            <div class="notify_info">
+              <p class="content-notification">
+                <span class="name-user-notification">Tuan Anh</span> comment to
+                your post: sj od inv isg tg fh hffh hjjjh gjkg hhjdfdhdh...
+              </p>
+              <span class="notify_time">10 minutes ago</span>
+            </div>
+          </div>
+          <div class="notify_item">
+            <div class="notify_img">
+              <div class="user-notification">
+                <img
+                  class="img-user-notification"
+                  src="https://i.pinimg.com/236x/27/8e/aa/278eaa9bb32d232b07405461bb7883bd.jpg"
+                  alt="profile_pic"
+                  style="width: 50px; border-radius: 50%"
+                />
+                <img
+                  src="/static/navbar/images/notification-add-friend.png"
+                  class="icon-type-notification"
+                />
+              </div>
+            </div>
+            <div class="notify_info">
+              <p class="content-notification">
+                <span class="name-user-notification">Tuan Anh</span> sent you a friend request.
+              </p>
+              <div class="btn-notification-addfriend-container">
+                <!-- <button class="btn-notification-addfriend accept-color-addfriend">Accept</button>
+                <button class="btn-notification-addfriend decline-color-addfriend">Decline</button> -->
+                <!-- <p class="btn-notification-addfriend accept-color-addfriend" style="background-color: rgba(0, 101, 252, 0.644); width: fit-content; margin: 0px;">Accepted</p> -->
+                <p class="btn-notification-addfriend decline-color-addfriend" style="background-color: #9b9b9b50; width: fit-content; margin: 0px;">Declined</p>
+              </div>
+              <span class="notify_time">10 minutes ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-              <div class="card mb-3">
-                <div class="card-body">
-                  <div class="d-flex flex-start comment_setting">
-                    <div class="avt_user">
-                      <img src="{%static 'userprofiles/images/avatar.png' %}">
-                    </div>
-                    <div class="notif">
-                      <div class="content_notif">
-                        <h3 class="name_user">QuocVuong</h3>
-                        <p class="comments_notif"> Liked your post.</p>
-                      </div>
-                      <div class="time_notif" style="color: blue;">10 minutes</div>
-                    </div>
-                    
-                  </div>
-                </div>
-              </div>
-
-              <div class="card mb-3">
-                <div class="card-body">
-                  <div class="d-flex flex-start comment_setting">
-                    <div class="avt_user">
-                      <img src="{%static 'userprofiles/images/avatar.png' %}">
-                    </div>
-                    <div class="notif">
-                      <div class="content_notif">
-                        <h3 class="name_user">GiangAn</h3>
-                        <p class="comments_notif"> Changed his avatar.</p>
-                      </div>
-                      <div class="time_notif" style="color: blue;">15 minutes</div>
-                    </div>
-                    
-                  </div>
-                </div>
-              </div>
-            {% comment %} </div>
-        </div> {% endcomment %}
-    </div>
-    
-    <div class="user-settings">
+      <div class="user-settings">
         <div class="profile-darkButton">
-            <div class="user-profile">
-                <a href="{% url 'userprofiles:profile'%}" class="inforUser">
-                    <div class="profileImage">
-
-                    </div>
-                    <div id="userName1" class="userNameIcon">
-                
-                    </div>
-                </a>
-            </div>
-            {% comment %} <div id="dark-button" onclick="darkModeON()">
-                <span></span>
-            </div> {% endcomment %}
+          <div class="user-profile">
+            <a href="{% url 'userprofiles:profile'%}" class="inforUser">
+              <div class="profileImage"></div>
+              <div id="userName1" class="userNameIcon"></div>
+            </a>
+          </div>
+          {% comment %}
+          <div id="dark-button" onclick="darkModeON()">
+            <span></span>
+          </div>
+          {% endcomment %}
         </div>
-        <hr>
+        <hr />
         <div class="user-profile">
-            <img src="{% static 'userprofiles/images/change-profile.png' %}" alt="">
-            <div>
-                <p> View all personal content</p>
-            </div>
+          <img
+            src="{% static 'userprofiles/images/change-profile.png' %}"
+            alt=""
+          />
+          <div>
+            <p>View all personal content</p>
+          </div>
         </div>
-        <hr>
+        <hr />
         <div class="settings-links">
-            <img src="{% static 'userprofiles/images/setting.png' %}" alt="" class="settings-icon">
-            <a href="#">Settings - Privary <img src="{% static 'userprofiles/images/arrow.png' %}" alt=""></a>
+          <img
+            src="{% static 'userprofiles/images/setting.png' %}"
+            alt=""
+            class="settings-icon"
+          />
+          <a href="#"
+            >Settings - Privary
+            <img src="{% static 'userprofiles/images/arrow.png' %}" alt=""
+          /></a>
         </div>
-    
-        <div class="settings-links">
-            <img src="{% static 'userprofiles/images/help.png' %}" alt="" class="settings-icon">
-            <a href="#">Help - Support <img src="{% static 'userprofiles/images/arrow.png' %}" alt=""></a>
-        </div>
-    
-        <div class="settings-links">
-            <img src="{% static 'userprofiles/images/display.png' %}" alt="" class="settings-icon">
-            <a href="#">Display - Accessibility <img src="{% static 'userprofiles/images/arrow.png' %}" alt=""></a>
-        </div>
-    
-        <div class="settings-links">
-            <img src="{% static 'userprofiles/images/logout.png' %}" alt="" class="settings-icon">
-            <a href="{% url 'users:login' %}">Logout <img src="{% static 'userprofiles/images/arrow.png' %}" alt=""></a>
-        </div>
-    
-    </div>
-  </nav>
-  
-  <script src="{%static 'navbar/js/navbar.js' %}" ></script>
-  <script src="{%static 'navbar/js/in4user.js' %}" ></script>
-  <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
 
-</body>
+        <div class="settings-links">
+          <img
+            src="{% static 'userprofiles/images/help.png' %}"
+            alt=""
+            class="settings-icon"
+          />
+          <a href="#"
+            >Help - Support
+            <img src="{% static 'userprofiles/images/arrow.png' %}" alt=""
+          /></a>
+        </div>
 
+        <div class="settings-links">
+          <img
+            src="{% static 'userprofiles/images/display.png' %}"
+            alt=""
+            class="settings-icon"
+          />
+          <a href="#"
+            >Display - Accessibility
+            <img src="{% static 'userprofiles/images/arrow.png' %}" alt=""
+          /></a>
+        </div>
+
+        <div class="settings-links">
+          <img
+            src="{% static 'userprofiles/images/logout.png' %}"
+            alt=""
+            class="settings-icon"
+          />
+          <a href="{% url 'users:login' %}"
+            >Logout
+            <img src="{% static 'userprofiles/images/arrow.png' %}" alt=""
+          /></a>
+        </div>
+      </div>
+    </nav>
+
+    <script src="{%static 'navbar/js/navbar.js' %}"></script>
+    <script src="{%static 'navbar/js/notification.js' %}"></script>
+    <script src="{%static 'navbar/js/in4user.js' %}"></script>
+    <script
+      src="https://kit.fontawesome.com/ef7e2b893b.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
