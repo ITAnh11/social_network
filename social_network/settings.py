@@ -90,13 +90,20 @@ WSGI_APPLICATION = 'social_network.wsgi.application'
 
 ASGI_APPLICATION = "social_network.asgi.application"
 
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
+    },
+    "redis": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(REDIS_HOST, REDIS_PORT)],
+        },
+    },
 }
-
-
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

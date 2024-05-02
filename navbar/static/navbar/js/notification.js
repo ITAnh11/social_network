@@ -222,7 +222,7 @@ function renderNotificationList(notifications) {
     notificationDropdown.innerHTML = "";
     notifications.forEach(notification => {
         var notificationItem = createNotificationItem(notification);
-        notificationDropdown.innerHTML += notificationItem;
+        notificationDropdown.insertAdjacentHTML("afterbegin", notificationItem);
     });
 }
 
