@@ -14,9 +14,6 @@ from common_functions.common_function import getUser, getUserProfileForPosts
 from users.models import User
 from .models import FriendRequest, Friendship
 from .serializers import FriendRequestSerializer, FriendshipSerializer
-
-from notifications.views import createAddFriendNotification
-from notifications.models import AddFriendNotifications
 # Create your views here.
 # friend_request.status = 'accepted'  # Cập nhật trạng thái của yêu cầu kết bạn thành 'accepted'
 # friend_request.save()  # Lưu thay đổi vào cơ sở dữ liệu
@@ -49,8 +46,6 @@ class SentFriendRequestView(APIView):
                 status = 'pending'
             )
             friend_request.save()
-            
-            createAddFriendNotification(friend_request)
         except :
             return Response({'error': 'Friend Request can not create'}, status=404)
         
@@ -66,7 +61,7 @@ class RevokeFriendRequestView(APIView):
         try:
             to_id = request.data.get('id')
             #print(to_id)
-            friend_request = get_object_or_404(FriendRequest, from_id=user, to_id=to_id, status='pending')
+            friend_request = get_object_or_404(FriendRequest, from_id=user, to_id=to_id)
             
             friend_request.delete()
             #print(user)
@@ -84,15 +79,11 @@ class AcceptFriendRequestView(APIView):
         
         
         try:
-                friend_request_id = int(request.data.get('id'))
-                friend_request = get_object_or_404(FriendRequest, id = friend_request_id, status='pending')
+                friend_request_id = request.data.get('id')
+                friend_request = get_object_or_404(FriendRequest, id = friend_request_id)
                 
                 friend_request.status = 'accepted'
                 friend_request.save()
-                
-                addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request_id}).first()
-                addfriendNotification.setAccept()
-                addfriendNotification.save()
                 
                 friend_ship = Friendship.objects.create(
                 user_id1 = user,
@@ -112,8 +103,7 @@ class AcceptFriendRequestView(APIView):
                     'success': 'Friend request processed successfully'
                     })
             
-        except Exception as e:
-            print(e)
+        except:
             return Response({'error': 'Error while saving friend request'}, status=400)
 
 class DenineFriendRequestView(APIView):
@@ -126,21 +116,16 @@ class DenineFriendRequestView(APIView):
         # print(request.data)
         
         try:
-                friend_request_id = int(request.data.get('id'))
-                friend_request = get_object_or_404(FriendRequest, id = friend_request_id, status='pending')
+                friend_request_id = request.data.get('id')
+                friend_request = get_object_or_404(FriendRequest, id = friend_request_id)
                 
                 #friend_request.status = 'pending'
                 friend_request.status = 'denined'
-                friend_request.save()
-                
-                addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request_id}).first()
-                addfriendNotification.setDecline()
-                addfriendNotification.save()
+                friend_request.save()  
                 
                 return Response({'success': 'Friend request processed successfully'})
             
-        except Exception as e:
-            print(e)
+        except:
             return Response({'error': 'Error while saving friend request'}, status=400)
     
 class DeleteFriendShip(APIView):
@@ -154,7 +139,7 @@ class DeleteFriendShip(APIView):
             friendship_id = request.data.get('id')
             
             friendship = get_object_or_404(Friendship,Q(user_id1=friendship_id, user_id2=user) | Q(user_id1=user, user_id2=friendship_id))
-            friendrequest = get_object_or_404(FriendRequest,Q(from_id=user, to_id=friendship_id) | Q(from_id=friendship_id, to_id=user), status='accepted')
+            friendrequest = get_object_or_404(FriendRequest,Q(from_id=user, to_id=friendship_id) | Q(from_id=friendship_id, to_id=user))
             
             friendrequest.delete()
             friendship.delete()
@@ -353,8 +338,8 @@ class GetStatusFriendView(APIView):
         if user == other_user_id : 
             return Response({'status_relationship': 'user'})
         
-        status_relationship_1_2 = FriendRequest.objects.filter(from_id=user, to_id=other_user_id).values_list('status', flat=True).order_by('-id').first()
-        status_relationship_2_1 = FriendRequest.objects.filter(from_id=other_user_id, to_id=user).values_list('status', flat=True).order_by('-id').first()
+        status_relationship_1_2 = FriendRequest.objects.filter(from_id=user, to_id=other_user_id).values_list('status', flat=True).first()
+        status_relationship_2_1 = FriendRequest.objects.filter(from_id=other_user_id, to_id=user).values_list('status', flat=True).first()
         
         print(status_relationship_1_2, status_relationship_2_1)
         if status_relationship_1_2 == 'accepted' or status_relationship_2_1 == 'accepted' :
@@ -394,7 +379,7 @@ class GetListFriendOfUserOtherView(APIView):
                 "friend_profile": getUserProfileForPosts(friend_id)
             }
             data.append(friend_ship)
-        
+        print(len(data))
         return Response({
             "data": data,
             "number_of_friends": len(data)
@@ -442,15 +427,11 @@ class AcceptFriendRequestProfileView(APIView):
         
         try:
                 from_user_id = request.data.get('id')
-                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user, status='pending')
+                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user)
                 
                 #friend_request.status = 'pending'
                 friend_request.status = 'accepted'
                 friend_request.save()
-                
-                addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request.id}).first()
-                addfriendNotification.setAccept()
-                addfriendNotification.save()
                 
                 friend_ship = Friendship.objects.create(
                 user_id1 = user,
@@ -485,15 +466,11 @@ class DenineFriendRequestProfileView(APIView):
         
         try:
                 from_user_id = request.data.get('id')
-                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user, status = 'pending')
+                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user)
                 
                 #friend_request.status = 'pending'
                 friend_request.status = 'denined'
                 friend_request.save()  
-                
-                addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request.id}).first()
-                addfriendNotification.setDecline()
-                addfriendNotification.save()
                 
                 return Response({'success': 'Friend request processed successfully',
                                  'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
