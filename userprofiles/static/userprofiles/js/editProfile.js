@@ -84,7 +84,7 @@ document.getElementById('form-editPassword').addEventListener('submit', function
   .then(data => {
       if (data['success']) {
           alert(data['success']);
-          window.location.href = data['redirect_url']
+          // window.location.href = data['redirect_url']
       } else {
           alert(data['warning']);
       }
