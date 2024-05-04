@@ -9,7 +9,7 @@ import jwt
 
 from users.views import LogoutView
 
-from posts.models import Posts, PostIsWatched
+from posts.models import Posts
 from posts.serializers import PostsSerializer, MediaOfPostsSerializer
 
 from userprofiles.serializers import UserProfileSerializer, ImageProfileSerializer

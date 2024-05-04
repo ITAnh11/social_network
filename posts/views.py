@@ -4,10 +4,10 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Posts, MediaOfPosts, PostIsWatched
+from .models import Posts, MediaOfPosts
 from userprofiles.views import UserProfileBasicView
 
-from .serializers import PostsSerializer, MediaOfPostsSerializer, PostIsWatched
+from .serializers import PostsSerializer, MediaOfPostsSerializer
 
 from common_functions.common_function import getTimeDuration, getUser
 
@@ -295,10 +295,6 @@ class MarkPostAsWatchedView(APIView):
             try:
                 post = Posts.objects(__raw__={'_id': idPostsRequest}).first()
             except Posts.DoesNotExist:
-                continue
-            
-            postIsWatched = PostIsWatched.objects(__raw__={'post_id': post.id, 'user_id': user.id}).first()
-            if postIsWatched:
                 continue
             
             # Add the post ID to the user's set of watched posts
