@@ -1,0 +1,24 @@
+2024-05-04 21:56:27,527:INFO - userprofiles.viewsEdit viewsEdit.py (line 29). GET request received in EditImagesPage
+2024-05-04 21:56:28,428:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-04 21:56:33,765:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
+2024-05-04 21:56:33,958:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
+2024-05-04 21:56:34,016:INFO - userprofiles.views views.py (line 46). check profile
+2024-05-04 21:56:34,936:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-04 21:56:34,936:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-04 21:56:34,961:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-04 21:56:35,077:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-04 21:56:35,188:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-04 21:56:35,262:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-04 21:56:35,343:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-04 21:56:35,569:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-04 21:56:35,655:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-04 21:56:35,723:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-04 21:56:35,795:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-04 21:56:35,939:INFO - userprofiles.views views.py (line 137). POST request received in GetPostsView
+2024-05-04 21:56:36,043:INFO - userprofiles.views views.py (line 193). GetPostsView executed in 0.1029508113861084 seconds
+2024-05-04 21:56:42,354:INFO - friends.views views.py (line 35). Accessed FriendsRequestsView successfully
+2024-05-04 21:56:43,063:INFO - friends.views views.py (line 250). List of friends retrieved successfully
+2024-05-04 21:56:43,138:INFO - friends.views views.py (line 284). Suggested friends retrieved successfully
+2024-05-04 21:56:43,157:INFO - friends.views views.py (line 225). Received friend requests retrieved successfully
+2024-05-04 21:57:02,918:INFO - friends.views views.py (line 48). Sending friend request from user 16 to user 5
+2024-05-04 21:57:07,157:INFO - friends.views views.py (line 60). Friend request sent successfully

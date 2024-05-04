@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 import datetime
-
+import logging
+logger=logging.getLogger(__name__)
 # Create your models here.
 class User(models.Model):
     email = models.EmailField(unique=True, max_length=255)
@@ -22,10 +23,17 @@ class User(models.Model):
     
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
+        logger.info(f"Password updated for user: {self.email}")
     
     def check_password(self, raw_password):
-        return check_password(raw_password, self.password)
+        is_valid = check_password(raw_password, self.password)
+        if is_valid:
+            logger.info(f"Password checked successfully for user: {self.email}")
+        else:
+            logger.warning(f"Invalid password provided for user: {self.email}")
+        return is_valid
     
     def set_last_login(self):
         self.last_login = datetime.datetime.now()
+        logger.info(f"Last login updated for user: {self.email}")
   
