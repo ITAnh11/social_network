@@ -11,12 +11,12 @@ function connectNotificationSocket() {
   fetch(api_get_userprofilebasic)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
+      // console.log(data);
       notificationSocket = new WebSocket(
         'ws://'
         + window.location.host
         + '/ws/notification/'
-        + '5'
+        + data.id
         + '/'
       );
 
@@ -69,7 +69,7 @@ bellIcon.addEventListener('click', function () {
 
 
 function clickNotificationItemGoToPostPage(event, post_id) {
-  console.log(event.target);
+  // console.log(event.target);
 
   var url = `/posts/page/?posts_id=${post_id}&image_id=1`;
 
@@ -77,13 +77,13 @@ function clickNotificationItemGoToPostPage(event, post_id) {
 }
 
 function clickNotificationItemGoToProfilePage(event, user_id) {
-  console.log(event.target);
+  // console.log(event.target);
   var url = `/userprofiles/?id=${user_id}`;
   window.open(url, "_blank");
 }
 
 function clickAcceptFriendRequest(event) {
-  console.log(event.target);
+  // console.log(event.target);
   console.log("Accept friend request");
   var formData = new FormData();
   formData.append("id", event.target.getAttribute("id_friend_request"));
@@ -93,7 +93,7 @@ function clickAcceptFriendRequest(event) {
   })
     .then(response => response.json())
     .then(data => {
-      console.log(data);
+      // console.log(data);
       // getNotification();
       if (data['success']) {
         var btn_notification_addfriend_container = event.target.parentElement;
@@ -104,7 +104,7 @@ function clickAcceptFriendRequest(event) {
 }
 
 function clickDeclineFriendRequest(event) {
-  console.log(event.target);
+  // console.log(event.target);
   console.log("Decline friend request");
   var formData = new FormData();
   formData.append("id", event.target.getAttribute("id_friend_request"));
@@ -114,7 +114,7 @@ function clickDeclineFriendRequest(event) {
   })
     .then(response => response.json())
     .then(data => {
-      console.log(data);
+      // console.log(data);
       // getNotification();
       if (data['success']) {
         var btn_notification_addfriend_container = event.target.parentElement;
@@ -203,6 +203,7 @@ function createCommentNotificationItem(notification) {
 }
 
 function createFriendRequestNotificationItem(notification) {
+  console.log(notification);
   var statusBtnFriendRequest = "";
   if (notification.status_request == "pending") {
     statusBtnFriendRequest = `<button class="btn-notification-addfriend accept-color-addfriend" 
@@ -275,7 +276,7 @@ function getNotification() {
   fetch(api_get_notification)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
+      // console.log(data);
       renderNotificationList(data.notifications);
     });
 }

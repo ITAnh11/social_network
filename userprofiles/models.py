@@ -55,4 +55,4 @@ class UserBasicInfo(EmbeddedDocument):
     id = fields.IntField()
     name = fields.StringField()
     avatar = fields.StringField()
-    
+        

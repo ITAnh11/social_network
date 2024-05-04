@@ -15,7 +15,7 @@ from users.models import User
 from .models import FriendRequest, Friendship
 from .serializers import FriendRequestSerializer, FriendshipSerializer
 
-from notifications.views import createAddFriendNotification
+from notifications.views import createAddFriendNotification, GetNotifications
 from notifications.models import AddFriendNotifications
 # Create your views here.
 # friend_request.status = 'accepted'  # Cập nhật trạng thái của yêu cầu kết bạn thành 'accepted'
@@ -107,6 +107,9 @@ class AcceptFriendRequestView(APIView):
                 "friend_profile" : getUserProfileForPosts(friend_request.from_id)
                 }
                 data.append(accepted_friend_request)
+                
+                GetNotifications().resetNotifications(user.id)
+                
                 return Response ({
                     'accepted_friend_request': data,
                     'success': 'Friend request processed successfully'
@@ -136,6 +139,8 @@ class DenineFriendRequestView(APIView):
                 addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request_id}).first()
                 addfriendNotification.setDecline()
                 addfriendNotification.save()
+                
+                GetNotifications().resetNotifications(user.id)
                 
                 return Response({'success': 'Friend request processed successfully'})
             
@@ -465,6 +470,9 @@ class AcceptFriendRequestProfileView(APIView):
                 "friend_profile" : getUserProfileForPosts(friend_request.from_id)
                 }
                 data.append(accepted_friend_request)
+                
+                GetNotifications().resetNotifications(user.id)
+                
                 return Response ({
                     'accepted_friend_request': data,
                     'success': 'Friend request processed successfully'
@@ -494,6 +502,8 @@ class DenineFriendRequestProfileView(APIView):
                 addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request.id}).first()
                 addfriendNotification.setDecline()
                 addfriendNotification.save()
+                
+                GetNotifications().resetNotifications(user.id)
                 
                 return Response({'success': 'Friend request processed successfully',
                                  'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})

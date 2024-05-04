@@ -84,9 +84,9 @@ def createReactNotification(forReaction):
         content += ' post' if forReaction.to_comment_id < 0 else ' comment'
         
         if is_for_post:
-            posts = Posts.objects.get(id=forReaction.to_posts_id)
+            posts = Posts.objects(__raw__={'_id': forReaction.to_posts_id}).first()
             contentOf = posts.content
-            to_user = User.objects.get(id=posts.user_id.id)
+            to_user = User.objects.get(id=posts.user.id)
             
         elif is_for_post == False:
             comment = Comments.objects(__raw__={'_id': forReaction.to_comment_id}).first()
@@ -128,12 +128,12 @@ def createCommentNotification(forcomment):
         content += ' post' if is_for_post else ' comment'
         
         if is_for_post:
-            posts = Posts.objects.get(id=forcomment.to_posts_id)
+            posts = Posts.objects(__raw__={'_id': forcomment.to_posts_id}).first()
             if posts is None:
                 print('Posts not found')
                 return
             contentOf = posts.content
-            to_user = User.objects.get(id=posts.user_id.id)
+            to_user = User.objects.get(id=posts.user.id)
             
         elif is_for_post == False:
             # print(forcomment.to_comment_id)
@@ -194,6 +194,17 @@ def createAddFriendNotification(forFriendRequest):
         print("createAddFriendNotification", e)
 
 class GetNotifications(APIView):
+    def resetNotifications(self, user_id):
+        redis_server.delete(f'notifications_{user_id}')
+        
+        notifications = Notifications.objects(__raw__={'to_user_id': user_id}).order_by('created_at')
+        
+        time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
+
+        redis_server.setex(f'notifications_{user_id}', 
+                           time_to_live, 
+                           json.dumps([notification.to_json() for notification in notifications]))
+    
     def getNotifications(self, user_id):
         notifications = redis_server.get(f'notifications_{user_id}')
         
@@ -205,7 +216,9 @@ class GetNotifications(APIView):
             
             time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
 
-            redis_server.setex(f'notifications_{user_id}', time_to_live, json.dumps([notification.to_json() for notification in notifications]))
+            redis_server.setex(f'notifications_{user_id}', 
+                               time_to_live, 
+                               json.dumps([notification.to_json() for notification in notifications]))
         else:
             print('Get from Redis')
             notifications = [Notifications.from_json(notification) for notification in json.loads(notifications)]

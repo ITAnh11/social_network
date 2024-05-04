@@ -1,33 +1,23 @@
-from django.shortcuts import render
 from django.utils import timezone
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from mongoengine.queryset.visitor import Q
-
 from comments.models import Comments
 from .serializers import CommentsSerializer
-
-from userprofiles.models import UserBasicInfo
 
 from notifications.views import createCommentNotification
 
 from common_functions.common_function import getUser, getTimeDurationForComment
 
-# Create your views here.
-
+from userprofiles.views import UserProfileBasicView
 class GetCommentsForPost(APIView):
     def post(self, request):
-        
-        # print(request.data)
         
         response = Response()
         
         posts_id = int(request.data.get('posts_id'))
-        
-        # print(type(posts_id))
-        
+
         comments = Comments.objects(__raw__={'to_posts_id': posts_id, 'to_comment_id': -1})
         
         list_comments = []
@@ -57,7 +47,6 @@ class GetCommentsForComment(APIView):
             dataComment['created_at'] = getTimeDurationForComment(comment.created_at)
             dataComment['most_use_reactions'] = comment.getMostUseReactions()
 
-            
             list_comments.append(dataComment)
         
         response.data = {
@@ -66,18 +55,12 @@ class GetCommentsForComment(APIView):
         
         return response
 
-class CreateComment(APIView):
-    
-    def createUserBasicInfo(self, request):        
-        return UserBasicInfo(id=int(request.data.get('user_id')), 
-                           name=request.data.get('user_name'), 
-                           avatar=request.data.get('user_avatar'))
-    
-    def createComment(self, request):
+class CreateComment(APIView):    
+    def createComment(self, request, user):
         return Comments(to_posts_id=request.data.get('posts_id'), 
                         to_comment_id=request.data.get('comment_id'), 
                         content=request.data.get('content'), 
-                        user=self.createUserBasicInfo(request), 
+                        user=UserProfileBasicView().getUserProfileBasic(user), 
                         created_at=timezone.now(), 
                         updated_at=timezone.now())
     
@@ -91,9 +74,7 @@ class CreateComment(APIView):
         
         response = Response()
         
-        # print(request.data)
-        
-        comment = self.createComment(request)
+        comment = self.createComment(request, user)
         comment.save()
         
         createCommentNotification(comment)

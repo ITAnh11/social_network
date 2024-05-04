@@ -4,21 +4,17 @@ from rest_framework import status
 
 from django.utils import timezone
 
-
 from .models import Reactions
 from .serializers import ReactionsSerializer
 
-from posts.models import PostsInfo
-from posts.serializers import PostsInfoSerializer
-
+from posts.models import Posts
 from comments.models import Comments
-from comments.serializers import CommentsSerializer
-
-from userprofiles.models import UserBasicInfo
 
 from common_functions.common_function import getUser
 
 from notifications.views import createReactNotification
+
+from userprofiles.views import UserProfileBasicView
 
 # Create your views here.
 class GetReactions(APIView):
@@ -37,11 +33,11 @@ class GetReactions(APIView):
         total = None
         
         if comment_id < 0:
-            postsInfo = PostsInfo.objects(__raw__={'posts_id': posts_id}).first()
-            if postsInfo is None:
+            post = Posts.objects(__raw__={'_id': posts_id}).first()
+            if post is None:
                 return Response({'error': 'Posts not found'}, status=status.HTTP_404_NOT_FOUND)
-            topMostReacted = postsInfo.getMostUseReactions()
-            total = postsInfo.number_of_reactions.total
+            topMostReacted = post.getMostUseReactions()
+            total = post.number_of_reactions.total
         elif comment_id > 0:
             comment = Comments.objects(__raw__={'_id': comment_id}).first()
             if comment is None:
@@ -57,14 +53,8 @@ class GetReactions(APIView):
         return response
 
 class CreateReaction(APIView):
-    def createUserBasicInfo(self, request):
-        
-        return UserBasicInfo(id=int(request.data.get('user_id')), 
-                            name=request.data.get('user_name'), 
-                            avatar=request.data.get('user_avatar'))
-    
-    def createReaction(self, request):
-        return Reactions(user=self.createUserBasicInfo(request), 
+    def createReaction(self, request, user):
+        return Reactions(user=UserProfileBasicView().getUserProfileBasic(user), 
                          to_posts_id=request.data.get('posts_id'), 
                          to_comment_id=request.data.get('comment_id'), 
                          type=request.data.get('type'),
@@ -88,18 +78,22 @@ class CreateReaction(APIView):
             reaction.setTypeReaction(newType)
             reaction.save()
             
-            createReactNotification(reaction)
-            
             # change number of type reactions
             is_for_posts = comment_id < 0
             if is_for_posts:
-                postInfo = PostsInfo.objects(__raw__={'posts_id' : posts_id}).first()
-                postInfo.changeTypeReaction(currentType, newType)
-                postInfo.save()
+                post = Posts.objects(__raw__={'_id': posts_id}).first()
+                if post is None:
+                    return False
+                post.changeTypeReaction(currentType, newType)
+                post.save()
             elif is_for_posts == False:
                 comment = Comments.objects(__raw__={'_id': comment_id}).first()
+                if comment is None:
+                    return False
                 comment.changeTypeReaction(currentType, newType)
                 comment.save()
+            
+            createReactNotification(reaction)
             
             return True
             
@@ -132,19 +126,25 @@ class CreateReaction(APIView):
             return Response({'success': 'Type reaction is changed'})
         
         try:
-            reaction = self.createReaction(request)
+            reaction = self.createReaction(request, user)
             reaction.save()
             
-            createReactNotification(reaction)
-            
             if comment_id < 0:
-                postsInfo = PostsInfo.objects(posts_id=posts_id).first()
-                postsInfo.inc_reaction(reaction.type)
-                postsInfo.save()
+                post = Posts.objects(__raw__={'_id': posts_id}).first()
+                if post is None:
+                    reaction.delete()
+                    return Response({'error': 'Posts not found'}, status=status.HTTP_404_NOT_FOUND)
+                post.inc_reaction(reaction.type)
+                post.save()
             elif comment_id > 0:
                 comment = Comments.objects(__raw__={'_id': comment_id}).first()
+                if comment is None:
+                    reaction.delete()
+                    return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
                 comment.inc_reaction(reaction.type)
                 comment.save()
+                
+            createReactNotification(reaction)
                 
         except Exception as e:
             print(e)
@@ -179,11 +179,11 @@ class DeleteReaction(APIView):
                 return Response({'error': 'Reaction not found'}, status=status.HTTP_404_NOT_FOUND)
             
             if comment_id < 0:
-                postsInfo = PostsInfo.objects(__raw__={'posts_id': posts_id}).first()
-                if postsInfo is None:
-                    return Response({'error': 'Posts Info not found'}, status=status.HTTP_404_NOT_FOUND)
-                postsInfo.dec_reaction(reaction.type)
-                postsInfo.save()
+                post = Posts.objects(__raw__={'_id': posts_id}).first()
+                if post is None:
+                    return Response({'error': 'Posts not found'}, status=status.HTTP_404_NOT_FOUND)
+                post.dec_reaction(reaction.type)
+                post.save()
             elif comment_id > 0:
                 comment = Comments.objects(__raw__={'_id': comment_id}).first()
                 if comment is None:

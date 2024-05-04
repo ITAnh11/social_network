@@ -6,22 +6,34 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-import jwt 
-
 from users.models import User
 
 from .models import UserProfile, ImageProfile
 from .serializers import UserProfileSerializer
 from .forms import ImageProfileForm
+from .views import UserProfileBasicView
 
+from posts.views import createUpdateImageProfilePosts
 
-from posts.views import CreatePostsAfterSetImageProfileView
+from common_functions.common_function import getUser
 
-# from users.views import LoginView
+from notifications.models import updateProfileNotification
+from posts.models import updateProfilePosts
+from reactions.models import updateProfileReactions
+from comments.models import updateProfileComments
 
-from common_functions.common_function import getUser, getTimeDuration, getUserProfileForPosts
-
-import time
+def updateAllReferences(user):
+    try:
+        userprofile = UserProfileBasicView().resetUserProfileBasic(user)
+        updateProfilePosts(user.id, userprofile)
+        updateProfileComments(user.id, userprofile)
+        updateProfileReactions(user.id, userprofile)
+        updateProfileNotification(user.id, userprofile)
+    except Exception as e:
+        print('updateAllReferences', e)
+        return False
+    return True
+    
 
 class EditImagesPage(APIView):
     def get(self, request):
@@ -57,18 +69,27 @@ class EditAvatarView(APIView):
             if not imageprofileForm.is_valid():
                 return Response({'error': imageprofileForm.errors}, status=404)
             
+            old_avatar = imageprofile.avatar
+            
             imageprofile.avatar = avatar    
             imageprofile.save()
             
-            CreatePostsAfterSetImageProfileView().createUpdateImageProfilePosts(user, 
-                                                                                'avatar', 
-                                                                                imageprofile.avatar
-                                                                                )
+            userprofile = UserProfileBasicView().getUserProfileBasic(user)
+            
+            post = createUpdateImageProfilePosts(userprofilebasic=userprofile, 
+                                                typeImage='avatar',
+                                                image=imageprofileForm.cleaned_data.get('avatar'))
+        
+            if post == False:
+                imageprofile.avatar = old_avatar
+                imageprofile.save()
+                return Response({'error': 'Error while creating post'}, status=400)
+            
+            updateAllReferences(user)
             
             return Response({'success': 'Your avatar image updated successfully!',
                              'avatar': imageprofile.avatar.url,
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
-        
         except Exception as e:
             return Response({'error': str(e)}, status=404)
     
@@ -88,13 +109,22 @@ class EditCoverView(APIView):
             imageprofileForm = ImageProfileForm(request.data, request.FILES)
             if not imageprofileForm.is_valid():
                 return Response({'error': imageprofileForm.errors}, status=404)
+            
+            old_background = imageprofile.background
                 
             imageprofile.background = background    
             imageprofile.save()
             
-            CreatePostsAfterSetImageProfileView().createUpdateImageProfilePosts(user, 
-                                                                                'background', 
-                                                                                imageprofileForm.cleaned_data.get('background'))
+            userprofile = UserProfileBasicView().getUserProfileBasic(user)
+            
+            post = createUpdateImageProfilePosts(userprofilebasic=userprofile, 
+                                                typeImage='background',
+                                                image=imageprofileForm.cleaned_data.get('background'))
+        
+            if post == False:
+                imageprofile.background = old_background
+                imageprofile.save()
+                return Response({'error': 'Error while creating post'}, status=400)
             
             return Response({'success': 'Your cover image updated successfully!',
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
@@ -131,8 +161,7 @@ class EditProfileView(APIView):
             
             first_name = request.data.get('first_name')
             last_name = request.data.get('last_name')
-            print(first_name)
-            print(last_name)
+            
             if not first_name or not last_name:
                 return Response({'warning': 'First name and last name are required!'}, status=404)
             
@@ -143,33 +172,14 @@ class EditProfileView(APIView):
         
             userprofile.save()
             
+            updateAllReferences(user)
+            
             return Response({'success': 'User profile updated successfully!',
                              'name': userprofile.first_name + ' ' + userprofile.last_name,
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
         
         except Exception as e:
             return Response({'error': str(e)}, status=404) 
-        # print(request.data)
-        # user = getUser(request)
-        
-        # if not isinstance(user, User):
-        #     return Response({'error': 'Unauthorized'}, status=401)
-        
-        # try:
-        #     userprofile = UserProfile.objects.get(user_id=user)
-            
-        #     userprofile.first_name = request.data.get('first_name')
-        #     userprofile.last_name = request.data.get('last_name')
-        #     userprofile.phone = request.data.get('phone') or ''
-        #     userprofile.birth_date = request.data.get('birth_date') or None
-        
-        #     userprofile.save()
-            
-        #     return Response({'success': 'User profile updated successfully!',
-        #                      'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
-        
-        # except Exception as e:
-        #     return Response({'error': str(e)}, status=404) 
         
 class EditStoryView(APIView):
     def get(self, request):

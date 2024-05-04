@@ -11,13 +11,7 @@ from .models import UserProfile, ImageProfile
 from .serializers import UserProfileSerializer, ImageProfileSerializer
 from .forms import ImageProfileForm
 
-from posts.models import Posts
-from posts.serializers import PostsSerializer, MediaOfPostsSerializer
-
-from posts.models import PostsInfo
-from posts.serializers import PostsInfoSerializer
-
-from common_functions.common_function import getUser, getTimeDuration, getUserProfileForPosts
+from common_functions.common_function import getUser
 
 from social_network.redis_conn import redis_server
 
@@ -122,80 +116,29 @@ class SetImageProfileView(APIView):
                               
         return Response({'message': 'Image profile created successfully!'})
     
-class GetPostsView(APIView):
-    def post(self, request):
+class UserProfileBasicView(APIView):
+    def resetUserProfileBasic(self, user):
+        redis_server.delete(f'userprofile_basic_{user.id}')
         
-        start_time = time.time()
+        userprofile = UserProfile.objects.filter(user_id=user).first()
+        imageprofile = ImageProfile.objects.filter(user_id=user).first()
         
-        user = getUser(request)
+        profileSerializer = UserProfileSerializer(userprofile)
+        imageSerializer = ImageProfileSerializer(imageprofile)
         
-        if not user:
-            return Response({'error': 'Unauthorized'}, status=401)
-        
-        data = []
-        
-        # print(request.query_params.get('id'))
-        
-        if request.query_params.get('id'):
-            idUserRequested = int(request.query_params.get('id'))
-        else:  
-            idUserRequested = user.id
-
-        userRequest = User.objects.filter(id=idUserRequested).first()
-        
-        if not userRequest:
-            return Response({'error': 'User not found'}, status=404)
-        
-        userDataForPosts = getUserProfileForPosts(userRequest)
-        
-        num_posts = Posts.objects.count()
-        currentNumberOfPosts = int(request.data.get('current_number_of_posts'))
-
-        if currentNumberOfPosts >= num_posts:
-            return Response({'error': 'No more posts available'}, status=400)
-        # print(num_posts, currentNumberOfPosts)
-
-        posts = Posts.objects.filter(user_id=userRequest).prefetch_related('user_id__userprofile_set', 
-                                               'user_id__imageprofile_set', 
-                                               'mediaofposts_set').order_by('-created_at')[currentNumberOfPosts:currentNumberOfPosts+10]
-        
-        # posts = Posts.objects.filter(user_id=userRequest).prefetch_related('mediaofposts_set').order_by('-created_at')[:10] 
-        
-        for post in posts:
-            posts_data = PostsSerializer(post).data
-            media_data = MediaOfPostsSerializer(post.mediaofposts_set.all(), many=True).data
-            posts_info = PostsInfo.objects(__raw__={'posts_id': post.id}).first()
-            
-            posts_data['media'] = media_data
-            posts_data['user'] = userDataForPosts
-            posts_data['posts_info'] = PostsInfoSerializer(posts_info).data
-
-            posts_data['created_at'] = getTimeDuration(post.created_at)
-        
-            data.append(posts_data)
-            
-        reponse = Response()
-        
-        reponse.data = {
-            'posts': data,
-            'isOwner': True if user.id == idUserRequested else False
+        context = {
+            'id': user.id,
+            'name': f"{profileSerializer.data.get('first_name')} {profileSerializer.data.get('last_name')}",
+            'avatar': imageSerializer.data.get('avatar')
         }
         
-        end_time = time.time()  # lưu thời gian kết thúc
-
-        execution_time = end_time - start_time  # tính thời gian thực thi
-
-        print(f"The function took {execution_time} seconds to complete")
-
-        return reponse
-    
-class GetUserProfileBasicView(APIView):
-    def get(self, request):
-        user = getUser(request)
+        time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
         
-        if not user:
-            return Response({'error': 'Unauthorized'}, status=401)
+        redis_server.setex(f'userprofile_basic_{user.id}', time_to_live , json.dumps(context))
         
+        return context
+        
+    def getUserProfileBasic(self, user):
         userprofileBasic = redis_server.get(f'userprofile_basic_{user.id}')
         
         if userprofileBasic is None:
@@ -206,7 +149,7 @@ class GetUserProfileBasicView(APIView):
             imageSerializer = ImageProfileSerializer(imageprofile)
             
             context = {
-                'user_id': user.id,
+                'id': user.id,
                 'name': f"{profileSerializer.data.get('first_name')} {profileSerializer.data.get('last_name')}",
                 'avatar': imageSerializer.data.get('avatar')
             }
@@ -216,6 +159,16 @@ class GetUserProfileBasicView(APIView):
             redis_server.setex(f'userprofile_basic_{user.id}', time_to_live , json.dumps(context))
         else :
             context = json.loads(userprofileBasic)
+            
+        return context
+    
+    def get(self, request):
+        user = getUser(request)
+        
+        if not user:
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        context = self.getUserProfileBasic(user)
 
         return Response(context)
     
