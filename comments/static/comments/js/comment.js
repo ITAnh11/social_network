@@ -168,16 +168,11 @@ function creatCommentForPost(event) {
   event.preventDefault();
   var commentInput = document.getElementById(`comment-input-post-${POST_ID}`);
   const content = commentInput.value;
-  const user_id = localStorage.getItem("id");
-  const avatar = localStorage.getItem("avatar");
-  const username = localStorage.getItem("name");
+
   var formData = new FormData();
   formData.append("content", content);
   formData.append("posts_id", POST_ID);
   formData.append("comment_id", -1);
-  formData.append("user_id", user_id);
-  formData.append("user_avatar", avatar);
-  formData.append("user_name", username);
   formData.append("csrfmiddlewaretoken", csrftoken);
 
   // console.log("creatCommentForPost", POST_ID, user_id, avatar, username, content);
@@ -200,16 +195,10 @@ function creatCommentForComment(event) {
   const comment_id = event.target.getAttribute("comment_id");
   var commentInput = document.getElementById(`comment-input-comment-${comment_id}`);
   const content = commentInput.value;
-  const user_id = localStorage.getItem("id");
-  const avatar = localStorage.getItem("avatar");
-  const username = localStorage.getItem("name");
   var formData = new FormData();
   formData.append("content", content);
   formData.append("posts_id", POST_ID);
   formData.append("comment_id", comment_id);
-  formData.append("user_id", user_id);
-  formData.append("user_avatar", avatar);
-  formData.append("user_name", username);
   formData.append("csrfmiddlewaretoken", csrftoken);
 
   // console.log("creatCommentForPost", POST_ID, user_id, avatar, username, content);

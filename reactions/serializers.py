@@ -1,5 +1,6 @@
 from rest_framework_mongoengine.serializers import DocumentSerializer
-from .models import Reactions, ReactionNumberInfo
+from .models import Reactions
+from .model_inheritance import ReactionNumberInfo
 
 class ReactionsSerializer(DocumentSerializer):
     class Meta:
@@ -9,4 +10,4 @@ class ReactionsSerializer(DocumentSerializer):
 class ReactionNumberInfoSerializer(DocumentSerializer):
     class Meta:
         model = ReactionNumberInfo
-        fields = '__all__'
+        fields = ['number_of_reactions']

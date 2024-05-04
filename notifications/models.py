@@ -50,3 +50,13 @@ class AddFriendNotifications(Notifications):
     
     def setDecline(self):
         self.update(__raw__={'$set': {'status_request': 'declined'}})
+
+def updateProfileNotification(user_id, userbasicinfo):
+    try:
+        notifications = Notifications.objects(__raw__={'user.id': user_id})
+        
+        for notification in notifications:
+            notification.update(__raw__={'$set': {'user': userbasicinfo}})
+    except Exception as e:
+        print("updateProfileNotification", e)
+        return False
