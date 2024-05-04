@@ -1,4 +1,5 @@
 import datetime
+import logging
 import json
 from django.shortcuts import render
 from django.urls import reverse
@@ -24,6 +25,7 @@ from .models import Conversation, Message, Channel, Messeeji, UserMess, Particip
 from common_functions.common_function import getUserProfileForPosts, getTimeDuration, getUser
 from django.shortcuts import render, redirect
 from mongoengine.errors import DoesNotExist
+logger=logging.getLogger(__name__)
 
 class MesseejiView():
     pass 
@@ -31,10 +33,9 @@ class MesseejiView():
 class ChatTestView(APIView):
 
     def post(self, request):
-        username = request.POST.get('username')
-        # channel = request.POST['channel']
-        print('post called')
         try:
+            username = request.POST.get('username')
+            print('post called')
             print(username)
             list_users = SearchUser.search(SearchUser, username)
             print("list users:", list_users)
@@ -43,11 +44,10 @@ class ChatTestView(APIView):
             list_channels = Channel.objects(user_id__in=user_ids)
             print(list_channels)
             
-            # return ChatTestView.showAllChannel(request, list_channels)
             return render(request, "chat/index.html")
         
         except Channel.DoesNotExist:
-            
+            logger.exception("Channel does not exist")
             CreateChannel.create(request)
 
     def showAllChannel(request, list_channels):
@@ -60,11 +60,6 @@ class ChatTestView(APIView):
         response.data = {
             'channel' : data
         }
-        # print('show all channel available')
-        # print("data",data)
-        # print("respone_data:", response.data)
-        # print(response)
-
         return response
 
     def get(self, request):
@@ -73,26 +68,28 @@ class ChatTestView(APIView):
 
 class GetMesseeji(APIView):
     def post(self, request):
-        channel_id = request.data.get('channel_id')
-        all_messeeji = Messeeji.objects(channel_id=channel_id)
-        response = Response()
-        data = []
-        
-        if not all_messeeji:
-        # Handle case where channel creation failed
-            response.data = {
-                "status" : "no messeeji found!",
-                "data" : []
-            }
-        else:
-            for messeeji in all_messeeji:
-                messeeji_data = MesseejiSerializer(messeeji).data
-                data.append(messeeji_data)
-            response.data = {
-                'status' : "messeeji found! bandai",
-                'data' : data
-            }
-        return response
+        try:
+            channel_id = request.data.get('channel_id')
+            all_messeeji = Messeeji.objects(channel_id=channel_id)
+            response = Response()
+            data = []
+            
+            if not all_messeeji:
+                response.data = {
+                    "status" : "no messeeji found!",
+                    "data" : []
+                }
+            else:
+                for messeeji in all_messeeji:
+                    messeeji_data = MesseejiSerializer(messeeji).data
+                    data.append(messeeji_data)
+                response.data = {
+                    'status' : "messeeji found! bandai",
+                    'data' : data
+                }
+            return response
+        except Exception as e:
+            logger.exception(f"Error fetching messeeji: {str(e)}")
 
 class GetChannels(APIView):
     def get_channels_by(query):
@@ -105,14 +102,15 @@ class GetChannels(APIView):
 
     def get(self, request):
         response = Response()
+        try:
+            channel_id = int(request.data.get('post_id'))
+            list_channels = self.get_channels_by(__raw__={'channel_id':channel_id})
 
-        channel_id = int(request.data.get('post_id'))
-
-        list_channels = self.get_channels_by(__raw__={'channel_id':channel_id})
-
-        response.data = {
-            'channel' : list_channels
-        }
+            response.data = {
+                'channel' : list_channels
+            }
+        except Exception as e:
+            logger.exception(f"Error fetching channels: {str(e)}")
         return response
     
 class CreateMesseeji(APIView):
@@ -126,36 +124,32 @@ class CreateMesseeji(APIView):
         )
 
     def post(self, request):
-        user = getUser(request)
-        
-        if not user:
-            return Response({
-                "message": "Unauthorized"
-                }, status=status.HTTP_401_UNAUTHORIZED)
-        
-        response = Response()
+        try:
+            user = getUser(request)
+            if not user:
+                return Response({"message": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
+            
+            response = Response()
 
-        messeeji = self.create(request)
-        messeeji.save()
+            messeeji = self.create(request)
+            messeeji.save()
 
-        response.data = {
-            "status": "new messeeji created!",
-            "data": [MesseejiSerializer(messeeji).data]
-        }
-        return response
+            response.data = {
+                "status": "new messeeji created!",
+                "data": [MesseejiSerializer(messeeji).data]
+            }
+            return response
+        except Exception as e:
+            logger.exception(f"Error creating messeeji: {str(e)}")
 
 class CreateChannel(APIView):
     def check_existing_channel(self, user_id1, user_id2):
         try:
-            # Query the Participants collection for channels involving both users
             part_user1 = Participants.objects(user_id=user_id1)
             part_user2 = Participants.objects(user_id=user_id2)
             channels_user1 = [participant.channel_id for participant in part_user1]
             channels_user2 = [participant.channel_id for participant in part_user2]
-            # print(f"channel2: {channels_user2}")
-            # Find common channels between the two users
             common_channels = set(channels_user1) & set(channels_user2)
-            # print(f"result: {common_channels}")
             if common_channels:
                 channel = Channel.objects(channel_id=list(common_channels)[0])
                 return True, channel
@@ -168,21 +162,15 @@ class CreateChannel(APIView):
         user = getUser(request)
         user_id = user.id
         target_id = request.data.get('target_id')
-        print(target_id)
         existed_channel = self.check_existing_channel(user_id, target_id)
-        print(f"check channel res: {existed_channel}")
-        print(existed_channel[0])
         if existed_channel[0]:
-            print(f"existed a channel between {user_id} and {target_id}")
             output_channel = existed_channel[1].first()
             return False, output_channel
         else:
-            print("let's create a new channel!")
             new_channel =  Channel(
                 created_at = datetime.datetime.now(),
                 capacity = 2,
             )
-            print(f"new channel: {new_channel}")
             part_user = Participants(
                 user_id = user_id,
                 channel_id = new_channel.id,
@@ -191,45 +179,40 @@ class CreateChannel(APIView):
                 user_id = target_id,
                 channel_id = new_channel.id
             )
-            print(f"creating new_channel {new_channel}")
-            print(f"creating part_user {part_user}")
-            print(f"creating part_target {part_target}")
             new_channel.save()
-
             part_user.save()
             part_target.save()
-            print("create completed!")
         return True, new_channel
     
     def post(self, request):
-        user = getUser(request)
-        if not user:
-            return Response({
-                "message": "Unauthorized"
-                },status=401)
-        
-        response = Response()
-        success, channel = self.create(request)
-        if not channel:
-        # Handle case where channel creation failed
-            response.data = {
-                "status" : "no channel created!",
-                "data" : []
-            }
-        else:
-            output_channel = channel
+        try:
+            user = getUser(request)
+            if not user:
+                return Response({"message": "Unauthorized"}, status=401)
+            
+            response = Response()
+            success, channel = self.create(request)
+            if not channel:
+                response.data = {
+                    "status" : "no channel created!",
+                    "data" : []
+                }
+            else:
+                output_channel = channel
 
-        if success:
-            response.data = {
-                "status" : "new channel created!",
-                "data" : [ChannelSerializer(output_channel).data]
-            }
-        else:
-            response.data = {
-                "status" : "existing channel found!",
-                "data" : [ChannelSerializer(output_channel).data]
-            }
-        return response
+            if success:
+                response.data = {
+                    "status" : "new channel created!",
+                    "data" : [ChannelSerializer(output_channel).data]
+                }
+            else:
+                response.data = {
+                    "status" : "existing channel found!",
+                    "data" : [ChannelSerializer(output_channel).data]
+                }
+            return response
+        except Exception as e:
+            logger.exception(f"Error creating channel: {str(e)}")
 
 
 class CreateConversationView(APIView):
@@ -255,26 +238,48 @@ class CreateConversationView(APIView):
         return Response({'success': 'Conversation created!',
                          'conversation': data})
 
+class CreateConversationView(APIView):
+    def createConversation(self, request):
+        try:
+            conversation = Conversation.objects.create(
+                conversation_id = 1,
+                title = request.data.get('title') or None,
+                status='visible'
+            )
+            conversation.save()
+        except Exception as e:
+            logger.error(f"Error creating conversation: {e}")
+            return None
+        return conversation
+    
+    def post(self, request):
+        conversation = self.createConversation(request)
+        if conversation:
+            data = [ConversationSerializer(conversation).data]
+            return Response({'success': 'Conversation created!', 'conversation': data})
+        else:
+            return Response({'error':'Error when creating Conversation'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class ConversationView(APIView):
     serializer_class = ConversationSerializer
 
     def get(self, request):
         response = Response()
-        user = getUser(request)
-        
-        convs = Conversation.objects.filter(
-            Q(conv__sender=user) | Q(conv__receiver=user)
-        ).distinct()
-        data = []
-        for conv in convs:
-            conv_data = ConversationSerializer(conv).data
-            print(conv_data)
-            data.append(conv_data)
+        try:
+            user = getUser(request)
+            convs = Conversation.objects.filter(
+                Q(conv__sender=user) | Q(conv__receiver=user)
+            ).distinct()
+            data = []
+            for conv in convs:
+                conv_data = ConversationSerializer(conv).data
+                data.append(conv_data)
 
-        response.data = {
-            "conversations" : data
-        }
-        
+            response.data = {
+                "conversations" : data
+            }
+        except Exception as e:
+            logger.error(f"Error fetching conversations: {e}")
         return response
 
 class MessageView(generics.ListAPIView):
@@ -283,65 +288,75 @@ class MessageView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def create_init_message(self, request):
-        conversation_id = request.data.get('conversation_id')
-        sender_id = request.data.get('sender_id')
-        receiver_id = request.data.get('receiver_id')
-        content = ""
+        try:
+            conversation_id = request.data.get('conversation_id')
+            sender_id = request.data.get('sender_id')
+            receiver_id = request.data.get('receiver_id')
+            content = ""
 
-        # Validate input data
-        if not all([conversation_id, sender_id, receiver_id, content]):
-            return Response({"error": "Missing required fields"}, status=400)
+            # Validate input data
+            if not all([conversation_id, sender_id, receiver_id, content]):
+                return Response({"error": "Missing required fields"}, status=400)
 
-        # Create the message
-        message = Message.objects.create(
-            conversation_id=conversation_id,
-            user_id=request.user.id,
-            sender_id=sender_id,
-            receiver_id=receiver_id,
-            content=content,
-            is_read=False  # Assuming the message is initially unread
-        )
+            # Create the message
+            message = Message.objects.create(
+                conversation_id=conversation_id,
+                user_id=request.user.id,
+                sender_id=sender_id,
+                receiver_id=receiver_id,
+                content=content,
+                is_read=False  # Assuming the message is initially unread
+            )
 
-    # Serialize the message data
-        serializer = MessageSerializer(message)
+            # Serialize the message data
+            serializer = MessageSerializer(message)
 
-        return Response(serializer.data, status=201)
+            return Response(serializer.data, status=201)
+        except Exception as e:
+            logger.error(f"Error creating initial message: {e}")
+            return Response({"error": "Error creating initial message"}, status=500)
 
     def get_queryset(self):
-        user_id = self.kwargs['user_id']
-        
-        messages = Message.objects.filter(
-            id__in = Subquery(
-                User.objects.filter(
-                    Q(sender__receiver=user_id),
-                    Q(receiver__sender=user_id),
-                ).distinct().annotate(
-                    last_message = Subquery(
-                        Message.objects.filter(
-                            Q(sender=OuterRef('id'), receiver=user_id),
-                            Q(receiver=OuterRef('id'), sender=user_id),
-                        ).order_by("-id")[:1].values_list("id", flat = True)
-                    )
-                ).values_list("last_message", flat=True).order_by("-id")
-            )            
-        ).order_by("-id")
+        try:
+            user_id = self.kwargs['user_id']
+            
+            messages = Message.objects.filter(
+                id__in = Subquery(
+                    User.objects.filter(
+                        Q(sender__receiver=user_id),
+                        Q(receiver__sender=user_id),
+                    ).distinct().annotate(
+                        last_message = Subquery(
+                            Message.objects.filter(
+                                Q(sender=OuterRef('id'), receiver=user_id),
+                                Q(receiver=OuterRef('id'), sender=user_id),
+                            ).order_by("-id")[:1].values_list("id", flat = True)
+                        )
+                    ).values_list("last_message", flat=True).order_by("-id")
+                )            
+            ).order_by("-id")
 
-        return messages
+            return messages
+        except Exception as e:
+            logger.error(f"Error fetching messages: {e}")
 
 class GetMessages(generics.ListAPIView):
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        sender_id = self.kwargs['sender_id']
-        receiver_id = self.kwargs['receiver_id']
+        try:
+            sender_id = self.kwargs['sender_id']
+            receiver_id = self.kwargs['receiver_id']
 
-        messages = Message.objects.filter(
-            sender__in=[sender_id, receiver_id],
-            receiver__in=[sender_id, receiver_id],
-        )
+            messages = Message.objects.filter(
+                sender__in=[sender_id, receiver_id],
+                receiver__in=[sender_id, receiver_id],
+            )
 
-        return messages
+            return messages
+        except Exception as e:
+            logger.error(f"Error fetching messages: {e}")
 
 class SendMessage(generics.CreateAPIView):
     serializer_class = MessageSerializer
@@ -360,32 +375,31 @@ class SearchUser(generics.ListAPIView):
     def search(self, username):
         users = []
         if(username != '@'):
-            # print(UserProfile.objects.all())
             users = UserProfile.objects.filter(
                 Q(user_id__email__icontains=username) |
                 Q(first_name__icontains=username) |
                 Q(last_name__icontains=username) 
-                # &-Q(user=logged_in_user),
             )
         else:
             users = UserProfile.objects.filter()
         return users
 
     def list(self, request, *args, **kwargs):
-        print("list func called")
-        username = self.kwargs['username']
-        # logged_in_user = self.request.user
-        users = self.search(username)
-        current_user_id = getUser(request).id
-        users = [user for user in users if user.id != current_user_id]
-        if not users:
-            return Response(
-                {"detail" : "No user found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        
-        serializer = UserInfoSerializer(users, many=True)
-        return Response({"list_users" : serializer.data})
+        try:
+            username = self.kwargs['username']
+            users = self.search(username)
+            current_user_id = getUser(request).id
+            users = [user for user in users if user.id != current_user_id]
+            if not users:
+                return Response(
+                    {"detail" : "No user found"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            
+            serializer = UserInfoSerializer(users, many=True)
+            return Response({"list_users" : serializer.data})
+        except Exception as e:
+            logger.error(f"Error searching users: {e}")
 
 def index(request):
     return render(request, "chat/index.html")
