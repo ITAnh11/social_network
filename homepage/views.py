@@ -15,47 +15,48 @@ from posts.serializers import PostsSerializer, MediaOfPostsSerializer, PostsInfo
 from userprofiles.serializers import UserProfileSerializer, ImageProfileSerializer
 
 from common_functions.common_function import getUser, getTimeDuration
+import logging
 
+logger = logging.getLogger(__name__)
 # Create your views here.
 class HomePageView(APIView):
     def get(self, request):
+        logger.info("GET request received in HomePageView")
+        
         token = request.COOKIES.get('jwt')  
             
         if not token:
+            logger.warning("No JWT token found in cookies")
             return HttpResponseRedirect(reverse('users:login'))
 
         try:
             payload = jwt.decode(token, 'secret', algorithms=['HS256'])
             user_id = payload['id']
         except jwt.ExpiredSignatureError:
+            logger.error("Expired JWT token")
             LogoutView().post(request)
             return HttpResponseRedirect(reverse('users:login'))
             
+        logger.info("Rendering homepage")
         return render(request, 'homepage/index.html')
 
 class GetPostsView(APIView):
     def post(self, request):
+        logger.info("POST request received in GetPostsView")
         
         user = getUser(request)
         
         if not user:
+            logger.warning("Unauthorized access")
             return Response({'error': 'Unauthorized'}, status=401)
         
-        # currentNumberOfPosts = self.checkEnableLoadMore(request)
-        
-        # if currentNumberOfPosts == -1:
-        #     print('No more posts')
-        #     return Response({'error': 'No more posts'}, status=400)
-        
         reponse = Response()
-        
         data = []
 
         posts = self.filterPosts(user.id)
 
         try: 
             for post in posts:
-                
                 posts_data = PostsSerializer(post).data
 
                 userProfile = UserProfileSerializer(post.user_id.userprofile_set.first())
@@ -68,8 +69,7 @@ class GetPostsView(APIView):
                 }
                 
                 postsInfo = PostsInfo.objects(__raw__={'posts_id': post.id}).first()
-                
-                # media = posts.mediaofposts_set.all()
+
                 media_data = MediaOfPostsSerializer(post.mediaofposts_set.all(), many=True).data
                 
                 posts_data['media'] = media_data
@@ -79,34 +79,29 @@ class GetPostsView(APIView):
             
                 data.append(posts_data)
         except Exception as e:
-            print(e)
+            logger.error(f"Error: {e}")
             
-        reponse.data = {
-            'posts': data
-        }
+        reponse.data = {'posts': data}
 
         return reponse
     
     def checkEnableLoadMore(self, request):
+        logger.info("Checking if load more is enabled")
         try:
-            
             num_posts = Posts.objects.count()
             currentNumberOfPosts = int(request.data.get('current_number_of_posts'))
             
             if currentNumberOfPosts >= num_posts:
                 return -1
         except Exception as e:
-            print(e)
+            logger.error(f"Error: {e}")
             return -1
 
         return currentNumberOfPosts
     
     def filterPosts(self, user_id):
+        logger.info("Filtering posts")
         try:
-            # posts = Posts.objects.prefetch_related('user_id__userprofile_set', 
-            #                                    'user_id__imageprofile_set', 
-            #                                    'mediaofposts_set').order_by('-created_at')[currentNumberOfPosts:currentNumberOfPosts+10]
-        
             posts = Posts.objects.raw(f"""
                         SELECT posts_posts.*, posts_postiswatched.user_id_id 
                         FROM posts_posts
@@ -116,6 +111,6 @@ class GetPostsView(APIView):
                         """)
 
         except Exception as e:
-            print(e)
+            logger.error(f"Error: {e}")
             return []
         return posts

@@ -21,4 +21,6 @@ django-rest-framework-mongoengine
 redis
 celery
 channels_redis
-
+Twisted[http2,tls]
+django-environ
+logtail-python
