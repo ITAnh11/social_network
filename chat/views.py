@@ -25,7 +25,9 @@ from .models import Conversation, Message, Channel, Messeeji, UserMess, Particip
 from common_functions.common_function import getUserProfileForPosts, getTimeDuration, getUser
 from django.shortcuts import render, redirect
 from mongoengine.errors import DoesNotExist
+
 logger=logging.getLogger(__name__)
+
 
 class MesseejiView():
     pass 
@@ -33,16 +35,12 @@ class MesseejiView():
 class ChatTestView(APIView):
 
     def post(self, request):
+
         try:
             username = request.POST.get('username')
-            print('post called')
-            print(username)
             list_users = SearchUser.search(SearchUser, username)
-            print("list users:", list_users)
             user_ids = [user.user_id.id for user in list_users]
-            print(user_ids)
             list_channels = Channel.objects(user_id__in=user_ids)
-            print(list_channels)
             
             return render(request, "chat/index.html")
         
@@ -265,15 +263,16 @@ class ConversationView(APIView):
 
     def get(self, request):
         response = Response()
-        try:
-            user = getUser(request)
-            convs = Conversation.objects.filter(
-                Q(conv__sender=user) | Q(conv__receiver=user)
-            ).distinct()
-            data = []
-            for conv in convs:
-                conv_data = ConversationSerializer(conv).data
-                data.append(conv_data)
+
+        user = getUser(request)
+        
+        convs = Conversation.objects.filter(
+            Q(conv__sender=user) | Q(conv__receiver=user)
+        ).distinct()
+        data = []
+        for conv in convs:
+            conv_data = ConversationSerializer(conv).data
+            data.append(conv_data)
 
             response.data = {
                 "conversations" : data
@@ -371,7 +370,7 @@ class SearchUser(generics.ListAPIView):
     serializer_class = UserInfoSerializer
     queryset = UserProfile.objects.all()
     # permission_classes = [IsAuthenticated]
-
+    # @cache_page(60*15)
     def search(self, username):
         users = []
         if(username != '@'):
@@ -383,23 +382,33 @@ class SearchUser(generics.ListAPIView):
         else:
             users = UserProfile.objects.filter()
         return users
-
     def list(self, request, *args, **kwargs):
-        try:
-            username = self.kwargs['username']
-            users = self.search(username)
-            current_user_id = getUser(request).id
-            users = [user for user in users if user.id != current_user_id]
-            if not users:
-                return Response(
-                    {"detail" : "No user found"},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            
-            serializer = UserInfoSerializer(users, many=True)
-            return Response({"list_users" : serializer.data})
-        except Exception as e:
-            logger.error(f"Error searching users: {e}")
+        username = self.kwargs['username']
+        users = self.search(username)
+        current_user_id = getUser(request).id
+        users = [user for user in users if user.id != current_user_id]
+        if not users:
+            return Response(
+                {"detail" : "No user found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        data = []
+        serializer = UserInfoSerializer(users, many=True)
+    
+        for index, user in enumerate(users):
+            user_img = getUserProfileForPosts(User.objects.filter(id=user.id).first())['avatar']
+            user_data = serializer.data[index]  # Get serialized data for the current user
+    
+            # Append the avatar to the user data
+            user_data['avatar'] = user_img
+    
+            data.append(user_data)
+    
+        return Response({
+            "list_users" : data,
+            "current_user" : getUser(request).id,
+        })
 
 def index(request):
     return render(request, "chat/index.html")

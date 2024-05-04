@@ -8,6 +8,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.room_name = f"room_{self.scope['url_route']['kwargs']['channel_id']}"
+        
         await self.channel_layer.group_add(self.room_name, self.channel_name)
         await self.accept()
 
@@ -17,7 +18,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         data = text_data_json
-        # print(message)
         event = {
             'type' : 'send_message',
             'data' : data,
@@ -29,13 +29,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.create_message(data=data)
         response_data = {
             'sender_id': data['sender_id'],
-            'message_content': data['message_content']
+            'channel_id': data['channel_id'],
+            'message_content': data['message_content'],
         }
         await self.send(text_data=json.dumps({'data': response_data}))
     
     @database_sync_to_async
     def create_message(self, data):
         if not Messeeji.objects(message_content=data['message_content']).exists():
+
+            print(f"channel: {data['channel_id']}, content: {data['message_content']}")
             new_message = Messeeji(
                 sender_id=data['sender_id'],
                 channel_id=data['channel_id'],
