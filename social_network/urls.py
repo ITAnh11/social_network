@@ -37,7 +37,6 @@ urlpatterns = [
     path('comments/', include('comments.urls')),
     path('navbar/', include('navbar.urls')),
     path('reactions/', include('reactions.urls')),
-    path("send_message/", views.SendMessage.as_view()),
     path("search/<username>", views.SearchUser.as_view()),
     
     path('notifications/', include('notifications.urls')),

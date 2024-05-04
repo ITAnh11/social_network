@@ -49,7 +49,7 @@ function setCountReaction_for_post(forWhat, idWhat){
     })
     .then(response => response.json())
     .then(data => {
-        console.log("so luong react:",data);
+        // console.log("so luong react:",data);
         count = data.total;
         document.getElementById(`count-reaction-${forWhat}-${idWhat}`).textContent = count;
         var iconTopReactionsContainer = document.getElementById(`icon-top-reactions-post-container-${idWhat}`);

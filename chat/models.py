@@ -41,6 +41,7 @@ class Messeeji(Document):
     sender_id = fields.IntField()
     channel_id = fields.IntField()
     message_content = fields.StringField()
+    is_read = fields.BooleanField(default=False)
     status = fields.StringField()
     created_at = fields.DateTimeField()
 

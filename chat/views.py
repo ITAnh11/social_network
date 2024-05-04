@@ -2,32 +2,33 @@ import datetime
 import json
 from django.shortcuts import render
 from django.urls import reverse
-from django.http import HttpResponse, HttpResponseRedirect
-from django.utils import timezone
 from django.db.models import Subquery, OuterRef, Q
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 
-from .serializers import MessageSerializer, UserInfoSerializer, ConversationSerializer, ChannelSerializer, MesseejiSerializer
+from .serializers import UserInfoSerializer, ChannelSerializer, MesseejiSerializer
 
 from users.models import User
 from userprofiles.models import UserProfile
 
-from .models import Conversation, Message, Channel, Messeeji, UserMess, Participants
+from .models import Channel, Messeeji, Participants
 
 from common_functions.common_function import getUserProfileForPosts, getTimeDuration, getUser
 from django.shortcuts import render, redirect
 from mongoengine.errors import DoesNotExist
-# from django.views.decorators.cache import cache_page
+from django.views.decorators.cache import cache_page
+from social_network.redis_conn import redis_server
+from mongoengine import connect
+# from django.conf import settings
+# from django.core.cache.backends.base import DEFAULT_TIMEOUT
+# from django.core.cache import cache
 
-class MesseejiView():
-    pass 
+# CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 class ChatTestView(APIView):
 
@@ -37,7 +38,7 @@ class ChatTestView(APIView):
         try:
             list_users = SearchUser.search(SearchUser, username)
             user_ids = [user.user_id.id for user in list_users]
-            list_channels = Channel.objects(user_id__in=user_ids)
+            # list_channels = Channel.objects(user_id__in=user_ids)
             
             # return ChatTestView.showAllChannel(request, list_channels)
             return render(request, "chat/index.html")
@@ -65,7 +66,14 @@ class ChatTestView(APIView):
 class GetMesseeji(APIView):
     def post(self, request):
         channel_id = request.data.get('channel_id')
+        # all_messages_channel_cached = channel_id
+        # if (cache.get(all_messages_channel_cached)):
+            # print(f"get from cache {channel_id}")
+            # all_messeeji = cache.get(all_messages_channel_cached)
+        # else:   
+            # print(f"get from db {channel_id}")
         all_messeeji = Messeeji.objects(channel_id=channel_id)
+            # cache.set(all_messages_channel_cached, all_messeeji)
         response = Response()
         data = []
         
@@ -80,7 +88,7 @@ class GetMesseeji(APIView):
                 messeeji_data = MesseejiSerializer(messeeji).data
                 data.append(messeeji_data)
             response.data = {
-                'status' : "messeeji found! bandai",
+                'status' : "messeeji found! banzai",
                 'data' : data
             }
         return response
@@ -213,120 +221,85 @@ class CreateChannel(APIView):
             }
         return response
 
+class MarkReadMesseeji(APIView):
 
-class CreateConversationView(APIView):
-    def createConversation(self, request):
+    def mark_message_as_read(self, messeeji_ids):
         try:
-            conversation = Conversation.objects.create(
-                conversation_id = 1,
-                title = request.data.get('title') or None,
-                status='visible'
-            )
-            conversation.save()
-        except:
-            return Response({'error':'error when creating Conversation'})
-        return conversation
+            # print("im first")     
+            # Get the MongoDB collection object
+            collection = Messeeji._get_collection()
+            # print("done collection")
+            # Write your raw MongoDB update query
+            raw_query = {
+                "_id": {"$in": messeeji_ids}
+            }
+            # print(f"Raw query: {raw_query}")
+            update_query = {
+                "$set": {"is_read": True}
+            }
+            # Execute the raw update query
+            result = collection.update_many(raw_query, update_query)
+            # print(f"result: {result}")
+            # Check if the update was successful
+            if result.matched_count > 0:
+                return "Message marked as read successfully"
+            else:
+                return "Message does not exist"
+        except Exception as e:
+            return f"Error occurred: {e}"
+
+    def filter_unread_messeejis(self, channel_id, sender_id):
+        try:
+            # Get the MongoDB collection object
+            collection = Messeeji._get_collection()
+            # print(f"collection: {collection}")
+            # Write your raw MongoDB find query
+            raw_query = {
+                'channel_id': channel_id,
+                'sender_id': sender_id,
+                'is_read': False
+            }
+
+            # Execute the raw find query
+            unread_messeejis = collection.find(raw_query)
+
+            data = []
+            for messeeji in unread_messeejis:
+                # Process your data here
+                data.append(messeeji)
+
+            response = {
+                'status': 'Unread messeejis found!' if data else 'No unread Messeejis found.',
+                'data' : data,
+            }
+            return response
+        except Exception as e:
+            print(f"Error occurred: {e}")
+
     def post(self, request):
-        conversation = self.createConversation(request)
-        data = []
+        try:
+            # Extract channel_id and sender_id from the request
+            channel_id = request.data.get('channel_id')
+            sender_id = request.data.get('sender_id')
 
-        conversation_data = ConversationSerializer(conversation).data
+            # print(f"sender: {sender_id}, channel: {channel_id}")
+            
+            # Filter unread messeejis
+            unread_messeejis_data = self.filter_unread_messeejis(channel_id, sender_id)
+            # print(f"unread_m_data: {unread_messeejis_data}")
+            # Mark unread messeejis as read
+            # print(f"2. {unread_messeejis_data['data']}")
+            
+            unread_messeeji_ids = [messeeji['_id'] for messeeji in unread_messeejis_data['data']]
+            # print(f"unread_m_ids: {unread_messeeji_ids}")
+            mark_status = self.mark_message_as_read(unread_messeeji_ids)
 
-        data.append(conversation_data)
-
-        return Response({'success': 'Conversation created!',
-                         'conversation': data})
-
-class ConversationView(APIView):
-    serializer_class = ConversationSerializer
-
-    def get(self, request):
-        response = Response()
-        user = getUser(request)
-        
-        convs = Conversation.objects.filter(
-            Q(conv__sender=user) | Q(conv__receiver=user)
-        ).distinct()
-        data = []
-        for conv in convs:
-            conv_data = ConversationSerializer(conv).data
-            data.append(conv_data)
-
-        response.data = {
-            "conversations" : data
-        }
-        
-        return response
-
-class MessageView(generics.ListAPIView):
-    
-    serializer_class = MessageSerializer
-    permission_classes = [IsAuthenticated]
-
-    def create_init_message(self, request):
-        conversation_id = request.data.get('conversation_id')
-        sender_id = request.data.get('sender_id')
-        receiver_id = request.data.get('receiver_id')
-        content = ""
-
-        # Validate input data
-        if not all([conversation_id, sender_id, receiver_id, content]):
-            return Response({"error": "Missing required fields"}, status=400)
-
-        # Create the message
-        message = Message.objects.create(
-            conversation_id=conversation_id,
-            user_id=request.user.id,
-            sender_id=sender_id,
-            receiver_id=receiver_id,
-            content=content,
-            is_read=False  # Assuming the message is initially unread
-        )
-
-    # Serialize the message data
-        serializer = MessageSerializer(message)
-
-        return Response(serializer.data, status=201)
-
-    def get_queryset(self):
-        user_id = self.kwargs['user_id']
-        
-        messages = Message.objects.filter(
-            id__in = Subquery(
-                User.objects.filter(
-                    Q(sender__receiver=user_id),
-                    Q(receiver__sender=user_id),
-                ).distinct().annotate(
-                    last_message = Subquery(
-                        Message.objects.filter(
-                            Q(sender=OuterRef('id'), receiver=user_id),
-                            Q(receiver=OuterRef('id'), sender=user_id),
-                        ).order_by("-id")[:1].values_list("id", flat = True)
-                    )
-                ).values_list("last_message", flat=True).order_by("-id")
-            )            
-        ).order_by("-id")
-
-        return messages
-
-class GetMessages(generics.ListAPIView):
-    serializer_class = MessageSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        sender_id = self.kwargs['sender_id']
-        receiver_id = self.kwargs['receiver_id']
-
-        messages = Message.objects.filter(
-            sender__in=[sender_id, receiver_id],
-            receiver__in=[sender_id, receiver_id],
-        )
-
-        return messages
-
-class SendMessage(generics.CreateAPIView):
-    serializer_class = MessageSerializer
-    permission_classes = [IsAuthenticated]
+            return Response({
+                'status': mark_status,
+                'unread_messeejis': unread_messeejis_data
+            })
+        except Exception as e:
+            return Response({'error': f"Error occurred: {e}"}, status=500)
 
 class ProfileDetail(generics.RetrieveUpdateAPIView):
     serializer_class = UserInfoSerializer
@@ -336,8 +309,6 @@ class ProfileDetail(generics.RetrieveUpdateAPIView):
 class SearchUser(generics.ListAPIView):
     serializer_class = UserInfoSerializer
     queryset = UserProfile.objects.all()
-    # permission_classes = [IsAuthenticated]
-    # @cache_page(60*15)
     def search(self, username):
         users = []
         if(username != '@'):
@@ -347,7 +318,7 @@ class SearchUser(generics.ListAPIView):
                 Q(last_name__icontains=username) 
             )
         else:
-            users = UserProfile.objects.filter()
+            users = UserProfile.objects.all()[:10]
         return users
     def list(self, request, *args, **kwargs):
         username = self.kwargs['username']
@@ -376,11 +347,3 @@ class SearchUser(generics.ListAPIView):
             "list_users" : data,
             "current_user" : getUser(request).id,
         })
-
-
-def index(request):
-    return render(request, "chat/index.html")
-
-
-def room(request, room_name):
-    return render(request, "chat/room.html", {"room_name": room_name})

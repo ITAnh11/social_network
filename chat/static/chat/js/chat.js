@@ -10,6 +10,31 @@ var inActiveSocket = null;
 
 var current_user;
 
+function mark_as_read(channel_id, sender_id) {
+  const csrftoken = getCookie('csrftoken');
+  const url_mark_as_read = '/chat/mark_as_read/';
+  const postData = {
+    channel_id: channel_id,
+    sender_id: sender_id,
+  };
+  fetch(url_mark_as_read, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrftoken
+    },
+    body: JSON.stringify(postData)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to mark message as read');
+    }
+  })
+  .catch(error => {
+    console.error('Error marking message as read:', error);
+  });
+}
+
 var url_all_users = "/search/@"; // Assuming this is the correct endpoint to fetch all users
 var url_get_channel = "chat/create_channel/"
 function show_all_users() {
@@ -141,7 +166,14 @@ function showChannel(user, channel_id) {
   img.className = 'avt';
   img.setAttribute('src', user.avatar);
   chatHeader.appendChild(img); 
-  get_all_messeeji(user, channel_id);
+  get_all_messeeji(user, channel_id)
+  .then(() => {
+    // Mark all messages in the channel as read
+    mark_as_read(channel_id, user.id);
+  })
+  .catch(error => {
+    console.error('Error fetching messages:', error);
+  });
   websocket_handle(user, channel_id);
 }
 //add a single message to div all_messeeji
@@ -156,35 +188,41 @@ function addMessage(message, sender) {
 // show all message with given channel_id
 const url_all_messeeji = '/chat/get_messeeji/'
 function get_all_messeeji(user, channel_id){
-  all_messeeji.innerHTML = '';
-  const csrftoken = getCookie('csrftoken');
-  var postData = {
-    channel_id : channel_id,
-  }
-  fetch(url_all_messeeji, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': csrftoken  // Include the CSRF token in the request headers
-    },
-    body: JSON.stringify(postData),
-  })
-  .then(response => response.json())
-  .then(data => {
+  return new Promise((resolve, reject) => {
+    all_messeeji.innerHTML = '';
+    const csrftoken = getCookie('csrftoken');
+
+    var postData = {
+      channel_id: channel_id,
+    };
+
+    fetch(url_all_messeeji, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify(postData),
+    })
+    .then(response => response.json())
+    .then(data => {
       data.data.forEach(function(messeeji) {
-          if (current_user == messeeji.sender_id) {
-            addMessage(messeeji.message_content, 'parker')
-          } else {
-            addMessage(messeeji.message_content, 'stark')
-          }
+        if (current_user == messeeji.sender_id) {
+          addMessage(messeeji.message_content, 'parker')
+        } else {
+          addMessage(messeeji.message_content, 'stark')
+        }
       });
-      scrollToBottom()
-  })
-  .catch(error => {
-      console.error('Error fetching users:', error);
-      // Handle errors, such as displaying an error message to the user
+      scrollToBottom();
+      resolve(); // Resolve the Promise after messages are fetched
+    })
+    .catch(error => {
+      console.error('Error fetching messages:', error);
+      reject(error); // Reject the Promise if there's an error
+    });
   });
 }
+
 
 // Gắn sự kiện cho nút gửi tin nhắn
 sendMessageBtn.addEventListener('click', function(event) {
