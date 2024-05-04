@@ -23,4 +23,6 @@ django-debug-toolbar
 redis
 celery
 channels_redis
-
+Twisted[http2,tls]
+django-environ
+logtail-python

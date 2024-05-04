@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 import jwt 
-
+import logging
 from users.models import User
 from friends.models import Friendship, FriendRequest
 from users.serializers import UserSerializer
@@ -32,48 +32,51 @@ from posts.serializers import PostsInfoSerializer
 from common_functions.common_function import getUser, getTimeDuration, getUserProfileForPosts
 
 import time
+logger = logging.getLogger(__name__)
 
 class ProfileView(APIView):
     def get(self, request):
+        logger.info("GET request received in ProfileView")
         user = getUser(request)
-        # print(user)
         if not isinstance(user, User):
+            logger.warning("Unauthorized access detected in ProfileView")
             return HttpResponseRedirect(reverse('users:login'))
         
         if request.query_params.get('id'):
+            logger.info('check profile')
             return render(request, 'userprofiles/profile.html')
         
         id_requested = request.query_params.get('id') or user.id
         
         path = reverse('userprofiles:profile') + '?id=' + str(id_requested)
-        
         return HttpResponseRedirect(path)
         
 class ListFriendsView(APIView):
     def get(self, request):
+        logger.info("GET request received in ListFriendsView")
         user = getUser(request)
-        # print(user)
         if not isinstance(user, User):
+            logger.warning("Unauthorized access detected in ListFriendsView")
             return HttpResponseRedirect(reverse('users:login'))
         
         if request.query_params.get('id'):
+            logger.info('check listFr of User')
             return render(request, 'userprofiles/listFriends.html')
         
         id_requested = request.query_params.get('id') or user.id
         
         path = reverse('userprofiles:listFriends') + '?id=' + str(id_requested)
-        
         return HttpResponseRedirect(path)
 
 class GetProfileView(APIView):
     def get(self, request):
+        logger.info("GET request received in GetProfileView")
         user = getUser(request)
         
         if not isinstance(user, User):
+            logger.warning("Unauthorized access detected in GetProfileView")
             return Response({'error': 'Unauthorized'}, status=401)
 
-        # print(request.query_params.get('id'))
-        
         if request.query_params.get('id'):
             idUserRequested = int(request.query_params.get('id'))
         else:  
@@ -82,6 +85,7 @@ class GetProfileView(APIView):
         try:
             context = self.getProfile(idUserRequested)
         except Exception as e:
+            logger.exception("An error occurred in GetProfileView")
             return Response({'error': str(e)}, status=404)
         
         context['isOwner'] = True if user.id == idUserRequested else False
@@ -105,8 +109,8 @@ class GetProfileView(APIView):
             raise e
     
 class SetUserProfileView(APIView):    
-    # create a new user profile
     def post(self, request, user):
+        logger.info("POST request received in SetUserProfileView")
         userprofile = UserProfile.objects.create(   user_id=user,
                                                     first_name=request.data.get('first_name'),
                                                     last_name=request.data.get('last_name'),
@@ -118,8 +122,10 @@ class SetUserProfileView(APIView):
         userprofile.save()
 
         return Response({'message': 'User profile created successfully!'})
+    
 class SetImageProfileView(APIView):    
     def post(self, request, user):
+        logger.info("POST request received in SetImageProfileView")
         imageProfileForm = ImageProfileForm(request.POST or None, request.FILES or None)
         if imageProfileForm.is_valid():
             imageProfileForm.save(user)
@@ -128,17 +134,16 @@ class SetImageProfileView(APIView):
     
 class GetPostsView(APIView):
     def post(self, request):
-        
+        logger.info("POST request received in GetPostsView")
         start_time = time.time()
         
         user = getUser(request)
         
         if not user:
+            logger.warning("Unauthorized access detected in GetPostsView")
             return Response({'error': 'Unauthorized'}, status=401)
         
         data = []
-        
-        # print(request.query_params.get('id'))
         
         if request.query_params.get('id'):
             idUserRequested = int(request.query_params.get('id'))
@@ -148,6 +153,7 @@ class GetPostsView(APIView):
         userRequest = User.objects.filter(id=idUserRequested).first()
         
         if not userRequest:
+            logger.warning("User not found in GetPostsView")
             return Response({'error': 'User not found'}, status=404)
         
         userDataForPosts = getUserProfileForPosts(userRequest)
@@ -157,13 +163,10 @@ class GetPostsView(APIView):
 
         if currentNumberOfPosts >= num_posts:
             return Response({'error': 'No more posts available'}, status=400)
-        # print(num_posts, currentNumberOfPosts)
 
         posts = Posts.objects.filter(user_id=userRequest).prefetch_related('user_id__userprofile_set', 
                                                'user_id__imageprofile_set', 
                                                'mediaofposts_set').order_by('-created_at')[currentNumberOfPosts:currentNumberOfPosts+10]
-        
-        # posts = Posts.objects.filter(user_id=userRequest).prefetch_related('mediaofposts_set').order_by('-created_at')[:10] 
         
         for post in posts:
             posts_data = PostsSerializer(post).data
@@ -185,19 +188,19 @@ class GetPostsView(APIView):
             'isOwner': True if user.id == idUserRequested else False
         }
         
-        end_time = time.time()  # lưu thời gian kết thúc
-
-        execution_time = end_time - start_time  # tính thời gian thực thi
-
-        print(f"The function took {execution_time} seconds to complete")
+        end_time = time.time()  
+        execution_time = end_time - start_time  
+        logger.info(f"GetPostsView executed in {execution_time} seconds")
 
         return reponse
     
 class GetUserProfileBasicView(APIView):
     def get(self, request):
+        logger.info("GET request received in GetUserProfileBasicView")
         user = getUser(request)
         
         if not user:
+            logger.warning("Unauthorized access detected in GetUserProfileBasicView")
             return Response({'error': 'Unauthorized'}, status=401)
         
         userprofile = UserProfile.objects.filter(user_id=user).first()
@@ -213,4 +216,5 @@ class GetUserProfileBasicView(APIView):
         }
         
         return Response(context)
+
     

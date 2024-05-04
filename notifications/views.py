@@ -17,6 +17,7 @@ from social_network.redis_conn import redis_server
 
 import datetime
 import random
+import logging
 
 LENGTH_OF_CONTENT = 50
 EX_TIME = 60
@@ -164,12 +165,14 @@ def createAddFriendNotification(forFriendRequest):
     except Exception as e:
         print("createAddFriendNotification", e)
 
+logger = logging.getLogger(__name__)
 class GetNotifications(APIView):
     def getNotifications(self, user_id):
+        logger.info("Fetching notifications")
         notifications = redis_server.get(f'notifications_{user_id}')
         
         if notifications is None:
-            print('Get from MongoDB')
+            logger.info("Fetching notifications from MongoDB")
             
             # order_by('created_at') is used to sort the notifications by the created_at field in ascending order
             notifications = Notifications.objects(__raw__={'to_user_id': user_id}).order_by('created_at')
@@ -178,12 +181,13 @@ class GetNotifications(APIView):
 
             redis_server.setex(f'notifications_{user_id}', time_to_live, json.dumps([notification.to_json() for notification in notifications]))
         else:
-            print('Get from Redis')
+            logger.info("Fetching notifications from Redis")
             notifications = [Notifications.from_json(notification) for notification in json.loads(notifications)]
         
         return notifications
     
     def serializeNotifications(self, notifications):
+        logger.info("Serializing notifications")
         list_notifications = []
         
         for notification in notifications:
@@ -201,11 +205,13 @@ class GetNotifications(APIView):
         return list_notifications
     
     def get(self, request):
+        logger.info("GET request received in GetNotifications")
         
         time_start = datetime.datetime.now()
         
         user = getUser(request)
         if isinstance(user, User) == False:
+            logger.warning("Unauthorized access detected in GetNotifications")
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
         
         response = Response()
@@ -220,6 +226,6 @@ class GetNotifications(APIView):
         
         time_end = datetime.datetime.now()
         
-        print('GetNotifications', time_end - time_start)
+        logger.info(f"GetNotifications execution time: {time_end - time_start}")
         
         return response

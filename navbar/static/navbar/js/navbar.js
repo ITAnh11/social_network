@@ -87,7 +87,7 @@ searchInput.addEventListener('keyup', function(event) {
             </div>
             </a>`; 
         })
-
+        a += '</div>';
         var newDiv = document.createElement("div");
         newDiv.classList.add("search-list");
         newDiv.innerHTML = a;
