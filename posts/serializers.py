@@ -14,7 +14,7 @@
 
 # Serializers for mongodb
 from rest_framework_mongoengine.serializers import DocumentSerializer
-from .models import MediaOfPosts, PostIsWatched, Posts
+from .models import MediaOfPosts, Posts
 from django.core.files.storage import default_storage
 from rest_framework import serializers
 
@@ -33,8 +33,3 @@ class MediaOfPostsSerializer(DocumentSerializer):
         if obj.media:
             return default_storage.url(obj.media)
         return None
-
-class PostIsWatchedSerializer(DocumentSerializer):
-    class Meta:
-        model = PostIsWatched
-        fields = ['post_id', 'user_id', 'time_watched']
