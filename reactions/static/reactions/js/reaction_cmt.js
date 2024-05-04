@@ -18,7 +18,7 @@ function setCountReaction_for_cmt(forWhat, idWhat){
     })
     .then(response => response.json())
     .then(data => {
-        console.log("so luong react cmt:",data);
+        // console.log("so luong react cmt:",data);
         count = data.total;
         document.getElementById(`count-reaction-${forWhat}-${idWhat}`).textContent = count;
         var iconTopReactionsContainer = document.getElementById(`icon-top-reactions-comment-container-${idWhat}`);

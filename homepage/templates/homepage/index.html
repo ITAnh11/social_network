@@ -32,15 +32,29 @@
         {% include 'posts/posts.html' %}
         <!-- sidebar------------ -->
         <div class="right-sidebar">
-          
+           
             <div class="heading-link">
-                <h4>Conversation</h4>
-                <a href="">Hide Chat</a>
-                <ul id="userList">
-                  <!-- Conversation list will be populated dynamically -->
-                </ul>
+                {% comment %} <h4>Conversation</h4> {% endcomment %}
+                <a href="#" id="toggleChat">Hide Chat</a>
+                <!-- Add a list of contacts -->
+                    <!-- Update the contact list structure -->
+                    <div id="userList" class="contact-list">
+                        {% comment %} <div class="contact" data-user-id="1">
+                          <img class="pic" src="" alt="User Image">
+                          <div class="contact-info">
+                            <div class="name">User Name</div>
+                            <div class="message">Last message</div>
+                          </div>
+                          <div class="badge">3</div> <!-- Example badge for unread messages -->
+                        </div>
+                        <!-- Add more contact items as needed --> {% endcomment %}
+                    </div>
+  
+
             </div>
-            <!-- {% include 'chat/index.html' %}           1 -->
+            <div class="chat-container">
+            {% include 'chat/index.html' %}       
+            </div>
         </div> 
     </div>
     <footer id="footer">

@@ -13,6 +13,7 @@ class UserProfile(models.Model):
     last_name = models.CharField(max_length=255, null=False)
     phone = models.CharField(max_length=15, null=True)
     birth_date = models.DateField(null=True, blank=True)
+    # birth_date = models.DateField(null=False, blank=False)
     gender = models.CharField(max_length=10, null=False)
     address = models.CharField(max_length=255, blank=True)
     bio = models.TextField(blank=True)
