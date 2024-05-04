@@ -11,11 +11,18 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import environ
 import os
 
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Take environment variables from .env file
+environ.Env.read_env(BASE_DIR /'.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -212,3 +219,102 @@ CORS_ALLOW_CREDENTIALS = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# logging setting
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+        "mytype": {
+            "format": "{asctime}:{levelname} - {name} {module}.py (line {lineno:d}). {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": env('DJANGO_LOG_FILE'),
+            "level": env('DJANGO_LOG_LEVEL'),
+            "formatter": "mytype",
+        },
+        'logtail': {
+            'class': 'logtail.LogtailHandler',
+            'source_token': env('BETTERSTACK_SOURCE_TOKEN'),
+        },
+        # "console": {
+        #     "class": "logging.StreamHandler",
+        #     "level": "DEBUG",
+        #     "formatter": "mytype",
+        # }
+    },
+    "loggers": {
+        "users.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "userprofiles.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "userprofiles.viewsEdit": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "reactions.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "notifications.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "navbar.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "mess.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "homepage.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "friends.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "comments.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "chat.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "users.models": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+    },
+}

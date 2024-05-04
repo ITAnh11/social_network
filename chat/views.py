@@ -1,4 +1,5 @@
 import datetime
+import logging
 import json
 from django.shortcuts import render
 from django.urls import reverse
@@ -21,6 +22,12 @@ from .models import Channel, Messeeji, Participants
 from common_functions.common_function import getUserProfileForPosts, getTimeDuration, getUser
 from django.shortcuts import render, redirect
 from mongoengine.errors import DoesNotExist
+
+logger=logging.getLogger(__name__)
+
+
+class MesseejiView():
+    pass 
 from django.views.decorators.cache import cache_page
 from social_network.redis_conn import redis_server
 from mongoengine import connect
@@ -33,18 +40,17 @@ from mongoengine import connect
 class ChatTestView(APIView):
 
     def post(self, request):
-        username = request.POST.get('username')
-        # channel = request.POST['channel']
+
         try:
+            username = request.POST.get('username')
             list_users = SearchUser.search(SearchUser, username)
             user_ids = [user.user_id.id for user in list_users]
             # list_channels = Channel.objects(user_id__in=user_ids)
             
-            # return ChatTestView.showAllChannel(request, list_channels)
             return render(request, "chat/index.html")
         
         except Channel.DoesNotExist:
-            
+            logger.exception("Channel does not exist")
             CreateChannel.create(request)
 
     def showAllChannel(request, list_channels):
@@ -65,33 +71,28 @@ class ChatTestView(APIView):
 
 class GetMesseeji(APIView):
     def post(self, request):
-        channel_id = request.data.get('channel_id')
-        # all_messages_channel_cached = channel_id
-        # if (cache.get(all_messages_channel_cached)):
-            # print(f"get from cache {channel_id}")
-            # all_messeeji = cache.get(all_messages_channel_cached)
-        # else:   
-            # print(f"get from db {channel_id}")
-        all_messeeji = Messeeji.objects(channel_id=channel_id)
-            # cache.set(all_messages_channel_cached, all_messeeji)
-        response = Response()
-        data = []
-        
-        if not all_messeeji:
-        # Handle case where channel creation failed
-            response.data = {
-                "status" : "no messeeji found!",
-                "data" : []
-            }
-        else:
-            for messeeji in all_messeeji:
-                messeeji_data = MesseejiSerializer(messeeji).data
-                data.append(messeeji_data)
-            response.data = {
-                'status' : "messeeji found! banzai",
-                'data' : data
-            }
-        return response
+        try:
+            channel_id = request.data.get('channel_id')
+            all_messeeji = Messeeji.objects(channel_id=channel_id)
+            response = Response()
+            data = []
+            
+            if not all_messeeji:
+                response.data = {
+                    "status" : "no messeeji found!",
+                    "data" : []
+                }
+            else:
+                for messeeji in all_messeeji:
+                    messeeji_data = MesseejiSerializer(messeeji).data
+                    data.append(messeeji_data)
+                response.data = {
+                    'status' : "messeeji found! bandai",
+                    'data' : data
+                }
+            return response
+        except Exception as e:
+            logger.exception(f"Error fetching messeeji: {str(e)}")
 
 class GetChannels(APIView):
     def get_channels_by(query):
@@ -104,14 +105,15 @@ class GetChannels(APIView):
 
     def get(self, request):
         response = Response()
+        try:
+            channel_id = int(request.data.get('post_id'))
+            list_channels = self.get_channels_by(__raw__={'channel_id':channel_id})
 
-        channel_id = int(request.data.get('post_id'))
-
-        list_channels = self.get_channels_by(__raw__={'channel_id':channel_id})
-
-        response.data = {
-            'channel' : list_channels
-        }
+            response.data = {
+                'channel' : list_channels
+            }
+        except Exception as e:
+            logger.exception(f"Error fetching channels: {str(e)}")
         return response
     
 class CreateMesseeji(APIView):
@@ -125,36 +127,32 @@ class CreateMesseeji(APIView):
         )
 
     def post(self, request):
-        user = getUser(request)
-        
-        if not user:
-            return Response({
-                "message": "Unauthorized"
-                }, status=status.HTTP_401_UNAUTHORIZED)
-        
-        response = Response()
+        try:
+            user = getUser(request)
+            if not user:
+                return Response({"message": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
+            
+            response = Response()
 
-        messeeji = self.create(request)
-        messeeji.save()
+            messeeji = self.create(request)
+            messeeji.save()
 
-        response.data = {
-            "status": "new messeeji created!",
-            "data": [MesseejiSerializer(messeeji).data]
-        }
-        return response
+            response.data = {
+                "status": "new messeeji created!",
+                "data": [MesseejiSerializer(messeeji).data]
+            }
+            return response
+        except Exception as e:
+            logger.exception(f"Error creating messeeji: {str(e)}")
 
 class CreateChannel(APIView):
     def check_existing_channel(self, user_id1, user_id2):
         try:
-            # Query the Participants collection for channels involving both users
             part_user1 = Participants.objects(user_id=user_id1)
             part_user2 = Participants.objects(user_id=user_id2)
             channels_user1 = [participant.channel_id for participant in part_user1]
             channels_user2 = [participant.channel_id for participant in part_user2]
-
-            # Find common channels between the two users
             common_channels = set(channels_user1) & set(channels_user2)
-
             if common_channels:
                 channel = Channel.objects(channel_id=list(common_channels)[0])
                 return True, channel
@@ -176,7 +174,6 @@ class CreateChannel(APIView):
                 created_at = datetime.datetime.now(),
                 capacity = 2,
             )
-
             part_user = Participants(
                 user_id = user_id,
                 channel_id = new_channel.id,
@@ -186,40 +183,39 @@ class CreateChannel(APIView):
                 channel_id = new_channel.id
             )
             new_channel.save()
-
             part_user.save()
             part_target.save()
         return True, new_channel
     
     def post(self, request):
-        user = getUser(request)
-        if not user:
-            return Response({
-                "message": "Unauthorized"
-                },status=401)
-        
-        response = Response()
-        success, channel = self.create(request)
-        if not channel:
-        # Handle case where channel creation failed
-            response.data = {
-                "status" : "no channel created!",
-                "data" : []
-            }
-        else:
-            output_channel = channel
+        try:
+            user = getUser(request)
+            if not user:
+                return Response({"message": "Unauthorized"}, status=401)
+            
+            response = Response()
+            success, channel = self.create(request)
+            if not channel:
+                response.data = {
+                    "status" : "no channel created!",
+                    "data" : []
+                }
+            else:
+                output_channel = channel
 
-        if success:
-            response.data = {
-                "status" : "new channel created!",
-                "data" : [ChannelSerializer(output_channel).data]
-            }
-        else:
-            response.data = {
-                "status" : "existing channel found!",
-                "data" : [ChannelSerializer(output_channel).data]
-            }
-        return response
+            if success:
+                response.data = {
+                    "status" : "new channel created!",
+                    "data" : [ChannelSerializer(output_channel).data]
+                }
+            else:
+                response.data = {
+                    "status" : "existing channel found!",
+                    "data" : [ChannelSerializer(output_channel).data]
+                }
+            return response
+        except Exception as e:
+            logger.exception(f"Error creating channel: {str(e)}")
 
 class MarkReadMesseeji(APIView):
 
