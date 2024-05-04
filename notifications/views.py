@@ -11,17 +11,29 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from common_functions.common_function import getUser, getTimeDuration
-
-import json
 from social_network.redis_conn import redis_server
 
+import json
 import datetime
 import random
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+
 LENGTH_OF_CONTENT = 50
-EX_TIME = 60
+EX_TIME = 60 * 10
 INT_FROM = 0
-INT_TO = 100
+INT_TO = EX_TIME // 3
+
+def notify_user(user_id, message):
+    try:
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(f'notification_{user_id}', {
+            'type': 'send_notification',
+            'message': message
+        })
+    except Exception as e:
+        print('notify_user', e)
 
 def appendNotifications(user_id, notification):
     print('Append Notifications')
@@ -43,7 +55,6 @@ def appendNotifications(user_id, notification):
     # Store the updated list in Redis
     redis_server.setex(f'notifications_{user_id}', time_to_live, json.dumps(notifications))
         
-
 def addContent(content, contentOf):
     if contentOf is None:
         content += '.'
@@ -53,6 +64,18 @@ def addContent(content, contentOf):
     elif len(contentOf) <= LENGTH_OF_CONTENT:
         content += f': {contentOf}'
     return content
+
+def serializeNotification(notification):
+    if notification.type == 'reaction':
+        dataNotification = ReactNotifitionsSerializer(notification).data
+    elif notification.type == 'comment':
+        dataNotification = CommentNotificationsSerializer(notification).data
+    elif notification.type == 'add_friend':
+        dataNotification = AddFriendNotificationsSerializer(notification).data
+    
+    dataNotification['created_at'] = getTimeDuration(notification.created_at)
+    
+    return dataNotification
 
 def createReactNotification(forReaction):
     try:
@@ -87,6 +110,8 @@ def createReactNotification(forReaction):
         notification.save() 
 
         appendNotifications(to_user.id, notification)
+        
+        notify_user(to_user.id, serializeNotification(notification))
         
     except Exception as e:
         print("createReactNotification", e)
@@ -136,6 +161,8 @@ def createCommentNotification(forcomment):
         
         appendNotifications(to_user.id, notification)
         
+        notify_user(to_user.id, serializeNotification(notification))
+        
     except Exception as e:
         print("createCommentNotification", e)
 
@@ -161,6 +188,8 @@ def createAddFriendNotification(forFriendRequest):
         
         appendNotifications(forFriendRequest.to_id.id, notification)
         
+        notify_user(forFriendRequest.to_id.id, serializeNotification(notification))
+        
     except Exception as e:
         print("createAddFriendNotification", e)
 
@@ -183,18 +212,11 @@ class GetNotifications(APIView):
         
         return notifications
     
-    def serializeNotifications(self, notifications):
+    def serializeNotificationList(self, notifications):
         list_notifications = []
         
         for notification in notifications:
-            if notification.type == 'reaction':
-                dataNotification = ReactNotifitionsSerializer(notification).data
-            elif notification.type == 'comment':
-                dataNotification = CommentNotificationsSerializer(notification).data
-            elif notification.type == 'add_friend':
-                dataNotification = AddFriendNotificationsSerializer(notification).data
-            
-            dataNotification['created_at'] = getTimeDuration(notification.created_at)
+            dataNotification = serializeNotification(notification)
                         
             list_notifications.append(dataNotification)
         
@@ -212,7 +234,7 @@ class GetNotifications(APIView):
         
         notifications = self.getNotifications(user.id)
             
-        list_notifications = self.serializeNotifications(notifications)
+        list_notifications = self.serializeNotificationList(notifications)
         
         response.data = {
             'notifications': list_notifications

@@ -1,20 +1,12 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.utils import timezone
-from django.db.models import Q
-from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-import jwt 
-
 from users.models import User
-from friends.models import Friendship, FriendRequest
 from users.serializers import UserSerializer
-from friends.serializers import FriendshipSerializer
-
 from .models import UserProfile, ImageProfile
 from .serializers import UserProfileSerializer, ImageProfileSerializer
 from .forms import ImageProfileForm
@@ -22,16 +14,20 @@ from .forms import ImageProfileForm
 from posts.models import Posts
 from posts.serializers import PostsSerializer, MediaOfPostsSerializer
 
-from posts.views import CreatePostsAfterSetImageProfileView
-
 from posts.models import PostsInfo
 from posts.serializers import PostsInfoSerializer
 
-# from users.views import LoginView
-
 from common_functions.common_function import getUser, getTimeDuration, getUserProfileForPosts
 
+from social_network.redis_conn import redis_server
+
+import random
 import time
+import json
+
+EX_TIME = 60 * 10
+INT_FROM = 0
+INT_TO = EX_TIME // 3
 
 class ProfileView(APIView):
     def get(self, request):
@@ -200,17 +196,26 @@ class GetUserProfileBasicView(APIView):
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        userprofile = UserProfile.objects.filter(user_id=user).first()
-        imageprofile = ImageProfile.objects.filter(user_id=user).first()
+        userprofileBasic = redis_server.get(f'userprofile_basic_{user.id}')
         
-        profileSerializer = UserProfileSerializer(userprofile)
-        imageSerializer = ImageProfileSerializer(imageprofile)
-        
-        context = {
-            'user_id': user.id,
-            'name': f"{profileSerializer.data.get('first_name')} {profileSerializer.data.get('last_name')}",
-            'avatar': imageSerializer.data.get('avatar')
-        }
-        
+        if userprofileBasic is None:
+            userprofile = UserProfile.objects.filter(user_id=user).first()
+            imageprofile = ImageProfile.objects.filter(user_id=user).first()
+            
+            profileSerializer = UserProfileSerializer(userprofile)
+            imageSerializer = ImageProfileSerializer(imageprofile)
+            
+            context = {
+                'user_id': user.id,
+                'name': f"{profileSerializer.data.get('first_name')} {profileSerializer.data.get('last_name')}",
+                'avatar': imageSerializer.data.get('avatar')
+            }
+            
+            time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
+            
+            redis_server.setex(f'userprofile_basic_{user.id}', time_to_live , json.dumps(context))
+        else :
+            context = json.loads(userprofileBasic)
+
         return Response(context)
     
