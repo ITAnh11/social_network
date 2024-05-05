@@ -1,24 +1,171 @@
-2024-05-04 21:56:27,527:INFO - userprofiles.viewsEdit viewsEdit.py (line 29). GET request received in EditImagesPage
-2024-05-04 21:56:28,428:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
-2024-05-04 21:56:33,765:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
-2024-05-04 21:56:33,958:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
-2024-05-04 21:56:34,016:INFO - userprofiles.views views.py (line 46). check profile
-2024-05-04 21:56:34,936:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
-2024-05-04 21:56:34,936:INFO - reactions.views views.py (line 29). POST request received in GetReactions
-2024-05-04 21:56:34,961:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
-2024-05-04 21:56:35,077:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
-2024-05-04 21:56:35,188:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
-2024-05-04 21:56:35,262:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
-2024-05-04 21:56:35,343:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
-2024-05-04 21:56:35,569:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
-2024-05-04 21:56:35,655:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
-2024-05-04 21:56:35,723:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
-2024-05-04 21:56:35,795:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
-2024-05-04 21:56:35,939:INFO - userprofiles.views views.py (line 137). POST request received in GetPostsView
-2024-05-04 21:56:36,043:INFO - userprofiles.views views.py (line 193). GetPostsView executed in 0.1029508113861084 seconds
-2024-05-04 21:56:42,354:INFO - friends.views views.py (line 35). Accessed FriendsRequestsView successfully
-2024-05-04 21:56:43,063:INFO - friends.views views.py (line 250). List of friends retrieved successfully
-2024-05-04 21:56:43,138:INFO - friends.views views.py (line 284). Suggested friends retrieved successfully
-2024-05-04 21:56:43,157:INFO - friends.views views.py (line 225). Received friend requests retrieved successfully
-2024-05-04 21:57:02,918:INFO - friends.views views.py (line 48). Sending friend request from user 16 to user 5
-2024-05-04 21:57:07,157:INFO - friends.views views.py (line 60). Friend request sent successfully
+2024-05-05 16:37:13,493:INFO - users.views views.py (line 85). POST request received in RegisterView
+2024-05-05 16:37:14,593:INFO - users.models models.py (line 26). Password updated for user: minh2@gmail.com
+2024-05-05 16:37:14,609:ERROR - users.views views.py (line 112). Failed to register user: 'User' object has no attribute 'username'
+2024-05-05 16:38:11,142:INFO - users.views views.py (line 74). GET request received in RegisterView
+2024-05-05 16:38:40,217:INFO - users.views views.py (line 85). POST request received in RegisterView
+2024-05-05 16:38:40,326:WARNING - users.views views.py (line 118). User needs to register with email
+2024-05-05 16:38:46,722:INFO - users.views views.py (line 85). POST request received in RegisterView
+2024-05-05 16:38:47,799:INFO - users.models models.py (line 26). Password updated for user: minh3@gmail.com
+2024-05-05 16:38:47,809:INFO - users.views views.py (line 92). User successfully registered
+2024-05-05 16:38:47,809:INFO - userprofiles.views views.py (line 113). POST request received in SetUserProfileView
+2024-05-05 16:38:47,827:INFO - userprofiles.views views.py (line 128). POST request received in SetImageProfileView
+2024-05-05 16:38:47,834:INFO - users.views views.py (line 108). User successfully registered
+2024-05-05 16:38:49,202:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
+2024-05-05 16:38:49,278:INFO - userprofiles.views views.py (line 46). check profile
+2024-05-05 16:38:50,052:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:38:50,149:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:38:50,152:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-05 16:38:50,152:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-05 16:38:50,299:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:38:50,425:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:38:50,556:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:38:50,662:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:38:50,988:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:38:51,126:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:38:51,134:INFO - userprofiles.views views.py (line 137). POST request received in GetPostsView
+2024-05-05 16:38:51,252:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:38:51,270:INFO - userprofiles.views views.py (line 193). GetPostsView executed in 0.1343398094177246 seconds
+2024-05-05 16:38:51,374:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:42:14,805:INFO - userprofiles.views views.py (line 137). POST request received in GetPostsView
+2024-05-05 16:42:14,999:INFO - userprofiles.views views.py (line 193). GetPostsView executed in 0.18411636352539062 seconds
+2024-05-05 16:42:15,586:INFO - userprofiles.views views.py (line 137). POST request received in GetPostsView
+2024-05-05 16:42:15,714:INFO - userprofiles.views views.py (line 193). GetPostsView executed in 0.11765551567077637 seconds
+2024-05-05 16:47:44,805:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
+2024-05-05 16:47:44,949:INFO - userprofiles.views views.py (line 46). check profile
+2024-05-05 16:47:46,308:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-05 16:47:46,312:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-05 16:47:46,619:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:47:46,626:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:47:46,629:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:47:46,636:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:47:46,666:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:47:48,092:INFO - userprofiles.views views.py (line 140). POST request received in GetPostsView
+2024-05-05 16:47:48,247:INFO - userprofiles.views views.py (line 196). GetPostsView executed in 0.15471768379211426 seconds
+2024-05-05 16:47:48,313:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:47:48,344:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:47:48,346:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:47:48,372:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:47:55,411:INFO - userprofiles.viewsEdit viewsEdit.py (line 173). GET request received in EditStoryView
+2024-05-05 16:47:55,523:INFO - userprofiles.viewsEdit viewsEdit.py (line 173). GET request received in EditStoryView
+2024-05-05 16:47:55,524:INFO - userprofiles.views views.py (line 140). POST request received in GetPostsView
+2024-05-05 16:47:55,638:INFO - userprofiles.views views.py (line 196). GetPostsView executed in 0.11242938041687012 seconds
+2024-05-05 16:48:10,043:INFO - userprofiles.viewsEdit viewsEdit.py (line 199). POST request received in EditStoryView
+2024-05-05 16:48:10,168:INFO - userprofiles.viewsEdit viewsEdit.py (line 218). user story updated successfully
+2024-05-05 16:48:11,375:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
+2024-05-05 16:48:11,581:INFO - userprofiles.views views.py (line 46). check profile
+2024-05-05 16:48:11,732:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-05 16:48:11,742:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-05 16:48:11,758:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:48:11,920:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:48:12,035:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:48:12,276:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:48:12,379:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:48:12,409:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:48:12,497:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:48:12,600:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:48:12,698:INFO - userprofiles.views views.py (line 140). POST request received in GetPostsView
+2024-05-05 16:48:12,725:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:48:12,801:INFO - userprofiles.views views.py (line 196). GetPostsView executed in 0.10181450843811035 seconds
+2024-05-05 16:49:08,959:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
+2024-05-05 16:49:09,034:INFO - userprofiles.views views.py (line 46). check profile
+2024-05-05 16:49:09,867:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-05 16:49:09,868:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-05 16:49:10,049:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:49:10,057:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:49:10,071:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:49:10,112:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:49:10,213:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:49:10,953:INFO - userprofiles.views views.py (line 140). POST request received in GetPostsView
+2024-05-05 16:49:11,124:INFO - userprofiles.views views.py (line 196). GetPostsView executed in 0.16962409019470215 seconds
+2024-05-05 16:49:11,163:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:49:11,165:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:49:11,166:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:49:11,166:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:49:13,587:INFO - userprofiles.viewsEdit viewsEdit.py (line 173). GET request received in EditStoryView
+2024-05-05 16:49:13,595:INFO - userprofiles.views views.py (line 140). POST request received in GetPostsView
+2024-05-05 16:49:13,705:INFO - userprofiles.views views.py (line 196). GetPostsView executed in 0.10825729370117188 seconds
+2024-05-05 16:49:13,720:INFO - userprofiles.viewsEdit viewsEdit.py (line 173). GET request received in EditStoryView
+2024-05-05 16:49:18,479:INFO - userprofiles.viewsEdit viewsEdit.py (line 199). POST request received in EditStoryView
+2024-05-05 16:49:18,576:ERROR - userprofiles.viewsEdit viewsEdit.py (line 222). An error occurred in EditStoryView
+Traceback (most recent call last):
+  File "E:\BTL\BTL DBSM\social_network\userprofiles\viewsEdit.py", line 218, in post
+    logger.info('user story updated successfully %s', user.name)
+                                                      ^^^^^^^^^
+AttributeError: 'User' object has no attribute 'name'
+2024-05-05 16:58:34,586:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
+2024-05-05 16:58:34,761:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
+2024-05-05 16:58:34,888:INFO - userprofiles.views views.py (line 46). check profile
+2024-05-05 16:58:36,383:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-05 16:58:36,385:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-05 16:58:36,398:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:58:36,649:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:58:36,791:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:58:37,013:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:58:37,129:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:58:37,915:INFO - userprofiles.views views.py (line 140). POST request received in GetPostsView
+2024-05-05 16:58:38,105:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:58:38,123:INFO - userprofiles.views views.py (line 196). GetPostsView executed in 0.17562341690063477 seconds
+2024-05-05 16:58:38,223:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:58:38,328:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:58:38,430:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:58:38,705:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
+2024-05-05 16:58:38,956:INFO - userprofiles.views views.py (line 46). check profile
+2024-05-05 16:58:40,126:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-05 16:58:40,128:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-05 16:58:40,310:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:58:40,311:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:58:40,329:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:58:40,330:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:58:40,452:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 16:58:40,983:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:58:40,991:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:58:40,999:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:58:40,999:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 16:58:41,132:INFO - userprofiles.views views.py (line 140). POST request received in GetPostsView
+2024-05-05 16:58:41,250:INFO - userprofiles.views views.py (line 196). GetPostsView executed in 0.11693644523620605 seconds
+2024-05-05 16:58:56,180:INFO - posts.views views.py (line 71). created content of post successfully
+2024-05-05 16:58:56,297:INFO - posts.views views.py (line 44). created post successfully!!!
+2024-05-05 16:58:56,347:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-05 16:58:56,350:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-05 16:58:56,430:INFO - reactions.views views.py (line 225). Checking if reacted in IsReactedView
+2024-05-05 16:58:59,115:INFO - userprofiles.views views.py (line 140). POST request received in GetPostsView
+2024-05-05 16:58:59,213:INFO - userprofiles.views views.py (line 196). GetPostsView executed in 0.0964663028717041 seconds
+2024-05-05 16:59:17,321:INFO - posts.views views.py (line 71). created content of post successfully
+2024-05-05 16:59:17,346:INFO - posts.views views.py (line 99). saved post successfully
+2024-05-05 16:59:17,353:INFO - posts.views views.py (line 44). created post successfully!!!
+2024-05-05 16:59:17,409:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-05 16:59:17,414:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-05 16:59:17,603:INFO - reactions.views views.py (line 225). Checking if reacted in IsReactedView
+2024-05-05 16:59:20,120:INFO - userprofiles.views views.py (line 140). POST request received in GetPostsView
+2024-05-05 16:59:20,224:INFO - userprofiles.views views.py (line 196). GetPostsView executed in 0.10350823402404785 seconds
+2024-05-05 17:04:40,501:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
+2024-05-05 17:04:40,585:INFO - userprofiles.views views.py (line 46). check profile
+2024-05-05 17:04:41,764:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-05 17:04:41,764:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-05 17:04:41,780:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 17:04:41,784:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 17:04:41,787:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 17:04:41,790:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 17:04:41,974:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
+2024-05-05 17:04:43,030:INFO - userprofiles.views views.py (line 140). POST request received in GetPostsView
+2024-05-05 17:04:43,162:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 17:04:43,266:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 17:04:43,281:INFO - userprofiles.views views.py (line 196). GetPostsView executed in 0.25043225288391113 seconds
+2024-05-05 17:04:43,313:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-05 17:04:43,318:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-05 17:04:43,398:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 17:04:43,414:INFO - reactions.views views.py (line 225). Checking if reacted in IsReactedView
+2024-05-05 17:04:43,477:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
+2024-05-05 17:04:43,824:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-05 17:04:43,825:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-05 17:04:43,935:INFO - reactions.views views.py (line 225). Checking if reacted in IsReactedView
+2024-05-05 17:04:44,148:INFO - userprofiles.views views.py (line 140). POST request received in GetPostsView
+2024-05-05 17:04:44,247:INFO - userprofiles.views views.py (line 196). GetPostsView executed in 0.0981132984161377 seconds
+2024-05-05 17:04:46,115:INFO - userprofiles.views views.py (line 140). POST request received in GetPostsView
+2024-05-05 17:04:46,224:INFO - userprofiles.views views.py (line 196). GetPostsView executed in 0.10829496383666992 seconds
+2024-05-05 17:05:01,790:INFO - posts.views views.py (line 71). created content of post successfully
+2024-05-05 17:05:01,808:INFO - posts.views views.py (line 99). saved post successfully
+2024-05-05 17:05:01,822:INFO - posts.views views.py (line 44). created post successfully!!!
+2024-05-05 17:05:01,883:INFO - reactions.views views.py (line 29). POST request received in GetReactions
+2024-05-05 17:05:01,890:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
+2024-05-05 17:05:01,985:INFO - reactions.views views.py (line 225). Checking if reacted in IsReactedView
