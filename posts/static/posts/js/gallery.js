@@ -21,7 +21,7 @@ function layout1(images, galleryContainerElement, posts_id) {
     galleryContainerElement.innerHTML += `<img
                 href="${urlFromCmt}"
                 class="gallery-image gallery-normal-image"
-                src="${images[0].media}"
+                src="${images[0].media_url}"
                 alt="Image"
                 image_id="1"
                 posts_id="${posts_id}"
@@ -34,7 +34,7 @@ function layout2(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img
                                                 class="gallery-image gallery-three-grid-cells"
-                                                src="${images[0].media}"
+                                                src="${images[0].media_url}"
                                                 alt="Image"
                                                 image_id="1"
                                                 posts_id="${posts_id}"
@@ -46,7 +46,7 @@ function layout2(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img
                                                 class="gallery-image gallery-three-grid-cells"
-                                                src="${images[1].media}"
+                                                src="${images[1].media_url}"
                                                 alt="Image"
                                                 image_id="2"
                                                 posts_id="${posts_id}"
@@ -59,7 +59,7 @@ function layout3(images, galleryContainerElement, posts_id) {
 
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img class="gallery-image gallery-four-grid-cells"
-        src="${images[0].media}"
+        src="${images[0].media_url}"
         alt="Image"
         image_id="1"
         posts_id="${posts_id}"
@@ -69,7 +69,7 @@ function layout3(images, galleryContainerElement, posts_id) {
 
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img class="gallery-image gallery-two-grid-cells"
-        src="${images[1].media}"
+        src="${images[1].media_url}"
         alt="Image"
         image_id="2"
         posts_id="${posts_id}"
@@ -79,7 +79,7 @@ function layout3(images, galleryContainerElement, posts_id) {
 
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img class="gallery-image gallery-two-grid-cells"
-        src="${images[2].media}"
+        src="${images[2].media_url}"
         alt="Image"
         image_id="3"
         posts_id="${posts_id}"
@@ -92,7 +92,7 @@ function layout4(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img
         class="gallery-image gallery-three-grid-cells"
-        src="${images[0].media}"
+        src="${images[0].media_url}"
         alt="Image"
         image_id="1"
         posts_id="${posts_id}"
@@ -103,7 +103,7 @@ function layout4(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img
         class="gallery-image gallery-three-grid-cells"
-        src="${images[1].media}"
+        src="${images[1].media_url}"
         alt="Image"
         image_id="2"
         posts_id="${posts_id}"
@@ -114,7 +114,7 @@ function layout4(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img 
         class="gallery-image gallery-three-grid-cells"
-        src="${images[2].media}"
+        src="${images[2].media_url}"
         alt="Image"
         image_id="3"
         posts_id="${posts_id}"
@@ -125,7 +125,7 @@ function layout4(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img 
         class="gallery-image gallery-three-grid-cells"
-        src="${images[3].media}"
+        src="${images[3].media_url}"
         alt="Image"
         image_id="4"
         posts_id="${posts_id}"
@@ -138,7 +138,7 @@ function layout5(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img
         class="gallery-image gallery-wide-image"
-        src="${images[0].media}"
+        src="${images[0].media_url}"
         alt="Image"
         image_id="1"
         posts_id="${posts_id}"
@@ -149,7 +149,7 @@ function layout5(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img
         class="gallery-image gallery-wide-image"
-        src="${images[1].media}"
+        src="${images[1].media_url}"
         alt="Image"
         image_id="2"
         posts_id="${posts_id}"
@@ -160,7 +160,7 @@ function layout5(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img 
         class="gallery-image"
-        src="${images[2].media}"
+        src="${images[2].media_url}"
         alt="Image"
         image_id="3"
         posts_id="${posts_id}"
@@ -171,7 +171,7 @@ function layout5(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img 
         class="gallery-image"
-        src="${images[3].media}"
+        src="${images[3].media_url}"
         alt="Image"
         image_id="4"
         posts_id="${posts_id}"
@@ -182,7 +182,7 @@ function layout5(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img 
         class="gallery-image"
-        src="${images[4].media}"
+        src="${images[4].media_url}"
         alt="Image"
         image_id="5"
         posts_id="${posts_id}"
@@ -195,7 +195,7 @@ function layoutMoreThan5(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img
         class="gallery-image gallery-wide-image"
-        src="${images[0].media}"
+        src="${images[0].media_url}"
         alt="Image"
         image_id="1"
         posts_id="${posts_id}"
@@ -206,7 +206,7 @@ function layoutMoreThan5(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img
         class="gallery-image gallery-wide-image"
-        src="${images[1].media}"
+        src="${images[1].media_url}"
         alt="Image"
         image_id="2"
         posts_id="${posts_id}"
@@ -217,7 +217,7 @@ function layoutMoreThan5(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img 
         class="gallery-image"
-        src="${images[2].media}"
+        src="${images[2].media_url}"
         alt="Image"
         image_id="3"
         posts_id="${posts_id}"
@@ -228,7 +228,7 @@ function layoutMoreThan5(images, galleryContainerElement, posts_id) {
     setTimeout(() => {
         galleryContainerElement.innerHTML += `<img 
         class="gallery-image"
-        src="${images[3].media}"
+        src="${images[3].media_url}"
         alt="Image"
         image_id="4"
         posts_id="${posts_id}"
@@ -241,7 +241,7 @@ function layoutMoreThan5(images, galleryContainerElement, posts_id) {
         <div class="gallery-image-container gallery-image">
             <img 
                 class="gallery-image"
-                src="${images[4].media}"
+                src="${images[4].media_url}"
                 alt="Image"
                 image_id="5"
                 posts_id="${posts_id}"

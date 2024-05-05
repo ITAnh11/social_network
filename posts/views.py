@@ -1,156 +1,128 @@
 from django.shortcuts import render
-from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.utils import timezone
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Posts, MediaOfPosts, PostsInfo, PostIsWatched
-from users.models import User
+from .models import Posts, MediaOfPosts
+from userprofiles.views import UserProfileBasicView
 
-from .serializers import PostsSerializer, MediaOfPostsSerializer, PostsInfoSerializer
+from .serializers import PostsSerializer, MediaOfPostsSerializer
 
-from common_functions.common_function import getUserProfileForPosts, getTimeDuration, getUser
-import logging
-logger=logging.getLogger(__name__)
+from common_functions.common_function import getTimeDuration, getUser
+
+from social_network.redis_conn import redis_server
+
+def createMediaOfPosts(post, medias):
+    listMediaOfPosts = []
+    try:
+        for media in medias:
+            mediaOfPosts = MediaOfPosts(
+                post_id=post
+            )
+            
+            mediaOfPosts.save_media(media)
+            
+            listMediaOfPosts.append(mediaOfPosts)
+    except Exception as e:
+        print('createMediaOfPosts', e)
+        return False
+
+    for mediaOfPosts in listMediaOfPosts:
+        try:
+            mediaOfPosts.save()
+        except Exception as e:
+            print('saveMediaOfPosts', e)
+            return False
+
+    return listMediaOfPosts
+
 # Create your views here.
 class CreatePostsView(APIView):
-    
     def post(self, request):
         user = getUser(request)
         
         if not user:
             return Response({'error': 'Unauthorized'}, status=401)
         
-        # print(request.data)
-        # print(request.FILES)
+        userProfileBasic = UserProfileBasicView().getUserProfileBasic(user)
         
-        post = self.createPost(user, request)
-        if type(post) != Posts:
-            return post
+        post = self.createPosts(userProfileBasic, 
+                                request.data.get('title'), 
+                                request.data.get('content'), 
+                                request.data.get('status'))
         
-        listMedia = self.createMediaOfPosts(post, request.FILES.getlist('media'))
-        if type(listMedia) != list:
+        if post == False:
+            return Response({'error': 'Error while creating post'}, status=400)
+        
+        print('request.data', request.data)
+        
+        medias = request.FILES.getlist('media')
+        
+        print('medias', medias)
+        
+        listMediaOfPost = createMediaOfPosts(post, medias)
+        
+        if listMediaOfPost == False:
+            for mediaOfPost in listMediaOfPost:
+                mediaOfPost.delete()
             post.delete()
-            return listMedia    
+            return Response({'error': 'Error while saving media'}, status=400)
         
-        if len(listMedia) == 0 and not post.content:
-            logger.error('no posts uploaded')
-            return Response({'error': 'No posts uploaded'}, status=400)
-    
-        postsInfo = PostsInfo()
-        postsInfo.setPostsId(post.id)
-        postsInfo.save()
-        logger.info('created post successfully!!!')
+        post_data = PostsSerializer(post).data
+        post_data['media'] = MediaOfPostsSerializer(listMediaOfPost, many=True).data
+        post_data['created_at'] = getTimeDuration(post.created_at)
         
         data = []
-        
-        posts_data = PostsSerializer(post).data
-        
-        posts_data['media'] = MediaOfPostsSerializer(listMedia, many=True).data
-        posts_data['user'] = getUserProfileForPosts(user)
-        posts_data['posts_info'] = PostsInfoSerializer(postsInfo).data
-
-        posts_data['created_at'] = getTimeDuration(post.created_at)
-        
-        data.append(posts_data)
+        data.append(post_data)
         
         return Response({'success': 'Post created!',
                          'posts': data})
-
-    def createPost(self, user, request):
+        
+    def createPosts(self, user, title, content, status):
         try:
             post = Posts.objects.create(
-                user_id=user,
-                title=request.data.get('title') or None,
-                content=request.data.get('content') or None,
-                status='public'
+                user=user,
+                title=title,
+                content=content,
+                status=status,
+                created_at=timezone.now(),
+                updated_at=timezone.now()
             )
-            
             post.save()
-            logger.info('created content of post successfully')
-        except:
-            # print(1)
-            logger.error('error while saving post with content')
-            return Response({'error': 'Error while saving post'}, status=400)
-        
-        return post
-    
-    def createMediaOfPosts(self, post, media):
-        # print('media:', media)
-        try:
-            listMediaOfPosts = []
-            for file in media:
-                if not file.content_type.startswith('image'):
-                    # print('not image or video')
-                                        return Response({'warning': 'File is not an image'}, status=400)
-
+        except Exception as e:
+            print('createPosts', e)
+            return False
                 
-                mediaOfPosts = MediaOfPosts.objects.create(
-                    post_id=post,
-                    media=file
-                )
-                
-                listMediaOfPosts.append(mediaOfPosts)
-            
-            for obj in listMediaOfPosts:
-                # print('saving media')
-                obj.save()
-                logger.info('saved post successfully')
-        except Exception as e:
-            # print('cant save media')
-            print('createMediaOfPosts', e)
-            logger.error('error while saving post with media')
-            return Response({'error': 'Error while saving media'}, status=400)
-        
-        return listMediaOfPosts
-    
-class CreatePostsAfterSetImageProfileView():
-    def createUpdateImageProfilePosts(self, user, typeImage, image):
-        
-        # print('createUpdateImageProfilePosts', user, typeImage, image)
-        try:
-            post = Posts.objects.create(
-                user_id=user,
-                title=f"updated {typeImage} profile picture ",
-                content='',
-                status='public'
-            )
-            
-            postsInfo = PostsInfo()
-            postsInfo.setPostsId(post.id)
-            
-            mediaOfPosts = self.createMediaOfPosts(post, image)
-            if type(mediaOfPosts) != MediaOfPosts:
-                post.delete()
-                return mediaOfPosts
-            
-            postsInfo.save()
-            post.save()
-            logger.info('post and post info saved successfully!!!')
-        except Exception as e:
-            print('createUpdateImageProfilePosts', e)
-            logger.error('error while saving post~~~~')
-            return Response({'error': 'Error while saving post'}, status=400)
-        
         return post
-    
-    def createMediaOfPosts(self, post, media):
-        try:
-            mediaOfPosts = MediaOfPosts.objects.create(
-                post_id=post,
-                media=media
-            )
-            
-            mediaOfPosts.save()
-            logger.info('creatpost after changing imageprofile successfully')
-        except Exception as e:
-            print('createMediaOfPosts', e)
-            logger.error('error while saving media')
-            return Response({'error': 'Error while saving media'}, status=400)
         
-        return mediaOfPosts
+def createUpdateImageProfilePosts(userprofilebasic, typeImage, image):
+    try:
+        post = Posts.objects.create(
+                            user=userprofilebasic,
+                            title=f"updated {typeImage} profile picture ",
+                            content='',
+                            status='public',
+                            created_at=timezone.now(),
+                            updated_at=timezone.now()
+                        )
+        
+        listMediaOfPost = createMediaOfPosts(post, [image])
+        
+        if listMediaOfPost == False:
+            for mediaOfPost in listMediaOfPost:
+                mediaOfPost.delete()
+            post.delete()
+            return False
+        
+        post.save()
+        
+    except Exception as e:
+        print('createUpdateImageProfilePosts', e)
+        return False
     
+    return post
+     
 class GetPostsPageView(APIView):
     def get(self, request):
         user = getUser(request)
@@ -168,44 +140,140 @@ class GetPostsPageView(APIView):
         idPostsRequest = int(posts_id)
         idImageRequest = int(image_id)
         
-        try:
-            posts = Posts.objects.filter(id=idPostsRequest).first()
-            
-            # print(str(Posts.objects.filter(id=idPostsRequest).query.explain(using='default')))
-            
-        except Posts.DoesNotExist:
-            return Response({'error': 'No posts found'}, status=404)
+        post = Posts.objects(__raw__={'_id': idPostsRequest}).first()
         
-        mediaOfPosts = MediaOfPosts.objects.filter(post_id=posts)
-        userOfPosts = User.objects.filter(id=posts.user_id.id).first()
+        if not post:
+            print('Post not found')
+            return Response({'error': 'Post not found'}, status=404)
+        
+        mediaOfPosts = MediaOfPosts.objects(__raw__={'post_id': idPostsRequest}).all()
         
         # print(str(MediaOfPosts.objects.filter(post_id=posts).query.explain(using='default')))
         
-        postsSerializer = PostsSerializer(posts)
+        postsSerializer = PostsSerializer(post)
         mediaOfPostsSerializer = MediaOfPostsSerializer(mediaOfPosts, many=True)
         
         postsData = postsSerializer.data
         postsData['media'] = mediaOfPostsSerializer.data
-        postsData['created_at'] = getTimeDuration(posts.created_at)
-        postsData['posts_info'] = self.getPostsInfo(posts)
-        postsData['user'] = getUserProfileForPosts(userOfPosts)
-        
+        postsData['created_at'] = getTimeDuration(post.created_at)
+                
         context = {
             'post': postsData,
             'image_id': idImageRequest,
         }
         
-        # print(postsData)
-        
         return render(request, 'posts/posts_page.html', context=context)
-    
-    def getPostsInfo(self, posts):
-        try:
-            postsInfo = PostsInfo.objects(__raw__={'posts_id': posts.id}).first()
-        except PostsInfo.DoesNotExist:
-            return Response({'error': 'No posts info found'}, status=404)
+class GetPostsForProfilePageView(APIView):
+    def post(self, request):
+        user = getUser(request)
         
-        return PostsInfoSerializer(postsInfo).data
+        if not user:
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        data = []
+        
+        if request.query_params.get('id'):
+            idUserRequested = int(request.query_params.get('id'))
+        else:  
+            idUserRequested = user.id
+        
+        num_posts = Posts.objects(__raw__={'user.id': idUserRequested}).count()
+        currentNumberOfPosts = int(request.data.get('current_number_of_posts'))
+
+        if currentNumberOfPosts >= num_posts:
+            return Response({'error': 'No more posts available'}, status=400)
+
+        posts = Posts.objects(__raw__={'user.id': idUserRequested}).order_by('-created_at')[currentNumberOfPosts:currentNumberOfPosts+10]
+        
+        for post in posts:
+            posts_data = PostsSerializer(post).data
+            media_of_posts = MediaOfPosts.objects(__raw__={'post_id': post.id}).all()
+            media_data = MediaOfPostsSerializer(media_of_posts, many=True).data
+            
+            posts_data['media'] = media_data
+
+            posts_data['created_at'] = getTimeDuration(post.created_at)
+        
+            data.append(posts_data)
+            
+        reponse = Response()
+        
+        reponse.data = {
+            'posts': data,
+            'isOwner': True if user.id == idUserRequested else False
+        }
+
+        return reponse
+
+class GetPostsForHomePageView(APIView):
+    def post(self, request):
+        pass
+        user = getUser(request)
+        
+        if not user:
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        # currentNumberOfPosts = self.checkEnableLoadMore(request)
+        
+        # if currentNumberOfPosts == -1:
+        #     print('No more posts')
+        #     return Response({'error': 'No more posts'}, status=400)
+        
+        reponse = Response()
+        
+        data = []
+
+        posts = self.filterPosts(user.id)
+
+        try: 
+            for post in posts:
+                
+                posts_data = PostsSerializer(post).data
+                
+                media = MediaOfPosts.objects(__raw__={'post_id': post.id}).all()
+                media_data = MediaOfPostsSerializer(media, many=True).data
+                
+                posts_data['media'] = media_data
+                posts_data['created_at'] = getTimeDuration(post.created_at)
+            
+                data.append(posts_data)
+        except Exception as e:
+            print(e)
+            
+        reponse.data = {
+            'posts': data
+        }
+
+        return reponse
+    
+    def checkEnableLoadMore(self, request):
+        try:
+            
+            num_posts = Posts.objects.count()
+            currentNumberOfPosts = int(request.data.get('current_number_of_posts'))
+            
+            if currentNumberOfPosts >= num_posts:
+                return -1
+        except Exception as e:
+            print(e)
+            return -1
+
+        return currentNumberOfPosts
+    
+    def filterPosts(self, user_id):
+        try:        
+            # Get all posts that the user has not watched
+            posts_is_watched_ids = [int(id) for id in redis_server.smembers(f'user:{user_id}:watched_posts')]
+            
+            print('posts_is_watched_ids', posts_is_watched_ids)
+
+            posts_not_watched = Posts.objects(__raw__={'user.id': {'$ne': user_id}, 
+                                                       '_id': {'$nin': posts_is_watched_ids}}).order_by('-created_at')[:10]
+
+        except Exception as e:
+            print(e)
+            return []
+        return posts_not_watched
     
 class MarkPostAsWatchedView(APIView):
     def post(self, request):
@@ -215,10 +283,7 @@ class MarkPostAsWatchedView(APIView):
             return Response({'error': 'Unauthorized'}, status=401)
         
         data = request.data
-        # print('data', data)
         post_ids = data.getlist('post_ids[]')
-        
-        # print('post_ids', post_ids)
         
         for post_id in post_ids:
         
@@ -228,34 +293,16 @@ class MarkPostAsWatchedView(APIView):
             idPostsRequest = int(post_id)
             
             try:
-                posts = Posts.objects.filter(id=idPostsRequest).first()
+                post = Posts.objects(__raw__={'_id': idPostsRequest}).first()
             except Posts.DoesNotExist:
                 continue
             
-            # postIsWatched = PostIsWatched.objects.filter(post_id=posts, user_id=user).first()
-            # if postIsWatched:
-            #     continue
+            # Add the post ID to the user's set of watched posts
+            redis_server.sadd(f'user:{user.id}:watched_posts', post_id)
             
-            # postIsWatched = PostIsWatched.objects.create(
-            #     post_id=posts,
-            #     user_id=user,
-            #     is_watched=True
-            # )
-            # postIsWatched.save()
-        
-            try:
-                postIsWatched = PostIsWatched.objects.filter(post_id=posts, user_id=user).first()
-                logger.info("Post with id %s is already marked as watched for user %s", posts.id, user.username)
-            except PostIsWatched.DoesNotExist:
-                try:
-                    postIsWatched = PostIsWatched.objects.create(
-                        post_id=posts,
-                        user_id=user,
-                        is_watched=True
-                    )
-                    postIsWatched.save()
-                    logger.info("Post with id %s is marked as watched for user %s", posts.id, user.username)
-                except Exception as e:
-                    logger.error("Failed to mark post with id %s as watched for user %s: %s", posts.id, user.username, str(e))
-        
+            # Check if the key has a TTL
+            if redis_server.ttl(f'user:{user.id}:watched_posts') == -1:
+                # Set a TTL for the key
+                redis_server.expire(f'user:{user.id}:watched_posts', 3600 * 24)  # 24 hour
+                    
         return Response({'success': 'Post is marked as watched!'})

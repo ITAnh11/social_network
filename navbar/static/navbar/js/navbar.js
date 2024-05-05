@@ -1,19 +1,3 @@
-document.addEventListener("DOMContentLoaded", function() {
-    var button = document.querySelector(".button_notif");
-    var listNotif = document.querySelector(".list_notif");
-  
-    button.addEventListener("click", function() {
-      // Kiểm tra xem phần tử list_notif đã hiển thị hay chưa
-      var isListNotifVisible = getComputedStyle(listNotif).display !== "none";
-      
-      // Nếu đã hiển thị, ẩn đi; ngược lại, hiển thị
-      if (isListNotifVisible) {
-        listNotif.style.display = "none";
-      } else {
-        listNotif.style.display = "block";
-      }
-    });
-  });
 /* user-settings */
 var userSettings = document.querySelector(".user-settings");
 var LoadMoreBackground =document.querySelector(".btn-LoadMore");

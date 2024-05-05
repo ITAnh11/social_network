@@ -1,6 +1,6 @@
 from django_mongoengine import fields
 from mongoengine.fields import EmbeddedDocumentField
-from reactions.models import ReactionNumberInfo 
+from reactions.model_inheritance import ReactionNumberInfo 
 from userprofiles.models import UserBasicInfo
 from django.utils import timezone
 
@@ -24,4 +24,13 @@ class Comments(ReactionNumberInfo):
             'to_comment_id'
         ]
     }
-    
+
+def updateProfileComments(user_id, userbasicinfo):
+    try:
+        comments = Comments.objects(__raw__={'user.id': user_id})
+        
+        for comment in comments:
+            comment.update(__raw__={'$set': {'user': userbasicinfo}})
+    except Exception as e:
+        print("updateProfileNotification", e)
+        return False
