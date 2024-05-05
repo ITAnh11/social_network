@@ -13,7 +13,7 @@ from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-
+from social_network.redis_conn import redis_server
 
 from .serializers import MessageSerializer, UserInfoSerializer, ConversationSerializer, ChannelSerializer, MesseejiSerializer
 
@@ -70,7 +70,11 @@ class GetMesseeji(APIView):
     def post(self, request):
         try:
             channel_id = request.data.get('channel_id')
-            all_messeeji = Messeeji.objects(channel_id=channel_id)
+            if (redis_server.get(f'chat_{channel_id}')):
+                all_messeeji = redis_server.get(f'chat_{channel_id}')
+            else:    
+                all_messeeji = Messeeji.objects(channel_id=channel_id)
+                redis_server.set(f'chat_{channel_id}', all_messeeji)
             response = Response()
             data = []
             
@@ -133,7 +137,7 @@ class CreateMesseeji(APIView):
 
             messeeji = self.create(request)
             messeeji.save()
-
+            logger.info('messeeji created successfully')
             response.data = {
                 "status": "new messeeji created!",
                 "data": [MesseejiSerializer(messeeji).data]
@@ -156,33 +160,39 @@ class CreateChannel(APIView):
             else:
                 return False, None
         except DoesNotExist:
+            logger.error("Failed to check existing channel: %s", str(e))
             return False, None
 
     def create(self, request):
-        user = getUser(request)
-        user_id = user.id
-        target_id = request.data.get('target_id')
-        existed_channel = self.check_existing_channel(user_id, target_id)
-        if existed_channel[0]:
-            output_channel = existed_channel[1].first()
-            return False, output_channel
-        else:
-            new_channel =  Channel(
-                created_at = datetime.datetime.now(),
-                capacity = 2,
-            )
-            part_user = Participants(
-                user_id = user_id,
-                channel_id = new_channel.id,
-            )
-            part_target = Participants(
-                user_id = target_id,
-                channel_id = new_channel.id
-            )
-            new_channel.save()
-            part_user.save()
-            part_target.save()
-        return True, new_channel
+        try: 
+            user = getUser(request)
+            user_id = user.id
+            target_id = request.data.get('target_id')
+            existed_channel = self.check_existing_channel(user_id, target_id)
+            if existed_channel[0]:
+                output_channel = existed_channel[1].first()
+                return False, output_channel
+            else:
+                new_channel =  Channel(
+                    created_at = datetime.datetime.now(),
+                    capacity = 2,
+                )
+                part_user = Participants(
+                    user_id = user_id,
+                    channel_id = new_channel.id,
+                )
+                part_target = Participants(
+                    user_id = target_id,
+                    channel_id = new_channel.id
+                )
+                new_channel.save()
+                part_user.save()
+                part_target.save()
+                logger.info("New channel created between users: %s and %s", user_id, target_id)
+            return True, new_channel
+        except Exception as e:
+            logger.error("Failed to create channel: %s", str(e))
+            return False, None
     
     def post(self, request):
         try:
@@ -224,7 +234,9 @@ class CreateConversationView(APIView):
                 status='visible'
             )
             conversation.save()
+            logger.info('created conversation successfully')
         except:
+            logger.error('error when creating Conversation')
             return Response({'error':'error when creating Conversation'})
         return conversation
     def post(self, request):
@@ -247,6 +259,7 @@ class CreateConversationView(APIView):
                 status='visible'
             )
             conversation.save()
+            logger.info('created conversation successfully')
         except Exception as e:
             logger.error(f"Error creating conversation: {e}")
             return None

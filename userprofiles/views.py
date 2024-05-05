@@ -110,18 +110,21 @@ class GetProfileView(APIView):
     
 class SetUserProfileView(APIView):    
     def post(self, request, user):
-        logger.info("POST request received in SetUserProfileView")
-        userprofile = UserProfile.objects.create(   user_id=user,
-                                                    first_name=request.data.get('first_name'),
-                                                    last_name=request.data.get('last_name'),
-                                                    gender=request.data.get('gender'),
-                                                    phone=request.data.get('phone'),
-                                                    birth_date=request.data.get('birth_date') or None,
-                                                )
-
-        userprofile.save()
-
-        return Response({'message': 'User profile created successfully!'})
+        try:
+            logger.info("POST request received in SetUserProfileView")
+            userprofile = UserProfile.objects.create(   user_id=user,
+                                                        first_name=request.data.get('first_name'),
+                                                        last_name=request.data.get('last_name'),
+                                                        gender=request.data.get('gender'),
+                                                        phone=request.data.get('phone'),
+                                                        birth_date=request.data.get('birth_date') or None,
+                                                    )
+            userprofile.save()
+            logger.info('User profile created successfully')
+            return Response({'message': 'User profile created successfully!'})
+        except Exception as e:
+            logger.error('Failed to create user profile: %s', e)
+            return Response({'error': 'Failed to create user profile. Please try again.'})
     
 class SetImageProfileView(APIView):    
     def post(self, request, user):

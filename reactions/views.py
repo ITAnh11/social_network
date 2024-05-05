@@ -148,7 +148,7 @@ class CreateReaction(APIView):
         try:
             reaction = self.createReaction(request)
             reaction.save()
-            
+            logger.info('user reacted successfully')
             createReactNotification(reaction)
             
             if comment_id < 0:

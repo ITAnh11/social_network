@@ -18,7 +18,7 @@ from social_network.redis_conn import redis_server
 import datetime
 import random
 import logging
-
+logger = logging.getLogger(__name__)
 LENGTH_OF_CONTENT = 50
 EX_TIME = 60
 INT_FROM = 0
@@ -86,10 +86,11 @@ def createReactNotification(forReaction):
                          created_at=forReaction.created_at) 
         
         notification.save() 
-
+        logger.info("Notification created successfully")
         appendNotifications(to_user.id, notification)
         
     except Exception as e:
+        logger.error('error while creating notifications')
         print("createReactNotification", e)
 
 
@@ -134,10 +135,11 @@ def createCommentNotification(forcomment):
                          created_at=forcomment.created_at) 
         
         notification.save() 
-        
+        logger.info('creat cmt notiies successfully')
         appendNotifications(to_user.id, notification)
         
     except Exception as e:
+        logger.error('error while creating cmtNotifications')
         print("createCommentNotification", e)
 
 def createAddFriendNotification(forFriendRequest):
@@ -159,13 +161,13 @@ def createAddFriendNotification(forFriendRequest):
                          created_at=forFriendRequest.created_at) 
         
         notification.save() 
-        
+        logger.info('created addFr notifications successfully')
         appendNotifications(forFriendRequest.to_id.id, notification)
         
     except Exception as e:
+        logger.error('can not creat addFrNotif huhu')
         print("createAddFriendNotification", e)
 
-logger = logging.getLogger(__name__)
 class GetNotifications(APIView):
     def getNotifications(self, user_id):
         logger.info("Fetching notifications")

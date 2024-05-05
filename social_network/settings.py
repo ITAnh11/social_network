@@ -295,6 +295,11 @@ LOGGING = {
             "level": env('DJANGO_LOG_LEVEL'),
             "propagate": False,
         },
+        "posts.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
         "users.models": {
             "handlers": ["logtail", "file"],
             "level": env('DJANGO_LOG_LEVEL'),
