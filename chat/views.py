@@ -3,46 +3,49 @@ import logging
 import json
 from django.shortcuts import render
 from django.urls import reverse
-from django.http import HttpResponse, HttpResponseRedirect
-from django.utils import timezone
 from django.db.models import Subquery, OuterRef, Q
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from social_network.redis_conn import redis_server
 
-from .serializers import MessageSerializer, UserInfoSerializer, ConversationSerializer, ChannelSerializer, MesseejiSerializer
+
+from .serializers import UserInfoSerializer, ChannelSerializer, MesseejiSerializer
 
 from users.models import User
 from userprofiles.models import UserProfile
 
-from .models import Conversation, Message, Channel, Messeeji, UserMess, Participants
+from .models import Channel, Messeeji, Participants
 
 from common_functions.common_function import getUserProfileForPosts, getTimeDuration, getUser
 from django.shortcuts import render, redirect
 from mongoengine.errors import DoesNotExist
+
 logger=logging.getLogger(__name__)
+
 
 class MesseejiView():
     pass 
+from django.views.decorators.cache import cache_page
+from social_network.redis_conn import redis_server
+from mongoengine import connect
+# from django.conf import settings
+# from django.core.cache.backends.base import DEFAULT_TIMEOUT
+# from django.core.cache import cache
+
+# CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 class ChatTestView(APIView):
 
     def post(self, request):
+
         try:
             username = request.POST.get('username')
-            print('post called')
-            print(username)
             list_users = SearchUser.search(SearchUser, username)
-            print("list users:", list_users)
             user_ids = [user.user_id.id for user in list_users]
-            print(user_ids)
-            list_channels = Channel.objects(user_id__in=user_ids)
-            print(list_channels)
+            # list_channels = Channel.objects(user_id__in=user_ids)
             
             return render(request, "chat/index.html")
         
@@ -70,11 +73,7 @@ class GetMesseeji(APIView):
     def post(self, request):
         try:
             channel_id = request.data.get('channel_id')
-            if (redis_server.get(f'chat_{channel_id}')):
-                all_messeeji = redis_server.get(f'chat_{channel_id}')
-            else:    
-                all_messeeji = Messeeji.objects(channel_id=channel_id)
-                redis_server.set(f'chat_{channel_id}', all_messeeji)
+            all_messeeji = Messeeji.objects(channel_id=channel_id)
             response = Response()
             data = []
             
@@ -137,7 +136,7 @@ class CreateMesseeji(APIView):
 
             messeeji = self.create(request)
             messeeji.save()
-            logger.info('messeeji created successfully')
+            logger.info('created messeeji successfully')
             response.data = {
                 "status": "new messeeji created!",
                 "data": [MesseejiSerializer(messeeji).data]
@@ -160,11 +159,10 @@ class CreateChannel(APIView):
             else:
                 return False, None
         except DoesNotExist:
-            logger.error("Failed to check existing channel: %s", str(e))
             return False, None
 
     def create(self, request):
-        try: 
+        try:
             user = getUser(request)
             user_id = user.id
             target_id = request.data.get('target_id')
@@ -188,12 +186,11 @@ class CreateChannel(APIView):
                 new_channel.save()
                 part_user.save()
                 part_target.save()
-                logger.info("New channel created between users: %s and %s", user_id, target_id)
+                logger.info('saved channel succesfully')
             return True, new_channel
         except Exception as e:
-            logger.error("Failed to create channel: %s", str(e))
+            logger.error('can not save channel like I want')
             return False, None
-    
     def post(self, request):
         try:
             user = getUser(request)
@@ -224,156 +221,85 @@ class CreateChannel(APIView):
         except Exception as e:
             logger.exception(f"Error creating channel: {str(e)}")
 
+class MarkReadMesseeji(APIView):
 
-class CreateConversationView(APIView):
-    def createConversation(self, request):
+    def mark_message_as_read(self, messeeji_ids):
         try:
-            conversation = Conversation.objects.create(
-                conversation_id = 1,
-                title = request.data.get('title') or None,
-                status='visible'
-            )
-            conversation.save()
-            logger.info('created conversation successfully')
-        except:
-            logger.error('error when creating Conversation')
-            return Response({'error':'error when creating Conversation'})
-        return conversation
-    def post(self, request):
-        conversation = self.createConversation(request)
-        data = []
-
-        conversation_data = ConversationSerializer(conversation).data
-
-        data.append(conversation_data)
-
-        return Response({'success': 'Conversation created!',
-                         'conversation': data})
-
-class CreateConversationView(APIView):
-    def createConversation(self, request):
-        try:
-            conversation = Conversation.objects.create(
-                conversation_id = 1,
-                title = request.data.get('title') or None,
-                status='visible'
-            )
-            conversation.save()
-            logger.info('created conversation successfully')
-        except Exception as e:
-            logger.error(f"Error creating conversation: {e}")
-            return None
-        return conversation
-    
-    def post(self, request):
-        conversation = self.createConversation(request)
-        if conversation:
-            data = [ConversationSerializer(conversation).data]
-            return Response({'success': 'Conversation created!', 'conversation': data})
-        else:
-            return Response({'error':'Error when creating Conversation'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class ConversationView(APIView):
-    serializer_class = ConversationSerializer
-
-    def get(self, request):
-        response = Response()
-        try:
-            user = getUser(request)
-            convs = Conversation.objects.filter(
-                Q(conv__sender=user) | Q(conv__receiver=user)
-            ).distinct()
-            data = []
-            for conv in convs:
-                conv_data = ConversationSerializer(conv).data
-                data.append(conv_data)
-
-            response.data = {
-                "conversations" : data
+            # print("im first")     
+            # Get the MongoDB collection object
+            collection = Messeeji._get_collection()
+            # print("done collection")
+            # Write your raw MongoDB update query
+            raw_query = {
+                "_id": {"$in": messeeji_ids}
             }
+            # print(f"Raw query: {raw_query}")
+            update_query = {
+                "$set": {"is_read": True}
+            }
+            # Execute the raw update query
+            result = collection.update_many(raw_query, update_query)
+            # print(f"result: {result}")
+            # Check if the update was successful
+            if result.matched_count > 0:
+                return "Message marked as read successfully"
+            else:
+                return "Message does not exist"
         except Exception as e:
-            logger.error(f"Error fetching conversations: {e}")
-        return response
+            return f"Error occurred: {e}"
 
-class MessageView(generics.ListAPIView):
-    
-    serializer_class = MessageSerializer
-    permission_classes = [IsAuthenticated]
-
-    def create_init_message(self, request):
+    def filter_unread_messeejis(self, channel_id, sender_id):
         try:
-            conversation_id = request.data.get('conversation_id')
+            # Get the MongoDB collection object
+            collection = Messeeji._get_collection()
+            # print(f"collection: {collection}")
+            # Write your raw MongoDB find query
+            raw_query = {
+                'channel_id': channel_id,
+                'sender_id': sender_id,
+                'is_read': False
+            }
+
+            # Execute the raw find query
+            unread_messeejis = collection.find(raw_query)
+
+            data = []
+            for messeeji in unread_messeejis:
+                # Process your data here
+                data.append(messeeji)
+
+            response = {
+                'status': 'Unread messeejis found!' if data else 'No unread Messeejis found.',
+                'data' : data,
+            }
+            return response
+        except Exception as e:
+            print(f"Error occurred: {e}")
+
+    def post(self, request):
+        try:
+            # Extract channel_id and sender_id from the request
+            channel_id = request.data.get('channel_id')
             sender_id = request.data.get('sender_id')
-            receiver_id = request.data.get('receiver_id')
-            content = ""
 
-            # Validate input data
-            if not all([conversation_id, sender_id, receiver_id, content]):
-                return Response({"error": "Missing required fields"}, status=400)
-
-            # Create the message
-            message = Message.objects.create(
-                conversation_id=conversation_id,
-                user_id=request.user.id,
-                sender_id=sender_id,
-                receiver_id=receiver_id,
-                content=content,
-                is_read=False  # Assuming the message is initially unread
-            )
-
-            # Serialize the message data
-            serializer = MessageSerializer(message)
-
-            return Response(serializer.data, status=201)
-        except Exception as e:
-            logger.error(f"Error creating initial message: {e}")
-            return Response({"error": "Error creating initial message"}, status=500)
-
-    def get_queryset(self):
-        try:
-            user_id = self.kwargs['user_id']
+            # print(f"sender: {sender_id}, channel: {channel_id}")
             
-            messages = Message.objects.filter(
-                id__in = Subquery(
-                    User.objects.filter(
-                        Q(sender__receiver=user_id),
-                        Q(receiver__sender=user_id),
-                    ).distinct().annotate(
-                        last_message = Subquery(
-                            Message.objects.filter(
-                                Q(sender=OuterRef('id'), receiver=user_id),
-                                Q(receiver=OuterRef('id'), sender=user_id),
-                            ).order_by("-id")[:1].values_list("id", flat = True)
-                        )
-                    ).values_list("last_message", flat=True).order_by("-id")
-                )            
-            ).order_by("-id")
+            # Filter unread messeejis
+            unread_messeejis_data = self.filter_unread_messeejis(channel_id, sender_id)
+            # print(f"unread_m_data: {unread_messeejis_data}")
+            # Mark unread messeejis as read
+            # print(f"2. {unread_messeejis_data['data']}")
+            
+            unread_messeeji_ids = [messeeji['_id'] for messeeji in unread_messeejis_data['data']]
+            # print(f"unread_m_ids: {unread_messeeji_ids}")
+            mark_status = self.mark_message_as_read(unread_messeeji_ids)
 
-            return messages
+            return Response({
+                'status': mark_status,
+                'unread_messeejis': unread_messeejis_data
+            })
         except Exception as e:
-            logger.error(f"Error fetching messages: {e}")
-
-class GetMessages(generics.ListAPIView):
-    serializer_class = MessageSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        try:
-            sender_id = self.kwargs['sender_id']
-            receiver_id = self.kwargs['receiver_id']
-
-            messages = Message.objects.filter(
-                sender__in=[sender_id, receiver_id],
-                receiver__in=[sender_id, receiver_id],
-            )
-
-            return messages
-        except Exception as e:
-            logger.error(f"Error fetching messages: {e}")
-
-class SendMessage(generics.CreateAPIView):
-    serializer_class = MessageSerializer
-    permission_classes = [IsAuthenticated]
+            return Response({'error': f"Error occurred: {e}"}, status=500)
 
 class ProfileDetail(generics.RetrieveUpdateAPIView):
     serializer_class = UserInfoSerializer
@@ -383,8 +309,6 @@ class ProfileDetail(generics.RetrieveUpdateAPIView):
 class SearchUser(generics.ListAPIView):
     serializer_class = UserInfoSerializer
     queryset = UserProfile.objects.all()
-    # permission_classes = [IsAuthenticated]
-
     def search(self, username):
         users = []
         if(username != '@'):
@@ -394,29 +318,32 @@ class SearchUser(generics.ListAPIView):
                 Q(last_name__icontains=username) 
             )
         else:
-            users = UserProfile.objects.filter()
+            users = UserProfile.objects.all()[:10]
         return users
-
     def list(self, request, *args, **kwargs):
-        try:
-            username = self.kwargs['username']
-            users = self.search(username)
-            current_user_id = getUser(request).id
-            users = [user for user in users if user.id != current_user_id]
-            if not users:
-                return Response(
-                    {"detail" : "No user found"},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            
-            serializer = UserInfoSerializer(users, many=True)
-            return Response({"list_users" : serializer.data})
-        except Exception as e:
-            logger.error(f"Error searching users: {e}")
-
-def index(request):
-    return render(request, "chat/index.html")
-
-
-def room(request, room_name):
-    return render(request, "chat/room.html", {"room_name": room_name})
+        username = self.kwargs['username']
+        users = self.search(username)
+        current_user_id = getUser(request).id
+        users = [user for user in users if user.id != current_user_id]
+        if not users:
+            return Response(
+                {"detail" : "No user found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        data = []
+        serializer = UserInfoSerializer(users, many=True)
+    
+        for index, user in enumerate(users):
+            user_img = getUserProfileForPosts(User.objects.filter(id=user.id).first())['avatar']
+            user_data = serializer.data[index]  # Get serialized data for the current user
+    
+            # Append the avatar to the user data
+            user_data['avatar'] = user_img
+    
+            data.append(user_data)
+    
+        return Response({
+            "list_users" : data,
+            "current_user" : getUser(request).id,
+        })
