@@ -303,6 +303,6 @@ class MarkPostAsWatchedView(APIView):
             # Check if the key has a TTL
             if redis_server.ttl(f'user:{user.id}:watched_posts') == -1:
                 # Set a TTL for the key
-                redis_server.expire(f'user:{user.id}:watched_posts', 3600)  # 1 hour
+                redis_server.expire(f'user:{user.id}:watched_posts', 3600 * 24)  # 24 hour
                     
         return Response({'success': 'Post is marked as watched!'})
