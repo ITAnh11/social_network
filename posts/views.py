@@ -11,7 +11,8 @@ from users.models import User
 from .serializers import PostsSerializer, MediaOfPostsSerializer, PostsInfoSerializer
 
 from common_functions.common_function import getUserProfileForPosts, getTimeDuration, getUser
-
+import logging
+logger=logging.getLogger(__name__)
 # Create your views here.
 class CreatePostsView(APIView):
     
@@ -34,11 +35,13 @@ class CreatePostsView(APIView):
             return listMedia    
         
         if len(listMedia) == 0 and not post.content:
+            logger.error('no posts uploaded')
             return Response({'error': 'No posts uploaded'}, status=400)
-        
+    
         postsInfo = PostsInfo()
         postsInfo.setPostsId(post.id)
         postsInfo.save()
+        logger.info('created post successfully!!!')
         
         data = []
         
@@ -65,8 +68,10 @@ class CreatePostsView(APIView):
             )
             
             post.save()
+            logger.info('created content of post successfully')
         except:
             # print(1)
+            logger.error('error while saving post with content')
             return Response({'error': 'Error while saving post'}, status=400)
         
         return post
@@ -91,9 +96,11 @@ class CreatePostsView(APIView):
             for obj in listMediaOfPosts:
                 # print('saving media')
                 obj.save()
+                logger.info('saved post successfully')
         except Exception as e:
             # print('cant save media')
             print('createMediaOfPosts', e)
+            logger.error('error while saving post with media')
             return Response({'error': 'Error while saving media'}, status=400)
         
         return listMediaOfPosts
@@ -120,9 +127,10 @@ class CreatePostsAfterSetImageProfileView():
             
             postsInfo.save()
             post.save()
-            
+            logger.info('post and post info saved successfully!!!')
         except Exception as e:
             print('createUpdateImageProfilePosts', e)
+            logger.error('error while saving post~~~~')
             return Response({'error': 'Error while saving post'}, status=400)
         
         return post
@@ -135,8 +143,10 @@ class CreatePostsAfterSetImageProfileView():
             )
             
             mediaOfPosts.save()
+            logger.info('creatpost after changing imageprofile successfully')
         except Exception as e:
             print('createMediaOfPosts', e)
+            logger.error('error while saving media')
             return Response({'error': 'Error while saving media'}, status=400)
         
         return mediaOfPosts
@@ -222,15 +232,30 @@ class MarkPostAsWatchedView(APIView):
             except Posts.DoesNotExist:
                 continue
             
-            postIsWatched = PostIsWatched.objects.filter(post_id=posts, user_id=user).first()
-            if postIsWatched:
-                continue
+            # postIsWatched = PostIsWatched.objects.filter(post_id=posts, user_id=user).first()
+            # if postIsWatched:
+            #     continue
             
-            postIsWatched = PostIsWatched.objects.create(
-                post_id=posts,
-                user_id=user,
-                is_watched=True
-            )
-            postIsWatched.save()
+            # postIsWatched = PostIsWatched.objects.create(
+            #     post_id=posts,
+            #     user_id=user,
+            #     is_watched=True
+            # )
+            # postIsWatched.save()
+        
+            try:
+                postIsWatched = PostIsWatched.objects.filter(post_id=posts, user_id=user).first()
+                logger.info("Post with id %s is already marked as watched for user %s", posts.id, user.username)
+            except PostIsWatched.DoesNotExist:
+                try:
+                    postIsWatched = PostIsWatched.objects.create(
+                        post_id=posts,
+                        user_id=user,
+                        is_watched=True
+                    )
+                    postIsWatched.save()
+                    logger.info("Post with id %s is marked as watched for user %s", posts.id, user.username)
+                except Exception as e:
+                    logger.error("Failed to mark post with id %s as watched for user %s: %s", posts.id, user.username, str(e))
         
         return Response({'success': 'Post is marked as watched!'})

@@ -66,7 +66,7 @@ class EditAvatarView(APIView):
             
             imageprofile.avatar = avatar    
             imageprofile.save()
-            
+            logger.info('user updated avatarImage successfully')
             CreatePostsAfterSetImageProfileView().createUpdateImageProfilePosts(user, 
                                                                                 'avatar', 
                                                                                 imageprofile.avatar
@@ -102,7 +102,7 @@ class EditCoverView(APIView):
                 
             imageprofile.background = background    
             imageprofile.save()
-            
+            logger.info('user updated coverImage successfully')
             CreatePostsAfterSetImageProfileView().createUpdateImageProfilePosts(user, 
                                                                                 'background', 
                                                                                 imageprofileForm.cleaned_data.get('background'))
@@ -159,7 +159,7 @@ class EditProfileView(APIView):
             userprofile.birth_date = request.data.get('birth_date') or None
         
             userprofile.save()
-            
+            logger.info('User profile updated successfully')
             return Response({'success': 'User profile updated successfully!',
                              'name': userprofile.first_name + ' ' + userprofile.last_name,
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
@@ -215,7 +215,7 @@ class EditStoryView(APIView):
             userprofile.social_link = request.data.get('social_link')
             
             userprofile.save()
-            
+            logger.info('user story updated successfully')
             return Response({'success': 'User story updated successfully!',
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
         except Exception as e:
