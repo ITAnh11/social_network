@@ -11,18 +11,30 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from common_functions.common_function import getUser, getTimeDuration
-
-import json
 from social_network.redis_conn import redis_server
 
+import json
 import datetime
 import random
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 import logging
+logger = logging.getLogger(__name__)
 
 LENGTH_OF_CONTENT = 50
-EX_TIME = 60
+EX_TIME = 60 * 10
 INT_FROM = 0
-INT_TO = 100
+INT_TO = EX_TIME // 3
+
+def notify_user(user_id, message):
+    try:
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(f'notification_{user_id}', {
+            'type': 'send_notification',
+            'message': message
+        })
+    except Exception as e:
+        print('notify_user', e)
 
 def appendNotifications(user_id, notification):
     print('Append Notifications')
@@ -44,7 +56,6 @@ def appendNotifications(user_id, notification):
     # Store the updated list in Redis
     redis_server.setex(f'notifications_{user_id}', time_to_live, json.dumps(notifications))
         
-
 def addContent(content, contentOf):
     if contentOf is None:
         content += '.'
@@ -55,6 +66,18 @@ def addContent(content, contentOf):
         content += f': {contentOf}'
     return content
 
+def serializeNotification(notification):
+    if notification.type == 'reaction':
+        dataNotification = ReactNotifitionsSerializer(notification).data
+    elif notification.type == 'comment':
+        dataNotification = CommentNotificationsSerializer(notification).data
+    elif notification.type == 'add_friend':
+        dataNotification = AddFriendNotificationsSerializer(notification).data
+    
+    dataNotification['created_at'] = getTimeDuration(notification.created_at)
+    
+    return dataNotification
+
 def createReactNotification(forReaction):
     try:
         is_for_post = (forReaction.to_comment_id < 0)
@@ -62,9 +85,9 @@ def createReactNotification(forReaction):
         content += ' post' if forReaction.to_comment_id < 0 else ' comment'
         
         if is_for_post:
-            posts = Posts.objects.get(id=forReaction.to_posts_id)
+            posts = Posts.objects(__raw__={'_id': forReaction.to_posts_id}).first()
             contentOf = posts.content
-            to_user = User.objects.get(id=posts.user_id.id)
+            to_user = User.objects.get(id=posts.user.id)
             
         elif is_for_post == False:
             comment = Comments.objects(__raw__={'_id': forReaction.to_comment_id}).first()
@@ -86,10 +109,13 @@ def createReactNotification(forReaction):
                          created_at=forReaction.created_at) 
         
         notification.save() 
-
+        logger.info("Notification created successfully")
         appendNotifications(to_user.id, notification)
         
+        notify_user(to_user.id, serializeNotification(notification))
+        
     except Exception as e:
+        logger.error('error while creating notifications')
         print("createReactNotification", e)
 
 
@@ -104,12 +130,12 @@ def createCommentNotification(forcomment):
         content += ' post' if is_for_post else ' comment'
         
         if is_for_post:
-            posts = Posts.objects.get(id=forcomment.to_posts_id)
+            posts = Posts.objects(__raw__={'_id': forcomment.to_posts_id}).first()
             if posts is None:
                 print('Posts not found')
                 return
             contentOf = posts.content
-            to_user = User.objects.get(id=posts.user_id.id)
+            to_user = User.objects.get(id=posts.user.id)
             
         elif is_for_post == False:
             # print(forcomment.to_comment_id)
@@ -134,10 +160,13 @@ def createCommentNotification(forcomment):
                          created_at=forcomment.created_at) 
         
         notification.save() 
-        
+        logger.info('creat cmt notiies successfully')
         appendNotifications(to_user.id, notification)
         
+        notify_user(to_user.id, serializeNotification(notification))
+        
     except Exception as e:
+        logger.error('error while creating cmtNotifications')
         print("createCommentNotification", e)
 
 def createAddFriendNotification(forFriendRequest):
@@ -159,66 +188,70 @@ def createAddFriendNotification(forFriendRequest):
                          created_at=forFriendRequest.created_at) 
         
         notification.save() 
-        
+        logger.info('created addFr notifications successfully')
         appendNotifications(forFriendRequest.to_id.id, notification)
         
+        notify_user(forFriendRequest.to_id.id, serializeNotification(notification))
+        
     except Exception as e:
+        logger.error('can not creat addFrNotif huhu')
         print("createAddFriendNotification", e)
 
-logger = logging.getLogger(__name__)
 class GetNotifications(APIView):
+    def resetNotifications(self, user_id):
+        redis_server.delete(f'notifications_{user_id}')
+        
+        notifications = Notifications.objects(__raw__={'to_user_id': user_id}).order_by('created_at')
+        
+        time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
+
+        redis_server.setex(f'notifications_{user_id}', 
+                           time_to_live, 
+                           json.dumps([notification.to_json() for notification in notifications]))
+    
     def getNotifications(self, user_id):
-        logger.info("Fetching notifications")
         notifications = redis_server.get(f'notifications_{user_id}')
         
         if notifications is None:
-            logger.info("Fetching notifications from MongoDB")
+            print('Get from MongoDB')
             
             # order_by('created_at') is used to sort the notifications by the created_at field in ascending order
             notifications = Notifications.objects(__raw__={'to_user_id': user_id}).order_by('created_at')
             
             time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
 
-            redis_server.setex(f'notifications_{user_id}', time_to_live, json.dumps([notification.to_json() for notification in notifications]))
+            redis_server.setex(f'notifications_{user_id}', 
+                               time_to_live, 
+                               json.dumps([notification.to_json() for notification in notifications]))
         else:
-            logger.info("Fetching notifications from Redis")
+            print('Get from Redis')
             notifications = [Notifications.from_json(notification) for notification in json.loads(notifications)]
         
         return notifications
     
-    def serializeNotifications(self, notifications):
-        logger.info("Serializing notifications")
+    def serializeNotificationList(self, notifications):
         list_notifications = []
         
         for notification in notifications:
-            if notification.type == 'reaction':
-                dataNotification = ReactNotifitionsSerializer(notification).data
-            elif notification.type == 'comment':
-                dataNotification = CommentNotificationsSerializer(notification).data
-            elif notification.type == 'add_friend':
-                dataNotification = AddFriendNotificationsSerializer(notification).data
-            
-            dataNotification['created_at'] = getTimeDuration(notification.created_at)
+            dataNotification = serializeNotification(notification)
                         
             list_notifications.append(dataNotification)
         
         return list_notifications
     
     def get(self, request):
-        logger.info("GET request received in GetNotifications")
         
         time_start = datetime.datetime.now()
         
         user = getUser(request)
         if isinstance(user, User) == False:
-            logger.warning("Unauthorized access detected in GetNotifications")
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
         
         response = Response()
         
         notifications = self.getNotifications(user.id)
             
-        list_notifications = self.serializeNotifications(notifications)
+        list_notifications = self.serializeNotificationList(notifications)
         
         response.data = {
             'notifications': list_notifications
@@ -226,6 +259,6 @@ class GetNotifications(APIView):
         
         time_end = datetime.datetime.now()
         
-        logger.info(f"GetNotifications execution time: {time_end - time_start}")
+        print('GetNotifications', time_end - time_start)
         
         return response

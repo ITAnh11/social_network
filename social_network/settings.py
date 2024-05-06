@@ -204,7 +204,7 @@ STATICFILES_DIRS =  (os.path.join(BASE_DIR, 'users\\static'),
                     os.path.join(BASE_DIR, 'comments\\static'),
                     os.path.join(BASE_DIR, 'reactions\\static'),
                     os.path.join(BASE_DIR, 'navbar\\static'),
-
+                    os.path.join(BASE_DIR, 'notifications\\static'),         
 )
 
 # Default primary key field type
@@ -307,6 +307,11 @@ LOGGING = {
             "propagate": False,
         },
         "chat.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "posts.views": {
             "handlers": ["logtail", "file"],
             "level": env('DJANGO_LOG_LEVEL'),
             "propagate": False,

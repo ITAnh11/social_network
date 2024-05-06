@@ -136,7 +136,7 @@ class CreateMesseeji(APIView):
 
             messeeji = self.create(request)
             messeeji.save()
-
+            logger.info('created messeeji successfully')
             response.data = {
                 "status": "new messeeji created!",
                 "data": [MesseejiSerializer(messeeji).data]
@@ -162,31 +162,35 @@ class CreateChannel(APIView):
             return False, None
 
     def create(self, request):
-        user = getUser(request)
-        user_id = user.id
-        target_id = request.data.get('target_id')
-        existed_channel = self.check_existing_channel(user_id, target_id)
-        if existed_channel[0]:
-            output_channel = existed_channel[1].first()
-            return False, output_channel
-        else:
-            new_channel =  Channel(
-                created_at = datetime.datetime.now(),
-                capacity = 2,
-            )
-            part_user = Participants(
-                user_id = user_id,
-                channel_id = new_channel.id,
-            )
-            part_target = Participants(
-                user_id = target_id,
-                channel_id = new_channel.id
-            )
-            new_channel.save()
-            part_user.save()
-            part_target.save()
-        return True, new_channel
-    
+        try:
+            user = getUser(request)
+            user_id = user.id
+            target_id = request.data.get('target_id')
+            existed_channel = self.check_existing_channel(user_id, target_id)
+            if existed_channel[0]:
+                output_channel = existed_channel[1].first()
+                return False, output_channel
+            else:
+                new_channel =  Channel(
+                    created_at = datetime.datetime.now(),
+                    capacity = 2,
+                )
+                part_user = Participants(
+                    user_id = user_id,
+                    channel_id = new_channel.id,
+                )
+                part_target = Participants(
+                    user_id = target_id,
+                    channel_id = new_channel.id
+                )
+                new_channel.save()
+                part_user.save()
+                part_target.save()
+                logger.info('saved channel succesfully')
+            return True, new_channel
+        except Exception as e:
+            logger.error('can not save channel like I want')
+            return False, None
     def post(self, request):
         try:
             user = getUser(request)
