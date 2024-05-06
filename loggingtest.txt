@@ -169,3 +169,56 @@ AttributeError: 'User' object has no attribute 'name'
 2024-05-05 17:05:01,883:INFO - reactions.views views.py (line 29). POST request received in GetReactions
 2024-05-05 17:05:01,890:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
 2024-05-05 17:05:01,985:INFO - reactions.views views.py (line 225). Checking if reacted in IsReactedView
+2024-05-06 22:37:12,232:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:37:12,234:ERROR - homepage.views views.py (line 36). Expired JWT token
+2024-05-06 22:37:12,235:INFO - users.views views.py (line 134). POST request received in LogoutView
+2024-05-06 22:37:12,265:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-06 22:37:24,424:WARNING - users.views views.py (line 49). User not found! Email: hitori_gotou@bocchi.com
+2024-05-06 22:37:32,493:WARNING - users.views views.py (line 49). User not found! Email: duong@example.com
+2024-05-06 22:37:35,915:INFO - users.views views.py (line 74). GET request received in RegisterView
+2024-05-06 22:37:59,017:INFO - users.views views.py (line 85). POST request received in RegisterView
+2024-05-06 22:37:59,346:INFO - users.models models.py (line 26). Password updated for user: duong@example.com
+2024-05-06 22:37:59,354:INFO - users.views views.py (line 92). User successfully registered
+2024-05-06 22:37:59,368:INFO - users.views views.py (line 108). User successfully registered
+2024-05-06 22:38:09,698:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:38:09,698:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 22:38:52,363:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:38:52,363:WARNING - homepage.views views.py (line 29). No JWT token found in cookies
+2024-05-06 22:38:52,380:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-06 22:38:58,684:INFO - users.views views.py (line 74). GET request received in RegisterView
+2024-05-06 22:39:28,514:INFO - users.views views.py (line 85). POST request received in RegisterView
+2024-05-06 22:39:28,850:INFO - users.models models.py (line 26). Password updated for user: hitori_gotou@bocchi.com
+2024-05-06 22:39:28,860:INFO - users.views views.py (line 92). User successfully registered
+2024-05-06 22:39:28,870:INFO - users.views views.py (line 108). User successfully registered
+2024-05-06 22:39:35,758:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:39:35,758:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 22:39:54,022:INFO - chat.views views.py (line 189). saved channel succesfully
+2024-05-06 22:40:33,241:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:40:33,242:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 22:40:36,245:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:40:36,246:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 22:41:37,928:INFO - chat.views views.py (line 189). saved channel succesfully
+2024-05-06 22:44:20,637:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:44:20,638:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 22:44:25,598:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:44:25,598:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 22:50:17,334:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:50:17,335:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 22:55:44,961:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:55:44,963:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 22:56:34,005:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:56:34,006:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 22:56:39,465:INFO - notifications.views views.py (line 112). Notification created successfully
+2024-05-06 22:56:46,436:INFO - notifications.views views.py (line 163). creat cmt notiies successfully
+2024-05-06 22:59:22,364:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:59:22,365:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 22:59:31,667:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 22:59:31,667:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 23:00:13,009:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 23:00:13,010:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 23:00:15,259:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 23:00:15,259:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 23:03:26,653:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 23:03:26,654:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-06 23:03:28,512:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-06 23:03:28,513:INFO - homepage.views views.py (line 40). Rendering homepage

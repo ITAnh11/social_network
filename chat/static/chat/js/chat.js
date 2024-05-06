@@ -261,7 +261,7 @@ function websocket_handle(user, channel_id) {
   }
 
   const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-  const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/${channel_id}/`;
+  const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/chat_notification/${channel_id}/`;
   socketMap[channel_id] = new WebSocket(wsEndpoint);
 
   inActiveSocket = channel_id;

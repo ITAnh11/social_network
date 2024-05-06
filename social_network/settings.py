@@ -62,7 +62,6 @@ INSTALLED_APPS = [
     'friends',
     'userprofiles',
     'channels',
-    'mess',
     'navbar',
     'notifications',
 ]
@@ -282,11 +281,6 @@ LOGGING = {
             "propagate": False,
         },
         "navbar.views": {
-            "handlers": ["logtail", "file"],
-            "level": env('DJANGO_LOG_LEVEL'),
-            "propagate": False,
-        },
-        "mess.views": {
             "handlers": ["logtail", "file"],
             "level": env('DJANGO_LOG_LEVEL'),
             "propagate": False,
