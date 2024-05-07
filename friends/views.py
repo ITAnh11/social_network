@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
 import jwt, datetime
+import logging
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 
@@ -21,13 +22,14 @@ from notifications.models import AddFriendNotifications
 # friend_request.status = 'accepted'  # Cập nhật trạng thái của yêu cầu kết bạn thành 'accepted'
 # friend_request.save()  # Lưu thay đổi vào cơ sở dữ liệu
 # friend_request.delete()  # Xóa yêu cầu kết bạn khỏi cơ sở dữ liệu
-
+logger = logging.getLogger(__name__)
 
 class FriendsRequestsView(APIView):
     def get(self,request):
         user = getUser(request)
         
         if not user:
+            logger.warning("Unauthorized access to FriendsRequestsView. Redirecting to login page.")
             return HttpResponseRedirect(reverse('users:login'))
         
         return render(request,'friends/friend.html')
@@ -37,9 +39,11 @@ class SentFriendRequestView(APIView):
         user = getUser(request)
         
         if not user:
+            logger.error("Unauthorized access to SentFriendRequestView. Returning 401 error.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         to_user_id = request.data.get('id')
+        logger.info(f"Sending friend request to user {to_user_id}.")
         print(request.data)
         to_user = get_object_or_404(User, id = to_user_id)
         try:
@@ -51,8 +55,9 @@ class SentFriendRequestView(APIView):
             friend_request.save()
             
             createAddFriendNotification(friend_request)
+            logger.info("Friend request sent successfully.")
         except Exception as e:
-            print(f"exception: {e}")
+            logger.error(f"Failed to send friend request: {str(e)}")
             return Response({'error': 'Friend Request can not create'}, status=404)
         
         return Response({'success': 'Friend request sent successfully'})
@@ -62,6 +67,7 @@ class RevokeFriendRequestView(APIView):
         user = getUser(request)
         
         if not user:
+            logger.error("Unauthorized access to RevokeFriendRequestView. Returning 401 error.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         try:
@@ -70,8 +76,10 @@ class RevokeFriendRequestView(APIView):
             friend_request = get_object_or_404(FriendRequest, from_id=user, to_id=to_id)
             
             friend_request.delete()
+            logger.info("Friend request revoked successfully.")
             #print(user)
         except FriendRequest.DoesNotExist:
+            logger.warning("Friend request not found.")
             return Response({'error': 'Friend request not found'}, status=404)
         
         return Response({'success': 'Friend request revoked successfully'})
@@ -81,6 +89,7 @@ class AcceptFriendRequestView(APIView):
         user = getUser(request)
         
         if not user:
+            logger.error("Unauthorized access to AcceptFriendRequestView. Returning 401 error.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         
@@ -110,13 +119,14 @@ class AcceptFriendRequestView(APIView):
                 data.append(accepted_friend_request)
                 
                 GetNotifications().resetNotifications(user.id)
-                
+                logger.info("Friend request accepted successfully.")
                 return Response ({
                     'accepted_friend_request': data,
                     'success': 'Friend request processed successfully'
                     })
             
         except Exception as e:
+            logger.error(f"Error while accepting friend request: {str(e)}")
             print(e)
             return Response({'error': 'Error while saving friend request'}, status=400)
 
@@ -125,6 +135,7 @@ class DenineFriendRequestView(APIView):
         user = getUser(request)
         
         if not user:
+            logger.error("Unauthorized access to DenyFriendRequestView. Returning 401 error.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         # print(request.data)
@@ -142,10 +153,11 @@ class DenineFriendRequestView(APIView):
                 addfriendNotification.save()
                 
                 GetNotifications().resetNotifications(user.id)
-                
+                logger.info("Friend request denied successfully.")
                 return Response({'success': 'Friend request processed successfully'})
             
         except Exception as e:
+            logger.error(f"Error while denying friend request: {str(e)}")
             print(e)
             return Response({'error': 'Error while saving friend request'}, status=400)
     
@@ -154,6 +166,7 @@ class DeleteFriendShip(APIView):
         user = getUser(request)
         
         if not user:
+            logger.error("Unauthorized access to DeleteFriendship. Returning 401 error.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         try:
@@ -164,7 +177,9 @@ class DeleteFriendShip(APIView):
             
             friendrequest.delete()
             friendship.delete()
+            logger.info("Friendship deleted successfully.")
         except Friendship.DoesNotExist:
+            logger.warning("Friendship not found.")
             return Response({'error': 'Friendship not found'}, status=404)
          
         return Response({'success': 'Friendship deleted successfully'})
@@ -174,122 +189,91 @@ class GetSentFriendRequestsView(APIView):
         user = getUser(request)
         
         if not user:
+            logger.error("Unauthorized access to GetSentFriendRequestsView. Returning 401 error.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         data = []
-        list_friend_requests_sent = FriendRequest.objects.filter(from_id=user)
-        #print(list_friend_requests_sent)
-        for friend_request_sent in list_friend_requests_sent:
-            serializer = FriendRequestSerializer(friend_request_sent)
-            #print(serializer)
-            
-            friend_request = {
-                "friend_request_sent" : serializer.data,
-                "friend_request_profile": getUserProfileForPosts(friend_request_sent.to_id)
-            }
-            data.append(friend_request)
-        return Response({
-            "data" : data
-        })
-    
+        try:
+            list_friend_requests_sent = FriendRequest.objects.filter(from_id=user)
+            for friend_request_sent in list_friend_requests_sent:
+                serializer = FriendRequestSerializer(friend_request_sent)
+                friend_request = {
+                    "friend_request_sent": serializer.data,
+                    "friend_request_profile": getUserProfileForPosts(friend_request_sent.to_id)
+                }
+                data.append(friend_request)
+        except Exception as e:
+            logger.error(f"Error while retrieving sent friend requests: {str(e)}")
+            return Response({'error': 'Error while retrieving sent friend requests'}, status=400)
+        
+        return Response({"data": data})
 
-class  GetReceivedFriendRequestsView(APIView):
+class GetReceivedFriendRequestsView(APIView):
     def get(self, request):
         user = getUser(request)
         
         if not user:
+            logger.error("Unauthorized access to GetReceivedFriendRequestsView. Returning 401 error.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         data = []
-        list_friend_requests_received = FriendRequest.objects.filter(to_id=user)
-        #print(list_friend_requests_received)
-        for friend_request_received in list_friend_requests_received:
-            serializer = FriendRequestSerializer(friend_request_received)
-            #print(serializer)
-            
-            friend_request = {
-                "friend_request_received" : serializer.data,
-                "friend_request_profile": getUserProfileForPosts(friend_request_received.from_id)
-            }
-
-            data.append(friend_request)
-
-        return Response({
-            "data": data
-            })
+        try:
+            list_friend_requests_received = FriendRequest.objects.filter(to_id=user)
+            for friend_request_received in list_friend_requests_received:
+                serializer = FriendRequestSerializer(friend_request_received)
+                friend_request = {
+                    "friend_request_received": serializer.data,
+                    "friend_request_profile": getUserProfileForPosts(friend_request_received.from_id)
+                }
+                data.append(friend_request)
+        except Exception as e:
+            logger.error(f"Error while retrieving received friend requests: {str(e)}")
+            return Response({'error': 'Error while retrieving received friend requests'}, status=400)
+        
+        return Response({"data": data})
 
 class GetListFriendView(APIView):
     def get(self, request):
         user = getUser(request)
         
         if not user:
+            logger.error("Unauthorized access to GetListFriendView. Returning 401 error.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         data = []
-        list_friend_ship = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
-        #print(list_friend_ship)
+        try:
+            list_friend_ship = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
+            for friend_ship in list_friend_ship:
+                try:
+                    friend = {
+                        "friend_ship": FriendshipSerializer(friend_ship).data,
+                        "friend_profile": getUserProfileForPosts(friend_ship.user_id2) if user == friend_ship.user_id1 else getUserProfileForPosts(friend_ship.user_id1)
+                    }
+                    data.append(friend)
+                except:
+                    logger.error("Friendship not found.")
+                    return Response({'error': 'Friendship not found'}, status=404)
+        except Exception as e:
+            logger.error(f"Error while retrieving list of friends: {str(e)}")
+            return Response({'error': 'Error while retrieving list of friends'}, status=400)
         
-        
-        for friend_ship in list_friend_ship:
-            
-            try:
-                friend = {
-                "friend_ship": FriendshipSerializer(friend_ship).data,
-                "friend_profile": getUserProfileForPosts(friend_ship.user_id2) if user == friend_ship.user_id1 else getUserProfileForPosts(friend_ship.user_id1)
-                }
-                
-                data.append(friend)
-            except:
-                return Response({'error': 'Friendship not found'}, status=404)
-        return Response({
-            "data": data
-            })
-
+        return Response({"data": data})
 
 class GetSuggestionFriendView(APIView):
-        def get(self, request):
-            user = getUser(request)
-            
-            if not user:
-                return Response({'error': 'Unauthorized'}, status=401)
-            
-            
-            #dsach bạn bè của mình
-            # user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
-            
-            # suggestions = []
-            
-            # #chạy từng bạn bè của mình
-            # for friendship in user_friendships:
-            #     #tìm thằng nào là bạn bè của bạn mình
-            #     mutual_friendships = Friendship.objects.filter(Q(user_id1=friendship.user_id1) | Q(user_id2=friendship.user_id1)) \
-            #                                          .filter(Q(user_id1=friendship.user_id2) | Q(user_id2=friendship.user_id2))
-                
-            #     mutual_friendships_count = mutual_friendships.exclude(Q(user_id1=user) | Q(user_id2=user)).count()
-                
-            #     if mutual_friendships_count >= 1:
-                    
-            #         # friend_profile = getUserProfileForPosts(friendship.user_id2) if user == friendship.user_id1 else getUserProfileForPosts(friendship.user_id1)
-            #         for mutual_friendship in mutual_friendships:
-            #             #lấy profile của thằng suggest đó
-            #             if mutual_friendship.user_id1 == friendship.user_id2 | mutual_friendship.user_id1==friendship.user_id1 :
-            #                 mutual_friend_profile = getUserProfileForPosts(mutual_friendship.user_id1) 
-                        
-            #             elif mutual_friendship.user_id2 == friendship.user_id2 | mutual_friendship.user_id2==friendship.user_id1 :
-            #                 getUserProfileForPosts(mutual_friendship.user_id1)
-                        
-            #             if not Friendship.objects.filter(Q(user_id1=user, user_id2=mutual_friend_profile.user) | Q(user_id1=mutual_friend_profile.user, user_id2=user)).exists():
-                            
-            #                 suggestions.append({
-            #                 "mutual_friendships_count": mutual_friendships_count,
-            #                 "mutual_friend_profile": mutual_friend_profile
-            #                 })
-            data = []
-            
-            sent_friend_requests_list = (FriendRequest.objects.filter(from_id=user).values_list('to_id', flat=True))
-            received_friend_requests_list = (FriendRequest.objects.filter(to_id=user).values_list('from_id', flat=True))
-            friend_list_1 = (Friendship.objects.filter(user_id1=user).values_list('user_id2', flat=True))
-            friend_list_2 = (Friendship.objects.filter(user_id2=user).values_list('user_id1', flat=True))
+    def get(self, request):
+        user = getUser(request)
+        
+        if not user:
+            logger.error("Unauthorized access to GetSuggestionFriendView. Returning 401 error.")
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        data = []
+        
+        try:
+            sent_friend_requests_list = FriendRequest.objects.filter(from_id=user).values_list('to_id', flat=True)
+            received_friend_requests_list = FriendRequest.objects.filter(to_id=user).values_list('from_id', flat=True)
+            friend_list_1 = Friendship.objects.filter(user_id1=user).values_list('user_id2', flat=True)
+            friend_list_2 = Friendship.objects.filter(user_id2=user).values_list('user_id1', flat=True)
             not_user = User.objects.filter(email=user).values_list('id', flat=True)
             
             sent_set = set(sent_friend_requests_list)
@@ -298,218 +282,190 @@ class GetSuggestionFriendView(APIView):
             friend2_set = set(friend_list_2)
             not_user_set = set(not_user)
             
-            #print(sent_set)
             other_users = list(set(User.objects.all().values_list('id', flat=True)) - (sent_set | received_set | friend1_set | friend2_set | not_user_set))
             
             for other_user in other_users:
                 suggesion = get_object_or_404(User, id=other_user)
-                #print(suggesion)
                 suggesions = {
                     "suggestions_friend": getUserProfileForPosts(suggesion)
                 }
                 data.append(suggesions)
-                
-            
-                
-            return Response({
-                "suggestions": data
-                })
+        except Exception as e:
+            logger.error(f"Error while retrieving friend suggestions: {str(e)}")
+            return Response({'error': 'Error while retrieving friend suggestions'}, status=400)
+        
+        return Response({"suggestions": data})
 
 class GetMutualFriendView(APIView):
-        def get(self, request):
-            user = getUser(request)
-            if not user:
-                return Response({'error': 'Unauthorized'}, status=401)
-            
-            other_user_id = request.query_params.get('id')    #lấy từ fe của user kia, fe gửi lên sever id profile của người đó
-            
-            # print(other_user_id)
-            other_user = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id)) # user_id1, user_id2
-            
+    def get(self, request):
+        user = getUser(request)
+        
+        if not user:
+            logger.error("Unauthorized access to GetMutualFriendView. Returning 401 error.")
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        other_user_id = request.query_params.get('id')
+        
+        try:
+            other_user = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
             user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
-            
             other_user_friendships = Friendship.objects.filter(Q(user_id1=other_user.user_id1) | Q(user_id2=other_user.user_id2))
-            
             mutual_friendships = user_friendships.intersection(other_user_friendships)
             
             data = []
             
             for mutual_friendship in mutual_friendships:
-                
                 friend_profile = getUserProfileForPosts(mutual_friendship.user_id2) if user == mutual_friendship.user_id1 else getUserProfileForPosts(mutual_friendship.user_id1)
                 
                 data.append({
-                "mutual_friendship": FriendshipSerializer(mutual_friendship).data,
-                "friend_profile": friend_profile
+                    "mutual_friendship": FriendshipSerializer(mutual_friendship).data,
+                    "friend_profile": friend_profile
                 })
-            
-            return Response({
-                "data": data
-                })
+        except Exception as e:
+            logger.error(f"Error while retrieving mutual friends: {str(e)}")
+            return Response({'error': 'Error while retrieving mutual friends'}, status=400)
+        
+        return Response({"data": data})
 
 class GetStatusFriendView(APIView):
     def get(self, request):
         user = getUser(request)
+        
         if not user:
+            logger.error("Unauthorized access to GetStatusFriendView. Returning 401 error.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         other_user_id = request.query_params.get('id')
-        print(other_user_id); 
         
-        if user == other_user_id : 
-            return Response({'status_relationship': 'user'})
+        try:
+            if user == other_user_id: 
+                return Response({'status_relationship': 'user'})
+            
+            status_relationship_1_2 = FriendRequest.objects.filter(from_id=user, to_id=other_user_id).values_list('status', flat=True).first()
+            status_relationship_2_1 = FriendRequest.objects.filter(from_id=other_user_id, to_id=user).values_list('status', flat=True).first()
+            
+            if status_relationship_1_2 == 'accepted' or status_relationship_2_1 == 'accepted':
+                return Response({'status_relationship': 'accepted'})
+            elif status_relationship_1_2 == 'denied' or status_relationship_2_1 == 'denied':
+                return Response({'status_relationship': 'denied'})
+            elif status_relationship_1_2 == 'pending':
+                return Response({'status_relationship': 'friendrequestfromuser'})
+            elif status_relationship_2_1 == 'pending':
+                return Response({'status_relationship': 'friendrequesttouser'})
+        except Exception as e:
+            logger.error(f"Error while retrieving friend status: {str(e)}")
+            return Response({'error': 'Error while retrieving friend status'}, status=400)
         
-        status_relationship_1_2 = FriendRequest.objects.filter(from_id=user, to_id=other_user_id).values_list('status', flat=True).first()
-        status_relationship_2_1 = FriendRequest.objects.filter(from_id=other_user_id, to_id=user).values_list('status', flat=True).first()
-        
-        print(status_relationship_1_2, status_relationship_2_1)
-        if status_relationship_1_2 == 'accepted' or status_relationship_2_1 == 'accepted' :
-            return Response({'status_relationship': 'accepted'})
-        elif status_relationship_1_2 == 'denied' or status_relationship_2_1 == 'denied':
-            return Response({'status_relationship': 'denied'})
-        elif status_relationship_1_2 == 'pending' :
-            return Response({'status_relationship': 'friendrequestfromuser'})
-        elif status_relationship_2_1 == 'pending' :
-            return Response({'status_relationship': 'friendrequesttouser'})
-        return Response({
-            "status_relationship": 'not_friend'
-        })
+        return Response({"status_relationship": 'not_friend'})
 
 class GetListFriendOfUserOtherView(APIView):
     def get(self, request):
         user = getUser(request)
+        
         if not user:
+            logger.error("Unauthorized access to GetListFriendOfUserOtherView. Returning 401 error.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         other_user_id = request.query_params.get('id') 
-        # other_user_id = request.data.get('id')    
-       # others_user_friend = get_object_or_404(Friendship, Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
-        others_user_friend = Friendship.objects.filter(Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
-        data = []
-        for other_user_friend in others_user_friend:
-            user_id = User.objects.filter(id=other_user_id).values_list('email', flat=True).first()
         
-            if user_id == str(other_user_friend.user_id2):
-                friend_id = other_user_friend.user_id1
-                # print('ok') 
-            else :
-                friend_id = other_user_friend.user_id2
-                # print('okkkk') 
+        try:
+            others_user_friend = Friendship.objects.filter(Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
+            data = []
+            for other_user_friend in others_user_friend:
+                user_id = User.objects.filter(id=other_user_id).values_list('email', flat=True).first()
+            
+                if user_id == str(other_user_friend.user_id2):
+                    friend_id = other_user_friend.user_id1
+                else:
+                    friend_id = other_user_friend.user_id2
 
-            friend_ship = {
-                "friend_profile": getUserProfileForPosts(friend_id)
-            }
-            data.append(friend_ship)
+                friend_ship = {
+                    "friend_profile": getUserProfileForPosts(friend_id)
+                }
+                data.append(friend_ship)
+        except Exception as e:
+            logger.error(f"Error while retrieving friend list of other user: {str(e)}")
+            return Response({'error': 'Error while retrieving friend list of other user'}, status=400)
         
-        return Response({
-            "data": data,
-            "number_of_friends": len(data)
-        })
+        return Response({"data": data, "number_of_friends": len(data)})
+
         
-# class GetMutualFriendOfUserView(APIView):
-#         def get(self, request):
-#             user = getUser(request)
-#             if not user:
-#                 return Response({'error': 'Unauthorized'}, status=401)
-            
-#             other_user_id = request.get('user_id')    #lấy từ fe của các user
-            
-#             other_user = get_object_or_404(Friendship, id=other_user_id)
-            
-#             user_friendships = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
-            
-#             other_user_friendships = Friendship.objects.filter(Q(user_id1=other_user.user_id1) | Q(user_id2=other_user.user_id2))
-            
-#             mutual_friendships = user_friendships.intersection(other_user_friendships)
-            
-#             data = []
-            
-#             for mutual_friendship in mutual_friendships:
-                
-#                 friend_profile = getUserProfileForPosts(mutual_friendship.user_id2) if user == mutual_friendship.user_id1 else getUserProfileForPosts(mutual_friendship.user_id1)
-                
-#                 data.append({
-#                 "mutual_friendship": FriendshipSerializer(mutual_friendship).data,
-#                 "friend_profile": friend_profile
-#                 })
-            
-#             return Response({
-#                 "data": data
-#                 })
 
 class AcceptFriendRequestProfileView(APIView):
     def post(self, request):
         user = getUser(request)
         
         if not user:
+            logger.error("Unauthorized access to AcceptFriendRequestProfileView. Returning 401 error.")
             return Response({'error': 'Unauthorized'}, status=401)
         
-        # print(request.data)
-        
         try:
-                from_user_id = request.data.get('id')
-                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user)
-                
-                #friend_request.status = 'pending'
-                friend_request.status = 'accepted'
-                friend_request.save()
-                
-                addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request.id}).first()
-                addfriendNotification.setAccept()
-                addfriendNotification.save()
-                
-                friend_ship = Friendship.objects.create(
-                user_id1 = user,
-                user_id2 = friend_request.from_id                 
-                )
-                # Friendship.objects.all().delete()  
-                friend_ship.save()    
-                 
-                data = []
-                
-                accepted_friend_request = {
-                "friend_profile" : getUserProfileForPosts(friend_request.from_id)
-                }
-                data.append(accepted_friend_request)
-                
-                GetNotifications().resetNotifications(user.id)
-                
-                return Response ({
-                    'accepted_friend_request': data,
-                    'success': 'Friend request processed successfully'
-                    })
-                # return Response({'success': 'Friend request processed successfully'})
+            from_user_id = request.data.get('id')
+            friend_request = get_object_or_404(FriendRequest, from_id=from_user_id, to_id=user)
             
-        except:
+            friend_request.status = 'accepted'
+            friend_request.save()
+            
+            addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request.id}).first()
+            addfriendNotification.setAccept()
+            addfriendNotification.save()
+            
+            friend_ship = Friendship.objects.create(
+                user_id1=user,
+                user_id2=friend_request.from_id                 
+            )
+            friend_ship.save()    
+             
+            data = []
+            
+            accepted_friend_request = {
+                "friend_profile": getUserProfileForPosts(friend_request.from_id)
+            }
+            data.append(accepted_friend_request)
+            
+            GetNotifications().resetNotifications(user.id)
+            
+            logger.info("Friend request accepted successfully.")
+            
+            return Response({
+                'accepted_friend_request': data,
+                'success': 'Friend request processed successfully'
+            })
+        
+        except Exception as e:
+            logger.error(f"Error while saving friend request: {str(e)}")
             return Response({'error': 'Error while saving friend request'}, status=400)
-    
+
 class DenineFriendRequestProfileView(APIView):
     def post(self, request):
         user = getUser(request)
         
         if not user:
+            logger.error("Unauthorized access to DenyFriendRequestProfileView. Returning 401 error.")
             return Response({'error': 'Unauthorized'}, status=401)
         
-        # print(request.data)
-        
         try:
-                from_user_id = request.data.get('id')
-                friend_request = get_object_or_404(FriendRequest, from_id = from_user_id, to_id = user)
-                
-                #friend_request.status = 'pending'
-                friend_request.status = 'denined'
-                friend_request.save()  
-                
-                addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request.id}).first()
-                addfriendNotification.setDecline()
-                addfriendNotification.save()
-                
-                GetNotifications().resetNotifications(user.id)
-                
-                return Response({'success': 'Friend request processed successfully',
-                                 'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
+            from_user_id = request.data.get('id')
+            friend_request = get_object_or_404(FriendRequest, from_id=from_user_id, to_id=user)
             
-        except:
+            friend_request.status = 'denied'
+            friend_request.save()  
+            
+            addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request.id}).first()
+            addfriendNotification.setDecline()
+            addfriendNotification.save()
+            
+            GetNotifications().resetNotifications(user.id)
+            
+            logger.info("Friend request denied successfully.")
+            
+            return Response({
+                'success': 'Friend request processed successfully',
+                'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)
+            })
+        
+        except Exception as e:
+            logger.error(f"Error while saving friend request: {str(e)}")
             return Response({'error': 'Error while saving friend request'}, status=400)
         
 # class DeleteFriendShipProfile(APIView):
