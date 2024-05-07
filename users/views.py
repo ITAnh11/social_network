@@ -46,11 +46,11 @@ class LoginView(APIView):
         user = User.objects.filter(email=email).first()
 
         if user is None:
-            logger.warning('User not found! Email: %s', email)
+            logger.warning('User not found!')
             return Response({'warning': 'User not found!'})
 
         if not user.check_password(password):
-            logger.warning('Incorrect password for user with email: %s', email)
+            logger.warning('Incorrect password for user')
             return Response({'warning': 'Incorrect password!'})
         
         user.set_last_login()
@@ -64,7 +64,7 @@ class LoginView(APIView):
             'jwt': token,
             'redirect_url': '/'
         }
-        logger.info('User successfully logged in. Email: %s, ID: %s, Redirecting to: %s', email, user.id, response.data['redirect_url'])
+        logger.info('User successfully logged in')
         
         return response
   
