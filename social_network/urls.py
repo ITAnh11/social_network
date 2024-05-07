@@ -37,7 +37,7 @@ urlpatterns = [
     path('comments/', include('comments.urls')),
     path('navbar/', include('navbar.urls')),
     path('reactions/', include('reactions.urls')),
-    path("search/<username>", views.SearchUser.as_view()),
+    path("search/<username>/", views.SearchUser.as_view(), name='search_users'),
     
     path('notifications/', include('notifications.urls')),
     # path('__debug__/', include(debug_toolbar.urls)),

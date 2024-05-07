@@ -51,7 +51,8 @@ class SentFriendRequestView(APIView):
             friend_request.save()
             
             createAddFriendNotification(friend_request)
-        except :
+        except Exception as e:
+            print(f"exception: {e}")
             return Response({'error': 'Friend Request can not create'}, status=404)
         
         return Response({'success': 'Friend request sent successfully'})

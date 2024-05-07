@@ -39,7 +39,7 @@ def backup_postgres():
 def backup_mongodb():
     try:
         # Set MongoDB connection parameters from settings
-        db_name = 'social_netwrok'
+        db_name = 'social_network'
         host = 'localhost'
         port = 27017
         backup_dir = 'D:\\bk_mongo\\dump'
@@ -84,4 +84,4 @@ def delete_old_backups(backup_dir, days_to_keep):
 backup_postgres()
 
 # Run MongoDB backup
-# backup_mongodb()
+backup_mongodb()

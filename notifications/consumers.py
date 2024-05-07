@@ -29,10 +29,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         try:
             text_data_json = json.loads(text_data)
             # print(text_data_json)
-            if (text_data_json['message_content']):
-                message = text_data_json['message_content']
-            else: 
-                message = text_data_json['message']
+
+            message = text_data_json['message']
 
             # Send the message to the group
             await self.channel_layer.group_send(

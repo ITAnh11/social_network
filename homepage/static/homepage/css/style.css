@@ -199,6 +199,25 @@ ul.navlogo li img {
     font-weight: 500;
 }
 
+.chat-header {
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Optional: Add background color */
+    padding: 10px;
+    border-bottom: 1px solid #ccc; /* Optional: Add border */
+    z-index: 999; /* Ensure it's above other elements */
+  }
+  
+  .chat-header a {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .chat-header a:hover {
+    text-decoration: underline;
+  }
+  
+
 .heading-link {
     display: flex;
     justify-content: space-between;

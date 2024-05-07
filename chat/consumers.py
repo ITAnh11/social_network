@@ -38,6 +38,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def create_message(self, data):
         if not Messeeji.objects(message_content=data['message_content']).exists():
             # print(f"channel: {data['channel_id']}, content: {data['message_content']}")
+            print(f"data: {data}")
             new_message = Messeeji(
                 sender_id=data['sender_id'],
                 channel_id=data['channel_id'],
