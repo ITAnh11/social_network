@@ -111,12 +111,6 @@ class CreateReaction(APIView):
         if request.data.get('posts_id') is None and request.data.get('comment_id') is None:
             return Response({'error': 'posts_id or comment_id is required'}, status=status.HTTP_400_BAD_REQUEST)
         
-        if request.data.get('user_id') is None or request.data.get('user_name') is None or request.data.get('user_avatar') is None:
-            return Response({'error': 'user_id, user_name, user_avatar is required'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        if int(request.data.get('user_id')) != user.id:
-            return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
-        
         response = Response()
         
         posts_id = int(request.data.get('posts_id'))

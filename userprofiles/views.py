@@ -117,6 +117,9 @@ class SetImageProfileView(APIView):
         return Response({'message': 'Image profile created successfully!'})
     
 class UserProfileBasicView(APIView):
+    def removeUserProfileBasic(self, user_id):
+        redis_server.delete(f'userprofile_basic_{user_id}')
+        
     def resetUserProfileBasic(self, user):
         redis_server.delete(f'userprofile_basic_{user.id}')
         

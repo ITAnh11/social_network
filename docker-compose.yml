@@ -1,0 +1,129 @@
+version: '3.7'
+
+services:
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - 6379:6379
+    command: redis-server
+  mongo-0-a:
+    container_name: mongo-0-a
+    image: mongo
+    ports:
+      - 127.0.10.1:27017:27017
+    volumes:
+      - mongo-0-a:/data/db
+    restart: unless-stopped
+    command: "--wiredTigerCacheSizeGB 0.25 --replSet rs0"
+    networks:
+      - social_network
+
+  mongo-0-b:
+    container_name: mongo-0-b
+    image: mongo
+    ports:
+      - 127.0.10.2:27017:27017
+    volumes:
+      - mongo-0-b:/data/db
+    restart: unless-stopped
+    command: "--wiredTigerCacheSizeGB 0.25 --replSet rs0"
+    networks:
+      - social_network
+
+  mongo-0-c:
+    container_name: mongo-0-c
+    image: mongo
+    ports:
+      - 127.0.10.3:27017:27017
+    volumes:
+      - mongo-0-c:/data/db
+    restart: unless-stopped
+    command: "--wiredTigerCacheSizeGB 0.25 --replSet rs0"
+    networks:
+      - social_network
+  
+  postgres:
+    container_name: postgres
+    image: postgres
+    ports:
+      - "5000:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=social_network
+    command:
+      - "postgres"
+      - "-c"
+      - "wal_level=logical"
+    networks:
+      - social_network
+    
+  zookeeper:
+    container_name: zookeeper
+    image: debezium/zookeeper
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+    networks:
+      - social_network
+  kafka:
+    container_name: kafka
+    image: debezium/kafka
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    depends_on:
+      - zookeeper
+    environment:
+      ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: EXTERNAL_SAME_HOST://:29092,INTERNAL://:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL_SAME_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL_SAME_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+    networks:
+      - social_network
+  
+  connect:
+    container_name: connect
+    image: debezium/connect
+    ports:
+      - "8083:8083"
+    depends_on:
+      - kafka
+      - zookeeper
+      - postgres
+    environment:
+      - BOOTSTRAP_SERVERS=kafka:9092
+      - GROUP_ID=1
+      - CONFIG_STORAGE_TOPIC=my_connect_configs
+      - OFFSET_STORAGE_TOPIC=my_connect_offsets
+      - STATUS_STORAGE_TOPIC=my_connect_statuses
+      - ENABLE_DEBEZIUM_KC_REST_EXTENSION=true
+      - ENABLE_DEBEZIUM_SCRIPTING=true
+      - CONNECT_REST_EXTENSION_CLASSES=io.debezium.kcrestextension.DebeziumConnectRestExtension
+      - ADVERTISED_HOST_NAME=localhost
+    networks:
+      - social_network
+      
+  debezium-ui:
+    container_name: debezium-ui
+    image: debezium/debezium-ui
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_CONNECT_URIS=http://connect:8083
+    depends_on:
+      - connect
+    networks:
+      - social_network
+
+volumes:
+  mongo-0-a:
+  mongo-0-b:
+  mongo-0-c:
+
+networks:
+  social_network:
+    

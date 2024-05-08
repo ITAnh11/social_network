@@ -18,7 +18,7 @@ def createMediaOfPosts(post, medias):
     try:
         for media in medias:
             mediaOfPosts = MediaOfPosts(
-                post_id=post
+                post_id=post.id
             )
             
             mediaOfPosts.save_media(media)
@@ -181,6 +181,7 @@ class GetPostsForProfilePageView(APIView):
         currentNumberOfPosts = int(request.data.get('current_number_of_posts'))
 
         if currentNumberOfPosts >= num_posts:
+            print('No more posts')
             return Response({'error': 'No more posts available'}, status=400)
 
         posts = Posts.objects(__raw__={'user.id': idUserRequested}).order_by('-created_at')[currentNumberOfPosts:currentNumberOfPosts+10]
