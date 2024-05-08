@@ -8,44 +8,41 @@ let notificationSocket;
 let reconnectInterval = 5000;  // ms
 
 function connectNotificationSocket() {
-  fetch(api_get_userprofilebasic)
-    .then(response => response.json())
-    .then(data => {
-      // console.log(data);
-      notificationSocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/notification/'
-        + data.id
-        + '/'
-      );
+  notificationSocket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/ws/notification/'
+    + USER_ID
+    + '/'
+  );
 
-      notificationSocket.onmessage = function (event) {
-        console.log('Received message from server:', event.data);
-        // var notification = JSON.parse(event.data);
-        // var notificationItem = createNotificationItem(notification);
-        // var notificationDropdown = document.querySelector(".dropdown-notification");
-        // notificationDropdown.insertAdjacentHTML("afterbegin", notificationItem);
-      };
+  notificationSocket.onmessage = function (event) {
+    console.log('Received message from server:', event.data);
+    // var notification = JSON.parse(event.data);
+    // var notificationItem = createNotificationItem(notification);
+    // var notificationDropdown = document.querySelector(".dropdown-notification");
+    // notificationDropdown.insertAdjacentHTML("afterbegin", notificationItem);
+  };
 
-      notificationSocket.onopen = function (event) {
-        console.log('WebSocket is open now.');
-      };
+  notificationSocket.onopen = function (event) {
+    console.log('WebSocket is open now.');
+  };
 
-      notificationSocket.onclose = function (event) {
-        console.error('WebSocket is closed now. Reconnect will be attempted in ' + (reconnectInterval / 1000) + ' second(s).', event.reason);
-        setTimeout(connectNotificationSocket, reconnectInterval);
-      };
+  notificationSocket.onclose = function (event) {
+    console.error('WebSocket is closed now. Reconnect will be attempted in ' + (reconnectInterval / 1000) + ' second(s).', event.reason);
+    setTimeout(connectNotificationSocket, reconnectInterval);
+  };
 
-      notificationSocket.onerror = function (err) {
-        console.error('WebSocket encountered error: ', err.message, 'Closing socket');
-        notificationSocket.close();
-      };
-    });
+  notificationSocket.onerror = function (err) {
+    console.error('WebSocket encountered error: ', err.message, 'Closing socket');
+    notificationSocket.close();
+  };
 
 }
 
+setTimeout(() => {
 connectNotificationSocket();
+}, 2000);
 
 var bellIcon = document.querySelector(".notification_icon");
 bellIcon.addEventListener('click', function () {

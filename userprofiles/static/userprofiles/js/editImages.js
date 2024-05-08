@@ -135,7 +135,6 @@ document.getElementById('form-editAvt').addEventListener('submit', function(even
         .then(data => {
             if (data['success']) {
                 console.log(data);
-                localStorage.setItem('avatar', data['avatar'])
                 alert(data['success']);
             } else {
                 // handle error

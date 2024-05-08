@@ -108,15 +108,28 @@ function send_comment(event, posts_id, comment_id, forwhat){
 
     const content = event.target.content.value;
     event.target.content.value = "";
-    console.log(content);
+    // console.log(content);
+
+    var user_id = "";
+    var user_name = "";
+    var user_avatar = "";
+
+    fetch(api_get_profile_basic)
+    .then(response => response.json())
+    .then(data => {
+        // console.log(data);
+        user_id = data.user_id;
+        user_name = data.name;
+        user_avatar = data.avatar;
+    })
 
     formData = new FormData();
     formData.append('content', content);
     formData.append('to_posts_id', posts_id);
     formData.append('to_comment_id', comment_id);
-    formData.append('user_id', localStorage.getItem('id'));
-    formData.append('user_name', localStorage.getItem('name'));
-    formData.append('user_avatar', localStorage.getItem('avatar'));
+    formData.append('user_id', user_id);
+    formData.append('user_name', user_name);
+    formData.append('user_avatar', user_avatar);
     formData.append('csrfmiddlewaretoken', csrftoken);
 
     console.log(formData.get('to_posts_id'));
@@ -356,9 +369,6 @@ function sendReaction(event) {
     formData = new FormData();
     formData.append(ofWhat, idWhat);
     formData.append(otherWhat, -1);
-    formData.append('user_id', localStorage.getItem('id'));
-    formData.append('user_name', localStorage.getItem('name'));
-    formData.append('user_avatar', localStorage.getItem('avatar'));
     formData.append('type', 'like');
     formData.append('csrfmiddlewaretoken', csrftoken);
 
