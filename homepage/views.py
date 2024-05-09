@@ -8,13 +8,8 @@ from rest_framework.response import Response
 import jwt
 
 from users.views import LogoutView
+from users.models import User
 
-from posts.models import Posts
-from posts.serializers import PostsSerializer, MediaOfPostsSerializer
-
-from userprofiles.serializers import UserProfileSerializer, ImageProfileSerializer
-
-from common_functions.common_function import getUser, getTimeDuration
 import logging
 
 logger = logging.getLogger(__name__)
@@ -36,6 +31,16 @@ class HomePageView(APIView):
             logger.error("Expired JWT token")
             LogoutView().post(request)
             return HttpResponseRedirect(reverse('users:login'))
+        
+        try:
+            user = User.objects.get(id=user_id)
+            if not user:
+                logger.error("User not found")
+                return HttpResponseRedirect(reverse('users:login'))
             
+        except User.DoesNotExist:
+            logger.error("User not found")
+            return HttpResponseRedirect(reverse('users:login'))
+        
         logger.info("Rendering homepage")
         return render(request, 'homepage/index.html')

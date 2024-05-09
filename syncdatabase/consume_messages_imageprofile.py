@@ -19,13 +19,18 @@ from comments.models import Comments
 from notifications.models import Notifications
 from userprofiles.views import UserProfileBasicView
 import json
+import logging
+logger = logging.getLogger(__name__)
 
 from concurrent.futures import ThreadPoolExecutor
 
 executor = ThreadPoolExecutor(max_workers=2)
 
 def update_data(model, query, update):
-    model.objects(__raw__=query).update(__raw__=update)
+    try:
+        model.objects(__raw__=query).update(__raw__=update)
+    except Exception as e:
+        logger.error('Error update data:', e)
 
 # This function processes a Kafka message and updates the database accordingly.
 def process_message_imageprofile(msg):
@@ -35,6 +40,8 @@ def process_message_imageprofile(msg):
     if msg.value() is None:
         print('No message')
         return
+    
+    logger.info('Begin process message Imageprofile')
     
     try:
         msg_value = msg.value().decode('utf-8')
@@ -51,6 +58,7 @@ def process_message_imageprofile(msg):
         # Perform the appropriate action in MongoDB based on the operation type
         if op == 'u':
             print("process_message_update_avatar", msg_json)
+            logger.info("process_message_update_avatar", msg_json)
             
             # Get the user ID
             user_id = after_data['user_id_id']
@@ -77,9 +85,14 @@ def process_message_imageprofile(msg):
         pass
     except Exception as e:
         print('Process message Imageprofile error:', e)
+        logger.error('Process message Imageprofile error:', e)
+        
     print('Processed message Imageprofile done!!!')
+    logger.info('End process message Imageprofile')
 
 def consume_messages_imageprofile():
+    print('Consuming messages imageprofile')
+    logger.info('Consuming messages imageprofile')
     # Create a Kafka consumer
     c = Consumer({
         'bootstrap.servers': 'localhost:29092',
@@ -98,6 +111,7 @@ def consume_messages_imageprofile():
                 continue
             elif msg.error():
                 print("Consumer error: {}".format(msg.error()))
+                logger.error("Consumer error: {}".format(msg.error()))
                 continue
             else:
                 # Process the Kafka message
@@ -105,4 +119,5 @@ def consume_messages_imageprofile():
     except KeyboardInterrupt:
         pass
     finally:
+        executor.shutdown(wait=True)
         c.close()

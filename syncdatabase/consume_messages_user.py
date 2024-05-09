@@ -21,25 +21,43 @@ from comments.models import Comments
 from notifications.models import Notifications
 from posts.models import MediaOfPosts
 from userprofiles.views import UserProfileBasicView
-
+import logging
+logger = logging.getLogger(__name__)
 # Create a ThreadPoolExecutor
 executor = ThreadPoolExecutor(max_workers=2)
 
 def delete_data(model, query):
-    model.objects(__raw__=query).delete()
+    try:
+        model.objects(__raw__=query).delete()
+    except Exception as e:
+        logger.error('Error delete data:', e)
+        # print('Error delete data:', e)
     
 def delete_all_posts(user_id):
     try:
         posts = Posts.objects(__raw__={'user.id': user_id})
         for post in posts:
-            print('Delete post:', post.id)
+            # print('Delete post:', post.id)
+            
             medias = MediaOfPosts.objects(__raw__={'post_id': post.id})
             for media in medias:
-                media.delete_media()
+                try:
+                    logger.info('Delete media:', media.id)
+                    media.delete_media()
+                except Exception as e:
+                    logger.error('Error delete media:', e)
+                    print('Error delete media:', e)
         
         for post in posts:
-            post.delete()
+            try:
+                logger.info('Delete post:', post.id)
+                post.delete()
+            except Exception as e:
+                logger.error('Error delete post:', e)
+                print('Error delete post:', e)
+
     except Exception as e:
+        logger.error('Error delete all posts:', e)
         print('Error delete all posts:', e)
         
 
@@ -51,7 +69,7 @@ def process_message_user(msg):
     if msg.value() is None:
         print('No message')
         return
-    
+    logger.info('Begin process message User')
     try:
         msg_value = msg.value().decode('utf-8')
 
@@ -63,13 +81,12 @@ def process_message_user(msg):
 
         # Get the before data
         before_data = msg_json['payload']['before']
-        # Get the after data
-        after_data = msg_json['payload']['after']
-
+        
         # Perform the appropriate action in MongoDB based on the operation type
         if op == 'd':
             
-            # print("process_message_delete_user", msg_json)
+            print("process_message_delete_user", msg_json)
+            logger.info("process_message_delete_user", msg_json)
             
             # Get the user ID
             user_id = before_data['id']
@@ -81,13 +98,17 @@ def process_message_user(msg):
             executor.submit(delete_data, Notifications, {'to_user_id': user_id})
 
         print('Processed message User done!!!')
+        logger.info('Processed message User done!!!')
     except KeyboardInterrupt:
         pass
     except Exception as e:
-        print('Error processing message User:', e)
+        logger.error('Error processing message User:', e)
+        # print('Error processing message User:', e)
         
     
 def consume_messages_user():
+    logger.info("Consuming messages user")
+    print("Consuming messages user")
     # Create a Kafka consumer
     c = Consumer({
         'bootstrap.servers': 'localhost:29092',
@@ -97,17 +118,22 @@ def consume_messages_user():
 
     # Subscribe to the Kafka topic
     c.subscribe(['social_network.public.users_user'])
-
-    while True:
-        # Poll for messages from Kafka
-        msg = c.poll(1.0)
-        if msg is None:
-            continue
-        elif msg.error():
-            print("Consumer error: {}".format(msg.error()))
-            continue
-        else:
-            # Process the Kafka message
-            process_message_user(msg)
-
-    c.close()
+    
+    try:
+        while True:
+            # Poll for messages from Kafka
+            msg = c.poll(1.0)
+            if msg is None:
+                continue
+            elif msg.error():
+                # print("Consumer error: {}".format(msg.error()))
+                logger.error("Consumer error: {}".format(msg.error()))
+                continue
+            else:
+                # Process the Kafka message
+                process_message_user(msg)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        c.close()
+        executor.shutdown(wait=True)

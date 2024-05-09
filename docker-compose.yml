@@ -43,19 +43,37 @@ services:
     networks:
       - social_network
   
-  postgres:
-    container_name: postgres
+  # postgres:
+  #   container_name: postgres
+  #   image: postgres
+  #   ports:
+  #     - "5000:5432"
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  #     - POSTGRES_DB=social_network
+  #   command:
+  #     - "postgres"
+  #     - "-c"
+  #     - "wal_level=logical"
+  #   networks:
+  #     - social_network
+
+  postgres-1:
+    container_name: postgres-1
     image: postgres
     ports:
-      - "5000:5432"
+      - "5001:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=social_network
-    command:
-      - "postgres"
-      - "-c"
-      - "wal_level=logical"
+      - PGDATA=/data
+    volumes:
+      - ./postgres-1/pgdata:/data
+      - ./postgres-1/config:/config
+      - ./postgres-1/archive:/mnt/server/archive
+    command: -c 'config_file=/config/postgresql.conf'
     networks:
       - social_network
     
@@ -93,7 +111,7 @@ services:
     depends_on:
       - kafka
       - zookeeper
-      - postgres
+      - postgres-1
     environment:
       - BOOTSTRAP_SERVERS=kafka:9092
       - GROUP_ID=1

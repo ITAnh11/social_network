@@ -40,9 +40,9 @@ function connectNotificationSocket() {
 
 }
 
-setTimeout(() => {
-connectNotificationSocket();
-}, 2000);
+// setTimeout(() => {
+// connectNotificationSocket();
+// }, 2000);
 
 var bellIcon = document.querySelector(".notification_icon");
 bellIcon.addEventListener('click', function () {
