@@ -39,14 +39,14 @@ class ImageProfile(models.Model):
             models.Index(fields=['user_id'])
         ]
     
-# class LinkProfile(models.Model):
-#     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-#     link = models.CharField(max_length=255, null=False)
+class LinkProfile(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    link = models.CharField(max_length=255, null=False)
     
-#     class Meta:
-#         indexes = [
-#             models.Index(fields=['user_id'])
-#         ]
+    class Meta:
+        indexes = [
+            models.Index(fields=['user_id'])
+        ]
 
 # model mongodb
 from django_mongoengine import fields, EmbeddedDocument
@@ -55,4 +55,4 @@ class UserBasicInfo(EmbeddedDocument):
     id = fields.IntField()
     name = fields.StringField()
     avatar = fields.StringField()
-        
+    
