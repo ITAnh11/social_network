@@ -10,5 +10,7 @@ urlpatterns = [
     path("create_channel/", views.CreateChannel.as_view()),
     path("create_messeeji/", views.CreateMesseeji.as_view()),  
     path("mark_as_read/", views.MarkReadMesseeji.as_view()), 
+    path("all_contact_users/", views.ContactUsers.as_view()), 
+    
     # path("<str:room_name>/", views.room, name="room"),
 ]

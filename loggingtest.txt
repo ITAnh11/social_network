@@ -1,24 +1,522 @@
-2024-05-04 21:56:27,527:INFO - userprofiles.viewsEdit viewsEdit.py (line 29). GET request received in EditImagesPage
-2024-05-04 21:56:28,428:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
-2024-05-04 21:56:33,765:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
-2024-05-04 21:56:33,958:INFO - userprofiles.views views.py (line 39). GET request received in ProfileView
-2024-05-04 21:56:34,016:INFO - userprofiles.views views.py (line 46). check profile
-2024-05-04 21:56:34,936:INFO - reactions.views views.py (line 242). POST request received in IsReactedView
-2024-05-04 21:56:34,936:INFO - reactions.views views.py (line 29). POST request received in GetReactions
-2024-05-04 21:56:34,961:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
-2024-05-04 21:56:35,077:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
-2024-05-04 21:56:35,188:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
-2024-05-04 21:56:35,262:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
-2024-05-04 21:56:35,343:INFO - userprofiles.views views.py (line 73). GET request received in GetProfileView
-2024-05-04 21:56:35,569:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
-2024-05-04 21:56:35,655:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
-2024-05-04 21:56:35,723:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
-2024-05-04 21:56:35,795:INFO - friends.views views.py (line 371). List of friends of other user retrieved successfully
-2024-05-04 21:56:35,939:INFO - userprofiles.views views.py (line 137). POST request received in GetPostsView
-2024-05-04 21:56:36,043:INFO - userprofiles.views views.py (line 193). GetPostsView executed in 0.1029508113861084 seconds
-2024-05-04 21:56:42,354:INFO - friends.views views.py (line 35). Accessed FriendsRequestsView successfully
-2024-05-04 21:56:43,063:INFO - friends.views views.py (line 250). List of friends retrieved successfully
-2024-05-04 21:56:43,138:INFO - friends.views views.py (line 284). Suggested friends retrieved successfully
-2024-05-04 21:56:43,157:INFO - friends.views views.py (line 225). Received friend requests retrieved successfully
-2024-05-04 21:57:02,918:INFO - friends.views views.py (line 48). Sending friend request from user 16 to user 5
-2024-05-04 21:57:07,157:INFO - friends.views views.py (line 60). Friend request sent successfully
+2024-05-08 00:43:39,082:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 00:43:39,095:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-08 00:43:40,702:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:43:40,711:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:43:46,019:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 00:43:46,626:ERROR - posts.views views.py (line 294). Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+2024-05-08 00:44:13,178:WARNING - users.views views.py (line 49). User not found!
+2024-05-08 00:44:16,534:INFO - users.views views.py (line 74). GET request received in RegisterView
+2024-05-08 00:44:41,787:INFO - users.views views.py (line 85). POST request received in RegisterView
+2024-05-08 00:44:43,041:INFO - users.models models.py (line 26). Password updated for user: mt@gmail.com
+2024-05-08 00:44:43,066:INFO - users.views views.py (line 92). User successfully registered
+2024-05-08 00:44:43,092:INFO - userprofiles.views views.py (line 117). User profile created successfully!
+2024-05-08 00:44:43,107:INFO - userprofiles.views views.py (line 124). Image profile created successfully!
+2024-05-08 00:44:43,110:INFO - users.views views.py (line 108). User successfully registered
+2024-05-08 00:44:44,878:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:44:44,879:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:44:45,344:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:44:45,360:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:44:45,411:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:44:45,447:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:44:45,448:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:44:45,472:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:44:45,680:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:44:45,692:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:44:45,783:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:44:45,793:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:44:45,898:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:44:45,911:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:44:46,011:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:44:46,024:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:44:46,578:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 00:46:04,340:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:46:04,356:INFO - userprofiles.views views.py (line 42). Redirecting to profile page.
+2024-05-08 00:46:04,513:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:46:04,521:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:46:05,656:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:46:05,690:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:46:05,723:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:05,780:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:06,015:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:06,027:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:06,803:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:06,817:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:06,928:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:06,942:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:07,051:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:07,061:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:08,501:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 00:46:19,624:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:46:19,626:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:46:20,061:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:46:20,082:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:46:20,087:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:20,123:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:20,322:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:20,332:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:20,432:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:20,446:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:20,557:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:20,569:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:20,697:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:20,714:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:24,283:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:46:24,306:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:46:40,242:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:46:40,250:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:46:40,823:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:46:40,843:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:46:40,850:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:40,911:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:41,123:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:41,135:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:41,220:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:41,232:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:41,326:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:41,336:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:41,434:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:46:41,444:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:46:42,500:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 00:47:52,101:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:47:52,103:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:47:53,467:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:47:53,469:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:47:53,489:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:47:53,493:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:47:53,721:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:47:53,732:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:47:53,824:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:47:53,840:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:47:53,939:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:47:53,951:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:47:54,097:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:47:54,109:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:47:54,741:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 00:49:10,473:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:49:10,481:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:49:10,831:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:10,861:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:10,862:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:10,932:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:11,113:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:11,127:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:11,226:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:11,239:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:11,372:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:11,382:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:11,497:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:11,511:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:12,467:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:12,470:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:12,997:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:12,998:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:16,061:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:49:16,063:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:49:16,375:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:16,397:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:16,415:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:16,485:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:16,554:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:16,569:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:16,701:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:16,711:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:16,806:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:16,816:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:16,915:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:16,928:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:17,692:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:17,723:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:18,784:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:18,785:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:20,793:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 00:49:27,265:INFO - users.models models.py (line 31). Password checked successfully for user: efg@gmail.com
+2024-05-08 00:49:27,267:INFO - users.models models.py (line 38). Last login updated for user: efg@gmail.com
+2024-05-08 00:49:27,280:INFO - users.views views.py (line 67). User successfully logged in
+2024-05-08 00:49:28,752:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 00:49:28,754:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-08 00:49:28,983:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:28,994:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:29,040:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:29,050:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:34,239:ERROR - posts.views views.py (line 294). Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+2024-05-08 00:49:39,248:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:49:39,249:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:49:39,517:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:39,540:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:39,561:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:39,593:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:39,749:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:39,758:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:39,844:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:39,857:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:39,979:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:39,999:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:40,126:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:40,137:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:41,052:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:41,055:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:41,580:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:42,031:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:42,154:INFO - friends.views views.py (line 180). Friendship deleted successfully.
+2024-05-08 00:49:46,311:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:49:46,312:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:49:46,622:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:46,624:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:46,645:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:46,674:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:46,862:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:46,874:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:46,972:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:46,983:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:47,107:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:47,124:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:47,251:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:49:47,265:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:49:48,651:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:48,653:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:50,674:INFO - friends.views views.py (line 180). Friendship deleted successfully.
+2024-05-08 00:49:53,225:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 00:49:53,227:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-08 00:49:53,642:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:49:53,667:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:49:59,797:ERROR - posts.views views.py (line 294). Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+2024-05-08 00:51:06,593:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:51:06,597:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:51:06,994:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:51:07,016:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:07,064:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:07,107:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:51:07,313:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:07,324:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:07,425:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:07,440:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:07,529:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:07,540:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:07,649:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:07,661:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:08,250:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:51:08,251:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:51:08,780:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:51:08,786:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:51:09,102:INFO - friends.views views.py (line 79). Friend request revoked successfully.
+2024-05-08 00:51:09,228:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:51:09,233:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:51:09,732:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:51:09,733:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:51:10,323:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:51:10,348:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:51:10,720:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:51:10,729:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:51:23,693:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:51:23,695:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:51:23,970:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:51:23,979:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:23,981:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:51:24,003:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:24,140:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:24,156:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:24,255:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:24,264:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:24,360:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:24,378:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:24,526:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:24,538:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:24,968:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 00:51:26,031:INFO - friends.views views.py (line 79). Friend request revoked successfully.
+2024-05-08 00:51:33,485:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:51:33,488:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:51:33,772:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:33,782:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:51:33,789:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:33,872:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:51:33,905:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:33,951:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:34,061:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:34,070:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:34,163:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:34,178:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:34,373:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:34,391:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:34,741:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 00:51:35,898:INFO - friends.views views.py (line 79). Friend request revoked successfully.
+2024-05-08 00:51:48,488:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:51:48,491:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:51:48,776:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:51:48,778:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:51:48,816:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:48,831:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:49,024:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:49,035:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:49,136:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:49,147:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:49,236:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:49,251:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:49,365:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:49,376:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:49,827:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 00:51:50,651:INFO - friends.views views.py (line 79). Friend request revoked successfully.
+2024-05-08 00:51:58,679:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:51:58,683:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:51:58,996:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:51:58,997:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:51:59,038:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:59,055:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:59,248:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:59,258:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:59,344:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:59,356:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:59,462:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:59,478:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:59,735:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:51:59,750:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:51:59,995:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 00:52:00,873:INFO - friends.views views.py (line 79). Friend request revoked successfully.
+2024-05-08 00:52:08,200:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 00:52:08,202:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 00:52:08,549:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:52:08,551:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:52:08,557:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:52:08,590:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:52:08,718:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:52:08,735:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:52:08,823:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:52:08,834:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:52:08,925:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:52:08,936:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:52:09,031:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:52:09,447:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 00:52:09,611:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 00:52:10,552:INFO - friends.views views.py (line 79). Friend request revoked successfully.
+2024-05-08 00:55:08,742:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 00:55:13,338:INFO - users.views views.py (line 74). GET request received in RegisterView
+2024-05-08 00:57:27,316:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 00:57:30,373:INFO - users.models models.py (line 31). Password checked successfully for user: efg@gmail.com
+2024-05-08 00:57:30,373:INFO - users.models models.py (line 38). Last login updated for user: efg@gmail.com
+2024-05-08 00:57:30,379:INFO - users.views views.py (line 67). User successfully logged in
+2024-05-08 00:57:32,379:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 00:57:32,382:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-08 00:57:33,871:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:57:33,888:ERROR - userprofiles.views views.py (line 82). Failed to retrieve profile data: UserProfile matching query does not exist.
+2024-05-08 00:57:33,997:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:57:34,006:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:57:39,337:ERROR - posts.views views.py (line 294). Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+2024-05-08 00:57:50,140:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 00:57:56,838:INFO - users.models models.py (line 31). Password checked successfully for user: mt@gmail.com
+2024-05-08 00:57:56,841:INFO - users.models models.py (line 38). Last login updated for user: mt@gmail.com
+2024-05-08 00:57:56,842:INFO - users.views views.py (line 67). User successfully logged in
+2024-05-08 00:57:57,966:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 00:57:57,966:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-08 00:57:58,190:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 00:57:58,204:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 00:57:58,247:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 00:57:58,253:ERROR - userprofiles.views views.py (line 82). Failed to retrieve profile data: UserProfile matching query does not exist.
+2024-05-08 00:58:03,496:ERROR - posts.views views.py (line 294). Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+2024-05-08 01:01:13,509:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 01:01:13,527:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-08 01:01:24,823:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 01:01:31,650:WARNING - users.views views.py (line 49). User not found!
+2024-05-08 01:01:34,398:INFO - users.views views.py (line 74). GET request received in RegisterView
+2024-05-08 01:01:58,776:INFO - users.views views.py (line 85). POST request received in RegisterView
+2024-05-08 01:01:59,205:INFO - users.models models.py (line 26). Password updated for user: mt@gmail.com
+2024-05-08 01:01:59,232:INFO - users.views views.py (line 92). User successfully registered
+2024-05-08 01:01:59,245:INFO - userprofiles.views views.py (line 117). User profile created successfully!
+2024-05-08 01:01:59,258:INFO - userprofiles.views views.py (line 124). Image profile created successfully!
+2024-05-08 01:01:59,259:INFO - users.views views.py (line 108). User successfully registered
+2024-05-08 01:02:00,879:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 01:02:00,881:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 01:02:01,119:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 01:02:01,142:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 01:02:01,186:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 01:02:01,201:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 01:02:01,202:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 01:02:01,215:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 01:02:01,381:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 01:02:01,387:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 01:02:01,464:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 01:02:01,470:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 01:02:01,545:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 01:02:01,555:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 01:02:01,657:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 01:02:01,663:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 01:02:02,258:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 01:03:31,879:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 01:03:42,121:INFO - users.views views.py (line 74). GET request received in RegisterView
+2024-05-08 01:04:02,142:INFO - users.views views.py (line 85). POST request received in RegisterView
+2024-05-08 01:04:02,610:INFO - users.models models.py (line 26). Password updated for user: mt1@gmail.com
+2024-05-08 01:04:02,621:INFO - users.views views.py (line 92). User successfully registered
+2024-05-08 01:04:02,635:INFO - userprofiles.views views.py (line 117). User profile created successfully!
+2024-05-08 01:04:02,641:INFO - userprofiles.views views.py (line 124). Image profile created successfully!
+2024-05-08 01:04:02,642:INFO - users.views views.py (line 108). User successfully registered
+2024-05-08 01:04:03,960:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 01:04:03,960:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 01:04:05,152:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 01:04:05,177:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 01:04:05,245:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 01:04:05,248:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 01:04:05,275:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 01:04:05,284:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 01:04:05,467:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 01:04:05,477:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 01:04:05,550:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 01:04:05,560:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 01:04:05,691:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 01:04:05,702:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 01:04:05,798:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 01:04:05,807:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 01:04:06,240:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 07:13:42,096:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 07:13:42,100:WARNING - homepage.views views.py (line 29). No JWT token found in cookies
+2024-05-08 07:13:42,184:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 07:13:49,713:INFO - users.views views.py (line 74). GET request received in RegisterView
+2024-05-08 07:29:02,387:INFO - users.views views.py (line 85). POST request received in RegisterView
+2024-05-08 07:29:03,009:INFO - users.models models.py (line 26). Password updated for user: mt2@gmail.com
+2024-05-08 07:29:03,023:INFO - users.views views.py (line 92). User successfully registered
+2024-05-08 07:29:03,035:INFO - userprofiles.views views.py (line 117). User profile created successfully!
+2024-05-08 07:29:03,047:INFO - userprofiles.views views.py (line 124). Image profile created successfully!
+2024-05-08 07:29:03,053:INFO - users.views views.py (line 108). User successfully registered
+2024-05-08 07:29:05,160:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 07:29:05,161:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 07:29:05,819:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 07:29:05,821:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 07:29:05,843:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 07:29:05,848:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 07:29:05,909:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 07:29:05,910:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 07:29:06,022:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 07:29:06,031:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 07:29:06,106:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 07:29:06,112:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 07:29:06,190:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 07:29:06,202:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 07:29:06,289:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 07:29:06,299:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 07:29:07,322:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 07:29:16,310:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 07:29:18,033:INFO - users.views views.py (line 74). GET request received in RegisterView
+2024-05-08 07:29:37,131:INFO - users.views views.py (line 85). POST request received in RegisterView
+2024-05-08 07:29:37,625:INFO - users.models models.py (line 26). Password updated for user: mt3@gmail.com
+2024-05-08 07:29:37,643:INFO - users.views views.py (line 92). User successfully registered
+2024-05-08 07:29:37,651:INFO - userprofiles.views views.py (line 117). User profile created successfully!
+2024-05-08 07:29:37,653:INFO - userprofiles.views views.py (line 124). Image profile created successfully!
+2024-05-08 07:29:37,653:INFO - users.views views.py (line 108). User successfully registered
+2024-05-08 07:29:39,108:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 07:29:39,108:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 07:29:39,320:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 07:29:39,328:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 07:29:39,350:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 07:29:39,365:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 07:29:39,365:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 07:29:39,385:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 07:29:39,511:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 07:29:39,521:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 07:29:39,587:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 07:29:39,599:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 07:29:39,665:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 07:29:39,675:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 07:29:39,744:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 07:29:39,750:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 07:29:40,344:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 07:29:43,877:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 07:29:45,251:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 16:50:16,749:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 16:50:16,754:WARNING - homepage.views views.py (line 29). No JWT token found in cookies
+2024-05-08 16:50:16,939:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 16:51:27,474:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 16:54:19,586:INFO - users.models models.py (line 31). Password checked successfully for user: mt3@gmail.com
+2024-05-08 16:54:19,592:INFO - users.models models.py (line 38). Last login updated for user: mt3@gmail.com
+2024-05-08 16:54:19,604:INFO - users.views views.py (line 67). User successfully logged in
+2024-05-08 16:54:21,140:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 16:54:21,142:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-08 16:54:22,246:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 16:54:22,327:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 16:54:22,328:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 16:54:22,367:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 16:54:27,489:ERROR - posts.views views.py (line 294). Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+2024-05-08 16:55:44,489:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 17:23:37,336:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 17:23:40,315:INFO - users.models models.py (line 31). Password checked successfully for user: mt3@gmail.com
+2024-05-08 17:23:40,316:INFO - users.models models.py (line 38). Last login updated for user: mt3@gmail.com
+2024-05-08 17:23:40,322:INFO - users.views views.py (line 67). User successfully logged in
+2024-05-08 17:23:41,137:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 17:23:41,138:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-08 17:23:41,836:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 17:23:41,851:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:23:41,895:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 17:23:41,895:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:23:46,944:ERROR - posts.views views.py (line 294). Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+2024-05-08 17:24:00,393:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 17:24:00,394:INFO - userprofiles.views views.py (line 42). Redirecting to profile page.
+2024-05-08 17:24:00,473:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 17:24:00,473:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 17:24:01,472:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:01,483:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 17:24:01,498:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:01,508:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 17:24:01,613:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 17:24:01,623:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 17:24:01,691:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 17:24:01,698:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 17:24:01,774:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 17:24:01,781:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 17:24:01,960:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 17:24:01,975:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 17:24:02,482:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 17:24:05,383:ERROR - posts.views views.py (line 200). No more posts available.
+2024-05-08 17:24:05,689:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 17:24:05,690:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-08 17:24:05,874:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:05,874:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:11,187:ERROR - posts.views views.py (line 294). Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+2024-05-08 17:24:12,358:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 17:24:12,360:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-08 17:24:12,548:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:12,549:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:15,194:INFO - users.views views.py (line 35). User attempts to access the login page.
+2024-05-08 17:24:17,642:ERROR - posts.views views.py (line 294). Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+2024-05-08 17:24:18,809:INFO - users.models models.py (line 31). Password checked successfully for user: a3@gmail.com
+2024-05-08 17:24:18,810:INFO - users.models models.py (line 38). Last login updated for user: a3@gmail.com
+2024-05-08 17:24:18,810:INFO - users.views views.py (line 67). User successfully logged in
+2024-05-08 17:24:19,616:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 17:24:19,617:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-08 17:24:19,986:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:19,988:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:19,988:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 17:24:20,026:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 17:24:24,656:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 17:24:24,656:INFO - userprofiles.views views.py (line 42). Redirecting to profile page.
+2024-05-08 17:24:24,727:INFO - userprofiles.views views.py (line 29). GET request received in ProfileView.
+2024-05-08 17:24:24,728:INFO - userprofiles.views views.py (line 35). Rendering profile.html.
+2024-05-08 17:24:24,937:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:24,946:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:24,957:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 17:24:24,973:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 17:24:25,067:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 17:24:25,080:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 17:24:25,152:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 17:24:25,159:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 17:24:25,222:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 17:24:25,232:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 17:24:25,299:INFO - userprofiles.views views.py (line 67). GET request received in GetProfileView.
+2024-05-08 17:24:25,305:INFO - userprofiles.views views.py (line 80). Successfully retrieved profile data.
+2024-05-08 17:24:25,434:ERROR - posts.views views.py (line 294). Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+2024-05-08 17:24:26,379:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:26,395:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:26,892:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:26,892:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:27,360:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:27,366:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:27,874:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:27,876:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:28,376:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:28,387:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:28,883:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:28,886:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:29,389:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:29,392:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:29,887:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:29,889:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:31,901:INFO - homepage.views views.py (line 24). GET request received in HomePageView
+2024-05-08 17:24:31,902:INFO - homepage.views views.py (line 40). Rendering homepage
+2024-05-08 17:24:32,106:INFO - reactions.views views.py (line 24). POST request received in GetReactions.
+2024-05-08 17:24:32,118:INFO - reactions.views views.py (line 239). POST request received in IsReactedView.
+2024-05-08 17:24:37,387:ERROR - posts.views views.py (line 294). Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.

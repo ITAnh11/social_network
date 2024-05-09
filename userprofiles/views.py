@@ -14,11 +14,11 @@ from .forms import ImageProfileForm
 from common_functions.common_function import getUser
 
 from social_network.redis_conn import redis_server
-
+import logging
 import random
 import time
 import json
-
+logger=logging.getLogger(__name__)
 EX_TIME = 60 * 10
 INT_FROM = 0
 INT_TO = EX_TIME // 3
@@ -26,44 +26,50 @@ INT_TO = EX_TIME // 3
 class ProfileView(APIView):
     def get(self, request):
         user = getUser(request)
-        # print(user)
+        logger.info("GET request received in ProfileView.")
         if not isinstance(user, User):
+            logger.warning("User is not authenticated.")
             return HttpResponseRedirect(reverse('users:login'))
         
         if request.query_params.get('id'):
+            logger.info("Rendering profile.html.")
             return render(request, 'userprofiles/profile.html')
         
         id_requested = request.query_params.get('id') or user.id
         
         path = reverse('userprofiles:profile') + '?id=' + str(id_requested)
         
+        logger.info("Redirecting to profile page.")
         return HttpResponseRedirect(path)
         
 class ListFriendsView(APIView):
     def get(self, request):
         user = getUser(request)
-        # print(user)
+        logger.info("GET request received in ListFriendsView.")
         if not isinstance(user, User):
+            logger.warning("User is not authenticated.")
             return HttpResponseRedirect(reverse('users:login'))
         
         if request.query_params.get('id'):
+            logger.info("Rendering listFriends.html.")
             return render(request, 'userprofiles/listFriends.html')
         
         id_requested = request.query_params.get('id') or user.id
         
         path = reverse('userprofiles:listFriends') + '?id=' + str(id_requested)
         
+        logger.info("Redirecting to listFriends page.")
         return HttpResponseRedirect(path)
 
 class GetProfileView(APIView):
     def get(self, request):
         user = getUser(request)
+        logger.info("GET request received in GetProfileView.")
         
         if not isinstance(user, User):
+            logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=401)
 
-        # print(request.query_params.get('id'))
-        
         if request.query_params.get('id'):
             idUserRequested = int(request.query_params.get('id'))
         else:  
@@ -71,7 +77,9 @@ class GetProfileView(APIView):
         
         try:
             context = self.getProfile(idUserRequested)
+            logger.info("Successfully retrieved profile data.")
         except Exception as e:
+            logger.error(f"Failed to retrieve profile data: {str(e)}")
             return Response({'error': str(e)}, status=404)
         
         context['isOwner'] = True if user.id == idUserRequested else False
@@ -106,14 +114,14 @@ class SetUserProfileView(APIView):
                                                 )
 
         userprofile.save()
-
+        logger.info("User profile created successfully!")
         return Response({'message': 'User profile created successfully!'})
 class SetImageProfileView(APIView):    
     def post(self, request, user):
         imageProfileForm = ImageProfileForm(request.POST or None, request.FILES or None)
         if imageProfileForm.is_valid():
             imageProfileForm.save(user)
-                              
+            logger.info("Image profile created successfully!")                     
         return Response({'message': 'Image profile created successfully!'})
     
 class UserProfileBasicView(APIView):
@@ -169,6 +177,7 @@ class UserProfileBasicView(APIView):
         user = getUser(request)
         
         if not user:
+            logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         context = self.getUserProfileBasic(user)

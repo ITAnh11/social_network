@@ -28,22 +28,8 @@
       </div>
   </div>
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const contactList = document.getElementById('userList');
-      const chatBox = document.getElementById('chatBox');
-  
-      // Add click event listener to each contact
-      contactList.addEventListener('click', function(event) {
-        const contact = event.target.closest('.contact');
-        if (contact) {
-          // Get user ID from data attribute
-          const userId = contact.dataset.userId;
-          // You can load chat history, user info, etc. based on the user ID
-          // For simplicity, let's just show the chat box
-          chatBox.classList.remove('hide');
-        }
-      });
-    });
+
+
   </script>
   </div>
   <script src="{% static 'chat/js/chat.js' %}"></script>

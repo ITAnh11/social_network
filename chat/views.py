@@ -23,19 +23,20 @@ from common_functions.common_function import getUserProfileForPosts, getTimeDura
 from django.shortcuts import render, redirect
 from mongoengine.errors import DoesNotExist
 
-logger=logging.getLogger(__name__)
 
-
-class MesseejiView():
-    pass 
 from django.views.decorators.cache import cache_page
 from social_network.redis_conn import redis_server
 from mongoengine import connect
-# from django.conf import settings
-# from django.core.cache.backends.base import DEFAULT_TIMEOUT
-# from django.core.cache import cache
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.core.cache import cache
 
-# CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+from rest_framework.pagination import PageNumberPagination
+
+
+logger=logging.getLogger(__name__)
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 class ChatTestView(APIView):
 
@@ -73,7 +74,13 @@ class GetMesseeji(APIView):
     def post(self, request):
         try:
             channel_id = request.data.get('channel_id')
-            all_messeeji = Messeeji.objects(channel_id=channel_id)
+            key = f"all_chat_channel_{channel_id}"
+            if (cache.get(key)):
+                all_messeeji = cache.get(key)
+            else: 
+                all_messeeji = Messeeji.objects(channel_id=channel_id)
+                cache.set(f"all_chat_channel_{channel_id}", all_messeeji)
+            
             response = Response()
             data = []
             
@@ -92,7 +99,9 @@ class GetMesseeji(APIView):
                 }
             return response
         except Exception as e:
+            print(f"exception: {e}")
             logger.exception(f"Error fetching messeeji: {str(e)}")
+
 
 class GetChannels(APIView):
     def get_channels_by(query):
@@ -136,7 +145,7 @@ class CreateMesseeji(APIView):
 
             messeeji = self.create(request)
             messeeji.save()
-
+            logger.info('created messeeji successfully')
             response.data = {
                 "status": "new messeeji created!",
                 "data": [MesseejiSerializer(messeeji).data]
@@ -148,8 +157,27 @@ class CreateMesseeji(APIView):
 class CreateChannel(APIView):
     def check_existing_channel(self, user_id1, user_id2):
         try:
-            part_user1 = Participants.objects(user_id=user_id1)
-            part_user2 = Participants.objects(user_id=user_id2)
+            # Define keys for caching
+            key_user1 = f"participants_user_{user_id1}"
+            key_user2 = f"participants_user_{user_id2}"
+
+            # Check if data is cached
+            cached_part_user1 = cache.get(key_user1)
+            cached_part_user2 = cache.get(key_user2)
+
+            # Retrieve data from cache if available
+            if cached_part_user1:
+                part_user1 = cached_part_user1
+            else:
+                part_user1 = Participants.objects(user_id=user_id1)
+                cache.set(key_user1, part_user1)
+
+            if cache.get(key_user2):
+                part_user2 = cached_part_user2
+            else:
+                part_user2 = Participants.objects(user_id=user_id2)
+                cache.set(key_user2, part_user2)
+
             channels_user1 = [participant.channel_id for participant in part_user1]
             channels_user2 = [participant.channel_id for participant in part_user2]
             common_channels = set(channels_user1) & set(channels_user2)
@@ -162,31 +190,35 @@ class CreateChannel(APIView):
             return False, None
 
     def create(self, request):
-        user = getUser(request)
-        user_id = user.id
-        target_id = request.data.get('target_id')
-        existed_channel = self.check_existing_channel(user_id, target_id)
-        if existed_channel[0]:
-            output_channel = existed_channel[1].first()
-            return False, output_channel
-        else:
-            new_channel =  Channel(
-                created_at = datetime.datetime.now(),
-                capacity = 2,
-            )
-            part_user = Participants(
-                user_id = user_id,
-                channel_id = new_channel.id,
-            )
-            part_target = Participants(
-                user_id = target_id,
-                channel_id = new_channel.id
-            )
-            new_channel.save()
-            part_user.save()
-            part_target.save()
-        return True, new_channel
-    
+        try:
+            user = getUser(request)
+            user_id = user.id
+            target_id = request.data.get('target_id')
+            existed_channel = self.check_existing_channel(user_id, target_id)
+            if existed_channel[0]:
+                output_channel = existed_channel[1].first()
+                return False, output_channel
+            else:
+                new_channel =  Channel(
+                    created_at = datetime.datetime.now(),
+                    capacity = 2,
+                )
+                part_user = Participants(
+                    user_id = user_id,
+                    channel_id = new_channel.id,
+                )
+                part_target = Participants(
+                    user_id = target_id,
+                    channel_id = new_channel.id
+                )
+                new_channel.save()
+                part_user.save()
+                part_target.save()
+                logger.info('saved channel succesfully')
+            return True, new_channel
+        except Exception as e:
+            logger.error('can not save channel like I want')
+            return False, None
     def post(self, request):
         try:
             user = getUser(request)
@@ -302,44 +334,159 @@ class ProfileDetail(generics.RetrieveUpdateAPIView):
     queryset = UserProfile.objects.all()
     permission_classes = [IsAuthenticated]
 
+class CustomPagination(PageNumberPagination):
+    page_size = 2
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
 class SearchUser(generics.ListAPIView):
     serializer_class = UserInfoSerializer
-    queryset = UserProfile.objects.all()
+    #queryset = UserProfile.objects.all()
+    pagination_class = CustomPagination
+
     def search(self, username):
-        users = []
-        if(username != '@'):
-            users = UserProfile.objects.filter(
-                Q(user_id__email__icontains=username) |
-                Q(first_name__icontains=username) |
-                Q(last_name__icontains=username) 
-            )
+        # Define cache key
+        cache_key = f"user_search_{username}"
+
+        # Check if data is cached
+        cached_result = cache.get(cache_key)
+
+        # Retrieve data from cache if available
+        if cached_result:
+            users = cached_result
         else:
-            users = UserProfile.objects.all()[:10]
+            if username != '@':
+                users = UserProfile.objects.filter(
+                    Q(user_id__email__icontains=username) |
+                    Q(first_name__icontains=username) |
+                    Q(last_name__icontains=username)
+                )
+            else:
+                users = UserProfile.objects.all()[:10]
+
+            # Set cache
+            cache.set(cache_key, users)
+
         return users
     def list(self, request, *args, **kwargs):
         username = self.kwargs['username']
         users = self.search(username)
-        current_user_id = getUser(request).id
-        users = [user for user in users if user.id != current_user_id]
+        current_user = getUser(request)
+        current_user_id = current_user.id
+
+        page = self.paginate_queryset(users)
+
         if not users:
             return Response(
                 {"detail" : "No user found"},
                 status=status.HTTP_404_NOT_FOUND
             )
-        
+        page = [user for user in page if user.id != current_user_id]
         data = []
-        serializer = UserInfoSerializer(users, many=True)
+        serializer = UserInfoSerializer(page, many=True)
     
-        for index, user in enumerate(users):
-            user_img = getUserProfileForPosts(User.objects.filter(id=user.id).first())['avatar']
-            user_data = serializer.data[index]  # Get serialized data for the current user
+        for user in serializer.data:
+            user_img = getUserProfileForPosts(User.objects.get(id=user['id']))['avatar']
+            user['avatar'] = user_img
+            data.append(user)
+        return self.get_paginated_response({
+            "list_users": data,
+            "current_user": current_user_id,
+        })
     
-            # Append the avatar to the user data
-            user_data['avatar'] = user_img
+
+class ContactUsers(generics.ListAPIView):
+    pagination_class = CustomPagination
+
+    def get_nearest_unread_messeeji(self, channel_id, current_user_id):
+        collection = Messeeji._get_collection()
+        # Write your raw MongoDB find query
+            # print(f"collection: {collection}")
+            # Write your raw MongoDB find query
+        raw_query = {
+            'channel_id': channel_id,
+            'sender_id': {
+                '$ne' : current_user_id
+            },
+            'is_read': False
+        }
+
+        num_documents = collection.count_documents(raw_query)
+        # Execute the raw find query
+        unread_messeejis = collection.find_one(raw_query, sort=[('created_at', 1)])
+        if (not num_documents):
+            num_documents = 0
+        return unread_messeejis, num_documents
+
+    def list(self, request, *args, **kwargs):
+        user = getUser(request)
+        if not user:
+            return Response({"message": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
+        current_user_id = user.id
+        # Filter all channels that the current user joins
+        user_channels = Participants.objects(user_id=current_user_id)
+        # print("a")
+        # print(f"all parti: {user_channels}")
+
+        # Find the newest unread Messeeji and its sender from each channel, where the sender is not the current user
+        senders_list_info = []
+        for channel in user_channels:
+            res = self.get_nearest_unread_messeeji(channel.channel_id, current_user_id)
+            newest_unread_messeeji = res[0]
+            unread_amount = res[1]
+            # print(f"new new new: {newest_unread_messeeji}")
+            if newest_unread_messeeji:
+                sender_profile = UserProfile.objects.get(user_id=newest_unread_messeeji['sender_id'])
+                senders_list_info.append({
+                    'sender': sender_profile,
+                    'channel_id': channel.channel_id,
+                    'created_at': newest_unread_messeeji['created_at'],
+                    'unread_amount' : unread_amount 
+                })
+
+        # print(f"sender_list bf: {senders_list_info}")
+        # Sort the list of senders by the time of the newest unread Messeeji
+        senders_list_info.sort(key=lambda x: x['created_at'] if x['created_at'] else datetime.min, reverse=True)
+        # print(f"sender_list af: {senders_list_info}")
+        sender_ids = [sender_info['sender'].user_id for sender_info in senders_list_info]
+
+        # Get all user IDs except those in sender_ids
+        all_user_ids = UserProfile.objects.exclude(user_id__in=sender_ids).exclude(user_id=current_user_id).values_list('user_id', flat=True)
+
+        sender_ids.extend(all_user_ids)
+
+        senders_queryset = UserProfile.objects.filter(user_id__in=sender_ids)
+
+        page = self.paginate_queryset(senders_queryset)
+
+        data = []
+        serializer = UserInfoSerializer(page, many=True)
+        # print(f"data is: {serializer.data}")
+        # print(f"sender_list: {senders_list_info}")
     
-            data.append(user_data)
-    
-        return Response({
-            "list_users" : data,
-            "current_user" : getUser(request).id,
+        data = []
+
+        senders_list_info_iter = iter(senders_list_info)
+        for user in serializer.data:
+            try:
+                
+                user_img = getUserProfileForPosts(User.objects.get(id=user['id']))['avatar']
+                user['avatar'] = user_img
+                sender_info = next(senders_list_info_iter)
+                user['unread_amount'] = sender_info['unread_amount']
+                data.append(user)
+            except StopIteration:
+                # Handle the case where sender_list_info runs out
+                user['unread_amount'] = 0
+                data.append(user)
+            except UserProfile.DoesNotExist:
+                # Handle the case where the sender's profile doesn't exist
+                user['unread_amount'] = 0
+                data.append(user)
+
+
+        # print(f"final data: {data}")
+        return self.get_paginated_response({
+            "list_users": data,
+            "current_user": current_user_id,
         })
