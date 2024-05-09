@@ -10,6 +10,7 @@ from users.serializers import UserSerializer
 from .models import UserProfile, ImageProfile
 from .serializers import UserProfileSerializer, ImageProfileSerializer
 from .forms import ImageProfileForm
+from django.db import connection
 
 from common_functions.common_function import getUser
 
@@ -25,7 +26,11 @@ INT_TO = EX_TIME // 3
 
 class ProfileView(APIView):
     def get(self, request):
-        user = getUser(request)
+        try:
+            user = getUser(request)
+        except Exception as e:
+            return HttpResponseRedirect(reverse('users:login'))
+        
         logger.info("GET request received in ProfileView.")
         if not isinstance(user, User):
             logger.warning("User is not authenticated.")
@@ -44,7 +49,11 @@ class ProfileView(APIView):
         
 class ListFriendsView(APIView):
     def get(self, request):
-        user = getUser(request)
+        try:
+            user = getUser(request)
+        except Exception as e:
+            return HttpResponseRedirect(reverse('users:login'))
+        
         logger.info("GET request received in ListFriendsView.")
         if not isinstance(user, User):
             logger.warning("User is not authenticated.")
@@ -104,18 +113,47 @@ class GetProfileView(APIView):
     
 class SetUserProfileView(APIView):    
     # create a new user profile
-    def post(self, request, user):
-        userprofile = UserProfile.objects.create(   user_id=user,
-                                                    first_name=request.data.get('first_name'),
-                                                    last_name=request.data.get('last_name'),
-                                                    gender=request.data.get('gender'),
-                                                    phone=request.data.get('phone'),
-                                                    birth_date=request.data.get('birth_date') or None,
-                                                )
+    # def post(self, request, user):
+    #     userprofile = UserProfile.objects.create(   user_id=user,
+    #                                                 first_name=request.data.get('first_name'),
+    #                                                 last_name=request.data.get('last_name'),
+    #                                                 gender=request.data.get('gender'),
+    #                                                 phone=request.data.get('phone'),
+    #                                                 birth_date=request.data.get('birth_date') or None,
+    #                                             )
 
-        userprofile.save()
-        logger.info("User profile created successfully!")
-        return Response({'message': 'User profile created successfully!'})
+    #     userprofile.save()
+    #     logger.info("User profile created successfully!")
+    #     return Response({'message': 'User profile created successfully!'})
+    class SetUserProfileView(APIView):    
+    # create a new user profile
+        def post(self, request, user):
+            # userprofile = UserProfile.objects.create(   user_id=user,
+            #                                             first_name=request.data.get('first_name'),
+            #                                             last_name=request.data.get('last_name'),
+            #                                             gender=request.data.get('gender'),
+            #                                             phone=request.data.get('phone'),
+            #                                             birth_date=request.data.get('birth_date') or None,
+            #                                         )
+
+            #userprofile.save()
+            
+            with connection.cursor() as cursor:
+                cursor.execute(""" UPDATE userprofiles_userprofile
+                                SET
+                                    first_name= %s,
+                                    last_name = %s,
+                                    gender = %s,
+                                    phone = %s,
+                                    birth_date = %s
+                                WHERE user_id_id = %s
+                                """,[request.data.get('first_name'), request.data.get('last_name'),
+                                    request.data.get('gender'), request.data.get('phone'),
+                                    request.data.get('birth_date'), user.id]
+            )
+
+            return Response({'message': 'User profile created successfully!'})
+    
 class SetImageProfileView(APIView):    
     def post(self, request, user):
         imageProfileForm = ImageProfileForm(request.POST or None, request.FILES or None)
@@ -126,7 +164,11 @@ class SetImageProfileView(APIView):
     
 class UserProfileBasicView(APIView):
     def removeUserProfileBasic(self, user_id):
-        redis_server.delete(f'userprofile_basic_{user_id}')
+        try:
+            logger.info(f"Removing user profile basic {user_id}")
+            redis_server.delete(f'userprofile_basic_{user_id}')
+        except Exception as e:
+            logger.error(f"Failed to remove user profile basic {user_id}: {str(e)}")
         
     def resetUserProfileBasic(self, user):
         redis_server.delete(f'userprofile_basic_{user.id}')

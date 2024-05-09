@@ -19,11 +19,17 @@ from notifications.models import Notifications
 from userprofiles.views import UserProfileBasicView
 import json
 from concurrent.futures import ThreadPoolExecutor
+import logging
+logger = logging.getLogger(__name__)
 
 executor = ThreadPoolExecutor(max_workers=2)
 
 def update_data(model, query, update):
-    model.objects(__raw__=query).update(__raw__=update)
+    try:
+        model.objects(__raw__=query).update(__raw__=update)
+    except Exception as e:
+        logger.error('Error update data:', e)
+        # print('Error update data:', e)
 
 # This function processes a Kafka message and updates the database accordingly.
 def process_message_userprofile(msg):
@@ -33,7 +39,7 @@ def process_message_userprofile(msg):
     if msg.value() is None:
         print('No message')
         return
-    
+    logger.info('Begin process message Userprofile')
     try:
         msg_value = msg.value().decode('utf-8')
 
@@ -49,6 +55,7 @@ def process_message_userprofile(msg):
         # Perform the appropriate action in MongoDB based on the operation type
         if op == 'u':
             print("process_message_update_name_userprofile", msg_json)
+            logger.info("process_message_update_name_userprofile", msg_json)
             
             new_first_name = after_data['first_name']
             new_last_name = after_data['last_name']
@@ -76,10 +83,13 @@ def process_message_userprofile(msg):
         pass
     except Exception as e:
         print('Error processing message Userprofile:', e)
+        logger.error('Error processing message Userprofile:', e)
     
     print('Processed message Userprofile done!!!')
+    logger.info('Processed message Userprofile done!!!')
 
 def consume_messages_userprofile():
+    print("Consuming messages userprofile")
     # Create a Kafka consumer
     c = Consumer({
         'bootstrap.servers': 'localhost:29092',
@@ -98,6 +108,7 @@ def consume_messages_userprofile():
                 continue
             elif msg.error():
                 print("Consumer error: {}".format(msg.error()))
+                logger.error("Consumer error: {}".format(msg.error()))
                 continue
             else:
                 # Process the Kafka message

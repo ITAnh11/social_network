@@ -68,11 +68,68 @@ class LoginView(APIView):
         
         return response
   
+# class RegisterView(APIView):
+#     def get(self, request):
+#         # Log khi phương thức GET được gọi
+#         logger.info("GET request received in RegisterView")
+        
+#         response = render(request, 'users/register.html')
+#         print(request.COOKIES.get('jwt'))
+#         response.delete_cookie('jwt')
+        
+#         return response
+            
+#     def post(self, request):
+#         try:
+#             # Log khi phương thức POST được gọi
+#             logger.info("POST request received in RegisterView")
+            
+#             serializer = UserSerializer(data=request.data)
+#             if serializer.is_valid(raise_exception=True):
+#                 try:
+#                     user = serializer.save()
+#                     # Ghi log khi save thành công
+#                     logger.info('User successfully registered')
+                    
+#                     SetUserProfileView().post(request, user)
+#                     SetImageProfileView().post(request, user)
+                    
+#                     # user.set_last_login()
+                    
+#                     token = LoginView().makeToken(user)
+                    
+#                     response = Response()
+#                     response.set_cookie(key='jwt', value=token, httponly=True)
+#                     response.data = {
+#                         'success': 'Register success!!! Welcome to the feisubukku!',
+#                         'jwt': token,
+#                         'redirect_url': '/userprofiles/' + f"?id={user.id}"
+#                     }
+#                     logger.info('User successfully registered')
+#                     return response
+#                 except Exception as save_error:
+#                     # Ghi log khi save thất bại
+#                     logger.error("Failed to register user: %s", save_error)
+#                     return Response({'error': 'Failed to register user. Please try again.'})
+
+            
+#         except ValidationError as e:
+#             if e.detail.get('email'):
+#                 logger.warning('User needs to register with email')
+#                 return Response({'warning': e.detail.get('email')})
+#             if e.detail.get('comfirm_password'):
+#                 logger.warning('User needs to enter password')
+#                 return Response({'warning': e.detail.get('comfirm_password')})
+#             if e.detail.get('check_password'):
+#                 logger.warning('User needs to enter the same email')
+#                 return Response({'warning': e.detail.get('check_password')})
+#         except Exception as e:
+#             # Log khi có lỗi xảy ra trong phương thức POST
+#             logger.exception("An error occurred in RegisterView")
+#             return Response({'error': 'Something went wrong. Please try again.'})
+
 class RegisterView(APIView):
     def get(self, request):
-        # Log khi phương thức GET được gọi
-        logger.info("GET request received in RegisterView")
-        
         response = render(request, 'users/register.html')
         print(request.COOKIES.get('jwt'))
         response.delete_cookie('jwt')
@@ -80,54 +137,39 @@ class RegisterView(APIView):
         return response
             
     def post(self, request):
+        # print(request.data)
         try:
-            # Log khi phương thức POST được gọi
-            logger.info("POST request received in RegisterView")
-            
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
-                try:
-                    user = serializer.save()
-                    # Ghi log khi save thành công
-                    logger.info('User successfully registered')
-                    
-                    SetUserProfileView().post(request, user)
-                    SetImageProfileView().post(request, user)
-                    
-                    # user.set_last_login()
-                    
-                    token = LoginView().makeToken(user)
-                    
-                    response = Response()
-                    response.set_cookie(key='jwt', value=token, httponly=True)
-                    response.data = {
-                        'success': 'Register success!!! Welcome to the feisubukku!',
-                        'jwt': token,
-                        'redirect_url': '/userprofiles/' + f"?id={user.id}"
-                    }
-                    logger.info('User successfully registered')
-                    return response
-                except Exception as save_error:
-                    # Ghi log khi save thất bại
-                    logger.error("Failed to register user: %s", save_error)
-                    return Response({'error': 'Failed to register user. Please try again.'})
-
+                user = serializer.save()
+                
+                SetUserProfileView().post(request, user)
+                #SetImageProfileView().post(request, user)
+                
+                # user.set_last_login()
+                
+                token = LoginView().makeToken(user)
+                
+                response = Response()
+                response.set_cookie(key='jwt', value=token, httponly=True)
+                response.data = {
+                    'success': 'Register success!!! Welcome to the feisubukku!',
+                    'jwt': token,
+                    'redirect_url': '/userprofiles/' + f"?id={user.id}"
+                }
+                
+                return response
             
         except ValidationError as e:
             if e.detail.get('email'):
-                logger.warning('User needs to register with email')
                 return Response({'warning': e.detail.get('email')})
             if e.detail.get('comfirm_password'):
-                logger.warning('User needs to enter password')
                 return Response({'warning': e.detail.get('comfirm_password')})
             if e.detail.get('check_password'):
-                logger.warning('User needs to enter the same email')
                 return Response({'warning': e.detail.get('check_password')})
         except Exception as e:
-            # Log khi có lỗi xảy ra trong phương thức POST
-            logger.exception("An error occurred in RegisterView")
             return Response({'error': 'Something went wrong. Please try again.'})
-
+        
 class LogoutView(APIView):
     def post(self, request):
         # Log khi phương thức POST của LogoutView được gọi

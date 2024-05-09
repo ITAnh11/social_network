@@ -22,7 +22,11 @@ logger=logging.getLogger(__name__)
 
 class EditImagesPage(APIView):
     def get(self, request):
-        user = getUser(request)
+        try:
+            user = getUser(request)
+        except Exception as e:
+            return HttpResponseRedirect(reverse('users:login'))
+        
         logger.info("GET request received in EditImagesPage.")
         if not isinstance(user, User):
             logger.warning("User is not authenticated.")
@@ -130,7 +134,11 @@ class EditCoverView(APIView):
 
 class EditProfileView(APIView):
     def get(self, request):
-        user = getUser(request)
+        try:
+            user = getUser(request)
+        except Exception as e:
+            return HttpResponseRedirect(reverse('users:login'))
+        
         logger.info("GET request received in EditProfileView.")
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
@@ -184,7 +192,11 @@ class EditProfileView(APIView):
 
 class EditStoryView(APIView):
     def get(self, request):
-        user = getUser(request)
+        try:
+            user = getUser(request)
+        except Exception as e:
+            return HttpResponseRedirect(reverse('users:login'))
+        
         logger.info("GET request received in EditStoryView.")
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
