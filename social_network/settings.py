@@ -101,7 +101,7 @@ WSGI_APPLICATION = 'social_network.wsgi.application'
 
 ASGI_APPLICATION = "social_network.asgi.application"
 
-REDIS_HOST = 'host.docker.internal'
+REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 
 CHANNEL_LAYERS = {
@@ -126,7 +126,15 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
-        'PORT': '5000',
+        'PORT': '5001',
+    },
+    'replica': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'social_network',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': '127.0.0.1',
+        'PORT': '5002',
     },
 }
 
