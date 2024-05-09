@@ -96,6 +96,7 @@ function showMoreUsers() {
                     nextPageUrl = data.next;
                 } else {
                     moreLink.style.display = 'none';
+                    nextPageUrl = null;
                 }
                 data.results.list_users.forEach(function(user) {
                     var fullName = user.first_name + " " + user.last_name;
