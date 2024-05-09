@@ -54,9 +54,6 @@ function create_reaction_for_cmt(event){
     var type = event.target.className;
     var b = event.target.parentNode.parentNode;
     formData = new FormData();
-    formData.append('user_id',localStorage.getItem('id'));
-    formData.append('user_name',localStorage.getItem('name'));
-    formData.append('user_avatar',localStorage.getItem('avatar'));
     formData.append('posts_id',post_id);
     formData.append('comment_id',b.getAttribute("comment_id"));
     formData.append('type',type);
@@ -106,9 +103,6 @@ url_delete_react = "/reactions/delete_reaction/";
 function delete_reaction_for_cmt(event){
     var b = event.target;
     formData = new FormData();
-    formData.append('user_id',localStorage.getItem('id'));
-    formData.append('user_name',localStorage.getItem('name'));
-    formData.append('user_avatar',localStorage.getItem('avatar'));
     formData.append('posts_id',post_id);
     formData.append('comment_id',b.getAttribute("comment_id"));
     formData.append('type',"like");

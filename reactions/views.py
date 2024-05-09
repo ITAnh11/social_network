@@ -118,14 +118,6 @@ class CreateReaction(APIView):
             logger.error("posts_id or comment_id is required.")
             return Response({'error': 'posts_id or comment_id is required'}, status=status.HTTP_400_BAD_REQUEST)
         
-        if request.data.get('user_id') is None or request.data.get('user_name') is None or request.data.get('user_avatar') is None:
-            logger.error("user_id, user_name, user_avatar is required.")
-            return Response({'error': 'user_id, user_name, user_avatar is required'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        if int(request.data.get('user_id')) != user.id:
-            logger.warning("User is not authorized.")
-            return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
-        
         response = Response()
         
         posts_id = int(request.data.get('posts_id'))

@@ -69,3 +69,6 @@ venv.bak/
 
 # folder
 media/
+
+postgres-1/
+postgres-2/

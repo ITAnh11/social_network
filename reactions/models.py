@@ -24,13 +24,3 @@ class Reactions(Document):
     
     def setTypeReaction(self, type):
         self.update(__raw__={'$set': {'type': type}})
-
-def updateProfileReactions(user_id, userbasicinfo):
-    try:
-        reactions = Reactions.objects(__raw__={'user.id': user_id})
-        
-        for reaction in reactions:
-            reaction.update(__raw__={'$set': {'user': userbasicinfo}})
-    except Exception as e:
-        print("updateProfileNotification", e)
-        return False

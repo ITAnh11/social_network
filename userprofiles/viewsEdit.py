@@ -17,29 +17,16 @@ from posts.views import createUpdateImageProfilePosts
 
 from common_functions.common_function import getUser
 
-from notifications.models import updateProfileNotification
-from posts.models import updateProfilePosts
-from reactions.models import updateProfileReactions
-from comments.models import updateProfileComments
 import logging
 logger=logging.getLogger(__name__)
 
-def updateAllReferences(user):
-    try:
-        userprofile = UserProfileBasicView().resetUserProfileBasic(user)
-        updateProfilePosts(user.id, userprofile)
-        updateProfileComments(user.id, userprofile)
-        updateProfileReactions(user.id, userprofile)
-        updateProfileNotification(user.id, userprofile)
-    except Exception as e:
-        logger.error('Error in updateAllReferences: %s', e)
-        return False
-    return True
-    
-
 class EditImagesPage(APIView):
     def get(self, request):
-        user = getUser(request)
+        try:
+            user = getUser(request)
+        except Exception as e:
+            return HttpResponseRedirect(reverse('users:login'))
+        
         logger.info("GET request received in EditImagesPage.")
         if not isinstance(user, User):
             logger.warning("User is not authenticated.")
@@ -93,9 +80,8 @@ class EditAvatarView(APIView):
                 logger.error("Error while creating post.")
                 return Response({'error': 'Error while creating post'}, status=400)
             
-            updateAllReferences(user)
-            
             logger.info("Avatar image updated successfully.")
+
             return Response({'success': 'Your avatar image updated successfully!',
                              'avatar': imageprofile.avatar.url,
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
@@ -148,7 +134,11 @@ class EditCoverView(APIView):
 
 class EditProfileView(APIView):
     def get(self, request):
-        user = getUser(request)
+        try:
+            user = getUser(request)
+        except Exception as e:
+            return HttpResponseRedirect(reverse('users:login'))
+        
         logger.info("GET request received in EditProfileView.")
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))
@@ -190,9 +180,8 @@ class EditProfileView(APIView):
         
             userprofile.save()
             
-            updateAllReferences(user)
-            
             logger.info("User profile updated successfully.")
+            
             return Response({'success': 'User profile updated successfully!',
                              'name': userprofile.first_name + ' ' + userprofile.last_name,
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
@@ -203,7 +192,11 @@ class EditProfileView(APIView):
 
 class EditStoryView(APIView):
     def get(self, request):
-        user = getUser(request)
+        try:
+            user = getUser(request)
+        except Exception as e:
+            return HttpResponseRedirect(reverse('users:login'))
+        
         logger.info("GET request received in EditStoryView.")
         if not isinstance(user, User):
             return HttpResponseRedirect(reverse('users:login'))

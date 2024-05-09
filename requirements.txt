@@ -3,7 +3,7 @@
 
 asgiref
 Django
-psycopg2
+psycopg2-binary
 python-dotenv
 sqlparse
 tzdata
@@ -26,3 +26,4 @@ channels_redis
 Twisted[http2,tls]
 django-environ
 logtail-python
+confluent-kafka

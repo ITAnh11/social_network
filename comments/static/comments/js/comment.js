@@ -3,9 +3,31 @@ const api_get_comments_for_posts = '/comments/get_comments_for_post/';
 const api_get_comments_for_comment = '/comments/get_comments_for_comment/';
 const api_create_comment = '/comments/create_comment/';
 
+// const api_get_profile_basic = '/userprofiles/get_profile_basic/';
+
+// let USER_ID = "";
+// let USER_NAME = "";
+// let USER_AVATAR = "";
+
+// function get_user_profile() {
+//     fetch(api_get_profile_basic)
+//         .then(response => response.json())
+//         .then(data => {
+//             USER_ID = data['id'];
+//             USER_NAME = data['name'];
+//             USER_AVATAR = data['avatar'];
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         });
+
+// }
+
+// get_user_profile();
+
 function setImageForCommentForPost() {
   var element = document.getElementById("comment-post-avatar-user");
-  element.src = localStorage.getItem("avatar");
+  element.src = USER_AVATAR;
 }
 
 setImageForCommentForPost();

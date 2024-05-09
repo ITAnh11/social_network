@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.utils import timezone
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -19,7 +21,7 @@ def createMediaOfPosts(post, medias):
     try:
         for media in medias:
             mediaOfPosts = MediaOfPosts(
-                post_id=post
+                post_id=post.id
             )
             
             mediaOfPosts.save_media(media)
@@ -137,7 +139,10 @@ def createUpdateImageProfilePosts(userprofilebasic, typeImage, image):
      
 class GetPostsPageView(APIView):
     def get(self, request):
-        user = getUser(request)
+        try:
+            user = getUser(request)
+        except Exception as e:
+            return HttpResponseRedirect(reverse('users:login'))
         
         if not user:
             logger.warning("User is not authenticated.")

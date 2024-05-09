@@ -97,6 +97,9 @@ function request_button(event){
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            if(data.error){
+                alert(data.error);
+            } 
         })
     }
     else{
@@ -242,6 +245,7 @@ moreButton.addEventListener('click', function(event) {
 show_list_friend();
 
 //hiện danh sách gợi ý
+
 url_list_suggest_friend = "/friends/get_suggestionfriend/";
 var url_next_suggest = url_list_suggest_friend;
 
@@ -291,6 +295,15 @@ moreSuggestBtn.addEventListener('click', function(event) {
     show_suggest_friend(); // Fetch and display more users
 });
 show_suggest_friend();
+
+
+suggest_list.addEventListener('scroll', function() {
+    // Kiểm tra nếu cuộn đã đạt đến cuối của div
+    if (suggest_list.scrollTop + suggest_list.clientHeight >= suggest_list.scrollHeight) {
+        // Xử lí khi cuộn đạt đến cuối của div ở đây
+        console.log("Đã đạt đến cuối của div!");
+    }
+});
 
 
 //danh sach gửi lời mời chờ chấp nhận

@@ -62,7 +62,10 @@ def getUser(request):
     except jwt.ExpiredSignatureError:
         return {'error': 'Unauthorized'}
     
-    user = User.objects.get(id=user_id)
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        raise Exception('User not found')
     
     return user
 
