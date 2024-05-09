@@ -607,6 +607,8 @@ class GetListFriendOfUserOtherView(APIView):
         
         return Response({"data": data, "number_of_friends": len(data)})
 
+        
+
 class AcceptFriendRequestProfileView(APIView):
     def post(self, request):
         user = getUser(request)
@@ -617,18 +619,20 @@ class AcceptFriendRequestProfileView(APIView):
         
         try:
             from_user_id = request.data.get('id')
-            for fr_r in FriendRequest.objects.raw("SELECT * FROM friends_friendrequest WHERE from_id_id = %s AND to_id_id = %s AND status = 'pending' ", [from_user_id, user.id]) :
-                    friend_request = fr_r
-               
-            with connection.cursor() as cursor:
-                cursor.execute(
-                "UPDATE friends_friendrequest SET status = 'accepted' WHERE id = %s AND status = 'pending'",
-                [friend_request.id]
-            )
+            friend_request = get_object_or_404(FriendRequest, from_id=from_user_id, to_id=user)
+            
+            friend_request.status = 'accepted'
+            friend_request.save()
             
             addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request.id}).first()
             addfriendNotification.setAccept()
-            addfriendNotification.save()    
+            addfriendNotification.save()
+            
+            friend_ship = Friendship.objects.create(
+                user_id1=user,
+                user_id2=friend_request.from_id                 
+            )
+            friend_ship.save()    
              
             data = []
             
@@ -660,14 +664,10 @@ class DenineFriendRequestProfileView(APIView):
         
         try:
             from_user_id = request.data.get('id')
-            for fr_r in FriendRequest.objects.raw("SELECT * FROM friends_friendrequest WHERE from_id_id = %s AND to_id_id = %s AND status = 'pending' ", [from_user_id, user.id]) :
-                    friend_request = fr_r
-                
-            with connection.cursor() as cursor:
-                cursor.execute(
-                "UPDATE friends_friendrequest SET status = 'denied' WHERE id = %s AND status = 'pending'",
-                [friend_request.id]
-            )
+            friend_request = get_object_or_404(FriendRequest, from_id=from_user_id, to_id=user)
+            
+            friend_request.status = 'denied'
+            friend_request.save()  
             
             addfriendNotification = AddFriendNotifications.objects(__raw__={'id_friend_request': friend_request.id}).first()
             addfriendNotification.setDecline()
@@ -686,3 +686,19 @@ class DenineFriendRequestProfileView(APIView):
             logger.error(f"Error while saving friend request: {str(e)}")
             return Response({'error': 'Error while saving friend request'}, status=400)
         
+# class DeleteFriendShipProfile(APIView):
+#     def post(self, request):
+#         user = getUser(request)
+        
+#         if not user:
+#             return Response({'error': 'Unauthorized'}, status=401)
+        
+#         try:
+#             friend_id = request.data.get('id')
+#             friendship = get_object_or_404(Friendship, id = friendship_id)
+            
+#             friendship.delete()
+#         except Friendship.DoesNotExist:
+#             return Response({'error': 'Friendship not found'}, status=404)
+         
+#         return Response({'success': 'Friendship deleted successfully'})

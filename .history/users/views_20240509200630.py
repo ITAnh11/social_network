@@ -144,6 +144,9 @@ class RegisterView(APIView):
                 user = serializer.save()
                 
                 SetUserProfileView().post(request, user)
+                #SetImageProfileView().post(request, user)
+                
+                # user.set_last_login()
                 
                 token = LoginView().makeToken(user)
                 

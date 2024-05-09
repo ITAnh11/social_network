@@ -146,29 +146,17 @@ DATABASES = {
 }
 
 MONGODB_DATABASES = {
-    # "default": {
-    #     "name": "social_network",
-    #     "host": "mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0",
-    # }
-    
     "default": {
         "name": "social_network",
-        "host": "localhost",
-        "port": 27017,
-        # "username": "mongo_user",  # replace with your username
-        # "password": "mongo_password",  # replace with your password
+        "host": "mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0",
     }
 }
 
 import mongoengine
 
 mongoengine.connect(
-    # db='social_network',
-    # host='mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0'
     db='social_network',
-    host='mongodb://localhost/social_network'
-    
-    
+    host='mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0'
 )
 
 # Password validation
