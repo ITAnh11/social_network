@@ -1,3 +1,13 @@
+const moreButton = document.getElementById('moreButton');
+moreButton.textContent = "More";
+moreButton.href = "#";
+const moreSuggestBtn = document.getElementById('moreSuggestButton');
+moreSuggestBtn.textContent = "More Suggest";
+moreSuggestBtn.href = "#";
+const moreAddtBtn = document.getElementById('moreAddButton');
+moreAddtBtn.textContent = "More Friend Request";
+moreAddtBtn.href = "#";
+const list_friend = document.getElementById('list_friends')
 var request_list = document.querySelector(".request-list");
 // var friend_list = document.querySelector(".card-list");
 var suggest_list = document.querySelector(".suggest_list");
@@ -138,12 +148,22 @@ function sent_friend_request_list(event){
 
 //hiện lời mời kết bạn
 url_addfriend = "/friends/get_receivedfriendrequest/";
+var url_next_add = url_addfriend;
 function addfriend() {
-    fetch(url_addfriend)
+    if (url_next_add) {
+
+    fetch(url_next_add)
     .then(response => response.json())
     .then(data => {
+        if (data.next) {
+            url_next_add = data.next;
+
+        } else {
+            moreAddtBtn.style.display = 'none';
+            url_next_add = null;
+        }
         console.log("friend_request: ", data);
-        data.data.forEach(function(request){
+        data.results.data.forEach(function(request){
             if(request.friend_request_received.status === "pending"){
                 var url = `/userprofiles/?id=${request.friend_request_profile.id}`;
                 var a = `<div class="card1" id="${request.friend_request_received.id}">
@@ -168,25 +188,32 @@ function addfriend() {
         })
     })
 }
-
+}
+moreAddtBtn.addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    addfriend(); // Fetch and display more users
+});
 addfriend();
 
 //hiện danh sách bạn bè
 url_list_friend = "/friends/get_listfriend/";
+
+var nextPageUrl = url_list_friend;
+
 function show_list_friend(){
-    fetch(url_list_friend)
+    if (nextPageUrl) {
+    fetch(nextPageUrl)
     .then(response => response.json())
     .then(data => {
+        if (data.next) {
+            nextPageUrl = data.next;
+        } else {
+            moreButton.style.display = 'none';
+            nextPageUrl = null;
+        }
         console.log("friend_list:",data);
-        var list_friend = document.createElement("div");
-        list_friend.className = "card-list";
-        var Friend_list = document.querySelector(".list");
-        console.log("abc",Friend_list);
-        Friend_list.appendChild(list_friend);
-        var p = document.createElement("div");
-        p.innerHTML =`<div style="font-size: large; color: rgb(0, 110, 255); margin: 10px;text-decoration: underline;"> Tất cả bạn bè </div>`;
-        list_friend.appendChild(p);
-        data.data.forEach(function(friend){
+        
+        data.results.data.forEach(function(friend){
             var url = `/userprofiles/?id=${friend.friend_profile.id}`;
             var a = `
             <a href="${url}" style="text-decoration: none;color:black;">
@@ -205,16 +232,34 @@ function show_list_friend(){
         })
     })
 }
+}
+
+moreButton.addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    show_list_friend(); // Fetch and display more users
+});
+
 show_list_friend();
 
 //hiện danh sách gợi ý
 url_list_suggest_friend = "/friends/get_suggestionfriend/";
+var url_next_suggest = url_list_suggest_friend;
+
 function show_suggest_friend(){
-    fetch(url_list_suggest_friend)
+    if (url_next_suggest) {
+        console.log("next link: ", url_next_suggest)
+    fetch(url_next_suggest)
     .then(response => response.json())
     .then(data => {
+        if (data.next) {
+            url_next_suggest = data.next;
+            console.log("new link: ", url_next_suggest);
+        } else {
+            moreSuggestBtn.style.display = 'none';
+            url_next_suggest = null;
+        }
         console.log("suggest_friend_list:",data);
-        data.suggestions.forEach(function(suggestions){
+        data.results.suggestions.forEach(function(suggestions){
             console.log(suggestions.suggestions_friend.id);
             var url = `/userprofiles/?id=${suggestions.suggestions_friend.id}`;
             var a = `
@@ -238,8 +283,13 @@ function show_suggest_friend(){
             suggest_list.appendChild(newDiv);
         })
     })
-    
+    }
 }
+
+moreSuggestBtn.addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    show_suggest_friend(); // Fetch and display more users
+});
 show_suggest_friend();
 
 

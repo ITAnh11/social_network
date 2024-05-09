@@ -2,10 +2,12 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.db.models import Q
+from rest_framework import generics
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
+from rest_framework.pagination import PageNumberPagination
 import jwt, datetime
 import logging
 from django.shortcuts import get_object_or_404
@@ -18,11 +20,20 @@ from .serializers import FriendRequestSerializer, FriendshipSerializer
 
 from notifications.views import createAddFriendNotification, GetNotifications
 from notifications.models import AddFriendNotifications
+
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.core.cache import cache
 # Create your views here.
 # friend_request.status = 'accepted'  # Cập nhật trạng thái của yêu cầu kết bạn thành 'accepted'
 # friend_request.save()  # Lưu thay đổi vào cơ sở dữ liệu
 # friend_request.delete()  # Xóa yêu cầu kết bạn khỏi cơ sở dữ liệu
 logger = logging.getLogger(__name__)
+
+class CustomPagination(PageNumberPagination):
+    page_size = 8
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 class FriendsRequestsView(APIView):
     def get(self,request):
@@ -208,32 +219,96 @@ class GetSentFriendRequestsView(APIView):
         
         return Response({"data": data})
 
-class GetReceivedFriendRequestsView(APIView):
-    def get(self, request):
-        user = getUser(request)
+class GetReceivedFriendRequestsView(generics.ListAPIView):
+    pagination_class = CustomPagination
+
+    # def get(self, request):
+    #     user = getUser(request)
+        
+    #     if not user:
+    #         logger.error("Unauthorized access to GetReceivedFriendRequestsView. Returning 401 error.")
+    #         return Response({'error': 'Unauthorized'}, status=401)
+        
+    #     data = []
+    #     try:
+    #         list_friend_requests_received = FriendRequest.objects.filter(to_id=user)
+    #         for friend_request_received in list_friend_requests_received:
+    #             serializer = FriendRequestSerializer(friend_request_received)
+    #             friend_request = {
+    #                 "friend_request_received": serializer.data,
+    #                 "friend_request_profile": getUserProfileForPosts(friend_request_received.from_id)
+    #             }
+    #             data.append(friend_request)
+    #     except Exception as e:
+    #         logger.error(f"Error while retrieving received friend requests: {str(e)}")
+    #         return Response({'error': 'Error while retrieving received friend requests'}, status=400)
+        
+    #     return Response({"data": data})
+
+    def get_queryset(self):
+        user = getUser(self.request)
         
         if not user:
             logger.error("Unauthorized access to GetReceivedFriendRequestsView. Returning 401 error.")
-            return Response({'error': 'Unauthorized'}, status=401)
+            return FriendRequest.objects.none()
         
-        data = []
+        return FriendRequest.objects.filter(to_id=user)
+
+    def list(self, request, *args, **kwargs):
         try:
-            list_friend_requests_received = FriendRequest.objects.filter(to_id=user)
-            for friend_request_received in list_friend_requests_received:
-                serializer = FriendRequestSerializer(friend_request_received)
-                friend_request = {
-                    "friend_request_received": serializer.data,
-                    "friend_request_profile": getUserProfileForPosts(friend_request_received.from_id)
-                }
-                data.append(friend_request)
+            queryset = self.get_queryset()
+            page = self.paginate_queryset(queryset)
+
+            if page is not None:
+                data = []
+                for friend_request_received in page:
+                    serializer = FriendRequestSerializer(friend_request_received)
+                    friend_request = {
+                        "friend_request_received": serializer.data,
+                        "friend_request_profile": getUserProfileForPosts(friend_request_received.from_id)
+                    }
+                    data.append(friend_request)
+                return self.get_paginated_response(
+                    {
+                        "data": data,
+                    }
+                )
+
         except Exception as e:
             logger.error(f"Error while retrieving received friend requests: {str(e)}")
             return Response({'error': 'Error while retrieving received friend requests'}, status=400)
-        
-        return Response({"data": data})
 
-class GetListFriendView(APIView):
-    def get(self, request):
+
+class GetListFriendView(generics.ListAPIView):
+    pagination_class = CustomPagination
+
+    # def get(self, request):
+    #     user = getUser(request)
+        
+    #     if not user:
+    #         logger.error("Unauthorized access to GetListFriendView. Returning 401 error.")
+    #         return Response({'error': 'Unauthorized'}, status=401)
+        
+    #     data = []
+    #     try:
+    #         list_friend_ship = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
+    #         for friend_ship in list_friend_ship:
+    #             try:
+    #                 friend = {
+    #                     "friend_ship": FriendshipSerializer(friend_ship).data,
+    #                     "friend_profile": getUserProfileForPosts(friend_ship.user_id2) if user == friend_ship.user_id1 else getUserProfileForPosts(friend_ship.user_id1)
+    #                 }
+    #                 data.append(friend)
+    #             except:
+    #                 logger.error("Friendship not found.")
+    #                 return Response({'error': 'Friendship not found'}, status=404)
+    #     except Exception as e:
+    #         logger.error(f"Error while retrieving list of friends: {str(e)}")
+    #         return Response({'error': 'Error while retrieving list of friends'}, status=400)
+        
+    #     return Response({"data": data})
+
+    def list(self, request, *args, **kwargs):
         user = getUser(request)
         
         if not user:
@@ -242,8 +317,16 @@ class GetListFriendView(APIView):
         
         data = []
         try:
-            list_friend_ship = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
-            for friend_ship in list_friend_ship:
+            key = f"all_friends_{user.id}"
+            if (cache.get(key)): 
+                list_friend_ship = cache.get(key) 
+            else:
+                list_friend_ship = Friendship.objects.filter(Q(user_id1=user) | Q(user_id2=user))
+                cache.set(key, list_friend_ship)
+            
+            page = self.paginate_queryset(list_friend_ship)
+
+            for friend_ship in page:
                 try:
                     friend = {
                         "friend_ship": FriendshipSerializer(friend_ship).data,
@@ -257,10 +340,74 @@ class GetListFriendView(APIView):
             logger.error(f"Error while retrieving list of friends: {str(e)}")
             return Response({'error': 'Error while retrieving list of friends'}, status=400)
         
-        return Response({"data": data})
+        return self.get_paginated_response({
+            "data": data,
+        })
 
-class GetSuggestionFriendView(APIView):
-    def get(self, request):
+class GetSuggestionFriendView(generics.ListAPIView):
+    pagination_class = CustomPagination
+
+    # def get(self, request):
+    #     user = getUser(request)
+        
+    #     if not user:
+    #         logger.error("Unauthorized access to GetSuggestionFriendView. Returning 401 error.")
+    #         return Response({'error': 'Unauthorized'}, status=401)
+        
+    #     data = []
+        
+    #     try:
+    #         sent_friend_requests_list = FriendRequest.objects.filter(from_id=user).values_list('to_id', flat=True)
+    #         received_friend_requests_list = FriendRequest.objects.filter(to_id=user).values_list('from_id', flat=True)
+    #         friend_list_1 = Friendship.objects.filter(user_id1=user).values_list('user_id2', flat=True)
+    #         friend_list_2 = Friendship.objects.filter(user_id2=user).values_list('user_id1', flat=True)
+    #         not_user = User.objects.filter(email=user).values_list('id', flat=True)
+            
+    #         sent_set = set(sent_friend_requests_list)
+    #         received_set = set(received_friend_requests_list)
+    #         friend1_set = set(friend_list_1)
+    #         friend2_set = set(friend_list_2)
+    #         not_user_set = set(not_user)
+            
+    #         other_users = list(set(User.objects.all().values_list('id', flat=True)) - (sent_set | received_set | friend1_set | friend2_set | not_user_set))
+            
+    #         for other_user in other_users:
+    #             suggesion = get_object_or_404(User, id=other_user)
+    #             suggesions = {
+    #                 "suggestions_friend": getUserProfileForPosts(suggesion)
+    #             }
+    #             data.append(suggesions)
+    #     except Exception as e:
+    #         logger.error(f"Error while retrieving friend suggestions: {str(e)}")
+    #         return Response({'error': 'Error while retrieving friend suggestions'}, status=400)
+        
+    #     return Response({"suggestions": data})
+
+    def get_queryset(self):
+        user = getUser(self.request)
+
+        if not user:
+            logger.error("Unauthorized access to GetSuggestionFriendView. Returning 401 error.")
+            return User.objects.none()
+
+        sent_friend_requests_list = FriendRequest.objects.filter(from_id=user).values_list('to_id', flat=True)
+        received_friend_requests_list = FriendRequest.objects.filter(to_id=user).values_list('from_id', flat=True)
+        friend_list_1 = Friendship.objects.filter(user_id1=user).values_list('user_id2', flat=True)
+        friend_list_2 = Friendship.objects.filter(user_id2=user).values_list('user_id1', flat=True)
+        not_user = User.objects.filter(email=user).values_list('id', flat=True)
+
+        sent_set = set(sent_friend_requests_list)
+        received_set = set(received_friend_requests_list)
+        friend1_set = set(friend_list_1)
+        friend2_set = set(friend_list_2)
+        not_user_set = set(not_user)
+
+        other_users = list(set(User.objects.all().values_list('id', flat=True)) - (sent_set | received_set | friend1_set | friend2_set | not_user_set))
+
+        return other_users
+
+    def list(self, request, *args, **kwargs):
+        
         user = getUser(request)
         
         if not user:
@@ -270,31 +417,22 @@ class GetSuggestionFriendView(APIView):
         data = []
         
         try:
-            sent_friend_requests_list = FriendRequest.objects.filter(from_id=user).values_list('to_id', flat=True)
-            received_friend_requests_list = FriendRequest.objects.filter(to_id=user).values_list('from_id', flat=True)
-            friend_list_1 = Friendship.objects.filter(user_id1=user).values_list('user_id2', flat=True)
-            friend_list_2 = Friendship.objects.filter(user_id2=user).values_list('user_id1', flat=True)
-            not_user = User.objects.filter(email=user).values_list('id', flat=True)
-            
-            sent_set = set(sent_friend_requests_list)
-            received_set = set(received_friend_requests_list)
-            friend1_set = set(friend_list_1)
-            friend2_set = set(friend_list_2)
-            not_user_set = set(not_user)
-            
-            other_users = list(set(User.objects.all().values_list('id', flat=True)) - (sent_set | received_set | friend1_set | friend2_set | not_user_set))
-            
-            for other_user in other_users:
-                suggesion = get_object_or_404(User, id=other_user)
-                suggesions = {
-                    "suggestions_friend": getUserProfileForPosts(suggesion)
-                }
-                data.append(suggesions)
+            queryset = self.get_queryset()
+
+            page = self.paginate_queryset(queryset)
+            if page is not None: 
+                for other_user in page:
+                    suggesion = get_object_or_404(User, id=other_user)
+                    suggesions = {
+                        "suggestions_friend": getUserProfileForPosts(suggesion)
+                    }
+                    data.append(suggesions)
         except Exception as e:
             logger.error(f"Error while retrieving friend suggestions: {str(e)}")
             return Response({'error': 'Error while retrieving friend suggestions'}, status=400)
         
-        return Response({"suggestions": data})
+        return self.get_paginated_response({"suggestions": data})
+
 
 class GetMutualFriendView(APIView):
     def get(self, request):
@@ -358,7 +496,9 @@ class GetStatusFriendView(APIView):
         
         return Response({"status_relationship": 'not_friend'})
 
-class GetListFriendOfUserOtherView(APIView):
+class GetListFriendOfUserOtherView(generics.ListAPIView):
+    pagination_class = CustomPagination
+
     def get(self, request):
         user = getUser(request)
         
@@ -369,7 +509,16 @@ class GetListFriendOfUserOtherView(APIView):
         other_user_id = request.query_params.get('id') 
         
         try:
-            others_user_friend = Friendship.objects.filter(Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
+            key = f"all_friends_{other_user_id}"
+            if (cache.get(key)): 
+                others_user_friend = cache.get(key) 
+            else:
+                others_user_friend = Friendship.objects.filter(Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
+                cache.set(key, others_user_friend)
+
+            #page = self.paginate_queryset(others_user_friend)
+
+
             data = []
             for other_user_friend in others_user_friend:
                 user_id = User.objects.filter(id=other_user_id).values_list('email', flat=True).first()
@@ -388,6 +537,47 @@ class GetListFriendOfUserOtherView(APIView):
             return Response({'error': 'Error while retrieving friend list of other user'}, status=400)
         
         return Response({"data": data, "number_of_friends": len(data)})
+
+    def list(self, request, *args, **kwargs):
+        user = getUser(request)
+        
+        if not user:
+            logger.error("Unauthorized access to GetListFriendOfUserOtherView. Returning 401 error.")
+            return Response({'error': 'Unauthorized'}, status=401)
+        
+        other_user_id = request.query_params.get('id') 
+        
+        try:
+            key = f"all_friends_{other_user_id}"
+            if (cache.get(key)): 
+                others_user_friend = cache.get(key) 
+            else:
+                others_user_friend = Friendship.objects.filter(Q(user_id1=other_user_id) | Q(user_id2=other_user_id))
+                cache.set(key, others_user_friend)
+
+            page = self.paginate_queryset(others_user_friend)
+
+            data = []
+            for other_user_friend in page:
+                user_id = User.objects.filter(id=other_user_id).values_list('email', flat=True).first()
+            
+                if user_id == str(other_user_friend.user_id2):
+                    friend_id = other_user_friend.user_id1
+                else:
+                    friend_id = other_user_friend.user_id2
+
+                friend_ship = {
+                    "friend_profile": getUserProfileForPosts(friend_id)
+                }
+                data.append(friend_ship)
+        except Exception as e:
+            logger.error(f"Error while retrieving friend list of other user: {str(e)}")
+            return Response({'error': 'Error while retrieving friend list of other user'}, status=400)
+        
+        return self.get_paginated_response({
+            "data": data, 
+            "number_of_friends": len(data)
+        })
 
         
 
