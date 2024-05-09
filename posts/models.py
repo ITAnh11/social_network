@@ -47,7 +47,7 @@ class Posts(ReactionNumberInfo):
 
 class MediaOfPosts(Document):
     id = fields.SequenceField(primary_key=True)
-    post_id = fields.ReferenceField(Posts)
+    post_id = fields.IntField()
     media = fields.StringField()
     
     def __init__(self, *args, **values):
@@ -63,7 +63,7 @@ class MediaOfPosts(Document):
 
     def save_media(self, file):
         # Save the file to the default storage
-        path = 'posts/post_{0}/{1}'.format(self.post_id.id, file.name)
+        path = 'posts/post_{0}/{1}'.format(self.post_id, file.name)
         
         file_name = default_storage.save(path, file)
         
@@ -72,19 +72,12 @@ class MediaOfPosts(Document):
         self.save()
     
     def delete_media(self):
-        # Delete the file from the storage
-        default_storage.delete(self.media)
-        
-        # Delete the path of the file in the database
-        self.delete()
-
-
-def updateProfilePosts(user_id, userbasicinfo):
-    try:
-        posts = Posts.objects(__raw__={'user.id': user_id})
-        
-        for post in posts:
-            post.update(__raw__={'$set': {'user': userbasicinfo}})
-    except Exception as e:
-        print("updateProfileNotification", e)
-        return False
+        try:
+            # Delete the file from the storage
+            default_storage.delete(self.media)
+            
+            # Delete the path of the file in the database
+            self.delete()
+        except Exception as e:
+            print('Error delete media:', e)
+            return False

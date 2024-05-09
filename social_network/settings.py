@@ -100,7 +100,7 @@ WSGI_APPLICATION = 'social_network.wsgi.application'
 
 ASGI_APPLICATION = "social_network.asgi.application"
 
-REDIS_HOST = 'localhost'
+REDIS_HOST = 'host.docker.internal'
 REDIS_PORT = 6379
 
 CHANNEL_LAYERS = {
@@ -122,40 +122,25 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'social_network',
-        'USER': 'admin',
-        'PASSWORD': 'abc123',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'PORT': '5000',
     },
 }
 
 MONGODB_DATABASES = {
     "default": {
         "name": "social_network",
-        "host": "localhost",
-        "port": 27017,
-        # "username": "mongo_user",  # replace with your username
-        # "password": "mongo_password",  # replace with your password
+        "host": "mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0",
     }
 }
-
-# CACHE_TTL = 60 * 1500
-
-# CACHES = {
-#     "default" : {
-#         "BACKEND" : "django_redis.cache.RedisCache",
-#         "LOCATION" : "redis://127.0.0.1:6379",
-#         "OPTIONS" : {
-#             "CLIENT_CLASS" : "django_redis.client.DefaultClient"
-#         } 
-#     }
-# }
 
 import mongoengine
 
 mongoengine.connect(
     db='social_network',
-    host='mongodb://localhost/social_network'
+    host='mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0'
 )
 
 # Password validation
@@ -175,7 +160,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

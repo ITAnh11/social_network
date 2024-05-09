@@ -40,7 +40,6 @@ urlpatterns = [
     path("search/<username>/", views.SearchUser.as_view(), name='search_users'),
     
     path('notifications/', include('notifications.urls')),
-    # path('__debug__/', include(debug_toolbar.urls)),
     
 ]
 

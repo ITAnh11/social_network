@@ -8,8 +8,6 @@ const uploadImg = document.querySelector('.upload-img');
 const uploadInfoValue = document.querySelector('.upload-info-value');
 const form_submit = document.getElementById('form-submit');
 
-// import { render_post } from './render_posted.js';
-
 var currentNumberFiles = 0;
 
 function resetValueUpload() {
@@ -27,6 +25,7 @@ post_upload_area.addEventListener("click", function () {
 // ẩn chức năng đăng bài
 var escBtn = posting.querySelector("#escBtn");
 escBtn.addEventListener("click", function () {
+    resetValueUpload();
     posting.style.display = 'none';
 })
 
@@ -181,22 +180,18 @@ function set_user_post() {
     var userImageElement1 = userprofileOverlay.querySelector("img");
     var userNameElement1 = userprofileOverlay.querySelector("p");
 
-    // Sử dụng localStorage thay vì Location
-    var userName = localStorage.getItem("name");
-    var userAvatar = localStorage.getItem("avatar");
 
-    // Gán giá trị từ localStorage cho các phần tử
     if (userNameElement) {
-        userNameElement.textContent = userName;
+        userNameElement.textContent = USER_NAME;
     }
     if (userImageElement) {
-        userImageElement.src = userAvatar;
+        userImageElement.src = USER_AVATAR;
     }
     if (userNameElement1) {
-        userNameElement1.textContent = userName;
+        userNameElement1.textContent = USER_NAME;
     }
     if (userImageElement1) {
-        userImageElement1.src = userAvatar;
+        userImageElement1.src = USER_AVATAR;
     }
 
 }
@@ -205,7 +200,7 @@ function showUploadPostsBox() {
     var url = window.location.href;
     var params = new URLSearchParams(window.location.search);
     if (url.includes("userprofiles")) {
-        if (localStorage.getItem('id') != params.get('id')) {
+        if (USER_ID != params.get('id')) {
             posts_upload_box.remove();
             console.log('remove posst upload box');
             return;

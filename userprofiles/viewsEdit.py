@@ -17,25 +17,8 @@ from posts.views import createUpdateImageProfilePosts
 
 from common_functions.common_function import getUser
 
-from notifications.models import updateProfileNotification
-from posts.models import updateProfilePosts
-from reactions.models import updateProfileReactions
-from comments.models import updateProfileComments
 import logging
 logger=logging.getLogger(__name__)
-
-def updateAllReferences(user):
-    try:
-        userprofile = UserProfileBasicView().resetUserProfileBasic(user)
-        updateProfilePosts(user.id, userprofile)
-        updateProfileComments(user.id, userprofile)
-        updateProfileReactions(user.id, userprofile)
-        updateProfileNotification(user.id, userprofile)
-    except Exception as e:
-        logger.error('Error in updateAllReferences: %s', e)
-        return False
-    return True
-    
 
 class EditImagesPage(APIView):
     def get(self, request):
@@ -93,9 +76,8 @@ class EditAvatarView(APIView):
                 logger.error("Error while creating post.")
                 return Response({'error': 'Error while creating post'}, status=400)
             
-            updateAllReferences(user)
-            
             logger.info("Avatar image updated successfully.")
+
             return Response({'success': 'Your avatar image updated successfully!',
                              'avatar': imageprofile.avatar.url,
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})
@@ -190,9 +172,8 @@ class EditProfileView(APIView):
         
             userprofile.save()
             
-            updateAllReferences(user)
-            
             logger.info("User profile updated successfully.")
+            
             return Response({'success': 'User profile updated successfully!',
                              'name': userprofile.first_name + ' ' + userprofile.last_name,
                              'redirect_url': reverse('userprofiles:profile') + '?id=' + str(user.id)})

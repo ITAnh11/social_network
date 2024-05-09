@@ -15,7 +15,6 @@ document.getElementById('form-editProfile').addEventListener('submit', function(
       if (data['success']) {
         console.log(data);
         alert(data['success']);
-        localStorage.setItem('name', data['name'])
         window.location.href = data['redirect_url']
       } else {
         // handle error

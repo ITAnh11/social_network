@@ -19,7 +19,7 @@ def createMediaOfPosts(post, medias):
     try:
         for media in medias:
             mediaOfPosts = MediaOfPosts(
-                post_id=post
+                post_id=post.id
             )
             
             mediaOfPosts.save_media(media)

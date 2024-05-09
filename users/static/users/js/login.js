@@ -1,9 +1,3 @@
-function clearLocalStorage() {
-    localStorage.clear();
-}
-
-clearLocalStorage();
-
 document.querySelector('form').addEventListener('submit', function(event) {
     event.preventDefault(); // prevent form submission
 

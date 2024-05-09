@@ -24,13 +24,3 @@ class Comments(ReactionNumberInfo):
             'to_comment_id'
         ]
     }
-
-def updateProfileComments(user_id, userbasicinfo):
-    try:
-        comments = Comments.objects(__raw__={'user.id': user_id})
-        
-        for comment in comments:
-            comment.update(__raw__={'$set': {'user': userbasicinfo}})
-    except Exception as e:
-        print("updateProfileNotification", e)
-        return False
