@@ -1,14 +1,52 @@
-
 const chatHeader = document.getElementById('chatHeader');
 const all_messeeji = document.getElementById('chat');
 const messageInput = document.getElementById('messageInput');
 const sendMessageBtn = document.getElementById('sendMessageBtn');
 const list_all_users = document.getElementById("userList");
-
+const url_all_messeeji = '/chat/get_messeeji/'
 const socketMap = {};
+const chatContainer = document.querySelector('.chat-container');
+const toggleChatBtn = document.getElementById('toggleChat');
+const chatBox = document.getElementById('chatBox');
 var inActiveSocket = null;
+var current_user = localStorage.getItem('id');
+toggleChatBtn.style.display = 'none';
+var moreLink = document.createElement('a');
+moreLink.textContent = "More";
+moreLink.href = "#";
+moreLink.className = 'more-link';
 
-var current_user;
+// Ensure the elements exist before adding event listener
+if (toggleChatBtn && chatContainer) {
+    // Toggle chat box visibility
+    toggleChatBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        chatContainer.classList.toggle('closed');
+        //chatBox.classList.remove('hide');
+        toggleChatBtn.textContent = chatContainer.classList.contains('closed') ? 'Show chat' : 'Hide chat';
+    });
+}
+document.addEventListener("DOMContentLoaded", function() {
+  const contactList = document.getElementById('userList');
+
+
+  // Add click event listener to each contact
+  contactList.addEventListener('click', function(event) {
+    const contact = event.target.closest('.contact');
+    if (contact) {
+      // Get user ID from data attribute
+      const userId = contact.dataset.userId;
+      // You can load chat history, user info, etc. based on the user ID
+      // For simplicity, let's just show the chat box
+      chatBox.classList.remove('hide');
+      if (chatContainer.classList.contains('closed')) { // Check if chat container is closed
+        chatContainer.classList.remove('closed'); // Open chat container
+        toggleChatBtn.textContent = 'Hide chat'; // Change button text
+    }
+      toggleChatBtn.style.display = ''
+    }
+  });
+});
 
 function mark_as_read(channel_id, sender_id) {
   const csrftoken = getCookie('csrftoken');
@@ -28,6 +66,8 @@ function mark_as_read(channel_id, sender_id) {
   .then(response => {
     if (!response.ok) {
       throw new Error('Failed to mark message as read');
+    } else {
+      
     }
   })
   .catch(error => {
@@ -35,75 +75,82 @@ function mark_as_read(channel_id, sender_id) {
   });
 }
 
+
+list_all_users.appendChild(moreLink);
 var url_all_users = "/search/@"; // Assuming this is the correct endpoint to fetch all users
+var url_all_contact_users = "chat/all_contact_users";
 var url_get_channel = "chat/create_channel/"
-function show_all_users() {
-  fetch(url_all_users)
-  .then(response => response.json())
-  .then(data => {
-      current_user = data.current_user;
-      console.log(current_user)
-      // console.log("all_users:", data);
-      data.list_users.forEach(function(user) {
-          console.log(user);
-          // var fullName = user.first_name + " " + user.last_name;
-          // var li = document.createElement('div');
-          // li.textContent = fullName;
 
-          var fullName = user.first_name + " " + user.last_name;
+// Variable to store the URL of the next page
+var nextPageUrl = url_all_contact_users;
 
-          // Create the elements
-          var divContact = document.createElement('div');
-          divContact.className = 'contact';
-          divContact.setAttribute('data-user-id', user.id);
-
-          var img = document.createElement('img');
-          img.className = 'pic';
-          img.setAttribute('src', user.avatar); // Set the source for the image
-
-          var divContactInfo = document.createElement('div');
-          divContactInfo.className = 'contact-info';
-
-          var divName = document.createElement('div');
-          divName.className = 'name';
-          divName.textContent = fullName;
-
-          var divMessage = document.createElement('div');
-          divMessage.className = 'message';
-          divMessage.textContent = 'Last message';
-
-          var divBadge = document.createElement('div');
-          divBadge.className = 'badge';
-          divBadge.textContent = '3'; // Example unread message count
-
-          // Append elements to each other
-          divContactInfo.appendChild(divName);
-          divContactInfo.appendChild(divMessage);
-          divContact.appendChild(img);
-          divContact.appendChild(divContactInfo);
-          divContact.appendChild(divBadge);
-
-          divContact.addEventListener('click', () => {
-            // Send POST request
-            createChannel(user)
-              .then(channel_id => {
-                showChannel(user, channel_id);
-
-              })
-              .catch(error => {
-                // Handle error
-                console.error('Failed to create channel:', error);
-              });
-          });
-          list_all_users.appendChild(divContact);
-          // console.log(li)
-      });
-  })
-  .catch(error => {
-      console.error('Error fetching users:', error);
-      // Handle errors, such as displaying an error message to the user
-  });
+// Function to fetch and display more users
+function showMoreUsers() {
+    if (nextPageUrl) {
+        fetch(nextPageUrl)
+            .then(response => response.json())
+            .then(data => {
+                console.log("data", data)
+                current_user = data.results.current_user;
+                if (data.next) {
+                    nextPageUrl = data.next;
+                } else {
+                    moreLink.style.display = 'none';
+                }
+                data.results.list_users.forEach(function(user) {
+                    var fullName = user.first_name + " " + user.last_name;
+                    var divContact = document.createElement('div');
+                    divContact.className = 'contact';
+                    divContact.setAttribute('data-user-id', user.id);
+                    var img = document.createElement('img');
+                    img.className = 'pic';
+                    img.setAttribute('src', user.avatar);
+                    var divContactInfo = document.createElement('div');
+                    divContactInfo.className = 'contact-info';
+                    var divName = document.createElement('div');
+                    divName.className = 'name';
+                    divName.textContent = fullName;
+                    var divMessage = document.createElement('div');
+                    divMessage.className = 'message';
+                    divMessage.textContent = 'Last message';
+                    var divBadge = document.createElement('div');
+                    divBadge.className = 'badge';
+                    if (user.unread_amount == 0) {
+                      divBadge.style.display = 'none'
+                    } 
+                    divBadge.textContent = user.unread_amount;
+                    divContactInfo.appendChild(divName);
+                    divContactInfo.appendChild(divMessage);
+                    divContact.appendChild(img);
+                    divContact.appendChild(divContactInfo);
+                    divContact.appendChild(divBadge);
+                    divContact.addEventListener('click', () => {
+                        createChannel(user)
+                            .then(channel_id => {
+                                showChannel(user, channel_id);
+                            })
+                            .catch(error => {
+                                console.error('Failed to create channel:', error);
+                            });
+                    });
+                    list_all_users.appendChild(divContact);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching users:', error);
+            });
+    }
 }
+
+// Event listener for the "More" link
+moreLink.addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    showMoreUsers(); // Fetch and display more users
+});
+
+// Initial call to fetch and display users
+showMoreUsers();
+
 // send request to create channel
 function createChannel(user) {
   return new Promise((resolve, reject) => {
@@ -155,11 +202,10 @@ function getCookie(name) {
   }
   return cookieValue;
 }
-show_all_users();
-
+//show_all_users();
 // show channel when click on Username
 function showChannel(user, channel_id) {
-
+  console.log("channel: ", channel_id)
   var full_name = user.first_name + " " + user.last_name;
   chatHeader.textContent = full_name;
   var img = document.createElement('img');
@@ -169,15 +215,18 @@ function showChannel(user, channel_id) {
   get_all_messeeji(user, channel_id)
   .then(() => {
     // Mark all messages in the channel as read
+
     mark_as_read(channel_id, user.id);
   })
   .catch(error => {
     console.error('Error fetching messages:', error);
   });
+
   websocket_handle(user, channel_id);
 }
 //add a single message to div all_messeeji
 function addMessage(message, sender) {
+  console.log("message added: ",message)
   const div = document.createElement('div');
   div.classList.add('message');
   div.classList.add(sender);
@@ -186,7 +235,6 @@ function addMessage(message, sender) {
 }
 
 // show all message with given channel_id
-const url_all_messeeji = '/chat/get_messeeji/'
 function get_all_messeeji(user, channel_id){
   return new Promise((resolve, reject) => {
     all_messeeji.innerHTML = '';
@@ -223,11 +271,24 @@ function get_all_messeeji(user, channel_id){
   });
 }
 
+// Gắn sự kiện click cho các tin nhắn để xử lý khi người dùng đọc tin nhắn
+all_messeeji.addEventListener('click', function(event) {
+  // Kiểm tra xem người dùng đã nhấp vào tin nhắn hay không
+  const message = event.target.closest('.message');
+  if (message) {
+      // Đánh dấu tin nhắn đã đọc và ẩn divBadge tương ứng
+      const divBadge = message.querySelector('.badge');
+      if (divBadge) {
+          divBadge.style.display = 'none'; // Ẩn divBadge
+      }
+  }
+});
 
 // Gắn sự kiện cho nút gửi tin nhắn
 sendMessageBtn.addEventListener('click', function(event) {
   if (inActiveSocket != null) {
     event.preventDefault();
+    console.log("current user: ", current_user)
     sendMessage();
   }
 });
@@ -235,6 +296,7 @@ sendMessageBtn.addEventListener('click', function(event) {
 messageInput.addEventListener('keypress', function(event) {
   if ((event.keyCode === 13) && (inActiveSocket != null)) {
     event.preventDefault();
+    console.log("current user: ", current_user)
     sendMessage();
   }
 });
@@ -253,7 +315,6 @@ function sendMessage() {
 
 // HANDLE WEBSOCKET
 function websocket_handle(user, channel_id) {
-
   if (socketMap[inActiveSocket]) {
     // Close the existing WebSocket connection
     socketMap[inActiveSocket].close();
@@ -261,7 +322,7 @@ function websocket_handle(user, channel_id) {
   }
 
   const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-  const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/notification/${channel_id}/`;
+  const wsEndpoint = `${websocketProtocol}://${window.location.host}/ws/chat_notification/${channel_id}/`;
   socketMap[channel_id] = new WebSocket(wsEndpoint);
 
   inActiveSocket = channel_id;
@@ -274,20 +335,6 @@ function websocket_handle(user, channel_id) {
     console.log("WebSocket connection closed!");
   };  
 
-  // // Form submit listener
-  // document.getElementById('sendMessageBtn').addEventListener('click', function(event){
-  //   event.preventDefault();
-  //   sendMessage()
-  // });
-
-  // document.getElementById('messageInput').addEventListener('keypress', function(event){
-  //   // Check if Enter key is pressed (key code 13)
-  //   if (event.keyCode === 13) {
-  //     event.preventDefault(); // Prevent the default behavior (e.g., form submission)
-  //     sendMessage(); // Call the sendMessage function
-  //   }
-  // });
-  // Response from consumer on the server
   socketMap[channel_id].addEventListener("message", (event) => {
     const messageData = JSON.parse(event.data)['data'];
     console.log(messageData);

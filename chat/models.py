@@ -5,7 +5,14 @@ from userprofiles.models import UserProfile
 from django_mongoengine import fields, Document, EmbeddedDocument
 from mongoengine.fields import EmbeddedDocumentField
 
-# Create your models here.
+class UserMess(EmbeddedDocument):
+    user_id = fields.IntField()
+    name = fields.StringField()
+    avatar = fields.StringField()
+
+    def __str__(self):
+        return f"{self.user_id}_{self.name}"
+
 class Participants(Document):
     channel_id = fields.IntField()
     user_id = fields.IntField()
@@ -16,14 +23,6 @@ class Participants(Document):
         'db': 'social_network',
         'collection': 'participants',
     }
-
-class UserMess(EmbeddedDocument):
-    user_id = fields.IntField()
-    name = fields.StringField()
-    avatar = fields.StringField()
-
-    def __str__(self):
-        return f"{self.user_id}_{self.name}"
 
 class Channel(Document):
     channel_id = fields.SequenceField(primary_key=True)
@@ -52,7 +51,7 @@ class Messeeji(Document):
         ]
     }
     def __str__(self):
-        return f"{self.message_id}_{self.sender.__str__}_{self.channel_id}_{self.message_content}"
+        return f"{self.message_id}_{self.sender_id.__str__}_{self.channel_id}_{self.message_content}"
 
 
 class Conversation(models.Model):

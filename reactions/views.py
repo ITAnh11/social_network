@@ -15,16 +15,17 @@ from common_functions.common_function import getUser
 from notifications.views import createReactNotification
 
 from userprofiles.views import UserProfileBasicView
-
+import logging
+logger=logging.getLogger(__name__)
 # Create your views here.
 class GetReactions(APIView):
     def post(self, request):
         user = getUser(request)
+        logger.info("POST request received in GetReactions.")
         
         if user is None:
+            logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
-        
-        # print(request.data)
         
         posts_id = int(request.data.get('posts_id'))
         comment_id = int(request.data.get('comment_id'))
@@ -35,12 +36,14 @@ class GetReactions(APIView):
         if comment_id < 0:
             post = Posts.objects(__raw__={'_id': posts_id}).first()
             if post is None:
+                logger.error("Posts not found.")
                 return Response({'error': 'Posts not found'}, status=status.HTTP_404_NOT_FOUND)
             topMostReacted = post.getMostUseReactions()
             total = post.number_of_reactions.total
         elif comment_id > 0:
             comment = Comments.objects(__raw__={'_id': comment_id}).first()
             if comment is None:
+                logger.error("Comment not found.")
                 return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
             topMostReacted = comment.getMostUseReactions()
             total = comment.number_of_reactions.total
@@ -70,7 +73,7 @@ class CreateReaction(APIView):
             newType = request.data.get('type')
             
             print(currentType, newType)
-            
+            logger.info("Changing type reaction")
             if currentType == newType:
                 return True
             
@@ -101,14 +104,18 @@ class CreateReaction(APIView):
     
     def post(self, request):
         user = getUser(request)
+        logger.info("POST request received in CreateReaction.")
         
         if user is None:
+            logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
         
         if request.data.get('type') not in ['like', 'love', 'haha', 'wow', 'sad', 'angry', 'care']:
+            logger.error("Invalid type.")
             return Response({'error': 'Invalid type'}, status=status.HTTP_400_BAD_REQUEST)
         
         if request.data.get('posts_id') is None and request.data.get('comment_id') is None:
+            logger.error("posts_id or comment_id is required.")
             return Response({'error': 'posts_id or comment_id is required'}, status=status.HTTP_400_BAD_REQUEST)
         
         response = Response()
@@ -127,6 +134,7 @@ class CreateReaction(APIView):
                 post = Posts.objects(__raw__={'_id': posts_id}).first()
                 if post is None:
                     reaction.delete()
+                    logger.error("Posts not found.")
                     return Response({'error': 'Posts not found'}, status=status.HTTP_404_NOT_FOUND)
                 post.inc_reaction(reaction.type)
                 post.save()
@@ -134,6 +142,7 @@ class CreateReaction(APIView):
                 comment = Comments.objects(__raw__={'_id': comment_id}).first()
                 if comment is None:
                     reaction.delete()
+                    logger.error("Comment not found.")
                     return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
                 comment.inc_reaction(reaction.type)
                 comment.save()
@@ -141,7 +150,7 @@ class CreateReaction(APIView):
             createReactNotification(reaction)
                 
         except Exception as e:
-            print(e)
+            logger.error("Error in CreateReaction: %s", e)
             return Response({'error': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         serializer = ReactionsSerializer(reaction)
@@ -154,8 +163,10 @@ class CreateReaction(APIView):
 class DeleteReaction(APIView):
     def post(self, request):
         user = getUser(request)
+        logger.info("POST request received in DeleteReaction.")
         
         if user is None:
+            logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
         
         response = Response()
@@ -170,24 +181,27 @@ class DeleteReaction(APIView):
                                                   'user.id': user_id}).first()
             
             if reaction is None:
+                logger.error("Reaction not found.")
                 return Response({'error': 'Reaction not found'}, status=status.HTTP_404_NOT_FOUND)
             
             if comment_id < 0:
                 post = Posts.objects(__raw__={'_id': posts_id}).first()
                 if post is None:
+                    logger.error("Posts not found.")
                     return Response({'error': 'Posts not found'}, status=status.HTTP_404_NOT_FOUND)
                 post.dec_reaction(reaction.type)
                 post.save()
             elif comment_id > 0:
                 comment = Comments.objects(__raw__={'_id': comment_id}).first()
                 if comment is None:
+                    logger.error("Comment not found.")
                     return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
                 comment.dec_reaction(reaction.type)
                 comment.save()
                 
             reaction.delete()
         except Exception as e:
-            print(e)
+            logger.error("Error in DeleteReaction: %s", e)
             return Response({'error': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         response.data = {
@@ -214,8 +228,10 @@ class IsReactedView(APIView):
     
     def post(self, request):
         user = getUser(request)
+        logger.info("POST request received in IsReactedView.")
         
         if user is None:
+            logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
         
         response = Response()

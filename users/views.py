@@ -46,11 +46,11 @@ class LoginView(APIView):
         user = User.objects.filter(email=email).first()
 
         if user is None:
-            logger.warning('User not found! Email: %s', email)
+            logger.warning('User not found!')
             return Response({'warning': 'User not found!'})
 
         if not user.check_password(password):
-            logger.warning('Incorrect password for user with email: %s', email)
+            logger.warning('Incorrect password for user')
             return Response({'warning': 'Incorrect password!'})
         
         user.set_last_login()
@@ -64,7 +64,7 @@ class LoginView(APIView):
             'jwt': token,
             'redirect_url': '/'
         }
-        logger.info('User successfully logged in. Email: %s, ID: %s, Redirecting to: %s', email, user.id, response.data['redirect_url'])
+        logger.info('User successfully logged in')
         
         return response
   
@@ -86,24 +86,32 @@ class RegisterView(APIView):
             
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
-                user = serializer.save()
-                
-                SetUserProfileView().post(request, user)
-                SetImageProfileView().post(request, user)
-                
-                # user.set_last_login()
-                
-                token = LoginView().makeToken(user)
-                
-                response = Response()
-                response.set_cookie(key='jwt', value=token, httponly=True)
-                response.data = {
-                    'success': 'Register success!!! Welcome to the feisubukku!',
-                    'jwt': token,
-                    'redirect_url': '/userprofiles/' + f"?id={user.id}"
-                }
-                logger.info('User successfully registered')
-                return response
+                try:
+                    user = serializer.save()
+                    # Ghi log khi save thành công
+                    logger.info('User successfully registered')
+                    
+                    SetUserProfileView().post(request, user)
+                    SetImageProfileView().post(request, user)
+                    
+                    # user.set_last_login()
+                    
+                    token = LoginView().makeToken(user)
+                    
+                    response = Response()
+                    response.set_cookie(key='jwt', value=token, httponly=True)
+                    response.data = {
+                        'success': 'Register success!!! Welcome to the feisubukku!',
+                        'jwt': token,
+                        'redirect_url': '/userprofiles/' + f"?id={user.id}"
+                    }
+                    logger.info('User successfully registered')
+                    return response
+                except Exception as save_error:
+                    # Ghi log khi save thất bại
+                    logger.error("Failed to register user: %s", save_error)
+                    return Response({'error': 'Failed to register user. Please try again.'})
+
             
         except ValidationError as e:
             if e.detail.get('email'):
@@ -160,8 +168,12 @@ class ChangePasswordView(APIView):
         
         user.set_password(new_password)
         user.confirm_password = user.password
-        user.save()
-        logger.info('User successfully changed password.')
-        return Response({'success': 'Change password success!'})
+        try:
+            user.save()
+            logger.info('User successfully changed password.')
+            return Response({'success': 'Change password success!'})
+        except Exception as e:
+            logger.error('Failed to save user to the database: %s', e)
+            return Response({'error': 'Failed to save user to the database!'})
     
     

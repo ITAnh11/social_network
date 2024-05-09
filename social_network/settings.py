@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-tq@z^zzy63%i6(+)=4l6vr2-g2p^#ba6&*-$u3b)d(bjb&(evb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
@@ -62,7 +62,6 @@ INSTALLED_APPS = [
     'friends',
     'userprofiles',
     'channels',
-    'mess',
     'navbar',
     'notifications',
 ]
@@ -278,11 +277,6 @@ LOGGING = {
             "level": env('DJANGO_LOG_LEVEL'),
             "propagate": False,
         },
-        "mess.views": {
-            "handlers": ["logtail", "file"],
-            "level": env('DJANGO_LOG_LEVEL'),
-            "propagate": False,
-        },
         "homepage.views": {
             "handlers": ["logtail", "file"],
             "level": env('DJANGO_LOG_LEVEL'),
@@ -299,6 +293,11 @@ LOGGING = {
             "propagate": False,
         },
         "chat.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "posts.views": {
             "handlers": ["logtail", "file"],
             "level": env('DJANGO_LOG_LEVEL'),
             "propagate": False,

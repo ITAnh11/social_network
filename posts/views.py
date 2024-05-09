@@ -12,7 +12,8 @@ from .serializers import PostsSerializer, MediaOfPostsSerializer
 from common_functions.common_function import getTimeDuration, getUser
 
 from social_network.redis_conn import redis_server
-
+import logging 
+logger = logging.getLogger(__name__)
 def createMediaOfPosts(post, medias):
     listMediaOfPosts = []
     try:
@@ -25,6 +26,7 @@ def createMediaOfPosts(post, medias):
             
             listMediaOfPosts.append(mediaOfPosts)
     except Exception as e:
+        logger.error('createMediaOfPosts: %s', e)
         print('createMediaOfPosts', e)
         return False
 
@@ -32,6 +34,7 @@ def createMediaOfPosts(post, medias):
         try:
             mediaOfPosts.save()
         except Exception as e:
+            logger.error('createMediaOfPosts: %s', e)
             print('saveMediaOfPosts', e)
             return False
 
@@ -43,6 +46,7 @@ class CreatePostsView(APIView):
         user = getUser(request)
         
         if not user:
+            logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         userProfileBasic = UserProfileBasicView().getUserProfileBasic(user)
@@ -53,20 +57,25 @@ class CreatePostsView(APIView):
                                 request.data.get('status'))
         
         if post == False:
+            logger.error("Error while creating post.")
             return Response({'error': 'Error while creating post'}, status=400)
         
         print('request.data', request.data)
-        
+
+        logger.info('Post created successfully.')
+        logger.debug('Request data: %s', request.data)
+
         medias = request.FILES.getlist('media')
         
         print('medias', medias)
-        
+        logger.debug('Medias: %s', medias)
         listMediaOfPost = createMediaOfPosts(post, medias)
         
         if listMediaOfPost == False:
             for mediaOfPost in listMediaOfPost:
                 mediaOfPost.delete()
             post.delete()
+            logger.error("Error while saving media.")
             return Response({'error': 'Error while saving media'}, status=400)
         
         post_data = PostsSerializer(post).data
@@ -91,6 +100,7 @@ class CreatePostsView(APIView):
             )
             post.save()
         except Exception as e:
+            logger.error('createPosts: %s', e)
             print('createPosts', e)
             return False
                 
@@ -113,11 +123,13 @@ def createUpdateImageProfilePosts(userprofilebasic, typeImage, image):
             for mediaOfPost in listMediaOfPost:
                 mediaOfPost.delete()
             post.delete()
+            logger.error("Error while saving media.")
             return False
         
         post.save()
         
     except Exception as e:
+        logger.error('createUpdateImageProfilePosts: %s', e)
         print('createUpdateImageProfilePosts', e)
         return False
     
@@ -128,6 +140,7 @@ class GetPostsPageView(APIView):
         user = getUser(request)
         
         if not user:
+            logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         params = request.GET
@@ -135,6 +148,7 @@ class GetPostsPageView(APIView):
         image_id = params.get('image_id')
         
         if not posts_id or not image_id:
+            logger.error("Invalid request.")
             return Response({'error': 'Invalid request'}, status=400)
         
         idPostsRequest = int(posts_id)
@@ -143,6 +157,7 @@ class GetPostsPageView(APIView):
         post = Posts.objects(__raw__={'_id': idPostsRequest}).first()
         
         if not post:
+            logger.error("Post not found.")
             print('Post not found')
             return Response({'error': 'Post not found'}, status=404)
         
@@ -168,6 +183,7 @@ class GetPostsForProfilePageView(APIView):
         user = getUser(request)
         
         if not user:
+            logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         data = []
@@ -181,7 +197,7 @@ class GetPostsForProfilePageView(APIView):
         currentNumberOfPosts = int(request.data.get('current_number_of_posts'))
 
         if currentNumberOfPosts >= num_posts:
-            print('No more posts')
+            logger.error("No more posts available.")
             return Response({'error': 'No more posts available'}, status=400)
 
         posts = Posts.objects(__raw__={'user.id': idUserRequested}).order_by('-created_at')[currentNumberOfPosts:currentNumberOfPosts+10]
@@ -212,6 +228,7 @@ class GetPostsForHomePageView(APIView):
         user = getUser(request)
         
         if not user:
+            logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         # currentNumberOfPosts = self.checkEnableLoadMore(request)
@@ -239,6 +256,7 @@ class GetPostsForHomePageView(APIView):
             
                 data.append(posts_data)
         except Exception as e:
+            logger.error(e)
             print(e)
             
         reponse.data = {
@@ -256,6 +274,7 @@ class GetPostsForHomePageView(APIView):
             if currentNumberOfPosts >= num_posts:
                 return -1
         except Exception as e:
+            logger.error(e)
             print(e)
             return -1
 
@@ -265,13 +284,14 @@ class GetPostsForHomePageView(APIView):
         try:        
             # Get all posts that the user has not watched
             posts_is_watched_ids = [int(id) for id in redis_server.smembers(f'user:{user_id}:watched_posts')]
-            
+            logger.debug('posts_is_watched_ids: %s', posts_is_watched_ids)
             print('posts_is_watched_ids', posts_is_watched_ids)
 
             posts_not_watched = Posts.objects(__raw__={'user.id': {'$ne': user_id}, 
                                                        '_id': {'$nin': posts_is_watched_ids}}).order_by('-created_at')[:10]
 
         except Exception as e:
+            logger.error(e)
             print(e)
             return []
         return posts_not_watched
@@ -281,6 +301,7 @@ class MarkPostAsWatchedView(APIView):
         user = getUser(request)
         
         if not user:
+            logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=401)
         
         data = request.data
