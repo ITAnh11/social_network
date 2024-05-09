@@ -117,6 +117,7 @@ overflow-y: auto;
 flex-wrap: wrap;
 position: relative; 
 flex-direction: row;
+max-height: 850px;
 }
 
 .card-list::-webkit-scrollbar {
