@@ -1,15 +1,17 @@
-const moreButton = document.getElementById('moreButton');
-moreButton.textContent = "More";
-moreButton.href = "#";
-const moreSuggestBtn = document.getElementById('moreSuggestButton');
-moreSuggestBtn.textContent = "More Suggest";
-moreSuggestBtn.href = "#";
-const moreAddtBtn = document.getElementById('moreAddButton');
-moreAddtBtn.textContent = "More Friend Request";
-moreAddtBtn.href = "#";
-const list_friend = document.getElementById('list_friends')
+// const moreButton = document.getElementById('moreButton');
+// moreButton.textContent = "More";
+// moreButton.href = "#";
+// const moreSuggestBtn = document.getElementById('moreSuggestButton');
+// moreSuggestBtn.textContent = "More Suggest";
+// moreSuggestBtn.href = "#";
+// const moreAddtBtn = document.getElementById('moreAddButton');
+// moreAddtBtn.textContent = "More Friend Request";
+// moreAddtBtn.href = "#";
+// var list_friend = document.getElementById('list_friends');
+// console.log("acb",list_friend.className);
 var request_list = document.querySelector(".request-list");
-// var friend_list = document.querySelector(".card-list");
+var friend_list = document.querySelector(".card-list");
+console.log(friend_list);
 var suggest_list = document.querySelector(".suggest_list");
 //Xử lí denine button
 function denine_button(event){
@@ -19,19 +21,14 @@ function denine_button(event){
     formdata.append("st", "denined");
     formdata.append("id", a);
     formdata.append("csrfmiddlewaretoken", csrftoken);
-    
     url = "/friends/denine_friendrequest/";
-
     fetch(url,{
         method:'POST',
         body: formdata,
     })
-
-
     if(event.target.textContent === "Từ chối") {
         event.target.textContent = "Đã từ chối";
     }
-
     event.target.parentNode.parentNode.querySelector(".button1").remove();
 
 }
@@ -162,7 +159,7 @@ function addfriend() {
             url_next_add = data.next;
 
         } else {
-            moreAddtBtn.style.display = 'none';
+            // moreAddtBtn.style.display = 'none';
             url_next_add = null;
         }
         console.log("friend_request: ", data);
@@ -192,9 +189,12 @@ function addfriend() {
     })
 }
 }
-moreAddtBtn.addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent default link behavior
-    addfriend(); // Fetch and display more users
+request_list.addEventListener('scroll', function(event) {
+    // Kiểm tra nếu cuộn đã đạt đến cuối của div
+    if (request_list.scrollTop + request_list.clientHeight >= request_list.scrollHeight) {
+        event.preventDefault();
+        addfriend();
+    }
 });
 addfriend();
 
@@ -211,7 +211,7 @@ function show_list_friend(){
         if (data.next) {
             nextPageUrl = data.next;
         } else {
-            moreButton.style.display = 'none';
+            // moreButton.style.display = 'none';
             nextPageUrl = null;
         }
         console.log("friend_list:",data);
@@ -231,15 +231,19 @@ function show_list_friend(){
             </a>`;
             var newCard = document.createElement("div");
             newCard.innerHTML = a;
-            list_friend.appendChild(newCard);
+            friend_list.appendChild(newCard);
         })
     })
 }
 }
 
-moreButton.addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent default link behavior
-    show_list_friend(); // Fetch and display more users
+
+friend_list.addEventListener('scroll', function(event) {
+    // Kiểm tra nếu cuộn đã đạt đến cuối của div
+    if (friend_list.scrollTop + friend_list.clientHeight >= friend_list.scrollHeight) {
+        event.preventDefault();
+        show_list_friend();
+    }
 });
 
 show_list_friend();
@@ -259,7 +263,7 @@ function show_suggest_friend(){
             url_next_suggest = data.next;
             console.log("new link: ", url_next_suggest);
         } else {
-            moreSuggestBtn.style.display = 'none';
+            // moreSuggestBtn.style.display = 'none';
             url_next_suggest = null;
         }
         console.log("suggest_friend_list:",data);
@@ -290,20 +294,16 @@ function show_suggest_friend(){
     }
 }
 
-moreSuggestBtn.addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent default link behavior
-    show_suggest_friend(); // Fetch and display more users
-});
-show_suggest_friend();
-
-
-suggest_list.addEventListener('scroll', function() {
+suggest_list.addEventListener('scroll', function(event) {
     // Kiểm tra nếu cuộn đã đạt đến cuối của div
     if (suggest_list.scrollTop + suggest_list.clientHeight >= suggest_list.scrollHeight) {
-        // Xử lí khi cuộn đạt đến cuối của div ở đây
-        console.log("Đã đạt đến cuối của div!");
+        event.preventDefault();
+        show_suggest_friend();
     }
 });
+
+show_suggest_friend();
+
 
 
 //danh sach gửi lời mời chờ chấp nhận
