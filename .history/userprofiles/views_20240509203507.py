@@ -151,7 +151,7 @@ class SetUserProfileView(APIView):
                                 request.data.get('gender'), request.data.get('phone'),
                                 request.data.get('birth_date'), user.id]
         )
-        logger.info("User profile created successfully!")
+
         return Response({'message': 'User profile created successfully!'})
     
 class SetImageProfileView(APIView):    

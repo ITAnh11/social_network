@@ -686,3 +686,19 @@ class DenineFriendRequestProfileView(APIView):
             logger.error(f"Error while saving friend request: {str(e)}")
             return Response({'error': 'Error while saving friend request'}, status=400)
         
+# class DeleteFriendShipProfile(APIView):
+#     def post(self, request):
+#         user = getUser(request)
+        
+#         if not user:
+#             return Response({'error': 'Unauthorized'}, status=401)
+        
+#         try:
+#             friend_id = request.data.get('id')
+#             friendship = get_object_or_404(Friendship, id = friendship_id)
+            
+#             friendship.delete()
+#         except Friendship.DoesNotExist:
+#             return Response({'error': 'Friendship not found'}, status=404)
+         
+#         return Response({'success': 'Friendship deleted successfully'})

@@ -13,15 +13,16 @@ class UserProfile(models.Model):
     last_name = models.CharField(max_length=255, null=False)
     phone = models.CharField(max_length=15, null=True)
     birth_date = models.DateField(null=True, blank=True)
+    # birth_date = models.DateField(null=False, blank=False)
     gender = models.CharField(max_length=10, null=False)
-    address = models.CharField(max_length=255, blank=True, null=True)
-    bio = models.TextField(blank=True, null=True)
-    school = models.CharField(max_length=255, blank=True, null=True)
-    work = models.CharField(max_length=255, blank=True, null=True)
-    address_work = models.CharField(max_length=255, blank=True, null=True)
-    place_birth = models.CharField(max_length=255, blank=True, null=True)
-    social_link = models.CharField(max_length=255, blank=True, null=True)
-    _destroy = models.BooleanField(default=False, null = True)
+    address = models.CharField(max_length=255, blank=True)
+    bio = models.TextField(blank=True)
+    school = models.CharField(max_length=255, blank=True)
+    work = models.CharField(max_length=255, blank=True)
+    address_work = models.CharField(max_length=255, blank=True)
+    place_birth = models.CharField(max_length=255, blank=True)
+    social_link = models.CharField(max_length=255, blank=True)
+    _destroy = models.BooleanField(default=False)
     
     class Meta:
         indexes = [
@@ -32,21 +33,21 @@ class ImageProfile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     avatar= models.ImageField(upload_to=media_directory_path, blank=True, default="users/default/avatar_default.png")
     background = models.ImageField(upload_to=media_directory_path, blank=True, default="users/default/background_default.jpg")
-    _destroy = models.BooleanField(default=False, null=True)
+    _destroy = models.BooleanField(default=False)
     
     class Meta:
         indexes = [
             models.Index(fields=['user_id'])
         ]
     
-# class LinkProfile(models.Model):
-#     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-#     link = models.CharField(max_length=255, null=False)
+class LinkProfile(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    link = models.CharField(max_length=255, null=False)
     
-#     class Meta:
-#         indexes = [
-#             models.Index(fields=['user_id'])
-#         ]
+    class Meta:
+        indexes = [
+            models.Index(fields=['user_id'])
+        ]
 
 # model mongodb
 from django_mongoengine import fields, EmbeddedDocument
