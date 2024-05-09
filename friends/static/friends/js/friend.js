@@ -87,6 +87,9 @@ function request_button(event){
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            if(data.error){
+                alert(data.error);
+            } 
         })
     }
     else{
@@ -208,6 +211,7 @@ function show_list_friend(){
 show_list_friend();
 
 //hiện danh sách gợi ý
+
 url_list_suggest_friend = "/friends/get_suggestionfriend/";
 function show_suggest_friend(){
     fetch(url_list_suggest_friend)
@@ -238,9 +242,32 @@ function show_suggest_friend(){
             suggest_list.appendChild(newDiv);
         })
     })
-    
 }
+
+// let count_suggest_friend = 1;
+// url_list_suggest_friend = `/friends/get_suggestionfriend/?count=${count_suggest_friend}`;
+// function show_suggest_friend(){
+//     fetch(url_list_suggest_friend)
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log("suggest_friend_list:",data);
+//         for(let i = count_suggest_friend;i <= Math.min(count_suggest_friend + 29,data.suggestions.length);++i){
+//             console.log("a: ",i);
+//         }
+//     })
+// }
+
+
 show_suggest_friend();
+
+
+suggest_list.addEventListener('scroll', function() {
+    // Kiểm tra nếu cuộn đã đạt đến cuối của div
+    if (suggest_list.scrollTop + suggest_list.clientHeight >= suggest_list.scrollHeight) {
+        // Xử lí khi cuộn đạt đến cuối của div ở đây
+        console.log("Đã đạt đến cuối của div!");
+    }
+});
 
 
 //danh sach gửi lời mời chờ chấp nhận
