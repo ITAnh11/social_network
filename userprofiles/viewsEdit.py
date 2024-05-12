@@ -68,6 +68,7 @@ class EditAvatarView(APIView):
             imageprofile.avatar = avatar    
             imageprofile.save()
             
+            UserProfileBasicView().resetUserProfileBasic(user)          
             userprofile = UserProfileBasicView().getUserProfileBasic(user)
             
             post = createUpdateImageProfilePosts(userprofilebasic=userprofile, 
@@ -179,6 +180,8 @@ class EditProfileView(APIView):
             userprofile.birth_date = request.data.get('birth_date') or None
         
             userprofile.save()
+            
+            UserProfileBasicView().resetUserProfileBasic(user)  
             
             logger.info("User profile updated successfully.")
             

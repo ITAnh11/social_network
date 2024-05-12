@@ -32,7 +32,7 @@ class ReactionNumberInfo(Document):
             self.update(__raw__={
             '$inc': {
                 f'number_of_reactions.{REACTION_FIELDS[reaction]}': +1,
-                'number_of_reactions.total': +1
+                'number_of_reactions.total': + 1
             }
         })
         

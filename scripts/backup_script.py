@@ -9,8 +9,9 @@ def backup_postgres():
         # Set PostgreSQL connection parameters from settings
         username = 'postgres'
         dbname = 'social_network'
-        password = 'Thai_duong2308'
+        password = 'postgres'
         backup_dir = 'D:\\bk_pg\\dump'
+        port = '5001'
 
         # Ensure backup directory exists
         if not os.path.exists(backup_dir):
@@ -24,11 +25,11 @@ def backup_postgres():
         os.environ['PGPASSWORD'] = password
 
         # Execute pg_dump command to backup PostgreSQL database
-        pg_dump_cmd = ['pg_dump', '-U', username, '-d', dbname, '-f', backup_file]
+        pg_dump_cmd = ['pg_dump', '-U', username, '-d', dbname, '-f', backup_file, '-p', port]
         subprocess.run(pg_dump_cmd, check=True)
 
         # Delete old backup files older than 4 weeks
-        delete_old_backups(backup_dir, days_to_keep=28)
+        delete_old_backups(backup_dir, days_to_keep=9)
 
         print("PostgreSQL backup successful.")
 
@@ -40,8 +41,7 @@ def backup_mongodb():
     try:
         # Set MongoDB connection parameters from settings
         db_name = 'social_network'
-        host = 'localhost'
-        port = 27017
+        host = 'mongo-0-a,mongo-0-b,mongo-0-c'
         backup_dir = 'D:\\bk_mongo\\dump'
 
         # Ensure backup directory exists
@@ -50,14 +50,14 @@ def backup_mongodb():
 
         # Generate timestamp for backup folder
         timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        backup_folder = os.path.join(backup_dir, f'mongo_backup_{timestamp}')
+        backup_file = os.path.join(backup_dir, f'mongo_backup_{timestamp}')
 
         # Execute mongodump command to backup MongoDB database
-        mongodump_cmd = ['mongodump', '--db', db_name, '--host', host, '--port', str(port), '--out', backup_folder]
+        mongodump_cmd = ['mongodump', '--db', db_name, '--host', f'{host}', '--out', backup_file]
         subprocess.run(mongodump_cmd, check=True)
 
         # Delete old backup folders older than 4 weeks
-        delete_old_backups(backup_dir, days_to_keep=28)
+        delete_old_backups(backup_dir, days_to_keep=9)
 
         print("MongoDB backup successful.")
 

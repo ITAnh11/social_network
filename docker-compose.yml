@@ -6,6 +6,7 @@ services:
     image: redis:latest
     ports:
       - 6379:6379
+    restart: unless-stopped
     command: redis-server
   mongo-0-a:
     container_name: mongo-0-a

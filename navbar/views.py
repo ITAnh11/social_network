@@ -13,6 +13,7 @@ from django.db.models import Q
 from .serializers import UserInfoSerializer, ImageSerializer
 from rest_framework import generics
 
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -25,24 +26,23 @@ class navbarView(APIView):
 
 class SearchListView(generics.ListAPIView):
     serializer_class = UserInfoSerializer
-    queryset = UserProfile.objects.all()
+    # queryset = UserProfile.objects.all()
 
     def post(self, request, *args, **kwargs):
         logger.info("POST request received in SearchListView")
         
         username = request.data.get('name')
         logger.info(f"Search query: {username}")
-        
         users =  UserProfile.objects.filter(
             Q(first_name__icontains=username) |
             Q(last_name__icontains=username)
         ).order_by('first_name')
-        
+    
         if not users.exists():
             logger.warning("No users found matching search query")
             return Response({"detail": "Không tìm thấy người dùng"})
         
-        data =[]
+        data = []
         for user in users:
             data.append({
                 "search_user": getUserProfileForPosts(user.user_id)

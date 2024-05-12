@@ -67,8 +67,6 @@ def process_message_imageprofile(msg):
             
             new_avatar_path = default_storage.url(new_avatar)
             
-            executor.submit(UserProfileBasicView().removeUserProfileBasic, user_id)
-            
             # Delete all post from the database
             executor.submit(update_data, Posts, {'user.id': user_id}, {'$set': {'user.avatar': new_avatar_path}})
             

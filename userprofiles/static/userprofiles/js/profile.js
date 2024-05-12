@@ -260,21 +260,24 @@ fetch(api_get_profile)
 
         // edit story
         var intro_bio = document.getElementById('intro_bio');
-        intro_bio.innerHTML += `<p>${data.userprofile['bio']}</p>`;
+        intro_bio.innerHTML += `<p>${data.userprofile['bio'] === null ? '' : data.userprofile['bio']}</p>`;
 
         var work = document.getElementById('work');
-        work.innerHTML += `${data.userprofile['work']}`;
+        work.innerHTML += `${data.userprofile['work'] === null ? '' : data.userprofile['work']}`;
 
         var address_work = document.getElementById('address_work');
-        address_work.innerHTML += `${data.userprofile['address_work']}`;
+        
+        address_work.innerHTML += `${data.userprofile['address_work'] === null ? '' : data.userprofile['address_work']}`;
 
         var address = document.getElementById('address');
-        address.innerHTML += `${data.userprofile['address']}`;
+        address.innerHTML += `${data.userprofile['address'] === null ? '' : data.userprofile['address']}`;
 
         var place_birth = document.getElementById('place_birth');
-        place_birth.innerHTML += `${data.userprofile['place_birth']}`;
+        place_birth.innerHTML += `${data.userprofile['place_birth'] === null ? '' : data.userprofile['place_birth']}`;
 
         var social_link = document.getElementById('social_link');
-        social_link.innerHTML += `<a href="https://www.instagram.com/${data.userprofile['social_link']}/"><p>${data.userprofile['social_link']}</p></a>`;
+        social_link.innerHTML += `<a href="https://www.instagram.com/${data.userprofile['social_link']}/">
+        <p>${data.userprofile['social_link'] == null ? '' : data.userprofile['social_link']}
+        </p></a>`;
         // social_link.innerHTML  += `<a href=></a>${data.userprofile['social_link']}`;
     })

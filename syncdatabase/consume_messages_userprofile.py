@@ -64,9 +64,7 @@ def process_message_userprofile(msg):
             
             # Get the user ID
             user_id = after_data['id']
-            
-            executor.submit(UserProfileBasicView.removeUserProfileBasic, user_id)
-                        
+                                    
             # Delete all post from the database
             executor.submit(update_data, Posts, {'user.id': user_id}, {'$set': {'user.name': name}})
             

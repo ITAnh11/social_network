@@ -29,8 +29,13 @@ if (currentUrl.includes("/")) {
 const searchInput = document.getElementById('search-input');
 const nav_bar = document.querySelector("ul");
 function remove_search_list(event){
-    console.log("abc:",event.target.parentNode.parentNode);
-    event.target.parentNode.parentNode.remove();
+    console.log("danh sach:",event.target.parentNode.parentNode.parentNode.className);
+    console.log("danh sach con:",event.target.parentNode.parentNode.className);
+    if(event.target.parentNode.parentNode.parentNode.className === "search-list"){
+        event.target.parentNode.parentNode.parentNode.remove();
+    }else if(event.target.parentNode.parentNode.className === "search-list"){
+        event.target.parentNode.parentNode.remove();
+    }
     searchInput.value = null;
 }
 
@@ -69,9 +74,8 @@ searchInput.addEventListener('keyup', function(event) {
                     <h3>${people.search_user.name}</h3>
                 </div>
             </div>
-            </a>`; 
+            </a>`;
         })
-        a += '</div>';
         var newDiv = document.createElement("div");
         newDiv.classList.add("search-list");
         newDiv.innerHTML = a;

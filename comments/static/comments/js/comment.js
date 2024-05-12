@@ -26,8 +26,13 @@ const api_create_comment = '/comments/create_comment/';
 // get_user_profile();
 
 function setImageForCommentForPost() {
-  var element = document.getElementById("comment-post-avatar-user");
-  element.src = USER_AVATAR;
+  fetch(api_get_profile_basic)
+    .then(response => response.json())
+    .then(data => {
+
+      var element = document.getElementById("comment-post-avatar-user");
+      element.src = data.avatar;
+    })
 }
 
 setImageForCommentForPost();

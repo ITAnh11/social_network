@@ -118,57 +118,90 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     #kết nối tới relica postgres
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'social_network',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5001',
+#     },
+#     'replica': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'social_network',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5002',
+#     },
+    
+#     # kết nối cho máy chỉ chạy 1 postgres
+#     # 'default': {
+#     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#     #     'NAME': 'social_network',
+#     #     'USER': 'admin',
+#     #     'PASSWORD': 'abc123',
+#     #     'HOST': '127.0.0.1',
+#     #     'PORT': '5432',
+#     # }
+# }
+
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'social_network',
-    #     'USER': 'postgres',
-    #     'PASSWORD': 'postgres',
-    #     'HOST': '127.0.0.1',
-    #     'PORT': '5001',
-    # },
-    # 'replica': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'social_network',
-    #     'USER': 'postgres',
-    #     'PASSWORD': 'postgres',
-    #     'HOST': '127.0.0.1',
-    #     'PORT': '5002',
-    # },
+    #kết nối tới relica postgres
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'dj_db_conn_pool.backends.postgresql',
         'NAME': 'social_network',
-        'USER': 'admin',
-        'PASSWORD': 'abc123',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'PORT': '5001',
+        'POOL_OPTIONS': {
+            'POOL_SIZE': 8,
+            'MAX_OVERFLOW': 8,
+            'RECYCLE': 24 * 60 * 60
+        }
+    },
+    'replica': {
+        'ENGINE': 'dj_db_conn_pool.backends.postgresql',
+        'NAME': 'social_network',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': '127.0.0.1',
+        'PORT': '5002',
+        'POOL_OPTIONS': {
+            'POOL_SIZE': 8,
+            'MAX_OVERFLOW': 8,
+            'RECYCLE': 24 * 60 * 60
+        }
     }
 }
 
 MONGODB_DATABASES = {
-    # "default": {
-    #     "name": "social_network",
-    #     "host": "mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0",
-    # }
-    
+    # kết nối replica set mongodb
     "default": {
         "name": "social_network",
-        "host": "localhost",
-        "port": 27017,
-        # "username": "mongo_user",  # replace with your username
-        # "password": "mongo_password",  # replace with your password
+        "host": "mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0",
     }
+    
+    # kết nối cho máy chỉ chạy 1 mongo
+    # "default": {
+    #     "name": "social_network",
+    #     "host": "localhost",
+    #     "port": 27017,
+    #     # "username": "mongo_user",  # replace with your username
+    #     # "password": "mongo_password",  # replace with your password
+    # }
 }
 
 import mongoengine
 
 mongoengine.connect(
-    # db='social_network',
-    # host='mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0'
     db='social_network',
-    host='mongodb://localhost/social_network'
-    
-    
+    host='mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0'
+    # db='social_network',
+    # host='mongodb://localhost/social_network'
 )
 
 # Password validation
