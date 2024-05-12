@@ -62,14 +62,14 @@ class CreatePostsView(APIView):
             logger.error("Error while creating post.")
             return Response({'error': 'Error while creating post'}, status=400)
         
-        print('request.data', request.data)
+        # print('request.data', request.data)
 
         logger.info('Post created successfully.')
         logger.debug('Request data: %s', request.data)
 
         medias = request.FILES.getlist('media')
         
-        print('medias', medias)
+        # print('medias', medias)
         logger.debug('Medias: %s', medias)
         listMediaOfPost = createMediaOfPosts(post, medias)
         
@@ -112,7 +112,7 @@ def createUpdateImageProfilePosts(userprofilebasic, typeImage, image):
     try:
         post = Posts.objects.create(
                             user=userprofilebasic,
-                            title=f"updated {typeImage} profile picture ",
+                            title=f"updated {typeImage} profile picture",
                             content='',
                             status='public',
                             created_at=timezone.now(),

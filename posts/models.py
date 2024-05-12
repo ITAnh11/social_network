@@ -23,17 +23,17 @@ class Posts(ReactionNumberInfo):
     def __init__(self, *args, **values):
         super().__init__(*args, **values)
         
-    def inc_comment(self):
-        self.update(__raw__={'$inc': {'number_of_comments': 1}})
+    def inc_comment(self, value=1):
+        self.update(__raw__={'$inc': {'number_of_comments': value}})
     
-    def inc_share(self):
-        self.update(__raw__={'$inc': {'number_of_shares': 1}})
+    def inc_share(self, value=1):
+        self.update(__raw__={'$inc': {'number_of_shares': value}})
     
-    def dec_comment(self):
-        self.update(__raw__={'$inc': {'number_of_comments': -1}})        
+    def dec_comment(self, value=1):
+        self.update(__raw__={'$inc': {'number_of_comments': -value}})        
     
-    def dec_share(self):
-        self.update(__raw__={'$inc': {'number_of_shares': -1}}) 
+    def dec_share(self, value=1):
+        self.update(__raw__={'$inc': {'number_of_shares': -value}}) 
     
     meta = {
         'db': 'social_network',

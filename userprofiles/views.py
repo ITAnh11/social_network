@@ -20,7 +20,7 @@ import random
 import time
 import json
 logger=logging.getLogger(__name__)
-EX_TIME = 60 * 10
+EX_TIME = 60 * 60
 INT_FROM = 0
 INT_TO = EX_TIME // 3
 
@@ -165,7 +165,7 @@ class SetImageProfileView(APIView):
 class UserProfileBasicView(APIView):
     def removeUserProfileBasic(self, user_id):
         try:
-            logger.info(f"Removing user profile basic {user_id}")
+            logger.info(f"Removing user profile basic {user_id} from redis")
             redis_server.delete(f'userprofile_basic_{user_id}')
         except Exception as e:
             logger.error(f"Failed to remove user profile basic {user_id}: {str(e)}")

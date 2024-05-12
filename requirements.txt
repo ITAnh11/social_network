@@ -27,3 +27,4 @@ Twisted[http2,tls]
 django-environ
 logtail-python
 confluent-kafka
+django-db-connection-pool

@@ -9,24 +9,26 @@ def media_directory_path(instance, filename):
 
 class UserProfile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=255, null=False)
-    last_name = models.CharField(max_length=255, null=False)
-    phone = models.CharField(max_length=15, null=True)
-    birth_date = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=10, null=False)
-    address = models.CharField(max_length=255, blank=True, null=True)
-    bio = models.TextField(blank=True, null=True)
-    school = models.CharField(max_length=255, blank=True, null=True)
-    work = models.CharField(max_length=255, blank=True, null=True)
-    address_work = models.CharField(max_length=255, blank=True, null=True)
-    place_birth = models.CharField(max_length=255, blank=True, null=True)
-    social_link = models.CharField(max_length=255, blank=True, null=True)
-    _destroy = models.BooleanField(default=False, null = True)
+    first_name = models.CharField(max_length=255, null=True)
+    last_name = models.CharField(max_length=255, null=True)
+    phone = models.CharField(max_length=15, default=" ", null=True)
+    birth_date = models.DateField(null=True)
+    gender = models.CharField(max_length=10, null=True, default=" ")
+    address = models.CharField(max_length=255, default=" ", null=True)
+    bio = models.TextField(default=" ", null=True)
+    school = models.CharField(max_length=255, default=" ", null=True)
+    work = models.CharField(max_length=255, default=" ", null=True)
+    address_work = models.CharField(max_length=255, default=" ", null=True)
+    place_birth = models.CharField(max_length=255, default=" ", null=True)
+    social_link = models.CharField(max_length=255, default=" ", null=True)
+    _destroy = models.BooleanField(default=False, null=True)
     
     class Meta:
         indexes = [
             models.Index(fields=['user_id'])
         ]
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 class ImageProfile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)

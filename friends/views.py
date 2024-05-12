@@ -94,7 +94,7 @@ class SentFriendRequestView(APIView):
         try:
             with transaction.atomic():
                 with connection.cursor() as cursor:
-                    cursor.execute('CALL check_friend_limit(%s)', [to_user_id])
+                    cursor.execute('CALL check_friend_limit(%s, %s)', [user.id,to_user_id])
         except Exception as e:
             print(e)
             return Response({'error': str(e)}, status=400)

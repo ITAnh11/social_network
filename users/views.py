@@ -1,6 +1,6 @@
 from .serializers import UserSerializer
 from .models import User
-from userprofiles.views import SetUserProfileView, SetImageProfileView
+from userprofiles.views import SetUserProfileView
 
 
 import jwt
@@ -128,14 +128,14 @@ class LoginView(APIView):
 #             logger.exception("An error occurred in RegisterView")
 #             return Response({'error': 'Something went wrong. Please try again.'})
 
-class RegisterView(APIView):
+class RegisterView(APIView): 
     def get(self, request):
         response = render(request, 'users/register.html')
         print(request.COOKIES.get('jwt'))
         response.delete_cookie('jwt')
         
         return response
-            
+    
     def post(self, request):
         # print(request.data)
         try:
@@ -165,7 +165,7 @@ class RegisterView(APIView):
             if e.detail.get('check_password'):
                 return Response({'warning': e.detail.get('check_password')})
         except Exception as e:
-            return Response({'error': 'Something went wrong. Please try again.'})
+            return Response({'error': 'Something went wrong. Please try again.'}, status=500)
         
 class LogoutView(APIView):
     def post(self, request):

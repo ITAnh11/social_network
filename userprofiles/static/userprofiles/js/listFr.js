@@ -10,7 +10,7 @@ function getUserIdFromUrl() {
 
     // Lấy giá trị của tham số "id"
     var id_user = urlParams.get('id');
-    console.log(id_user);
+    // console.log(id_user);
 
     return id_user;
 }
@@ -67,7 +67,7 @@ function showListFriendsOfUserprofile(id_user) {
                 .then(response => response.json())
                 .then(data => {
                     // console.log("user_id:",id_user);
-                    console.log("friend_list:",data);
+                    // console.log("friend_list:",data);
                     
                     var listFr_Userprofile = document.getElementById('listFrOfUserprofile')
 
@@ -101,8 +101,8 @@ function showMutualFrIcon(id_user) {
             fetch(`/friends/get_listfriendofuserother/?id=${id_user}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("user_id:",id_user);
-                    console.log("friend_list:",data);
+                    // console.log("user_id:",id_user);
+                    // console.log("friend_list:",data);
                     var mutual_friend_images = document.getElementById('mutualFriendImages');
 
                     data.data.forEach(function(friend_ship){

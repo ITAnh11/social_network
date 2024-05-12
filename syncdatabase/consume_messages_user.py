@@ -91,7 +91,7 @@ def process_message_user(msg):
             # Get the user ID
             user_id = before_data['id']
             
-            executor.submit(UserProfileBasicView().removeUserProfileBasic, user_id)
+            executor.submit(UserProfileBasicView.removeUserProfileBasic, user_id)
             executor.submit(delete_all_posts, user_id)
             executor.submit(delete_data, Reactions, {'user.id': user_id})
             executor.submit(delete_data, Comments, {'user.id': user_id})
