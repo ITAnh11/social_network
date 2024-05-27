@@ -196,10 +196,14 @@ MONGODB_DATABASES = {
 }
 
 import mongoengine
+from pymongo import ReadPreference
 
 mongoengine.connect(
     db='social_network',
-    host='mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0'
+    host='mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0',
+    alias='default',
+    read_preference=ReadPreference.SECONDARY_PREFERRED
+    
     # db='social_network',
     # host='mongodb://localhost/social_network'
 )

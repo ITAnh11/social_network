@@ -236,12 +236,6 @@ class GetPostsForHomePageView(APIView):
             logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=401)
         
-        # currentNumberOfPosts = self.checkEnableLoadMore(request)
-        
-        # if currentNumberOfPosts == -1:
-        #     print('No more posts')
-        #     return Response({'error': 'No more posts'}, status=400)
-        
         reponse = Response()
         
         data = []
@@ -270,21 +264,6 @@ class GetPostsForHomePageView(APIView):
 
         return reponse
     
-    def checkEnableLoadMore(self, request):
-        try:
-            
-            num_posts = Posts.objects.count()
-            currentNumberOfPosts = int(request.data.get('current_number_of_posts'))
-            
-            if currentNumberOfPosts >= num_posts:
-                return -1
-        except Exception as e:
-            logger.error(e)
-            print(e)
-            return -1
-
-        return currentNumberOfPosts
-    
     def filterPosts(self, user_id):
         try:        
             # Get all posts that the user has not watched
@@ -294,10 +273,9 @@ class GetPostsForHomePageView(APIView):
 
             posts_not_watched = Posts.objects(__raw__={'user.id': {'$ne': user_id}, 
                                                        '_id': {'$nin': posts_is_watched_ids}}).order_by('-created_at')[:10]
-
+            
         except Exception as e:
             logger.error(e)
-            print(e)
             return []
         return posts_not_watched
     

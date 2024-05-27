@@ -15,6 +15,7 @@ pillow
 channels
 daphne
 docker
+pymongo
 mongoengine
 django_mongoengine
 django-rest-framework-mongoengine
@@ -26,5 +27,4 @@ channels_redis
 Twisted[http2,tls]
 django-environ
 logtail-python
-confluent-kafka
 django-db-connection-pool
