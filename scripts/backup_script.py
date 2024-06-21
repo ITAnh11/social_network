@@ -26,6 +26,7 @@ def backup_postgres():
 
         # Execute pg_dump command to backup PostgreSQL database
         pg_dump_cmd = ['pg_dump', '-U', username, '-d', dbname, '-f', backup_file, '-p', port]
+        # "pg_dump -U postgres -d social_network -f D:\\bk_pg\\dump\\social_network.sql -p 5001"
         subprocess.run(pg_dump_cmd, check=True)
 
         # Delete old backup files older than 4 weeks

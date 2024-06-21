@@ -156,33 +156,39 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
-        'PORT': '5001',
+        'PORT': '5000',
         'POOL_OPTIONS': {
             'POOL_SIZE': 8,
             'MAX_OVERFLOW': 8,
             'RECYCLE': 24 * 60 * 60
         }
     },
-    'replica': {
-        'ENGINE': 'dj_db_conn_pool.backends.postgresql',
-        'NAME': 'social_network',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': '127.0.0.1',
-        'PORT': '5002',
-        'POOL_OPTIONS': {
-            'POOL_SIZE': 8,
-            'MAX_OVERFLOW': 8,
-            'RECYCLE': 24 * 60 * 60
-        }
-    }
+    # 'replica': {
+    #     'ENGINE': 'dj_db_conn_pool.backends.postgresql',
+    #     'NAME': 'social_network',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'postgres',
+    #     'HOST': '127.0.0.1',
+    #     'PORT': '5002',
+    #     'POOL_OPTIONS': {
+    #         'POOL_SIZE': 8,
+    #         'MAX_OVERFLOW': 8,
+    #         'RECYCLE': 24 * 60 * 60
+    #     }
+    # }
 }
 
 MONGODB_DATABASES = {
     # kết nối replica set mongodb
+    # "default": {
+    #     "name": "social_network",
+    #     "host": "mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0",
+    # }
+    
+    # on docker
     "default": {
         "name": "social_network",
-        "host": "mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0",
+        "host": "mongodb://localhost:27018/",
     }
     
     # kết nối cho máy chỉ chạy 1 mongo
@@ -199,13 +205,18 @@ import mongoengine
 from pymongo import ReadPreference
 
 mongoengine.connect(
-    db='social_network',
-    host='mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0',
-    alias='default',
-    read_preference=ReadPreference.SECONDARY_PREFERRED
+    # db='social_network',
+    # host='mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0',
+    # alias='default',
+    # read_preference=ReadPreference.SECONDARY_PREFERRED
     
+    ## on local
     # db='social_network',
     # host='mongodb://localhost/social_network'
+    
+    #on docker
+    db='social_network',
+    host='mongodb://localhost:27018/'
 )
 
 # Password validation

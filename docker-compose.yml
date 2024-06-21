@@ -1,4 +1,4 @@
-version: '3.7'
+version: '1'
 
 services:
   redis:
@@ -9,76 +9,30 @@ services:
     restart: unless-stopped
     command: redis-server
     
-  mongo-0-a:
-    container_name: mongo-0-a
+  mongodb:
+    container_name: mongodb
     image: mongo
     ports:
-      - 127.0.10.1:27017:27017
-    volumes:
-      - mongo-0-a:/data/db
-    restart: unless-stopped
-    command: "--wiredTigerCacheSizeGB 0.25 --replSet rs0"
-    networks:
-      - social_network
-
-  mongo-0-b:
-    container_name: mongo-0-b
-    image: mongo
-    ports:
-      - 127.0.10.2:27017:27017
-    volumes:
-      - mongo-0-b:/data/db
-    restart: unless-stopped
-    command: "--wiredTigerCacheSizeGB 0.25 --replSet rs0"
-    networks:
-      - social_network
-
-  mongo-0-c:
-    container_name: mongo-0-c
-    image: mongo
-    ports:
-      - 127.0.10.3:27017:27017
-    volumes:
-      - mongo-0-c:/data/db
-    restart: unless-stopped
-    command: "--wiredTigerCacheSizeGB 0.25 --replSet rs0"
+      - 27018:27017
     networks:
       - social_network
   
-  # postgres:
-  #   container_name: postgres
-  #   image: postgres
-  #   ports:
-  #     - "5000:5432"
-  #   environment:
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=postgres
-  #     - POSTGRES_DB=social_network
-  #   command:
-  #     - "postgres"
-  #     - "-c"
-  #     - "wal_level=logical"
-  #   networks:
-  #     - social_network
-
-  postgres-1:
-    container_name: postgres-1
+  postgres:
+    container_name: postgres
     image: postgres
     ports:
-      - "5001:5432"
+      - "5000:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=social_network
-      - PGDATA=/data
-    volumes:
-      - ./postgres-1/pgdata:/data
-      - ./postgres-1/config:/config
-      - ./postgres-1/archive:/mnt/server/archive
-    command: -c 'config_file=/config/postgresql.conf'
+    command:
+      - "postgres"
+      - "-c"
+      - "wal_level=logical"
     networks:
       - social_network
-    
+
   zookeeper:
     container_name: zookeeper
     image: debezium/zookeeper
@@ -104,7 +58,6 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
     networks:
       - social_network
-  
   connect:
     container_name: connect
     image: debezium/connect
@@ -113,7 +66,7 @@ services:
     depends_on:
       - kafka
       - zookeeper
-      - postgres-1
+      - postgres
     environment:
       - BOOTSTRAP_SERVERS=kafka:9092
       - GROUP_ID=1
@@ -126,23 +79,6 @@ services:
       - ADVERTISED_HOST_NAME=localhost
     networks:
       - social_network
-      
-  # debezium-ui:
-  #   container_name: debezium-ui
-  #   image: debezium/debezium-ui
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     - KAFKA_CONNECT_URIS=http://connect:8083
-  #   depends_on:
-  #     - connect
-  #   networks:
-  #     - social_network
-
-volumes:
-  mongo-0-a:
-  mongo-0-b:
-  mongo-0-c:
 
 networks:
   social_network:
