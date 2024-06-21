@@ -1,63 +1,4 @@
-<h2 align="center">✈️ Feisubukku ✈️</h3>
-
-<h3 align="center">Trang web mạng xã hội</h3>
-
-# Tên Dự Án
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Dependencies](https://img.shields.io/david/username/repo)
-
-
-
-## Mục đích profject:
-- Luyện tập tương tác với cơ dữ liệu, thực hành các kiến thức được học của bộ môn Cơ sở dữ liệu
-- Đề chọn: Trang web đặt vé máy bay online. Trang web tham khảo 👉 <a href="https://www.vietnamairlines.com" target="_blank" rel="noreferrer">VietName Airline</a>
-
-## Các chức năng chính của trang web:
-- Tạo tài khoản, đăng nhập cơ bản
-- Ở trang homepage hiện các chuyến bay nổi bật (được đặt nhiều nhất)
-- Chức năng tìm kiếm các chuyến bay theo điểm đến, điểm đi, thời gian, giá vé
-- Sau khi chọn được vé chuyển đến trang điền thông tin hành khách
-- Tiếp tục chọn ghế ngồi
-- Chọn ghế ngồi xong, người dùng sẽ được chuyển đến trang cá nhân để xem các vé đã đặt
-
-## Mong muốn cải thiện
-- Có thêm chức thanh toán
-- Thiết kế database chưa tốt
-- Trang web cần được tối ưu hơn
-
-## Link demo trang web 👇👇👇
-Youtube: <a href="https://www.youtube.com/watch?v=ny6n667tthA" target="_blank" rel="noreferrer">video demo</a>
-
-<h3 align="left">Languages and Tools:</h3>
-
-<h3 align="left">Languages and Tools:</h3>
-<p align="left"> <a href="https://aws.amazon.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="aws" width="40" height="40"/> </a> <a href="https://getbootstrap.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg" alt="bootstrap" width="40" height="40"/> </a> <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/> </a> <a href="https://www.djangoproject.com/" target="_blank" rel="noreferrer"> <img src="https://cdn.worldvectorlogo.com/logos/django.svg" alt="django" width="40" height="40"/> </a> <a href="https://www.docker.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg" alt="docker" width="40" height="40"/> </a> <a href="https://git-scm.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" width="40" height="40"/> </a> <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> <a href="https://kafka.apache.org/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/apache_kafka/apache_kafka-icon.svg" alt="kafka" width="40" height="40"/> </a> <a href="https://www.mongodb.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original-wordmark.svg" alt="mongodb" width="40" height="40"/> </a> <a href="https://www.postgresql.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="40" height="40"/> </a> <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> <a href="https://redis.io" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/redis/redis-original-wordmark.svg" alt="redis" width="40" height="40"/> </a> </p>
-
-<p><img align="center" src="https://github-readme-stats.vercel.app/api/top-langs?username=itanh11&show_icons=true&locale=en&layout=compact" alt="itanh11" /></p>
-
-#### Frontend:
-<p align="left">
-  <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a>
-  <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/> </a>  
-  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a>  
-</p>
-  
-#### Backend:
-<p align="left"> 
-  <a href="https://nodejs.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original-wordmark.svg" alt="nodejs" width="40" height="40"/> </a> 
-  <a href="https://expressjs.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" alt="express" width="40" height="40"/> </a> 
-</p>
-
-#### Database:
-<p align="left"> 
-  <a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/> </a> 
-</p>
-
-- Nguồn tham khảo chính của web là https://www.vietnamairlines.com/
-
-- 📫 How to reach me **buianhkc112004@gmail.com**
-# Tên Dự Án Web
+# Social network (Feisubukku)
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
@@ -65,7 +6,7 @@ Youtube: <a href="https://www.youtube.com/watch?v=ny6n667tthA" target="_blank" r
 ![Website](https://img.shields.io/badge/website-online-green)
 
 ## Mô tả ngắn gọn
-Đây là một dự án web mã nguồn mở giúp giải quyết vấn đề XYZ bằng cách ABC. Trang web cung cấp các tính năng tương tác và dễ sử dụng cho người dùng.
+Đây là 1 dự án nhóm về phát triển 1 trang web mạng xã hội giúp cho mọi người có thể chia sẽ những hình ảnh, câu chuyện dưới dạng bài đăng, người khác có thể tương tác với các bài đăng của mình như bình luận, thả tương tác. Ngoài ra còn có thể kết bạn, nhắn tin.
 
 ## Mục lục
 - [Giới thiệu](#giới-thiệu)
@@ -93,9 +34,32 @@ Bạn có thể xem demo trực tuyến của dự án tại: [Demo](https://www
 
 ## Công nghệ sử dụng
 Dự án này sử dụng các công nghệ sau:
-- Frontend: React, Vue.js, Angular
-- Backend: Node.js, Express, Django
-- Cơ sở dữ liệu: MongoDB, MySQL, PostgreSQL
+- Frontend: HTML, CSS, Js, Bootraps
+  <p align="left"> 
+   <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a> 
+    <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/> </a>
+   <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> 
+     <a href="https://getbootstrap.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg" alt="bootstrap" width="40" height="40"/> </a> 
+  </p>
+- Backend: Python, Django
+  <p align="left"> 
+  <a href="https://www.djangoproject.com/" target="_blank" rel="noreferrer"> <img src="https://cdn.worldvectorlogo.com/logos/django.svg" alt="django" width="40" height="40"/> </a> 
+    <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> 
+  </p>
+- Cơ sở dữ liệu: MongoDB, PostgreSQL, Redis
+  <p align="left"> 
+  <a href="https://redis.io" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/redis/redis-original-wordmark.svg" alt="redis" width="40" height="40"/> </a> 
+    <a href="https://www.mongodb.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original-wordmark.svg" alt="mongodb" width="40" height="40"/> </a> 
+  <a href="https://www.postgresql.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="40" height="40"/> 
+  </p>
+- Các công nghệ khác:
+  <p align="left"> 
+    <a href="https://aws.amazon.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="aws" width="40" height="40"/> </a> 
+    <a href="https://www.docker.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg" alt="docker" width="40" height="40"/> </a> 
+    <a href="https://git-scm.com/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" width="40" height="40"/> </a> 
+    <a href="https://kafka.apache.org/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/apache_kafka/apache_kafka-icon.svg" alt="kafka" width="40" height="40"/> </a> 
+    </a> 
+  </p>
 
 ## Cài đặt
 Để cài đặt dự án này, bạn cần làm theo các bước sau:
