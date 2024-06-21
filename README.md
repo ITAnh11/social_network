@@ -6,7 +6,7 @@
 ![Website](https://img.shields.io/badge/website-online-green)
 
 ## Mô tả ngắn gọn
-Đây là 1 dự án nhóm về phát triển 1 trang web mạng xã hội giúp cho mọi người có thể chia sẽ những hình ảnh, câu chuyện dưới dạng bài đăng, người khác có thể tương tác với các bài đăng của mình như bình luận, thả tương tác. Ngoài ra còn có thể kết bạn, nhắn tin.
+Đây là 1 dự án nhóm về phát triển 1 trang web mạng xã hội giúp cho mọi người có thể chia sẽ những hình ảnh, câu chuyện dưới dạng bài đăng, người khác có thể tương tác với các bài đăng của mình như bình luận, thả tương tác. Ngoài ra còn có thể kết bạn, nhắn tin, chỉnh sửa trang cá nhân. Dự án còn là nơi chúng tôi luyện tập sử dụng đa cơ sở dữ liệu cùng 1 lúc.
 
 ## Mục lục
 - [Giới thiệu](#giới-thiệu)
@@ -15,16 +15,10 @@
 - [Công nghệ sử dụng](#công-nghệ-sử-dụng)
 - [Cài đặt](#cài-đặt)
 - [Sử dụng](#sử-dụng)
-- [Đóng góp](#đóng-góp)
 - [Thông tin liên hệ](#thông-tin-liên-hệ)
 
 ## Giới thiệu
-Dự án web này được tạo ra để giúp mọi người dễ dàng quản lý XYZ. Nó cung cấp các tính năng như...
-- Tính năng 1
-- Tính năng 2
-- Tính năng 3
-
-## Các tính năng
+Dự án web này được tạo ra để giúp mọi người chia sẻ về cuộc sống của mình. Nó cung cấp các tính năng như
 - Tính năng 1: Mô tả chi tiết tính năng 1.
 - Tính năng 2: Mô tả chi tiết tính năng 2.
 - Tính năng 3: Mô tả chi tiết tính năng 3.
@@ -104,24 +98,6 @@ Hướng dẫn chi tiết về cách sử dụng các tính năng của dự án
     ```bash
     Sử dụng các biểu mẫu để thêm, sửa, xóa dữ liệu.
     ```
-
-## Đóng góp
-Chúng tôi hoan nghênh mọi đóng góp từ cộng đồng. Để đóng góp, bạn có thể:
-
-1. Fork repository này.
-2. Tạo một nhánh mới:
-    ```bash
-    git checkout -b feature/your-feature
-    ```
-3. Commit thay đổi:
-    ```bash
-    git commit -m 'Thêm tính năng mới'
-    ```
-4. Push lên nhánh của bạn:
-    ```bash
-    git push origin feature/your-feature
-    ```
-5. Tạo một pull request.
 
 ## Thông tin liên hệ
 Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ qua email: [buianhkc112004@gmail.com](mailto:buianhkc112004@gmail.com)
