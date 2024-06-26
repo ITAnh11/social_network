@@ -10,18 +10,22 @@
 
 ## Mục lục
 - [Giới thiệu](#giới-thiệu)
-- [Các tính năng](#các-tính-năng)
 - [Demo](#demo)
 - [Công nghệ sử dụng](#công-nghệ-sử-dụng)
-- [Cài đặt](#cài-đặt)
+- [Cài đặt trên Local](#cài-đặt-trên-local)
 - [Sử dụng](#sử-dụng)
 - [Thông tin liên hệ](#thông-tin-liên-hệ)
 
 ## Giới thiệu
 Dự án web này được tạo ra để giúp mọi người chia sẻ về cuộc sống của mình. Nó cung cấp các tính năng như
-- Tính năng 1: Mô tả chi tiết tính năng 1.
-- Tính năng 2: Mô tả chi tiết tính năng 2.
-- Tính năng 3: Mô tả chi tiết tính năng 3.
+- Đăng ký, đăng nhập xác thực người dùng sửa dụng JWT.
+- Đăng bài: người dùng có thể đăng bài kèm nhiều hình ảnh.
+- Thả cảm xúc like, haha, ... với bài đăng hoặc comment.
+- Comment bài đăng hoặc trả lời comment.
+- Kết bạn tìm kiếm bạn bè theo tên.
+- Nhận thông báo khi có người gửi lời mời kết bạn, khi có người thả cảm xúc, comment với bài đăng hay comment của mình.
+- Nhắn tin thời gian thực
+- Chỉnh sửa trang cá nhân
 
 ## Demo
 Bạn có thể xem demo trực tuyến của dự án tại: [Demo](https://www.youtube.com/watch?v=CRyd2E1PPxo)
@@ -55,48 +59,68 @@ Dự án này sử dụng các công nghệ sau:
     </a> 
   </p>
 
-## Cài đặt
+## Cài đặt trên Local
+
+> [!IMPORTANT]
+> Cần cài đặt Visualstudio Code, Python, Docker
+
 Để cài đặt dự án này, bạn cần làm theo các bước sau:
 
 1. Clone repository:
     ```bash
-    git clone https://github.com/username/repo.git
+    git clone https://github.com/ITAnh11/social_network.git
     ```
-2. Di chuyển vào thư mục của dự án:
-    ```bash
-    cd repo
-    ```
+2. Dùng VSC mở thư mục vừa clone về: 
 3. Cài đặt các phụ thuộc cho backend:
     ```bash
-    npm install
+    pip install -r requirements.txt
     ```
-4. Cài đặt các phụ thuộc cho frontend:
+4. Khởi chạy các service cần thiết trên docker:
     ```bash
-    cd frontend
-    npm install
+    docker-compose up -d
     ```
+5. Migrate cho Postgres:
+  ```bash
+    python manage.py migrate
+  ```
+6. Cài đặt các trigger, function, ... cho Postgres:
+   6.1
+   ```bash
+    python manage.py migrate
+   ```
+   6.2
+   ```bash
+    python manage.py migrate
+   ```
+7. Cài đặt connect trên Kafka:
+   7.1 Sử Postman trên trình duyệt, tạo phương thức POST với url và body raw sau:
+   ```bash
+    python manage.py migrate
+   ```
+   ```bash
+    python manage.py migrate
+   ```
+   7.2
+   ```bash
+    python manage.py migrate
+   ```
+   
+
 
 ## Sử dụng
 Sau khi cài đặt, bạn có thể chạy dự án bằng lệnh sau:
 
-1. Khởi động server backend:
+1. Khởi chạy các service trên docker:
     ```bash
-    npm run start:server
+    docker-compose up -d
     ```
-2. Khởi động ứng dụng frontend:
+2. Mở 1 terminal, khởi động server:
     ```bash
-    cd frontend
-    npm run serve
+    python manage.py runserver
     ```
-Hướng dẫn chi tiết về cách sử dụng các tính năng của dự án:
-
-1. Đăng nhập:
+3. Mở thêm 1 terminal, khởi chương trình động đồng bộ dữ liệu giữa các sở dữ liệu:
     ```bash
-    Sử dụng email và mật khẩu để đăng nhập.
-    ```
-2. Quản lý dữ liệu:
-    ```bash
-    Sử dụng các biểu mẫu để thêm, sửa, xóa dữ liệu.
+    python .\syncdatabase\syncdatabase.py
     ```
 
 ## Thông tin liên hệ
