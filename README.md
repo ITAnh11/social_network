@@ -83,29 +83,58 @@ Dự án này sử dụng các công nghệ sau:
   ```bash
     python manage.py migrate
   ```
-6. Cài đặt các trigger, function, ... cho Postgres:
-   6.1
+6. Cài đặt các trigger, function, ... cho Postgres:  
+   6.1 Copy File Dump vào Docker Container
    ```bash
-    python manage.py migrate
+    docker cp database\social_network.sql postgres:/dump.sql
    ```
-   6.2
+   6.2 Khôi phục Cơ sở dữ liệu  
    ```bash
-    python manage.py migrate
+    docker exec -it postgres psql -U postgres -d social_network -f /dump.sql
    ```
-7. Cài đặt connect trên Kafka:
-   7.1 Sử Postman trên trình duyệt, tạo phương thức POST với url và body raw sau:
-   ```bash
-    python manage.py migrate
+7. Cài đặt kafka connect:
+   7.1 Sử Postman trên trình duyệt, tạo phương thức POST với url và body raw sau:  
+   url
    ```
-   ```bash
-    python manage.py migrate
+    localhost:8083/connectors/
    ```
-   7.2
-   ```bash
-    python manage.py migrate
+   body
    ```
-   
-
+     {
+      "name": "pg_connect",
+      "config": {
+          "topic.prefix": "social_network",
+          "database.hostname": "postgres",
+          "database.port":"5432",
+          "database.user": "postgres",
+          "database.password": "postgres",
+          "database.dbname": "social_network",
+          "table.include.list": "public.users_user,public.userprofiles_userprofile,public.userprofiles_imageprofile",       
+          "query.fetch.size": 500,
+          "topic.creation.groups": "debezium-etl",
+          "topic.creation.debezium-etl.include": "",
+          "topic.creation.debezium-etl.exclude": "",
+          "topic.creation.default.partitions": -1,
+          "topic.creation.default.replication.factor": -1,
+          "plugin.name": "pgoutput",
+          "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+          "tasks.max": "1",
+          "skipped.operations": "r",
+          "snapshot.mode": "never",
+          "slot.name": "debezium",
+          "publication.autocreate.mode": "filtered",
+          "publication.name": "dbz_publication",
+          "transforms": "unwrap",
+          "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+          "transforms.unwrap.add.fields": "op,ts_ms,source,after, before"
+      }
+    }
+   ```
+   7.2 Có thể xóa connect trên, method DELETE  
+   url
+   ```
+   http://localhost:8083/connectors/pg_connect
+   ```
 
 ## Sử dụng
 Sau khi cài đặt, bạn có thể chạy dự án bằng lệnh sau:
