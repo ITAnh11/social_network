@@ -10,6 +10,7 @@
 
 ## Mục lục
 - [Giới thiệu](#giới-thiệu)
+- [Điều tâm đắc khi phát triển dự án](#điều-tâm-đắc-khi-phát-triển-dự-án)
 - [Demo](#demo)
 - [Công nghệ sử dụng](#công-nghệ-sử-dụng)
 - [Cài đặt trên Local](#cài-đặt-trên-local)
@@ -26,6 +27,15 @@ Dự án web này được tạo ra để giúp mọi người chia sẻ về cu
 - Nhận thông báo khi có người gửi lời mời kết bạn, khi có người thả cảm xúc, comment với bài đăng hay comment của mình.
 - Nhắn tin thời gian thực
 - Chỉnh sửa trang cá nhân
+
+## Điều tâm đắc khi phát triển dự án  
+- Cải thiện kỹ năng phát triển web sử dụng ngôn ngữ Python kết hợp framwork Django
+- Biết thêm về các loại cơ sở dữ liệu, sử dụng chúng khi nào, vào dự án như nào
+- Áp dụng websocket để phát triển tính năng chat realtime
+- Thêm kỹ thuật sử dụng Docker
+- Biết thêm về triển khai hệ thống cơ sở dữ liệu Master slave của Postgres, Replica set của Mongodb
+- Học thêm về Debezium, Kafka để xử lý vấn đề đồng bộ dữ liệu
+- Sử dụng Apache Jmeter để test trang web
 
 ## Demo
 Bạn có thể xem demo trực tuyến của dự án tại: [Demo](https://www.youtube.com/watch?v=CRyd2E1PPxo)
@@ -62,7 +72,7 @@ Dự án này sử dụng các công nghệ sau:
 ## Cài đặt trên Local
 
 > [!IMPORTANT]
-> Cần cài đặt Visualstudio Code, Python, Docker
+> Cần cài đặt Visualstudio Code, Python, Docker, máy tính RAM >= 16GB
 
 Để cài đặt dự án này, bạn cần làm theo các bước sau:
 
@@ -92,7 +102,7 @@ Dự án này sử dụng các công nghệ sau:
    ```bash
     docker exec -it postgres psql -U postgres -d social_network -f /dump.sql
    ```
-7. Cài đặt kafka connect:
+7. Cài đặt kafka connect:  
    7.1 Sử Postman trên trình duyệt, tạo phương thức POST với url và body raw sau:  
    url
    ```
@@ -151,6 +161,7 @@ Sau khi cài đặt, bạn có thể chạy dự án bằng lệnh sau:
     ```bash
     python .\syncdatabase\syncdatabase.py
     ```
+4. Trải nghiệm trang web [link](http://127.0.0.1:8000/)
 
 ## Thông tin liên hệ
 Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ qua email: [buianhkc112004@gmail.com](mailto:buianhkc112004@gmail.com)
