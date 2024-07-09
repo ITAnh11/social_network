@@ -10,7 +10,7 @@
 
 ## Mục lục
 - [Giới thiệu](#giới-thiệu)
-- [Điều tâm đắc khi phát triển dự án](#điều-tâm-đắc-khi-phát-triển-dự-án)
+- [Điều học hỏi được sau khi phát triển dự án](#điều-học-hỏi-được-sau-khi-phát-triển-dự-án)
 - [Demo](#demo)
 - [Công nghệ sử dụng](#công-nghệ-sử-dụng)
 - [Cài đặt trên Local](#cài-đặt-trên-local)
@@ -28,7 +28,7 @@ Dự án web này được tạo ra để giúp mọi người chia sẻ về cu
 - Nhắn tin thời gian thực
 - Chỉnh sửa trang cá nhân
 
-## Điều tâm đắc khi phát triển dự án  
+## Điều học hỏi được sau khi phát triển dự án  
 - Cải thiện kỹ năng phát triển web sử dụng ngôn ngữ Python kết hợp framwork Django
 - Biết thêm về các loại cơ sở dữ liệu, sử dụng chúng khi nào, vào dự án như nào
 - Áp dụng websocket để phát triển tính năng chat realtime
