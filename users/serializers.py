@@ -17,16 +17,9 @@ class UserSerializer(serializers.ModelSerializer):
         return True
      
     def create(self, validated_data):
-        password = validated_data.pop('password')
-        confirm_password = validated_data.pop('confirm_password')
-        
-        user_exists = User.objects.filter(email=validated_data['email']).exists()
-        
-        if user_exists:
-            raise ValidationError(detail={'email': 'Email already exists!'})
-        
-        if password is not None:
-            user = self.Meta.model(**validated_data)
+        try:
+            password = validated_data.pop('password')
+            confirm_password = validated_data.pop('confirm_password')
             
             if password != confirm_password:
                 raise ValidationError(detail={'comfirm_password': 'Passwords do not match!'})
@@ -35,7 +28,23 @@ class UserSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     detail={'check_password': 'Password does not meet the requirements!\nPassword must be at least 8 characters long!\nPassword must not contain any spaces!'})
             
-            user.set_password(password)
-            user.confirm_password = user.password
-            user.save()
-            return user
+            if user_exists:
+                raise ValidationError(detail={'email': 'Email already exists!'})
+            
+            if password is not None:
+                user = self.Meta.model(**validated_data)
+                
+                if password != confirm_password:
+                    raise ValidationError(detail={'comfirm_password': 'Passwords do not match!'})
+            
+                if not self.check_password(password):
+                    raise serializers.ValidationError(detail={'check_password': 'Password does not meet the requirements!'})
+                
+                user.set_password(password)
+                user.confirm_password = user.password
+                user.save()
+                print('User created!')
+                return user
+        except Exception as e:
+            print(e)
+            raise e

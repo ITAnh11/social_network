@@ -40,6 +40,9 @@ class LoginView(APIView):
         return response
     
     def post(self, request):
+        
+        print(request.data)
+        
         email = request.data.get('email')
         password = request.data.get('password')
 
@@ -53,7 +56,7 @@ class LoginView(APIView):
             logger.warning('Incorrect password for user')
             return Response({'warning': 'Incorrect password!'})
         
-        user.set_last_login()
+        # user.set_last_login()
         
         token = self.makeToken(user)
         
@@ -137,7 +140,7 @@ class RegisterView(APIView):
         return response
     
     def post(self, request):
-        # print(request.data)
+        print(request.data)
         try:
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
@@ -147,6 +150,8 @@ class RegisterView(APIView):
                 
                 token = LoginView().makeToken(user)
                 
+                print('made token')
+                
                 response = Response()
                 response.set_cookie(key='jwt', value=token, httponly=True)
                 response.data = {
@@ -155,15 +160,17 @@ class RegisterView(APIView):
                     'redirect_url': '/userprofiles/' + f"?id={user.id}"
                 }
                 
+                print('made response')
+                
                 return response
             
         except ValidationError as e:
             if e.detail.get('email'):
-                return Response({'warning': e.detail.get('email')})
+                return Response({'warning': e.detail.get('email')}, status=400)
             if e.detail.get('comfirm_password'):
-                return Response({'warning': e.detail.get('comfirm_password')})
+                return Response({'warning': e.detail.get('comfirm_password')}, status=400)
             if e.detail.get('check_password'):
-                return Response({'warning': e.detail.get('check_password')})
+                return Response({'warning': e.detail.get('check_password')}, status=400)
         except Exception as e:
             return Response({'error': 'Something went wrong. Please try again.'}, status=500)
         

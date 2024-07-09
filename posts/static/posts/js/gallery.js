@@ -27,6 +27,7 @@ function layout1(images, galleryContainerElement, posts_id) {
                 posts_id="${posts_id}"
                 onclick="clickImage(event)"
             />`
+    }, TIME_DELAY_LOAD_IMAGE * 1);
 }
 
 function layout2(images, galleryContainerElement, posts_id) {
