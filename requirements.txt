@@ -27,3 +27,5 @@ Twisted[http2,tls]
 django-environ
 logtail-python
 django-db-connection-pool
+boto3
+django-storages

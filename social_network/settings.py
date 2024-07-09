@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework', # pip install djangorestframework
     'corsheaders', # pip install django-cors-headers
     'django_mongoengine',
+    'storages',
     # 'debug_toolbar',
     'homepage',
     'users',
@@ -187,8 +188,8 @@ MONGODB_DATABASES = {
     
     # on docker
     "default": {
-        "name": "social_network",
-        "host": "mongodb://localhost:27018/",
+        "name": env('MONGODB_NAME'),
+        "host": env('MONGODB_HOST'),
     }
     
     # kết nối cho máy chỉ chạy 1 mongo
@@ -215,8 +216,8 @@ mongoengine.connect(
     # host='mongodb://localhost/social_network'
     
     #on docker
-    db='social_network',
-    host='mongodb://localhost:27018/'
+    db=env('MONGODB_NAME'),
+    host=env('MONGODB_HOST'),
 )
 
 # Password validation
@@ -249,23 +250,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
-
-STATICFILES_DIRS =  (os.path.join(BASE_DIR, 'users\\static'),
-                    os.path.join(BASE_DIR, 'userprofiles\\static'),
-                    os.path.join(BASE_DIR, 'posts\\static'),
-                    os.path.join(BASE_DIR, 'friends\\static'),
-                    os.path.join(BASE_DIR, 'homepage\\static'),
-                    os.path.join(BASE_DIR, 'comments\\static'),
-                    os.path.join(BASE_DIR, 'reactions\\static'),
-                    os.path.join(BASE_DIR, 'navbar\\static'),
-                    os.path.join(BASE_DIR, 'notifications\\static'),         
-)
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -275,9 +259,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True 
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # logging setting
 LOGGING = {
@@ -377,3 +358,47 @@ LOGGING = {
         },
     },
 }
+
+# AWS configuration
+
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+
+
+# Basic Storage configuration for Amazon S3 (Irrespective of Django versions)
+
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME') # - Enter your S3 bucket name HERE
+
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+AWS_S3_FILE_OVERWRITE = False
+
+
+# Django < 4.2
+
+'''
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+'''
+
+# Django 4.2 >
+
+STORAGES = {
+
+    # Media file (image) management   
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+    },
+    
+    # CSS and JS file management
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+    },
+}
+
+
+# Add STATIC_URL setting
+STATIC_URL = 'https://feisubukku.s3.amazonaws.com/static/'
+MEDIA_URL = 'https://feisubukku.s3.amazonaws.com/media/'

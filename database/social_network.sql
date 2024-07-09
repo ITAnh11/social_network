@@ -48,8 +48,8 @@ CREATE FUNCTION public.add_userprofile_after_insert_user() RETURNS trigger
             )
             VALUES (
                 NEW.id,
-                'users/default/avatar_default.png',
-                'users/default/background_default.jpg'
+                'media/users/default/avatar_default.png',
+                'media/users/default/background_default.jpg'
                 
             );
             RETURN NULL;

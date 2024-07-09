@@ -63,7 +63,7 @@ class MediaOfPosts(Document):
 
     def save_media(self, file):
         # Save the file to the default storage
-        path = 'posts/post_{0}/{1}'.format(self.post_id, file.name)
+        path = 'media/posts/post_{0}/{1}'.format(self.post_id, file.name)
         
         file_name = default_storage.save(path, file)
         
