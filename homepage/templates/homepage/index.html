@@ -15,7 +15,7 @@
     {% include 'navbar/navbar.html' %}
     <!-- content-area------------ -->
 
-    <div class="container">
+    <div class="container-homepage" style="display: flex; justify-content: space-between; padding: 10px 20px;">
         <div class="left-sidebar">
             <div class="important-links">
                 <a href="#"><img src="{%static 'homepage/images/news.png'%}" alt="">Latest News</a>
@@ -25,82 +25,26 @@
                 <a href="#"><img src="{%static 'homepage/images/watch.png'%}" alt="">Watch</a>
                 <a href="#">See More</a>
             </div>
-                <div class="chat" id="-1">
-                  <div class="contact bar">
-                    <img class="pic stark"></img>
-                    <div class="name">
-                      Name
-                    </div>
-                  </div>
-                  <div class="messages" id="chat">
-                    <div class="message stark">
-                      Kid, where'd you come from? 
-                    </div>
-                    <div class="message parker">
-                      Field trip! 🤣
-                    </div>
-                    <div class="message parker">
-                      Uh, what is this guy's problem, Mr. Stark? 🤔
-                    </div>
-                    <div class="message stark">
-                      Uh, he's from space, he came here to steal a necklace from a wizard.
-                    </div>
-                  </div>
-                  <div class="input">
-                    <i class="fas fa-camera"></i>
-                    <i class="far fa-laugh-beam"></i>
-                    <input id="Send_Message" placeholder="Type your message here!" type="text"  onkeypress="sendMessage(event)"/>
-                    <i class="fas fa-microphone"></i>
-                  </div>
-                </div>
         </div>
 
         <!-- main-content------- -->
 
         {% include 'posts/posts.html' %}
-
         <!-- sidebar------------ -->
         <div class="right-sidebar">
-            <div class="heading-link">
-                <h4>Conversation</h4>
-                <a href="">Hide Chat</a>
-            </div>
+           
+            <div class="chat-header">
+                {% comment %} <h4>Conversation</h4> {% endcomment %}
+                <a href="#" id="toggleChat">Hide Chat</a>
+                <!-- Add a list of contacts -->
+                    <!-- Update the contact list structure -->
+                    <div id="userList" class="contact-list">
+                    </div>
+  
 
-            <div class="online-list" id="1">
-                <div class="online">
-                    <img src="images/member-1.png" alt="">
-                </div>
-                <p>Alison Mina</p>
             </div>
-            <div class="online-list" id="2">
-                <div class="online">
-                    <img src="images/hq720.webp" alt="">
-                </div>
-                <p>Văn Tùng</p>
-            </div>
-            <div class="online-list" id="1">
-                <div class="online">
-                    <img src="images/member-1.png" alt="">
-                </div>
-                <p>Alison Mina</p>
-            </div>
-            <div class="online-list" id="2">
-                <div class="online">
-                    <img src="images/hq720.webp" alt="">
-                </div>
-                <p>Văn Tùng</p>
-            </div>
-            <div class="online-list" id="1">
-                <div class="online">
-                    <img src="images/member-1.png" alt="">
-                </div>
-                <p>Alison Mina</p>
-            </div>
-            <div class="online-list" id="2">
-                <div class="online">
-                    <img src="images/hq720.webp" alt="">
-                </div>
-                <p>Văn Tùng</p>
+            <div class="chat-container">
+            {% include 'chat/index.html' %}       
             </div>
         </div> 
     </div>
@@ -108,6 +52,8 @@
         
     </footer>
 
-    <script src=""></script>
+    <script src="{% static 'homepage/js/homepage.js' %}"></script>
+    <script src="{% static 'chat/js/chat.js' %}"></script>
+    
 </body>
 </html>

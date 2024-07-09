@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'homepage/css/chat.css' %}">
+    <title>Socialbook</title>
+    <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    {% include 'navbar/navbar.html' %}
+    <div class="container">
+        <div class="right-sidebar">
+            <div class="heading-link">
+                <h4>Conversation</h4>
+                <a href="">Hide Chat</a>
+            </div>
+        </div> 
+    </div>
+    <footer id="footer">
+        
+    </footer>
+
+    <script src="{% static 'homepage/js/homepage.js' %}"></script>
+</body>
+</html>

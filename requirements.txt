@@ -3,7 +3,7 @@
 
 asgiref
 Django
-psycopg2
+psycopg2-binary
 python-dotenv
 sqlparse
 tzdata
@@ -15,10 +15,15 @@ pillow
 channels
 daphne
 docker
+pymongo
 mongoengine
 django_mongoengine
 django-rest-framework-mongoengine
-django-storages
-boto3
-sshtunnel
-
+django-redis
+django-debug-toolbar
+redis
+channels_redis
+Twisted[http2,tls]
+django-environ
+logtail-python
+django-db-connection-pool

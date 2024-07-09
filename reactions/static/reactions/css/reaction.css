@@ -1,0 +1,62 @@
+
+/* reaction cho bai post */
+.list_reactionPost{
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    height: 45px;
+    width: 280px;
+    max-width: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 25px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 100px;
+    margin-left: -20px;
+    transition: max-width 0.3s;
+    overflow: hidden;
+}
+.show_list_reactionPost{
+    max-width: 280px;
+}
+.reaction_btnPost{
+    display: flex;
+    height: 35px;
+    transition: 0.5s;
+}
+.reaction_btnPost:hover{
+    height: 50px;
+}
+
+.count-reactionPost{
+    width: 100%; 
+    display: flex; 
+    border-bottom: 1px solid rgb(172, 171, 171);
+    height: 40px;
+    overflow: hidden; 
+    align-items: center;
+    padding-left: 10px;
+}
+.top1-react-in-post{
+    width: 27px;
+    height: 27px;
+}
+.top2-react-in-post{
+    width: 27px;
+    height: 27px; 
+    position: relative; 
+    left: -13px;
+}
+
+/* reaction cho comment */
+.top1-react-in-cmt{
+    width: 20px;
+    height: 20px;
+}
+.top2-react-in-cmt{
+    width: 20px;
+    height: 20px; 
+    position: relative; 
+    left: -10px;
+}

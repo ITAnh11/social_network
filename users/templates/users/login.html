@@ -5,16 +5,18 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook Login Page</title>
+    <title>Feisu bukku
+      Login Page</title>
     <link rel="stylesheet" type="text/css" href="{% static 'users\css\login.css' %}">
   </head>
   <body>
     <div class="container flex">
       <div class="facebook-page flex">
         <div class="text">
-          <h1>facebook</h1>
+          <h1>Feisu bukku
+          </h1>
           <p>Connect with friends and the world </p>
-          <p> around you on Facebook.</p>
+          <p> around you on Feisu bukku.</p>
         </div>
         <form action="{% url 'users:login' %}" method="post">
           {% csrf_token %}

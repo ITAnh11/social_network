@@ -1,0 +1,94 @@
+ /* Tùy chỉnh giao diện cho input file */
+.file-input-avt {
+    text-align: center; /* Căn giữa nội dung */
+    margin-bottom: 20px;
+}
+
+.file-input-avt label {
+    padding: 10px 15px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.file-input-avt input[type="file"] {
+    display: none;
+}
+
+ .file-input-cover {
+    text-align: center; /* Căn giữa nội dung */
+    margin-bottom: 20px;
+}
+
+.file-input-cover label {
+    padding: 10px 15px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.file-input-cover input[type="file"] {
+    display: none;
+}
+
+/* Hiển thị ảnh */
+.image-preview img {
+    height: 200px;
+    width: 200px;
+}
+
+.choose_img {
+    display: grid;
+    grid-template-columns: 1fr 5px 1fr; 
+    margin-bottom: 20px;
+}
+
+.choose_avt {
+    grid-column: 1;
+}
+
+.divider {
+    grid-column: 2; /* Chiếm cột kẻ dọc */
+    background-color: rgb(170, 169, 169); /* Màu của kẻ dọc */
+}
+.choose_cover {
+    grid-column: 3;
+}
+
+.choose_avt,
+.choose_cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-input-avt,
+.file-input-cover {
+    flex: 1;
+    margin-bottom: 5px;
+}
+
+.preview-place {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#upload-avatar-box,
+#upload-background-box img {
+    height: 250px;
+    width: 250px;
+}
+
+.Cancel {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 20px; 
+    border-radius: 50px;
+    background-color: bisque;
+}

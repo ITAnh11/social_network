@@ -1,6 +1,5 @@
 const main_container = document.getElementById('main-container');
 
-
 //lấy bài đăng
 const api_get_posts_for_userprofilepage = '/homepage/get_posts/';
 const api_get_comments_for_posts = '/comments/get_comments_for_post/';
@@ -64,13 +63,13 @@ function render_post(data,old) {
 
                     <div class="reaction-container" style="display: flex;">
                         <p id="count-reaction-posts-${posts_id}" style="margin: 5px; padding: 0;">100</p>
-                        <button id="react-btn-posts-${posts_id}" type="button" class="of-posts ${posts_id}" style="margin: 5px;" onclick="sendReaction(event)">like</button>
+                        <button id="react-btn-posts-${posts_id}" type="button" class="of-posts" posts_id="${posts_id}" style="margin: 5px;" onclick="sendReaction(event)">like</button>
                     </div>
 
                     <div class="comment-container">
 
                         <div id="active-comment">
-                            <button id="active-comment-of-posts-btn-${posts_id}" class="${posts_id}" onclick="show_commented_of_posts(event)">show commented</button>
+                            <button id="active-comment-of-posts-btn-${posts_id}" onclick="show_commented_of_posts(event)">show commented</button>
                         </div>
             
                         <div id="commented-of-posts-box-${posts_id}" style="display: none;"></div>
@@ -109,13 +108,28 @@ function send_comment(event, posts_id, comment_id, forwhat){
 
     const content = event.target.content.value;
     event.target.content.value = "";
-    console.log(content);
+    // console.log(content);
+
+    var user_id = "";
+    var user_name = "";
+    var user_avatar = "";
+
+    fetch(api_get_profile_basic)
+    .then(response => response.json())
+    .then(data => {
+        // console.log(data);
+        user_id = data.user_id;
+        user_name = data.name;
+        user_avatar = data.avatar;
+    })
 
     formData = new FormData();
     formData.append('content', content);
     formData.append('to_posts_id', posts_id);
     formData.append('to_comment_id', comment_id);
-    formData.append('user', JSON.stringify(USERPROFILE));
+    formData.append('user_id', user_id);
+    formData.append('user_name', user_name);
+    formData.append('user_avatar', user_avatar);
     formData.append('csrfmiddlewaretoken', csrftoken);
 
     console.log(formData.get('to_posts_id'));
@@ -204,7 +218,7 @@ function get_comments_for_comment(comment_id, idElement){
 
 function show_commented_of_comment(event){
 
-    const comment_id = parseInt(event.target.classList[0]);
+    const comment_id = parseInt(event.target.getAttribute('comment_id'));
     console.log(comment_id);
     // console.log("clicked");
     comment_id_element = `commented-of-comment-box-${comment_id}`;
@@ -254,11 +268,11 @@ function render_comment(data, idElement){ {
 
                             <div class="reaction-container" style="display: flex;">
                                 <p id="count-reaction-comment-${comment_id}" style="margin: 5px; padding: 0;">100</p>
-                                <button id="react-btn-comment-${comment_id}" type="button" class="of-comment ${comment_id}" style="margin: 5px;" onclick="sendReaction(event)">like</button>
+                                <button id="react-btn-comment-${comment_id}" type="button" class="of-comment"  style="margin: 5px;" onclick="sendReaction(event)">like</button>
                             </div>
 
                             <div id="active-comment">
-                                <button id="active-comment-of-comment-btn-${comment_id}" class="${comment_id}" onclick="show_commented_of_comment(event)">show reply</button>
+                                <button id="active-comment-of-comment-btn-${comment_id}" comment_id="${comment_id}" onclick="show_commented_of_comment(event)">show reply</button>
                             </div>
                             
                             <div id="commented-of-comment-box-${comment_id}" style="display: none;"></div>
@@ -349,13 +363,12 @@ function sendReaction(event) {
 
     ofWhat = (event.target.classList[0] == 'of-posts') ? 'posts_id' : 'comment_id';
     otherWhat = (ofWhat == 'posts_id') ? 'comment_id' : 'posts_id';
-    idWhat = parseInt(event.target.classList[1]);
+    idWhat = parseInt(event.target.getAttribute(ofWhat));
     what = (ofWhat == 'posts_id') ? 'posts' : 'comment';
 
     formData = new FormData();
     formData.append(ofWhat, idWhat);
     formData.append(otherWhat, -1);
-    formData.append('user', JSON.stringify(USERPROFILE));
     formData.append('type', 'like');
     formData.append('csrfmiddlewaretoken', csrftoken);
 

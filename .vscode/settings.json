@@ -3,8 +3,18 @@
         "CONNECTIONSTRING",
         "duong",
         "feisu",
+        "messeeji",
         "psycopg",
         "userprofiles",
         "whitenoise"
-    ]
+    ],
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./social_network",
+        "-p",
+        "*test.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true
 }

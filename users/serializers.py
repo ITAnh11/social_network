@@ -21,7 +21,12 @@ class UserSerializer(serializers.ModelSerializer):
             password = validated_data.pop('password')
             confirm_password = validated_data.pop('confirm_password')
             
-            user_exists = User.objects.filter(email=validated_data['email']).exists()
+            if password != confirm_password:
+                raise ValidationError(detail={'comfirm_password': 'Passwords do not match!'})
+        
+            if not self.check_password(password):
+                raise serializers.ValidationError(
+                    detail={'check_password': 'Password does not meet the requirements!\nPassword must be at least 8 characters long!\nPassword must not contain any spaces!'})
             
             if user_exists:
                 raise ValidationError(detail={'email': 'Email already exists!'})

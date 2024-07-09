@@ -6,27 +6,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat App</title>
-  <link rel="stylesheet" href="{% static 'chat/css/chat.css' %}">
+  <link rel="stylesheet" href="{% static 'homepage/css/chat.css' %}">
+  {% comment %} <link rel="stylesheet" href="{% static 'chat/css/chat.css' %}"> {% endcomment %}
   <link rel="stylesheet" href="{% static 'chat/css/style.css' %}">
 </head>
 <body>
 
   <div class="container">
-    <div class="sidebar">
-      <h2>Conversations</h2>
-      <input type="text" id="search" placeholder="Search...">
-      <ul id="conversationList">
-        <!-- Conversation list will be populated dynamically -->
-      </ul>
-    </div>
-    <div class="chat">
-      <div id="chatHeader"></div>
-      <div id="chatMessages"></div>
-      <div class="chatInput">
-        <input type="text" id="messageInput" placeholder="Type a message...">
-        <button id="sendMessageBtn">Send</button>
+    <div id="chatBox" class="chat hide">
+      <div class="chat" id="chatContainer">
+        <div class="contact bar" id="chatHeader">
+          <img class="avt"></img>
+          <div class="name"></div>
+        </div>
+        <div class="messages" id="chat">
+        </div>
+        <div class="chatInput input">
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button id="sendMessageBtn"><i class="fa fa-paper-plane"></i></button>
+        </div>
       </div>
-    </div>
+  </div>
+  <script>
+
+
+  </script>
   </div>
   <script src="{% static 'chat/js/chat.js' %}"></script>
 </body>

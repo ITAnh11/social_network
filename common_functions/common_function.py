@@ -21,16 +21,34 @@ def getUserProfileForPosts(user):
         return data
 
 def getTimeDuration(created_at):
-        time_duration = timezone.now() - created_at
-        if time_duration < timedelta(minutes=1):
-            return f'{time_duration.seconds} seconds ago'
-        elif time_duration < timedelta(hours=1):
-            return f'{time_duration.seconds//60} minutes ago'
-        elif time_duration < timedelta(days=1):
-            return f'{time_duration.seconds//3600} hours ago'
-        elif time_duration < timedelta(days=7):
-            return f'{time_duration.days} days ago'
-        return created_at.strftime('%d, %B %Y')
+    created_at = created_at.replace(tzinfo=timezone.utc)
+    time_duration = timezone.now() - created_at
+    if time_duration < timedelta(minutes=1):
+        return f'{time_duration.seconds} seconds ago'
+    elif time_duration < timedelta(hours=1):
+        return f'{time_duration.seconds//60} minutes ago'
+    elif time_duration < timedelta(days=1):
+        return f'{time_duration.seconds//3600} hours ago'
+    elif time_duration < timedelta(days=7):
+        return f'{time_duration.days} days ago'
+    return created_at.strftime('%d, %B %Y')
+
+def getTimeDurationForComment(created_at):
+    created_at = created_at.replace(tzinfo=timezone.utc)
+    time_duration = timezone.now() - created_at
+    if time_duration < timedelta(minutes=1):
+        return f'{time_duration.seconds} s'
+    elif time_duration < timedelta(hours=1):
+        return f'{time_duration.seconds//60} m'
+    elif time_duration < timedelta(days=1):
+        return f'{time_duration.seconds//3600} h'
+    elif time_duration < timedelta(days=7):
+        return f'{time_duration.days} d'
+    elif time_duration < timedelta(days=30):
+        return f'{time_duration.days//7} w'
+    elif time_duration < timedelta(days=365):
+        return f'{time_duration.days//30} m'
+    return f'{time_duration.days//365} y'
 
 def getUser(request):
     token = request.COOKIES.get('jwt')
@@ -44,6 +62,12 @@ def getUser(request):
     except jwt.ExpiredSignatureError:
         return {'error': 'Unauthorized'}
     
-    user = User.objects.get(id=user_id)
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        raise Exception('User not found')
     
     return user
+
+def getAllUsers():
+     return User.objects.filter()

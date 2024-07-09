@@ -11,11 +11,18 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import environ
 import os
 
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Take environment variables from .env file
+environ.Env.read_env(BASE_DIR /'.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -26,12 +33,15 @@ SECRET_KEY = 'django-insecure-tq@z^zzy63%i6(+)=4l6vr2-g2p^#ba6&*-$u3b)d(bjb&(evb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.106.210.251', '127.0.0.1']
-
+ALLOWED_HOSTS = ['*']
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 # Application definition
 
 INSTALLED_APPS = [
+    'chat.apps.ChatConfig',
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,21 +52,22 @@ INSTALLED_APPS = [
     'rest_framework', # pip install djangorestframework
     'corsheaders', # pip install django-cors-headers
     'django_mongoengine',
-    'storages',
+    # 'debug_toolbar',
     'homepage',
     'users',
     'posts',
-    'chat',
+    # 'chat',
     'comments',
     'reactions',
     'friends',
     'userprofiles',
     'channels',
-    'mess',
     'navbar',
+    'notifications',
 ]
 
 MIDDLEWARE = [
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -72,7 +83,7 @@ ROOT_URLCONF = 'social_network.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['users\\templates'],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -89,72 +100,123 @@ WSGI_APPLICATION = 'social_network.wsgi.application'
 
 ASGI_APPLICATION = "social_network.asgi.application"
 
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+
 CHANNEL_LAYERS = {
     "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    },
+    "redis": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [(REDIS_HOST, REDIS_PORT)],
         },
     },
 }
-
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 # DATABASES = {
+#     #kết nối tới relica postgres
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #         'NAME': 'social_network',
 #         'USER': 'postgres',
-#         'PASSWORD': 'TuAnhkc11',
-#         'HOST': 'database-1.cxmwy0oq0y75.ap-southeast-2.rds.amazonaws.com',
-#         'PORT': '5432',
+#         'PASSWORD': 'postgres',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5001',
 #     },
+#     'replica': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'social_network',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5002',
+#     },
+    
+#     # kết nối cho máy chỉ chạy 1 postgres
+#     # 'default': {
+#     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#     #     'NAME': 'social_network',
+#     #     'USER': 'admin',
+#     #     'PASSWORD': 'abc123',
+#     #     'HOST': '127.0.0.1',
+#     #     'PORT': '5432',
+#     # }
 # }
 
-import sshtunnel
-
-SSH_PKEY_PATH = os.path.join(BASE_DIR, 'pem', 'test.pem')
-
-sshtunnel.SSH_TIMEOUT = 5.0
-sshtunnel.TUNNEL_TIMEOUT = 5.0
-
-tunnel = sshtunnel.SSHTunnelForwarder(
-    ('ec2-54-252-204-63.ap-southeast-2.compute.amazonaws.com'),  # Public EC2 instance address
-    ssh_username='unbuntu',
-    ssh_pkey='D:/upcloud_aws/test.pem',  # Private key of the EC2 instance
-    remote_bind_address=('database-2.cxmwy0oq0y75.ap-southeast-2.rds.amazonaws.com', 5432)  # Private RDS instance address
-)
-
-tunnel.start()
-
 DATABASES = {
+    #kết nối tới relica postgres
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'dj_db_conn_pool.backends.postgresql',
         'NAME': 'social_network',
-        'USER': 'tuananh',
-        'PASSWORD': 'TuAnhkc11',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
-        'PORT': tunnel.local_bind_port,
-    }
+        'PORT': '5000',
+        'POOL_OPTIONS': {
+            'POOL_SIZE': 8,
+            'MAX_OVERFLOW': 8,
+            'RECYCLE': 24 * 60 * 60
+        }
+    },
+    # 'replica': {
+    #     'ENGINE': 'dj_db_conn_pool.backends.postgresql',
+    #     'NAME': 'social_network',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'postgres',
+    #     'HOST': '127.0.0.1',
+    #     'PORT': '5002',
+    #     'POOL_OPTIONS': {
+    #         'POOL_SIZE': 8,
+    #         'MAX_OVERFLOW': 8,
+    #         'RECYCLE': 24 * 60 * 60
+    #     }
+    # }
 }
 
 MONGODB_DATABASES = {
+    # kết nối replica set mongodb
+    # "default": {
+    #     "name": "social_network",
+    #     "host": "mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0",
+    # }
+    
+    # on docker
     "default": {
         "name": "social_network",
-        "host": "localhost",
-        "port": 27017,
-        # "username": "mongo_user",  # replace with your username
-        # "password": "mongo_password",  # replace with your password
+        "host": "mongodb://localhost:27018/",
     }
+    
+    # kết nối cho máy chỉ chạy 1 mongo
+    # "default": {
+    #     "name": "social_network",
+    #     "host": "localhost",
+    #     "port": 27017,
+    #     # "username": "mongo_user",  # replace with your username
+    #     # "password": "mongo_password",  # replace with your password
+    # }
 }
 
 import mongoengine
+from pymongo import ReadPreference
 
 mongoengine.connect(
+    # db='social_network',
+    # host='mongodb://mongo-0-a:27017,mongo-0-b:27017,mongo-0-b:27017/social_network?replicaSet=rs0',
+    # alias='default',
+    # read_preference=ReadPreference.SECONDARY_PREFERRED
+    
+    ## on local
+    # db='social_network',
+    # host='mongodb://localhost/social_network'
+    
+    #on docker
     db='social_network',
-    host='mongodb://localhost/social_network'
+    host='mongodb://localhost:27018/'
 )
 
 # Password validation
@@ -174,7 +236,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -202,7 +263,7 @@ STATICFILES_DIRS =  (os.path.join(BASE_DIR, 'users\\static'),
                     os.path.join(BASE_DIR, 'comments\\static'),
                     os.path.join(BASE_DIR, 'reactions\\static'),
                     os.path.join(BASE_DIR, 'navbar\\static'),
-
+                    os.path.join(BASE_DIR, 'notifications\\static'),         
 )
 
 # Default primary key field type
@@ -218,12 +279,101 @@ CORS_ALLOW_CREDENTIALS = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-AWS_ACCESS_KEY_ID = 'AKIAZQ3DQVSTOELWTKJU'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'feisubukku'
-AWS_S3_REGION_NAME = 'ap-southeast-2'  # Optional
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-
-AWS_PUBLIC_MEDIA_LOCATION = 'media/'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_PUBLIC_MEDIA_LOCATION)
+# logging setting
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+        "mytype": {
+            "format": "{asctime}:{levelname} - {name} {module}.py (line {lineno:d}). {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": env('DJANGO_LOG_FILE'),
+            "level": env('DJANGO_LOG_LEVEL'),
+            "formatter": "mytype",
+        },
+        'logtail': {
+            'class': 'logtail.LogtailHandler',
+            'source_token': env('BETTERSTACK_SOURCE_TOKEN'),
+        },
+        # "console": {
+        #     "class": "logging.StreamHandler",
+        #     "level": "DEBUG",
+        #     "formatter": "mytype",
+        # }
+    },
+    "loggers": {
+        "users.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "userprofiles.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "userprofiles.viewsEdit": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "reactions.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "notifications.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "navbar.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "homepage.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "friends.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "comments.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "chat.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "posts.views": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+        "users.models": {
+            "handlers": ["logtail", "file"],
+            "level": env('DJANGO_LOG_LEVEL'),
+            "propagate": False,
+        },
+    },
+}

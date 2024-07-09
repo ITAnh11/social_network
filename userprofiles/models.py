@@ -6,21 +6,26 @@ from users.models import User
 
 class UserProfile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=255, null=False)
-    last_name = models.CharField(max_length=255, null=False)
-    phone = models.CharField(max_length=15, null=True)
-    birth_date = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=10, null=False)
-    address = models.CharField(max_length=255, blank=True)
-    bio = models.TextField(blank=True)
-    school = models.CharField(max_length=255, blank=True)
-    work = models.CharField(max_length=255, blank=True)
-    _destroy = models.BooleanField(default=False)
+    first_name = models.CharField(max_length=255, null=True)
+    last_name = models.CharField(max_length=255, null=True)
+    phone = models.CharField(max_length=15, default=" ", null=True)
+    birth_date = models.DateField(null=True)
+    gender = models.CharField(max_length=10, null=True, default=" ")
+    address = models.CharField(max_length=255, default=" ", null=True)
+    bio = models.TextField(default=" ", null=True)
+    school = models.CharField(max_length=255, default=" ", null=True)
+    work = models.CharField(max_length=255, default=" ", null=True)
+    address_work = models.CharField(max_length=255, default=" ", null=True)
+    place_birth = models.CharField(max_length=255, default=" ", null=True)
+    social_link = models.CharField(max_length=255, default=" ", null=True)
+    _destroy = models.BooleanField(default=False, null=True)
     
     class Meta:
         indexes = [
             models.Index(fields=['user_id'])
         ]
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 def media_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/avatars/<filename>
@@ -29,25 +34,27 @@ class ImageProfile(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     avatar= models.ImageField(upload_to=media_directory_path, blank=True, default="users/default/avatar_default.png")
     background = models.ImageField(upload_to=media_directory_path, blank=True, default="users/default/background_default.jpg")
-    _destroy = models.BooleanField(default=False)
+    _destroy = models.BooleanField(default=False, null=True)
     
     class Meta:
         indexes = [
             models.Index(fields=['user_id'])
         ]
     
-class LinkProfile(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    link = models.CharField(max_length=255, null=False)
+# class LinkProfile(models.Model):
+#     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+#     link = models.CharField(max_length=255, null=False)
     
-    class Meta:
-        indexes = [
-            models.Index(fields=['user_id'])
-        ]
+#     class Meta:
+#         indexes = [
+#             models.Index(fields=['user_id'])
+#         ]
 
-class Image(models.Model):
-    file = models.ImageField(upload_to='images')
-    uploaded = models.DateTimeField(auto_now_add=True)
+# model mongodb
+from django_mongoengine import fields, EmbeddedDocument
 
-    def __str__(self):
-        return str(self.pk)
+class UserBasicInfo(EmbeddedDocument):
+    id = fields.IntField()
+    name = fields.StringField()
+    avatar = fields.StringField()
+        

@@ -8,8 +8,6 @@ const uploadImg = document.querySelector('.upload-img');
 const uploadInfoValue = document.querySelector('.upload-info-value');
 const form_submit = document.getElementById('form-submit');
 
-import { render_post } from './render_posted.js';
-
 var currentNumberFiles = 0;
 
 function resetValueUpload() {
@@ -20,18 +18,19 @@ function resetValueUpload() {
     currentNumberFiles = 0;
 }
 
-post_upload_area.addEventListener("click",function() {
+post_upload_area.addEventListener("click", function () {
     posting.style.display = 'flex';
 })
 
 // ẩn chức năng đăng bài
 var escBtn = posting.querySelector("#escBtn");
-escBtn.addEventListener("click",function(){
+escBtn.addEventListener("click", function () {
+    resetValueUpload();
     posting.style.display = 'none';
 })
 
 
-uploadArea.addEventListener('click', function() {
+uploadArea.addEventListener('click', function () {
     uploadInput.click();
 });
 
@@ -45,10 +44,10 @@ function handleFileUpload(event) {
 
 function removeImg(event) {
     // Remove the node parent element of the button
-    if (event.target.parentNode.classList.contains('uploaded-img')) { 
-        event.target.parentNode.remove(); 
-    } else if (event.target.parentNode.parentNode.classList.contains('uploaded-img')) { 
-        event.target.parentNode.parentNode.remove(); 
+    if (event.target.parentNode.classList.contains('uploaded-img')) {
+        event.target.parentNode.remove();
+    } else if (event.target.parentNode.parentNode.classList.contains('uploaded-img')) {
+        event.target.parentNode.parentNode.remove();
     }
 
     currentNumberFiles -= 1;
@@ -62,7 +61,7 @@ function removeImg(event) {
 // Function to read file as data URL
 function readFile(file) {
     var reader = new FileReader();
-    reader.onload = function(event) {
+    reader.onload = function (event) {
         // Create the elements
         var uploadedImgDiv = document.createElement('div');
         uploadedImgDiv.classList.add('uploaded-img');
@@ -73,7 +72,7 @@ function readFile(file) {
         var removeBtn = document.createElement('button');
         removeBtn.type = 'button';
         removeBtn.classList.add('remove-btn');
-        removeBtn.onclick = function(event) {
+        removeBtn.onclick = function (event) {
             removeImg(event);
         };
 
@@ -90,7 +89,7 @@ function readFile(file) {
 }
 
 // Event listener for file input change
-uploadInput.addEventListener('change', function(event) {
+uploadInput.addEventListener('change', function (event) {
     handleFileUpload(event);
     // Update the number of uploaded files
     currentNumberFiles += event.target.files.length;
@@ -103,7 +102,7 @@ const clickFormSubmit = () => {
 };
 
 var post_btn = document.querySelector(".post_btn");
-post_btn.addEventListener("click", function() {
+post_btn.addEventListener("click", function () {
     clickFormSubmit();
 });
 
@@ -111,17 +110,16 @@ function appendImageToFormData(images, formData) {
     var promises = [];
     var number = 0;
 
-    images.forEach(function(image) {
+    images.forEach(function (image) {
         var promise = fetch(image.src)
-        .then(response => response.blob())
-        .then(blob => {
-            number += 1;
-            console.log(number);
-            formData.append(`media`, blob, `images_${number}.png`);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(response => response.blob())
+            .then(blob => {
+                number += 1;
+                formData.append(`media`, blob, `images_${number}.png`);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         promises.push(promise);
     });
 
@@ -129,7 +127,7 @@ function appendImageToFormData(images, formData) {
 }
 
 //upload_post
-form_submit.addEventListener('submit', function(event) {
+form_submit.addEventListener('submit', function (event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const images = document.querySelectorAll('.uploaded-img img');
@@ -140,32 +138,39 @@ form_submit.addEventListener('submit', function(event) {
     if (content === "" && images.length === 0) {
         return;
     }
-    
-    formData.append(`content`,content);
+
+    formData.append(`content`, content);
 
     Promise.all(promises)
         .then(() => {
-        fetch(event.target.action, {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            render_post(data,"new");
-        })
-        .then(() => {
-            resetValueUpload();
-            posting.style.display = 'none';
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+            fetch(event.target.action, {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data['warning'] != null) {
+                        alert(data['warning']);
+                    } else if (data['error'] != null) {
+                        alert(data['error']);
+                    } else {
+                        console.log('Success:', data);
+                        render_post(data, "new");
+                    }
+                })
+                .then(() => {
+                    resetValueUpload();
+                    posting.style.display = 'none';
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         });
 });
 
 
 //cài đặt thông tin người dùng cho phần đăng bài
-function set_user_post(){
+function set_user_post() {
     var userProfile = document.querySelector("#posts-upload-userprofile");
     // console.log(userProfile);
     var userNameElement = userProfile.querySelector("#posts-upload-name-user");
@@ -174,23 +179,19 @@ function set_user_post(){
     var userprofileOverlay = posting.querySelector(".user-profile");
     var userImageElement1 = userprofileOverlay.querySelector("img");
     var userNameElement1 = userprofileOverlay.querySelector("p");
-    
-    // Sử dụng localStorage thay vì Location
-    var userName = localStorage.getItem("name");
-    var userAvatar = localStorage.getItem("avatar");
 
-    // Gán giá trị từ localStorage cho các phần tử
+
     if (userNameElement) {
-        userNameElement.textContent = userName;
+        userNameElement.textContent = USER_NAME;
     }
     if (userImageElement) {
-        userImageElement.src = userAvatar;
+        userImageElement.src = USER_AVATAR;
     }
     if (userNameElement1) {
-        userNameElement1.textContent = userName;
+        userNameElement1.textContent = USER_NAME;
     }
     if (userImageElement1) {
-        userImageElement1.src = userAvatar;
+        userImageElement1.src = USER_AVATAR;
     }
 
 }
@@ -199,9 +200,9 @@ function showUploadPostsBox() {
     var url = window.location.href;
     var params = new URLSearchParams(window.location.search);
     if (url.includes("userprofiles")) {
-        if (localStorage.getItem('id') != params.get('id')) {
+        if (USER_ID != params.get('id')) {
             posts_upload_box.remove();
-            console.log('remove');
+            console.log('remove posst upload box');
             return;
         }
     }
@@ -210,11 +211,8 @@ function showUploadPostsBox() {
 }
 
 
-showUploadPostsBox();
-set_user_post();
-
-
-
-
-
+setTimeout(() => {
+    showUploadPostsBox();
+    set_user_post();
+}, 2000);
 
