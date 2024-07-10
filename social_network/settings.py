@@ -101,8 +101,8 @@ WSGI_APPLICATION = 'social_network.wsgi.application'
 
 ASGI_APPLICATION = "social_network.asgi.application"
 
-REDIS_HOST = 'localhost'
-REDIS_PORT = 6379
+REDIS_HOST = env('REDIS_HOST')
+REDIS_PORT = env('REDIS_PORT')
 
 CHANNEL_LAYERS = {
     "default": {

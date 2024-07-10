@@ -29,3 +29,4 @@ logtail-python
 django-db-connection-pool
 boto3
 django-storages
+gunicorn
