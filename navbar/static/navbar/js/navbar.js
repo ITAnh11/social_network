@@ -1,4 +1,5 @@
 /* user-settings */
+const baseUrlNavbar = document.body.getAttribute('static_url_navbar');
 var userSettings = document.querySelector(".user-settings");
 var LoadMoreBackground =document.querySelector(".btn-LoadMore");
 var listNotif = document.querySelector(".list_notif");

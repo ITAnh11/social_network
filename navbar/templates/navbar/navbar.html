@@ -28,7 +28,7 @@
     />
     <title>Profle - Socialbook</title>
   </head>
-  <body>
+  <body static_url_navbar="{% static 'navbar/' %}">
     <nav class="big_navbar">
       <ul>
         <li>
@@ -115,7 +115,7 @@
             <div class="notification_icon">
               <img
                 class="icon-notification-bell"
-                src="/static/navbar/images/notification-bell-off.png"
+                src="{%static 'navbar/images/notification-bell-off.png' %}"
               />
             </div>
             <img
@@ -127,7 +127,7 @@
                 top: 5px;
                 right: 0px;
               "
-              src="/static/navbar/images/notification-dot.png"
+              src="{%static 'navbar/images/notification-dot.png' %}"
             />
           </div>
         </li>

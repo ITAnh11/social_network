@@ -1,5 +1,6 @@
-const bellOffIconSrc = "/static/navbar/images/notification-bell-off.png";
-const bellOnIconSrc = "/static/navbar/images/notification-bell-on.png";
+
+const bellOffIconSrc = baseUrlNavbar + "images/notification-bell-off.png";
+const bellOnIconSrc = baseUrlNavbar + "images/notification-bell-on.png";
 const api_get_notification = "/notifications/get_notifications/";
 const api_accept_friend_request = "/friends/accept_friendrequest/";
 const api_decline_friend_request = "/friends/denine_friendrequest/";

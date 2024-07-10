@@ -1,5 +1,5 @@
 --
--- PostgreSQL database dump
+-- buianhkc11QL database dump
 --
 
 -- Dumped from database version 16.3 (Debian 16.3-1.pgdg120+1)
@@ -17,7 +17,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: add_userprofile_after_insert_user(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: add_userprofile_after_insert_user(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.add_userprofile_after_insert_user() RETURNS trigger
@@ -57,10 +57,10 @@ CREATE FUNCTION public.add_userprofile_after_insert_user() RETURNS trigger
         $$;
 
 
-ALTER FUNCTION public.add_userprofile_after_insert_user() OWNER TO postgres;
+ALTER FUNCTION public.add_userprofile_after_insert_user() OWNER TO buianhkc11;
 
 --
--- Name: after_delete_friend_request(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: after_delete_friend_request(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.after_delete_friend_request() RETURNS trigger
@@ -79,10 +79,10 @@ CREATE FUNCTION public.after_delete_friend_request() RETURNS trigger
                 $$;
 
 
-ALTER FUNCTION public.after_delete_friend_request() OWNER TO postgres;
+ALTER FUNCTION public.after_delete_friend_request() OWNER TO buianhkc11;
 
 --
--- Name: after_delete_imageprofile(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: after_delete_imageprofile(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.after_delete_imageprofile() RETURNS trigger
@@ -101,10 +101,10 @@ CREATE FUNCTION public.after_delete_imageprofile() RETURNS trigger
             $$;
 
 
-ALTER FUNCTION public.after_delete_imageprofile() OWNER TO postgres;
+ALTER FUNCTION public.after_delete_imageprofile() OWNER TO buianhkc11;
 
 --
--- Name: after_delete_userprofile(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: after_delete_userprofile(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.after_delete_userprofile() RETURNS trigger
@@ -123,10 +123,10 @@ CREATE FUNCTION public.after_delete_userprofile() RETURNS trigger
             $$;
 
 
-ALTER FUNCTION public.after_delete_userprofile() OWNER TO postgres;
+ALTER FUNCTION public.after_delete_userprofile() OWNER TO buianhkc11;
 
 --
--- Name: after_insert_friend_request(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: after_insert_friend_request(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.after_insert_friend_request() RETURNS trigger
@@ -142,10 +142,10 @@ CREATE FUNCTION public.after_insert_friend_request() RETURNS trigger
                 $$;
 
 
-ALTER FUNCTION public.after_insert_friend_request() OWNER TO postgres;
+ALTER FUNCTION public.after_insert_friend_request() OWNER TO buianhkc11;
 
 --
--- Name: after_update_accepted_to_denied_friend_request(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: after_update_accepted_to_denied_friend_request(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.after_update_accepted_to_denied_friend_request() RETURNS trigger
@@ -160,10 +160,10 @@ CREATE FUNCTION public.after_update_accepted_to_denied_friend_request() RETURNS 
             $$;
 
 
-ALTER FUNCTION public.after_update_accepted_to_denied_friend_request() OWNER TO postgres;
+ALTER FUNCTION public.after_update_accepted_to_denied_friend_request() OWNER TO buianhkc11;
 
 --
--- Name: after_update_accepted_to_pending_friend_request(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: after_update_accepted_to_pending_friend_request(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.after_update_accepted_to_pending_friend_request() RETURNS trigger
@@ -180,10 +180,10 @@ CREATE FUNCTION public.after_update_accepted_to_pending_friend_request() RETURNS
             $$;
 
 
-ALTER FUNCTION public.after_update_accepted_to_pending_friend_request() OWNER TO postgres;
+ALTER FUNCTION public.after_update_accepted_to_pending_friend_request() OWNER TO buianhkc11;
 
 --
--- Name: after_update_denied_to_accepted_or_pending_friend_request(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: after_update_denied_to_accepted_or_pending_friend_request(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.after_update_denied_to_accepted_or_pending_friend_request() RETURNS trigger
@@ -198,10 +198,10 @@ CREATE FUNCTION public.after_update_denied_to_accepted_or_pending_friend_request
                 $$;
 
 
-ALTER FUNCTION public.after_update_denied_to_accepted_or_pending_friend_request() OWNER TO postgres;
+ALTER FUNCTION public.after_update_denied_to_accepted_or_pending_friend_request() OWNER TO buianhkc11;
 
 --
--- Name: after_update_pending_to_accepted_friend_request(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: after_update_pending_to_accepted_friend_request(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.after_update_pending_to_accepted_friend_request() RETURNS trigger
@@ -217,10 +217,10 @@ CREATE FUNCTION public.after_update_pending_to_accepted_friend_request() RETURNS
                 $$;
 
 
-ALTER FUNCTION public.after_update_pending_to_accepted_friend_request() OWNER TO postgres;
+ALTER FUNCTION public.after_update_pending_to_accepted_friend_request() OWNER TO buianhkc11;
 
 --
--- Name: check_friend_limit(integer, integer); Type: PROCEDURE; Schema: public; Owner: postgres
+-- Name: check_friend_limit(integer, integer); Type: PROCEDURE; Schema: public; Owner: buianhkc11
 --
 
 CREATE PROCEDURE public.check_friend_limit(IN from_id integer, IN to_id integer)
@@ -254,10 +254,10 @@ CREATE PROCEDURE public.check_friend_limit(IN from_id integer, IN to_id integer)
 					$$;
 
 
-ALTER PROCEDURE public.check_friend_limit(IN from_id integer, IN to_id integer) OWNER TO postgres;
+ALTER PROCEDURE public.check_friend_limit(IN from_id integer, IN to_id integer) OWNER TO buianhkc11;
 
 --
--- Name: check_friendship_exists(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: check_friendship_exists(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.check_friendship_exists() RETURNS trigger
@@ -288,10 +288,10 @@ CREATE FUNCTION public.check_friendship_exists() RETURNS trigger
                     $$;
 
 
-ALTER FUNCTION public.check_friendship_exists() OWNER TO postgres;
+ALTER FUNCTION public.check_friendship_exists() OWNER TO buianhkc11;
 
 --
--- Name: create_friendship(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: create_friendship(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.create_friendship() RETURNS trigger
@@ -314,10 +314,10 @@ CREATE FUNCTION public.create_friendship() RETURNS trigger
                     $$;
 
 
-ALTER FUNCTION public.create_friendship() OWNER TO postgres;
+ALTER FUNCTION public.create_friendship() OWNER TO buianhkc11;
 
 --
--- Name: prevent_duplicate_friend_request(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: prevent_duplicate_friend_request(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.prevent_duplicate_friend_request() RETURNS trigger
@@ -339,10 +339,10 @@ CREATE FUNCTION public.prevent_duplicate_friend_request() RETURNS trigger
                 $$;
 
 
-ALTER FUNCTION public.prevent_duplicate_friend_request() OWNER TO postgres;
+ALTER FUNCTION public.prevent_duplicate_friend_request() OWNER TO buianhkc11;
 
 --
--- Name: prevent_pending_friend_request(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: prevent_pending_friend_request(); Type: FUNCTION; Schema: public; Owner: buianhkc11
 --
 
 CREATE FUNCTION public.prevent_pending_friend_request() RETURNS trigger
@@ -364,14 +364,14 @@ CREATE FUNCTION public.prevent_pending_friend_request() RETURNS trigger
                         $$;
 
 
-ALTER FUNCTION public.prevent_pending_friend_request() OWNER TO postgres;
+ALTER FUNCTION public.prevent_pending_friend_request() OWNER TO buianhkc11;
 
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: auth_group; Type: TABLE; Schema: public; Owner: postgres
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.auth_group (
@@ -380,10 +380,10 @@ CREATE TABLE public.auth_group (
 );
 
 
-ALTER TABLE public.auth_group OWNER TO postgres;
+ALTER TABLE public.auth_group OWNER TO buianhkc11;
 
 --
--- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.auth_group ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -397,7 +397,7 @@ ALTER TABLE public.auth_group ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTI
 
 
 --
--- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: postgres
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.auth_group_permissions (
@@ -407,10 +407,10 @@ CREATE TABLE public.auth_group_permissions (
 );
 
 
-ALTER TABLE public.auth_group_permissions OWNER TO postgres;
+ALTER TABLE public.auth_group_permissions OWNER TO buianhkc11;
 
 --
--- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.auth_group_permissions ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -424,7 +424,7 @@ ALTER TABLE public.auth_group_permissions ALTER COLUMN id ADD GENERATED BY DEFAU
 
 
 --
--- Name: auth_permission; Type: TABLE; Schema: public; Owner: postgres
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.auth_permission (
@@ -435,10 +435,10 @@ CREATE TABLE public.auth_permission (
 );
 
 
-ALTER TABLE public.auth_permission OWNER TO postgres;
+ALTER TABLE public.auth_permission OWNER TO buianhkc11;
 
 --
--- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.auth_permission ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -452,7 +452,7 @@ ALTER TABLE public.auth_permission ALTER COLUMN id ADD GENERATED BY DEFAULT AS I
 
 
 --
--- Name: auth_user; Type: TABLE; Schema: public; Owner: postgres
+-- Name: auth_user; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.auth_user (
@@ -470,10 +470,10 @@ CREATE TABLE public.auth_user (
 );
 
 
-ALTER TABLE public.auth_user OWNER TO postgres;
+ALTER TABLE public.auth_user OWNER TO buianhkc11;
 
 --
--- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: postgres
+-- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.auth_user_groups (
@@ -483,10 +483,10 @@ CREATE TABLE public.auth_user_groups (
 );
 
 
-ALTER TABLE public.auth_user_groups OWNER TO postgres;
+ALTER TABLE public.auth_user_groups OWNER TO buianhkc11;
 
 --
--- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.auth_user_groups ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -500,7 +500,7 @@ ALTER TABLE public.auth_user_groups ALTER COLUMN id ADD GENERATED BY DEFAULT AS 
 
 
 --
--- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.auth_user ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -514,7 +514,7 @@ ALTER TABLE public.auth_user ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTIT
 
 
 --
--- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: postgres
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.auth_user_user_permissions (
@@ -524,10 +524,10 @@ CREATE TABLE public.auth_user_user_permissions (
 );
 
 
-ALTER TABLE public.auth_user_user_permissions OWNER TO postgres;
+ALTER TABLE public.auth_user_user_permissions OWNER TO buianhkc11;
 
 --
--- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.auth_user_user_permissions ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -541,7 +541,7 @@ ALTER TABLE public.auth_user_user_permissions ALTER COLUMN id ADD GENERATED BY D
 
 
 --
--- Name: chat_conversation; Type: TABLE; Schema: public; Owner: postgres
+-- Name: chat_conversation; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.chat_conversation (
@@ -552,10 +552,10 @@ CREATE TABLE public.chat_conversation (
 );
 
 
-ALTER TABLE public.chat_conversation OWNER TO postgres;
+ALTER TABLE public.chat_conversation OWNER TO buianhkc11;
 
 --
--- Name: chat_conversation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: chat_conversation_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.chat_conversation ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -569,7 +569,7 @@ ALTER TABLE public.chat_conversation ALTER COLUMN id ADD GENERATED BY DEFAULT AS
 
 
 --
--- Name: chat_message; Type: TABLE; Schema: public; Owner: postgres
+-- Name: chat_message; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.chat_message (
@@ -585,10 +585,10 @@ CREATE TABLE public.chat_message (
 );
 
 
-ALTER TABLE public.chat_message OWNER TO postgres;
+ALTER TABLE public.chat_message OWNER TO buianhkc11;
 
 --
--- Name: chat_message_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: chat_message_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.chat_message ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -602,7 +602,7 @@ ALTER TABLE public.chat_message ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDEN
 
 
 --
--- Name: django_admin_log; Type: TABLE; Schema: public; Owner: postgres
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.django_admin_log (
@@ -618,10 +618,10 @@ CREATE TABLE public.django_admin_log (
 );
 
 
-ALTER TABLE public.django_admin_log OWNER TO postgres;
+ALTER TABLE public.django_admin_log OWNER TO buianhkc11;
 
 --
--- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.django_admin_log ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -635,7 +635,7 @@ ALTER TABLE public.django_admin_log ALTER COLUMN id ADD GENERATED BY DEFAULT AS 
 
 
 --
--- Name: django_content_type; Type: TABLE; Schema: public; Owner: postgres
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.django_content_type (
@@ -645,10 +645,10 @@ CREATE TABLE public.django_content_type (
 );
 
 
-ALTER TABLE public.django_content_type OWNER TO postgres;
+ALTER TABLE public.django_content_type OWNER TO buianhkc11;
 
 --
--- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.django_content_type ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -662,7 +662,7 @@ ALTER TABLE public.django_content_type ALTER COLUMN id ADD GENERATED BY DEFAULT 
 
 
 --
--- Name: django_migrations; Type: TABLE; Schema: public; Owner: postgres
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.django_migrations (
@@ -673,10 +673,10 @@ CREATE TABLE public.django_migrations (
 );
 
 
-ALTER TABLE public.django_migrations OWNER TO postgres;
+ALTER TABLE public.django_migrations OWNER TO buianhkc11;
 
 --
--- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.django_migrations ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -690,7 +690,7 @@ ALTER TABLE public.django_migrations ALTER COLUMN id ADD GENERATED BY DEFAULT AS
 
 
 --
--- Name: django_session; Type: TABLE; Schema: public; Owner: postgres
+-- Name: django_session; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.django_session (
@@ -700,10 +700,10 @@ CREATE TABLE public.django_session (
 );
 
 
-ALTER TABLE public.django_session OWNER TO postgres;
+ALTER TABLE public.django_session OWNER TO buianhkc11;
 
 --
--- Name: friends_friendrequest; Type: TABLE; Schema: public; Owner: postgres
+-- Name: friends_friendrequest; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.friends_friendrequest (
@@ -717,10 +717,10 @@ CREATE TABLE public.friends_friendrequest (
 );
 
 
-ALTER TABLE public.friends_friendrequest OWNER TO postgres;
+ALTER TABLE public.friends_friendrequest OWNER TO buianhkc11;
 
 --
--- Name: friends_friendrequest_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: friends_friendrequest_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.friends_friendrequest ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -734,7 +734,7 @@ ALTER TABLE public.friends_friendrequest ALTER COLUMN id ADD GENERATED BY DEFAUL
 
 
 --
--- Name: friends_friendship; Type: TABLE; Schema: public; Owner: postgres
+-- Name: friends_friendship; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.friends_friendship (
@@ -746,10 +746,10 @@ CREATE TABLE public.friends_friendship (
 );
 
 
-ALTER TABLE public.friends_friendship OWNER TO postgres;
+ALTER TABLE public.friends_friendship OWNER TO buianhkc11;
 
 --
--- Name: friends_friendship_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: friends_friendship_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.friends_friendship ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -763,7 +763,7 @@ ALTER TABLE public.friends_friendship ALTER COLUMN id ADD GENERATED BY DEFAULT A
 
 
 --
--- Name: userprofiles_imageprofile; Type: TABLE; Schema: public; Owner: postgres
+-- Name: userprofiles_imageprofile; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.userprofiles_imageprofile (
@@ -775,10 +775,10 @@ CREATE TABLE public.userprofiles_imageprofile (
 );
 
 
-ALTER TABLE public.userprofiles_imageprofile OWNER TO postgres;
+ALTER TABLE public.userprofiles_imageprofile OWNER TO buianhkc11;
 
 --
--- Name: userprofiles_imageprofile_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: userprofiles_imageprofile_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.userprofiles_imageprofile ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -792,7 +792,7 @@ ALTER TABLE public.userprofiles_imageprofile ALTER COLUMN id ADD GENERATED BY DE
 
 
 --
--- Name: userprofiles_userprofile; Type: TABLE; Schema: public; Owner: postgres
+-- Name: userprofiles_userprofile; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.userprofiles_userprofile (
@@ -814,10 +814,10 @@ CREATE TABLE public.userprofiles_userprofile (
 );
 
 
-ALTER TABLE public.userprofiles_userprofile OWNER TO postgres;
+ALTER TABLE public.userprofiles_userprofile OWNER TO buianhkc11;
 
 --
--- Name: userprofiles_userprofile_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: userprofiles_userprofile_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.userprofiles_userprofile ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -831,7 +831,7 @@ ALTER TABLE public.userprofiles_userprofile ALTER COLUMN id ADD GENERATED BY DEF
 
 
 --
--- Name: users_user; Type: TABLE; Schema: public; Owner: postgres
+-- Name: users_user; Type: TABLE; Schema: public; Owner: buianhkc11
 --
 
 CREATE TABLE public.users_user (
@@ -847,10 +847,10 @@ CREATE TABLE public.users_user (
 );
 
 
-ALTER TABLE public.users_user OWNER TO postgres;
+ALTER TABLE public.users_user OWNER TO buianhkc11;
 
 --
--- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE public.users_user ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
@@ -864,7 +864,7 @@ ALTER TABLE public.users_user ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTI
 
 
 --
--- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_group
@@ -872,7 +872,7 @@ ALTER TABLE ONLY public.auth_group
 
 
 --
--- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_group_permissions
@@ -880,7 +880,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_group_permissions
@@ -888,7 +888,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_group
@@ -896,7 +896,7 @@ ALTER TABLE ONLY public.auth_group
 
 
 --
--- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_permission
@@ -904,7 +904,7 @@ ALTER TABLE ONLY public.auth_permission
 
 
 --
--- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_permission
@@ -912,7 +912,7 @@ ALTER TABLE ONLY public.auth_permission
 
 
 --
--- Name: auth_user_groups auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_user_groups auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_user_groups
@@ -920,7 +920,7 @@ ALTER TABLE ONLY public.auth_user_groups
 
 
 --
--- Name: auth_user_groups auth_user_groups_user_id_group_id_94350c0c_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_user_groups auth_user_groups_user_id_group_id_94350c0c_uniq; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_user_groups
@@ -928,7 +928,7 @@ ALTER TABLE ONLY public.auth_user_groups
 
 
 --
--- Name: auth_user auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_user auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_user
@@ -936,7 +936,7 @@ ALTER TABLE ONLY public.auth_user
 
 
 --
--- Name: auth_user_user_permissions auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_user_user_permissions auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_user_user_permissions
@@ -944,7 +944,7 @@ ALTER TABLE ONLY public.auth_user_user_permissions
 
 
 --
--- Name: auth_user_user_permissions auth_user_user_permissions_user_id_permission_id_14a6b632_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_user_user_permissions auth_user_user_permissions_user_id_permission_id_14a6b632_uniq; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_user_user_permissions
@@ -952,7 +952,7 @@ ALTER TABLE ONLY public.auth_user_user_permissions
 
 
 --
--- Name: auth_user auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_user auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_user
@@ -960,7 +960,7 @@ ALTER TABLE ONLY public.auth_user
 
 
 --
--- Name: chat_conversation chat_conversation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: chat_conversation chat_conversation_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.chat_conversation
@@ -968,7 +968,7 @@ ALTER TABLE ONLY public.chat_conversation
 
 
 --
--- Name: chat_message chat_message_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: chat_message chat_message_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.chat_message
@@ -976,7 +976,7 @@ ALTER TABLE ONLY public.chat_message
 
 
 --
--- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.django_admin_log
@@ -984,7 +984,7 @@ ALTER TABLE ONLY public.django_admin_log
 
 
 --
--- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.django_content_type
@@ -992,7 +992,7 @@ ALTER TABLE ONLY public.django_content_type
 
 
 --
--- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.django_content_type
@@ -1000,7 +1000,7 @@ ALTER TABLE ONLY public.django_content_type
 
 
 --
--- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.django_migrations
@@ -1008,7 +1008,7 @@ ALTER TABLE ONLY public.django_migrations
 
 
 --
--- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.django_session
@@ -1016,7 +1016,7 @@ ALTER TABLE ONLY public.django_session
 
 
 --
--- Name: friends_friendrequest friends_friendrequest_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: friends_friendrequest friends_friendrequest_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.friends_friendrequest
@@ -1024,7 +1024,7 @@ ALTER TABLE ONLY public.friends_friendrequest
 
 
 --
--- Name: friends_friendship friends_friendship_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: friends_friendship friends_friendship_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.friends_friendship
@@ -1032,7 +1032,7 @@ ALTER TABLE ONLY public.friends_friendship
 
 
 --
--- Name: userprofiles_imageprofile userprofiles_imageprofile_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: userprofiles_imageprofile userprofiles_imageprofile_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.userprofiles_imageprofile
@@ -1040,7 +1040,7 @@ ALTER TABLE ONLY public.userprofiles_imageprofile
 
 
 --
--- Name: userprofiles_userprofile userprofiles_userprofile_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: userprofiles_userprofile userprofiles_userprofile_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.userprofiles_userprofile
@@ -1048,7 +1048,7 @@ ALTER TABLE ONLY public.userprofiles_userprofile
 
 
 --
--- Name: users_user users_user_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users_user users_user_email_key; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.users_user
@@ -1056,7 +1056,7 @@ ALTER TABLE ONLY public.users_user
 
 
 --
--- Name: users_user users_user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users_user users_user_pkey; Type: CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.users_user
@@ -1064,287 +1064,287 @@ ALTER TABLE ONLY public.users_user
 
 
 --
--- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: postgres
+-- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX auth_group_name_a6ea08ec_like ON public.auth_group USING btree (name varchar_pattern_ops);
 
 
 --
--- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: postgres
+-- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX auth_group_permissions_group_id_b120cbf9 ON public.auth_group_permissions USING btree (group_id);
 
 
 --
--- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: postgres
+-- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON public.auth_group_permissions USING btree (permission_id);
 
 
 --
--- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: postgres
+-- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX auth_permission_content_type_id_2f476e4b ON public.auth_permission USING btree (content_type_id);
 
 
 --
--- Name: auth_user_groups_group_id_97559544; Type: INDEX; Schema: public; Owner: postgres
+-- Name: auth_user_groups_group_id_97559544; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX auth_user_groups_group_id_97559544 ON public.auth_user_groups USING btree (group_id);
 
 
 --
--- Name: auth_user_groups_user_id_6a12ed8b; Type: INDEX; Schema: public; Owner: postgres
+-- Name: auth_user_groups_user_id_6a12ed8b; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX auth_user_groups_user_id_6a12ed8b ON public.auth_user_groups USING btree (user_id);
 
 
 --
--- Name: auth_user_user_permissions_permission_id_1fbb5f2c; Type: INDEX; Schema: public; Owner: postgres
+-- Name: auth_user_user_permissions_permission_id_1fbb5f2c; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX auth_user_user_permissions_permission_id_1fbb5f2c ON public.auth_user_user_permissions USING btree (permission_id);
 
 
 --
--- Name: auth_user_user_permissions_user_id_a95ead1b; Type: INDEX; Schema: public; Owner: postgres
+-- Name: auth_user_user_permissions_user_id_a95ead1b; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX auth_user_user_permissions_user_id_a95ead1b ON public.auth_user_user_permissions USING btree (user_id);
 
 
 --
--- Name: auth_user_username_6821ab7c_like; Type: INDEX; Schema: public; Owner: postgres
+-- Name: auth_user_username_6821ab7c_like; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX auth_user_username_6821ab7c_like ON public.auth_user USING btree (username varchar_pattern_ops);
 
 
 --
--- Name: chat_message_conversation_id_id_68268054; Type: INDEX; Schema: public; Owner: postgres
+-- Name: chat_message_conversation_id_id_68268054; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX chat_message_conversation_id_id_68268054 ON public.chat_message USING btree (conversation_id_id);
 
 
 --
--- Name: chat_message_receiver_id_0eceddde; Type: INDEX; Schema: public; Owner: postgres
+-- Name: chat_message_receiver_id_0eceddde; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX chat_message_receiver_id_0eceddde ON public.chat_message USING btree (receiver_id);
 
 
 --
--- Name: chat_message_sender_id_991c686c; Type: INDEX; Schema: public; Owner: postgres
+-- Name: chat_message_sender_id_991c686c; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX chat_message_sender_id_991c686c ON public.chat_message USING btree (sender_id);
 
 
 --
--- Name: chat_message_user_id_a47c01bb; Type: INDEX; Schema: public; Owner: postgres
+-- Name: chat_message_user_id_a47c01bb; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX chat_message_user_id_a47c01bb ON public.chat_message USING btree (user_id);
 
 
 --
--- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: postgres
+-- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX django_admin_log_content_type_id_c4bce8eb ON public.django_admin_log USING btree (content_type_id);
 
 
 --
--- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: postgres
+-- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX django_admin_log_user_id_c564eba6 ON public.django_admin_log USING btree (user_id);
 
 
 --
--- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: postgres
+-- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX django_session_expire_date_a5c62663 ON public.django_session USING btree (expire_date);
 
 
 --
--- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: postgres
+-- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session USING btree (session_key varchar_pattern_ops);
 
 
 --
--- Name: friends_friendrequest_from_id_id_06b21325; Type: INDEX; Schema: public; Owner: postgres
+-- Name: friends_friendrequest_from_id_id_06b21325; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX friends_friendrequest_from_id_id_06b21325 ON public.friends_friendrequest USING btree (from_id_id);
 
 
 --
--- Name: friends_friendrequest_to_id_id_f55c1428; Type: INDEX; Schema: public; Owner: postgres
+-- Name: friends_friendrequest_to_id_id_f55c1428; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX friends_friendrequest_to_id_id_f55c1428 ON public.friends_friendrequest USING btree (to_id_id);
 
 
 --
--- Name: friends_friendship_user_id1_id_54e6c061; Type: INDEX; Schema: public; Owner: postgres
+-- Name: friends_friendship_user_id1_id_54e6c061; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX friends_friendship_user_id1_id_54e6c061 ON public.friends_friendship USING btree (user_id1_id);
 
 
 --
--- Name: friends_friendship_user_id2_id_fd5c77fe; Type: INDEX; Schema: public; Owner: postgres
+-- Name: friends_friendship_user_id2_id_fd5c77fe; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX friends_friendship_user_id2_id_fd5c77fe ON public.friends_friendship USING btree (user_id2_id);
 
 
 --
--- Name: userprofile_user_id_03ed93_idx; Type: INDEX; Schema: public; Owner: postgres
+-- Name: userprofile_user_id_03ed93_idx; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX userprofile_user_id_03ed93_idx ON public.userprofiles_imageprofile USING btree (user_id_id);
 
 
 --
--- Name: userprofile_user_id_e911da_idx; Type: INDEX; Schema: public; Owner: postgres
+-- Name: userprofile_user_id_e911da_idx; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX userprofile_user_id_e911da_idx ON public.userprofiles_userprofile USING btree (user_id_id);
 
 
 --
--- Name: userprofiles_imageprofile_user_id_id_86aa5c97; Type: INDEX; Schema: public; Owner: postgres
+-- Name: userprofiles_imageprofile_user_id_id_86aa5c97; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX userprofiles_imageprofile_user_id_id_86aa5c97 ON public.userprofiles_imageprofile USING btree (user_id_id);
 
 
 --
--- Name: userprofiles_userprofile_user_id_id_3a811107; Type: INDEX; Schema: public; Owner: postgres
+-- Name: userprofiles_userprofile_user_id_id_3a811107; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX userprofiles_userprofile_user_id_id_3a811107 ON public.userprofiles_userprofile USING btree (user_id_id);
 
 
 --
--- Name: users_user_email_243f6e77_like; Type: INDEX; Schema: public; Owner: postgres
+-- Name: users_user_email_243f6e77_like; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX users_user_email_243f6e77_like ON public.users_user USING btree (email varchar_pattern_ops);
 
 
 --
--- Name: users_user_email_6f2530_idx; Type: INDEX; Schema: public; Owner: postgres
+-- Name: users_user_email_6f2530_idx; Type: INDEX; Schema: public; Owner: buianhkc11
 --
 
 CREATE INDEX users_user_email_6f2530_idx ON public.users_user USING btree (email);
 
 
 --
--- Name: friends_friendrequest after_delete_friend_request; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: friends_friendrequest after_delete_friend_request; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER after_delete_friend_request AFTER DELETE ON public.friends_friendrequest FOR EACH ROW EXECUTE FUNCTION public.after_delete_friend_request();
 
 
 --
--- Name: userprofiles_imageprofile after_delete_imageprofile; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: userprofiles_imageprofile after_delete_imageprofile; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER after_delete_imageprofile AFTER DELETE ON public.userprofiles_imageprofile FOR EACH ROW EXECUTE FUNCTION public.after_delete_imageprofile();
 
 
 --
--- Name: userprofiles_userprofile after_delete_userprofile; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: userprofiles_userprofile after_delete_userprofile; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER after_delete_userprofile AFTER DELETE ON public.userprofiles_userprofile FOR EACH ROW EXECUTE FUNCTION public.after_delete_userprofile();
 
 
 --
--- Name: friends_friendrequest after_insert_friend_request; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: friends_friendrequest after_insert_friend_request; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER after_insert_friend_request AFTER INSERT ON public.friends_friendrequest FOR EACH ROW EXECUTE FUNCTION public.after_insert_friend_request();
 
 
 --
--- Name: friends_friendrequest after_update_accepted_to_denied_friend_request; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: friends_friendrequest after_update_accepted_to_denied_friend_request; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER after_update_accepted_to_denied_friend_request AFTER UPDATE ON public.friends_friendrequest FOR EACH ROW EXECUTE FUNCTION public.after_update_accepted_to_denied_friend_request();
 
 
 --
--- Name: friends_friendrequest after_update_accepted_to_pending_friend_request; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: friends_friendrequest after_update_accepted_to_pending_friend_request; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER after_update_accepted_to_pending_friend_request AFTER UPDATE ON public.friends_friendrequest FOR EACH ROW EXECUTE FUNCTION public.after_update_accepted_to_pending_friend_request();
 
 
 --
--- Name: friends_friendrequest after_update_denied_to_accepted_or_pending_friend_request; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: friends_friendrequest after_update_denied_to_accepted_or_pending_friend_request; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER after_update_denied_to_accepted_or_pending_friend_request BEFORE UPDATE ON public.friends_friendrequest FOR EACH ROW EXECUTE FUNCTION public.after_update_denied_to_accepted_or_pending_friend_request();
 
 
 --
--- Name: friends_friendrequest after_update_pending_to_accepted_friend_request; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: friends_friendrequest after_update_pending_to_accepted_friend_request; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER after_update_pending_to_accepted_friend_request AFTER UPDATE ON public.friends_friendrequest FOR EACH ROW EXECUTE FUNCTION public.after_update_pending_to_accepted_friend_request();
 
 
 --
--- Name: friends_friendship check_friendship_exists_trigger; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: friends_friendship check_friendship_exists_trigger; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER check_friendship_exists_trigger BEFORE INSERT ON public.friends_friendship FOR EACH ROW EXECUTE FUNCTION public.check_friendship_exists();
 
 
 --
--- Name: friends_friendship create_friendship; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: friends_friendship create_friendship; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER create_friendship AFTER INSERT OR UPDATE ON public.friends_friendship FOR EACH ROW EXECUTE FUNCTION public.create_friendship();
 
 
 --
--- Name: friends_friendrequest prevent_duplicate_friend_request; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: friends_friendrequest prevent_duplicate_friend_request; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER prevent_duplicate_friend_request BEFORE INSERT ON public.friends_friendrequest FOR EACH ROW EXECUTE FUNCTION public.prevent_duplicate_friend_request();
 
 
 --
--- Name: friends_friendrequest prevent_pending_friend_request; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: friends_friendrequest prevent_pending_friend_request; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER prevent_pending_friend_request BEFORE INSERT ON public.friends_friendrequest FOR EACH ROW EXECUTE FUNCTION public.prevent_pending_friend_request();
 
 
 --
--- Name: users_user trigger_add_userprofile_after_insert_user; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: users_user trigger_add_userprofile_after_insert_user; Type: TRIGGER; Schema: public; Owner: buianhkc11
 --
 
 CREATE TRIGGER trigger_add_userprofile_after_insert_user AFTER INSERT ON public.users_user FOR EACH ROW EXECUTE FUNCTION public.add_userprofile_after_insert_user();
 
 
 --
--- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_group_permissions
@@ -1352,7 +1352,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_group_permissions
@@ -1360,7 +1360,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_permission
@@ -1368,7 +1368,7 @@ ALTER TABLE ONLY public.auth_permission
 
 
 --
--- Name: auth_user_groups auth_user_groups_group_id_97559544_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_user_groups auth_user_groups_group_id_97559544_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_user_groups
@@ -1376,7 +1376,7 @@ ALTER TABLE ONLY public.auth_user_groups
 
 
 --
--- Name: auth_user_groups auth_user_groups_user_id_6a12ed8b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_user_groups auth_user_groups_user_id_6a12ed8b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_user_groups
@@ -1384,7 +1384,7 @@ ALTER TABLE ONLY public.auth_user_groups
 
 
 --
--- Name: auth_user_user_permissions auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_user_user_permissions auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_user_user_permissions
@@ -1392,7 +1392,7 @@ ALTER TABLE ONLY public.auth_user_user_permissions
 
 
 --
--- Name: auth_user_user_permissions auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_user_user_permissions auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.auth_user_user_permissions
@@ -1400,7 +1400,7 @@ ALTER TABLE ONLY public.auth_user_user_permissions
 
 
 --
--- Name: chat_message chat_message_conversation_id_id_68268054_fk_chat_conv; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: chat_message chat_message_conversation_id_id_68268054_fk_chat_conv; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.chat_message
@@ -1408,7 +1408,7 @@ ALTER TABLE ONLY public.chat_message
 
 
 --
--- Name: chat_message chat_message_receiver_id_0eceddde_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: chat_message chat_message_receiver_id_0eceddde_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.chat_message
@@ -1416,7 +1416,7 @@ ALTER TABLE ONLY public.chat_message
 
 
 --
--- Name: chat_message chat_message_sender_id_991c686c_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: chat_message chat_message_sender_id_991c686c_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.chat_message
@@ -1424,7 +1424,7 @@ ALTER TABLE ONLY public.chat_message
 
 
 --
--- Name: chat_message chat_message_user_id_a47c01bb_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: chat_message chat_message_user_id_a47c01bb_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.chat_message
@@ -1432,7 +1432,7 @@ ALTER TABLE ONLY public.chat_message
 
 
 --
--- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.django_admin_log
@@ -1440,7 +1440,7 @@ ALTER TABLE ONLY public.django_admin_log
 
 
 --
--- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.django_admin_log
@@ -1448,7 +1448,7 @@ ALTER TABLE ONLY public.django_admin_log
 
 
 --
--- Name: friends_friendrequest fk_from_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: friends_friendrequest fk_from_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.friends_friendrequest
@@ -1456,7 +1456,7 @@ ALTER TABLE ONLY public.friends_friendrequest
 
 
 --
--- Name: userprofiles_imageprofile fk_image_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: userprofiles_imageprofile fk_image_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.userprofiles_imageprofile
@@ -1464,7 +1464,7 @@ ALTER TABLE ONLY public.userprofiles_imageprofile
 
 
 --
--- Name: friends_friendrequest fk_to_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: friends_friendrequest fk_to_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.friends_friendrequest
@@ -1472,7 +1472,7 @@ ALTER TABLE ONLY public.friends_friendrequest
 
 
 --
--- Name: userprofiles_userprofile fk_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: userprofiles_userprofile fk_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.userprofiles_userprofile
@@ -1480,7 +1480,7 @@ ALTER TABLE ONLY public.userprofiles_userprofile
 
 
 --
--- Name: friends_friendship fk_user_id1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: friends_friendship fk_user_id1; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.friends_friendship
@@ -1488,7 +1488,7 @@ ALTER TABLE ONLY public.friends_friendship
 
 
 --
--- Name: friends_friendship fk_user_id2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: friends_friendship fk_user_id2; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.friends_friendship
@@ -1496,7 +1496,7 @@ ALTER TABLE ONLY public.friends_friendship
 
 
 --
--- Name: friends_friendrequest friends_friendrequest_from_id_id_06b21325_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: friends_friendrequest friends_friendrequest_from_id_id_06b21325_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.friends_friendrequest
@@ -1504,7 +1504,7 @@ ALTER TABLE ONLY public.friends_friendrequest
 
 
 --
--- Name: friends_friendrequest friends_friendrequest_to_id_id_f55c1428_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: friends_friendrequest friends_friendrequest_to_id_id_f55c1428_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.friends_friendrequest
@@ -1512,7 +1512,7 @@ ALTER TABLE ONLY public.friends_friendrequest
 
 
 --
--- Name: friends_friendship friends_friendship_user_id1_id_54e6c061_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: friends_friendship friends_friendship_user_id1_id_54e6c061_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.friends_friendship
@@ -1520,7 +1520,7 @@ ALTER TABLE ONLY public.friends_friendship
 
 
 --
--- Name: friends_friendship friends_friendship_user_id2_id_fd5c77fe_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: friends_friendship friends_friendship_user_id2_id_fd5c77fe_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.friends_friendship
@@ -1528,7 +1528,7 @@ ALTER TABLE ONLY public.friends_friendship
 
 
 --
--- Name: userprofiles_imageprofile userprofiles_imageprofile_user_id_id_86aa5c97_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: userprofiles_imageprofile userprofiles_imageprofile_user_id_id_86aa5c97_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.userprofiles_imageprofile
@@ -1536,7 +1536,7 @@ ALTER TABLE ONLY public.userprofiles_imageprofile
 
 
 --
--- Name: userprofiles_userprofile userprofiles_userprofile_user_id_id_3a811107_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: userprofiles_userprofile userprofiles_userprofile_user_id_id_3a811107_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: buianhkc11
 --
 
 ALTER TABLE ONLY public.userprofiles_userprofile
@@ -1544,36 +1544,36 @@ ALTER TABLE ONLY public.userprofiles_userprofile
 
 
 --
--- Name: dbz_order_publication; Type: PUBLICATION; Schema: -; Owner: postgres
+-- Name: dbz_order_publication; Type: PUBLICATION; Schema: -; Owner: buianhkc11
 --
 
 CREATE PUBLICATION dbz_order_publication WITH (publish = 'insert, update, delete, truncate');
 
 
-ALTER PUBLICATION dbz_order_publication OWNER TO postgres;
+ALTER PUBLICATION dbz_order_publication OWNER TO buianhkc11;
 
 --
--- Name: dbz_order_publication userprofiles_imageprofile; Type: PUBLICATION TABLE; Schema: public; Owner: postgres
+-- Name: dbz_order_publication userprofiles_imageprofile; Type: PUBLICATION TABLE; Schema: public; Owner: buianhkc11
 --
 
 ALTER PUBLICATION dbz_order_publication ADD TABLE ONLY public.userprofiles_imageprofile;
 
 
 --
--- Name: dbz_order_publication userprofiles_userprofile; Type: PUBLICATION TABLE; Schema: public; Owner: postgres
+-- Name: dbz_order_publication userprofiles_userprofile; Type: PUBLICATION TABLE; Schema: public; Owner: buianhkc11
 --
 
 ALTER PUBLICATION dbz_order_publication ADD TABLE ONLY public.userprofiles_userprofile;
 
 
 --
--- Name: dbz_order_publication users_user; Type: PUBLICATION TABLE; Schema: public; Owner: postgres
+-- Name: dbz_order_publication users_user; Type: PUBLICATION TABLE; Schema: public; Owner: buianhkc11
 --
 
 ALTER PUBLICATION dbz_order_publication ADD TABLE ONLY public.users_user;
 
 
 --
--- PostgreSQL database dump complete
+-- buianhkc11QL database dump complete
 --
 
