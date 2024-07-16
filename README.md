@@ -15,6 +15,7 @@
 - [Công nghệ sử dụng](#công-nghệ-sử-dụng)
 - [Cài đặt trên Local](#cài-đặt-trên-local)
 - [Sử dụng](#sử-dụng)
+- [Deploy](#deploy)
 - [Thông tin liên hệ](#thông-tin-liên-hệ)
 
 ## Giới thiệu
@@ -162,6 +163,14 @@ Sau khi cài đặt, bạn có thể chạy dự án bằng lệnh sau:
     python .\syncdatabase\syncdatabase.py
     ```
 4. Trải nghiệm trang web [link](http://127.0.0.1:8000/)
+
+## Deploy
+1. S3 
+[tutorial](https://www.youtube.com/watch?v=JQVQcNN0cXE)
+2. Mongodb 
+[free](https://www.mongodb.com/products/platform/atlas-database)
+3. Postgres
+[tutorial](https://www.youtube.com/watch?v=z_FN0Zu-Z3Q&t=746s) 
 
 ## Thông tin liên hệ
 Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ qua email: [buianhkc112004@gmail.com](mailto:buianhkc112004@gmail.com)

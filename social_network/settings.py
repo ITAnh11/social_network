@@ -326,5 +326,5 @@ STORAGES = {
 
 
 # Add STATIC_URL setting
-STATIC_URL = 'https://feisubukku.s3.amazonaws.com/static/'
-MEDIA_URL = 'https://feisubukku.s3.amazonaws.com/media/'
+STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/"
+MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/"

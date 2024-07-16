@@ -47,8 +47,8 @@ CREATE OR REPLACE FUNCTION after_insert_friend_request()
             )
             VALUES (
                 NEW.id,
-                'users/default/avatar_default.png',
-                'users/default/background_default.jpg'
+                'media/users/default/avatar_default.png',
+                'media/users/default/background_default.jpg'
                 
             );
             RETURN NULL;
