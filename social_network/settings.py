@@ -116,6 +116,11 @@ CHANNEL_LAYERS = {
     },
 }
 
+if CHANNEL_LAYERS['redis'] is not None:
+    print("Connected to Redis")
+else:
+    print("Not connected to Redis")
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -131,6 +136,11 @@ DATABASES = {
     },
 }
 
+if DATABASES['default'] is not None:
+    print("Connected to PostgreSQL")
+else:
+    print("Not connected to PostgreSQL")
+
 MONGODB_DATABASES = {
     "default": {
         "name": env('MONGODB_NAME'),
@@ -145,6 +155,11 @@ mongoengine.connect(
     db=env('MONGODB_NAME'),
     host=env('MONGODB_HOST'),
 )
+
+if mongoengine.connection.get_connection() is not None:
+    print("Connected to MongoDB")
+else:
+    print("Not connected to MongoDB")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
