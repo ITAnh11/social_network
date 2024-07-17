@@ -192,27 +192,30 @@ class UserProfileBasicView(APIView):
         return context
         
     def getUserProfileBasic(self, user):
-        userprofileBasic = redis_server.get(f'userprofile_basic_{user.id}')
-        
-        if userprofileBasic is None:
-            userprofile = UserProfile.objects.filter(user_id=user).first()
-            imageprofile = ImageProfile.objects.filter(user_id=user).first()
+        try:
+            userprofileBasic = redis_server.get(f'userprofile_basic_{user.id}')
             
-            profileSerializer = UserProfileSerializer(userprofile)
-            imageSerializer = ImageProfileSerializer(imageprofile)
-            
-            context = {
-                'id': user.id,
-                'name': f"{profileSerializer.data.get('first_name')} {profileSerializer.data.get('last_name')}",
-                'avatar': imageSerializer.data.get('avatar')
-            }
-            
-            time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
-            
-            redis_server.setex(f'userprofile_basic_{user.id}', time_to_live , json.dumps(context))
-        else :
-            context = json.loads(userprofileBasic)
-            
+            if userprofileBasic is None:
+                userprofile = UserProfile.objects.filter(user_id=user).first()
+                imageprofile = ImageProfile.objects.filter(user_id=user).first()
+                
+                profileSerializer = UserProfileSerializer(userprofile)
+                imageSerializer = ImageProfileSerializer(imageprofile)
+                
+                context = {
+                    'id': user.id,
+                    'name': f"{profileSerializer.data.get('first_name')} {profileSerializer.data.get('last_name')}",
+                    'avatar': imageSerializer.data.get('avatar')
+                }
+                
+                time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
+                
+                redis_server.setex(f'userprofile_basic_{user.id}', time_to_live , json.dumps(context))
+            else :
+                context = json.loads(userprofileBasic)
+        except Exception as e:
+            logger.error(f"Failed to retrieve user profile basic: {str(e)}")
+            context = {}
         return context
     
     def get(self, request):
@@ -221,6 +224,8 @@ class UserProfileBasicView(APIView):
         if not user:
             logger.warning("User is not authenticated.")
             return Response({'error': 'Unauthorized'}, status=401)
+        
+        print("GET request received in UserProfileBasicView.")
         
         context = self.getUserProfileBasic(user)
 
