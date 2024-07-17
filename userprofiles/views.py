@@ -194,6 +194,11 @@ class UserProfileBasicView(APIView):
     def getUserProfileBasic(self, user):
         try:
             print('Getting user profile basic from redis')
+            try:
+                redis_server.ping()
+                print("Redis is working.")
+            except Exception as e:
+                print(f"Failed to connect to Redis: {str(e)}")
             userprofileBasic = redis_server.get(f'userprofile_basic_{user.id}')
             
             if userprofileBasic is None:
