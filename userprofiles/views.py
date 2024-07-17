@@ -213,6 +213,9 @@ class UserProfileBasicView(APIView):
                 redis_server.setex(f'userprofile_basic_{user.id}', time_to_live , json.dumps(context))
             else :
                 context = json.loads(userprofileBasic)
+            
+            print("User profile basic retrieved successfully.")
+            print(context)
         except Exception as e:
             logger.error(f"Failed to retrieve user profile basic: {str(e)}")
             context = {}
