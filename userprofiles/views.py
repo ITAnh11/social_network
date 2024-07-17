@@ -193,9 +193,11 @@ class UserProfileBasicView(APIView):
         
     def getUserProfileBasic(self, user):
         try:
+            print('Getting user profile basic from redis')
             userprofileBasic = redis_server.get(f'userprofile_basic_{user.id}')
             
             if userprofileBasic is None:
+                print('User profile basic not found in redis')
                 userprofile = UserProfile.objects.filter(user_id=user).first()
                 imageprofile = ImageProfile.objects.filter(user_id=user).first()
                 
@@ -207,10 +209,12 @@ class UserProfileBasicView(APIView):
                     'name': f"{profileSerializer.data.get('first_name')} {profileSerializer.data.get('last_name')}",
                     'avatar': imageSerializer.data.get('avatar')
                 }
+                print("User profile basic retrieved from database.")
                 
                 time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
                 
                 redis_server.setex(f'userprofile_basic_{user.id}', time_to_live , json.dumps(context))
+                print("User profile basic set in redis.")
             else :
                 context = json.loads(userprofileBasic)
             
