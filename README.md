@@ -171,6 +171,7 @@ Sau khi cài đặt, bạn có thể chạy dự án bằng lệnh sau:
 [free](https://www.mongodb.com/products/platform/atlas-database)
 3. Postgres
 [tutorial](https://www.youtube.com/watch?v=z_FN0Zu-Z3Q&t=746s) 
+4. [tutorial](https://www.youtube.com/watch?v=dDwGYGUVTdo)
 
 ## Thông tin liên hệ
 Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ qua email: [buianhkc112004@gmail.com](mailto:buianhkc112004@gmail.com)
