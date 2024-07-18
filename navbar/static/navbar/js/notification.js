@@ -126,19 +126,19 @@ function createReactNotificationItem(notification) {
 
   var srcIconType = "";
   if (notification.type_reaction === "like") {
-    srcIconType = baseUrlNavbar + "/images/like.png";
+    srcIconType = baseUrlNavbar + "images/like.png";
   } else if (notification.type_reaction === "love") {
-    srcIconType = baseUrlNavbar + "/images/love.png";
+    srcIconType = baseUrlNavbar + "images/love.png";
   } else if (notification.type_reaction === "haha") {
-    srcIconType = baseUrlNavbar + "/images/haha.png";
+    srcIconType = baseUrlNavbar + "images/haha.png";
   } else if (notification.type_reaction === "wow") {
-    srcIconType = baseUrlNavbar + "/images/wow.png";
+    srcIconType = baseUrlNavbar + "images/wow.png";
   } else if (notification.type_reaction === "sad") {
-    srcIconType = baseUrlNavbar + "/images/sad.png";
+    srcIconType = baseUrlNavbar + "images/sad.png";
   } else if (notification.type_reaction === "angry") {
-    srcIconType = baseUrlNavbar + "/images/angry.png";
+    srcIconType = baseUrlNavbar + "images/angry.png";
   } else if (notification.type_reaction === "care") {
-    srcIconType = baseUrlNavbar + "/images/care.png";
+    srcIconType = baseUrlNavbar + "images/care.png";
   }
 
   return `<div class="notify_item" 
