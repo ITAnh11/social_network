@@ -11,7 +11,9 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from common_functions.common_function import getUser, getTimeDuration
-from social_network.redis_conn import redis_server
+
+from django.core.cache import caches
+redis_server = caches['redis']
 
 import json
 import datetime
@@ -54,7 +56,10 @@ def appendNotifications(user_id, notification):
     time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
 
     # Store the updated list in Redis
-    redis_server.setex(f'notifications_{user_id}', time_to_live, json.dumps(notifications))
+    redis_server.set(f'notifications_{user_id}',
+                     json.dumps(notifications),
+                        time_to_live)
+    
         
 def addContent(content, contentOf):
     if contentOf is None:
@@ -205,9 +210,9 @@ class GetNotifications(APIView):
         
         time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
 
-        redis_server.setex(f'notifications_{user_id}', 
-                           time_to_live, 
-                           json.dumps([notification.to_json() for notification in notifications]))
+        redis_server.set(f'notifications_{user_id}',                           
+                           json.dumps([notification.to_json() for notification in notifications]),
+                           time_to_live)
     
     def getNotifications(self, user_id):
         notifications = redis_server.get(f'notifications_{user_id}')
@@ -220,9 +225,9 @@ class GetNotifications(APIView):
             
             time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
 
-            redis_server.setex(f'notifications_{user_id}', 
-                               time_to_live, 
-                               json.dumps([notification.to_json() for notification in notifications]))
+            redis_server.set(f'notifications_{user_id}',                                
+                               json.dumps([notification.to_json() for notification in notifications]),
+                               time_to_live)
         else:
             print('Get from Redis')
             notifications = [Notifications.from_json(notification) for notification in json.loads(notifications)]

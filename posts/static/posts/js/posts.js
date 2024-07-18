@@ -193,7 +193,6 @@ function set_user_post() {
     if (userImageElement1) {
         userImageElement1.src = USER_AVATAR;
     }
-
 }
 
 function showUploadPostsBox() {

@@ -23,16 +23,18 @@ from common_functions.common_function import getUserProfileForPosts, getTimeDura
 from django.shortcuts import render, redirect
 from mongoengine.errors import DoesNotExist
 
-
 from django.views.decorators.cache import cache_page
-from social_network.redis_conn import redis_server
+
 from mongoengine import connect
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.core.cache import cache
 
+from django.core.cache import caches
+
 from rest_framework.pagination import PageNumberPagination
 
+redis_server = caches['redis']
 
 logger=logging.getLogger(__name__)
 
@@ -75,11 +77,11 @@ class GetMesseeji(APIView):
         try:
             channel_id = request.data.get('channel_id')
             key = f"all_chat_channel_{channel_id}"
-            if (cache.get(key)):
-                all_messeeji = cache.get(key)
+            if (redis_server.get(key)):
+                all_messeeji = redis_server.get(key)
             else: 
                 all_messeeji = Messeeji.objects(channel_id=channel_id)
-                cache.set(f"all_chat_channel_{channel_id}", all_messeeji)
+                redis_server.set(f"all_chat_channel_{channel_id}", all_messeeji)
             
             response = Response()
             data = []
@@ -162,21 +164,21 @@ class CreateChannel(APIView):
             key_user2 = f"participants_user_{user_id2}"
 
             # Check if data is cached
-            cached_part_user1 = cache.get(key_user1)
-            cached_part_user2 = cache.get(key_user2)
+            cached_part_user1 = redis_server.get(key_user1)
+            cached_part_user2 = redis_server.get(key_user2)
 
             # Retrieve data from cache if available
             if cached_part_user1:
                 part_user1 = cached_part_user1
             else:
                 part_user1 = Participants.objects(user_id=user_id1)
-                cache.set(key_user1, part_user1)
+                redis_server.set(key_user1, part_user1)
 
-            if cache.get(key_user2):
+            if redis_server.get(key_user2):
                 part_user2 = cached_part_user2
             else:
                 part_user2 = Participants.objects(user_id=user_id2)
-                cache.set(key_user2, part_user2)
+                redis_server.set(key_user2, part_user2)
 
             channels_user1 = [participant.channel_id for participant in part_user1]
             channels_user2 = [participant.channel_id for participant in part_user2]
@@ -349,7 +351,7 @@ class SearchUser(generics.ListAPIView):
         cache_key = f"user_search_{username}"
 
         # Check if data is cached
-        cached_result = cache.get(cache_key)
+        cached_result = redis_server.get(cache_key)
 
         # Retrieve data from cache if available
         if cached_result:
@@ -365,7 +367,7 @@ class SearchUser(generics.ListAPIView):
                 users = UserProfile.objects.all()[:10]
 
             # Set cache
-            cache.set(cache_key, users)
+            redis_server.set(cache_key, users)
 
         return users
     def list(self, request, *args, **kwargs):

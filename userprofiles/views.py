@@ -14,11 +14,15 @@ from django.db import connection
 
 from common_functions.common_function import getUser
 
-from social_network.redis_conn import redis_server
+from django.core.cache import caches
+
+redis_server = caches['redis']
+
 import logging
 import random
 import time
 import json
+
 logger=logging.getLogger(__name__)
 EX_TIME = 60 * 60
 INT_FROM = 0
@@ -187,20 +191,13 @@ class UserProfileBasicView(APIView):
         
         time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
         
-        redis_server.setex(f'userprofile_basic_{user.id}', time_to_live , json.dumps(context))
-        
+        redis_server.set(f'userprofile_basic_{user.id}', json.dumps(context), time_to_live)
         return context
         
     def getUserProfileBasic(self, user):
         try:
             print('Getting user profile basic from redis')
-            try:
-                redis_server.ping()
-                print("Redis is working.")
-            except Exception as e:
-                print(f"Failed to connect to Redis: {str(e)}")
             userprofileBasic = redis_server.get(f'userprofile_basic_{user.id}')
-            
             if userprofileBasic is None:
                 print('User profile basic not found in redis')
                 userprofile = UserProfile.objects.filter(user_id=user).first()
@@ -218,13 +215,13 @@ class UserProfileBasicView(APIView):
                 
                 time_to_live = EX_TIME + random.randint(INT_FROM, INT_TO)
                 
-                redis_server.setex(f'userprofile_basic_{user.id}', time_to_live , json.dumps(context))
+                redis_server.set(f'userprofile_basic_{user.id}', json.dumps(context), time_to_live)
                 print("User profile basic set in redis.")
             else :
                 context = json.loads(userprofileBasic)
             
             print("User profile basic retrieved successfully.")
-            print(context)
+
         except Exception as e:
             logger.error(f"Failed to retrieve user profile basic: {str(e)}")
             context = {}

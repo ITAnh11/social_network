@@ -13,7 +13,12 @@ from .serializers import PostsSerializer, MediaOfPostsSerializer
 
 from common_functions.common_function import getTimeDuration, getUser
 
-from social_network.redis_conn import redis_server
+from django.core.cache import caches
+
+import json
+
+redis_server = caches['redis']
+
 import logging 
 logger = logging.getLogger(__name__)
 def createMediaOfPosts(post, medias):
@@ -267,7 +272,19 @@ class GetPostsForHomePageView(APIView):
     def filterPosts(self, user_id):
         try:        
             # Get all posts that the user has not watched
-            posts_is_watched_ids = [int(id) for id in redis_server.smembers(f'user:{user_id}:watched_posts')]
+            
+            watched_posts = redis_server.get(f'user:{user_id}:watched_posts')
+
+            # Kiểm tra nếu dữ liệu không phải là None
+            if watched_posts:
+                # Nếu dữ liệu là chuỗi JSON, chuyển đổi nó thành danh sách
+                if isinstance(watched_posts, str):
+                    watched_posts = json.loads(watched_posts)
+                
+                # Chuyển đổi các phần tử trong danh sách thành số nguyên
+                posts_is_watched_ids = [int(id) for id in watched_posts]
+            else:
+                posts_is_watched_ids = []
             logger.debug('posts_is_watched_ids: %s', posts_is_watched_ids)
             print('posts_is_watched_ids', posts_is_watched_ids)
 
@@ -290,6 +307,9 @@ class MarkPostAsWatchedView(APIView):
         data = request.data
         post_ids = data.getlist('post_ids[]')
         
+        post_ids = set(post_ids)
+        post_ids = list(post_ids)
+        
         for post_id in post_ids:
         
             if not post_id:
@@ -302,12 +322,28 @@ class MarkPostAsWatchedView(APIView):
             except Posts.DoesNotExist:
                 continue
             
-            # Add the post ID to the user's set of watched posts
-            redis_server.sadd(f'user:{user.id}:watched_posts', post_id)
+            # Lấy danh sách hiện tại từ Redis
+            watched_posts = redis_server.get(f'user:{user.id}:watched_posts')
+
+            # Nếu danh sách hiện tại là None, khởi tạo danh sách rỗng
+            if watched_posts is None:
+                watched_posts = []
+
+            # Nếu danh sách hiện tại là chuỗi JSON, chuyển đổi nó thành danh sách
+            if isinstance(watched_posts, str):
+                watched_posts = json.loads(watched_posts)
+
+            # Thêm ID mới vào danh sách
+            watched_posts.append(post.id)
             
-            # Check if the key has a TTL
-            if redis_server.ttl(f'user:{user.id}:watched_posts') == -1:
-                # Set a TTL for the key
-                redis_server.expire(f'user:{user.id}:watched_posts', 3600 * 24)  # 24 hour
+            # Lưu lại danh sách đã cập nhật vào Redis
+            redis_server.set(f'user:{user.id}:watched_posts', json.dumps(watched_posts))
+
+            # Kiểm tra TTL của khóa
+            ttl = redis_server.ttl(f'user:{user.id}:watched_posts')
+
+            # Nếu TTL là -1 (không có TTL), thiết lập TTL cho khóa
+            if ttl == -1:
+                redis_server.expire(f'user:{user.id}:watched_posts', 3600 * 24)  # 24 giờ
                     
         return Response({'success': 'Post is marked as watched!'})

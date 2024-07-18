@@ -116,7 +116,20 @@ CHANNEL_LAYERS = {
     },
 }
 
-if CHANNEL_LAYERS['redis'] is not None:
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    },
+    "redis": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    },
+}
+
+if CACHES['redis'] is not None:
     print("Connected to Redis")
 else:
     print("Not connected to Redis")
@@ -136,11 +149,6 @@ DATABASES = {
     },
 }
 
-if DATABASES['default'] is not None:
-    print("Connected to PostgreSQL")
-else:
-    print("Not connected to PostgreSQL")
-
 MONGODB_DATABASES = {
     "default": {
         "name": env('MONGODB_NAME'),
@@ -155,11 +163,6 @@ mongoengine.connect(
     db=env('MONGODB_NAME'),
     host=env('MONGODB_HOST'),
 )
-
-if mongoengine.connection.get_connection() is not None:
-    print("Connected to MongoDB")
-else:
-    print("Not connected to MongoDB")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
