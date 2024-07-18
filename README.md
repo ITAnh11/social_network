@@ -15,6 +15,7 @@
 - [Công nghệ sử dụng](#công-nghệ-sử-dụng)
 - [Cài đặt trên Local](#cài-đặt-trên-local)
 - [Sử dụng](#sử-dụng)
+- [Deploy](#deploy)
 - [Thông tin liên hệ](#thông-tin-liên-hệ)
 
 ## Giới thiệu
@@ -163,6 +164,9 @@ Sau khi cài đặt, bạn có thể chạy dự án bằng lệnh sau:
     python .\syncdatabase\syncdatabase.py
     ```
 4. Trải nghiệm trang web [link local](http://127.0.0.1:8000/)
+
+## Deploy
+Để biết cách deploy chuyển qua branch "deploy"
 
 ## Thông tin liên hệ
 Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ qua email: [buianhkc112004@gmail.com](mailto:buianhkc112004@gmail.com)
