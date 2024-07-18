@@ -39,6 +39,7 @@ Dự án web này được tạo ra để giúp mọi người chia sẻ về cu
 
 ## Demo
 Bạn có thể xem demo trực tuyến của dự án tại: [Demo](https://www.youtube.com/watch?v=CRyd2E1PPxo)
+Bạn có thể trải nghiệm trực tiếp tại [link](http://15.152.41.241:8000/)
 
 ## Công nghệ sử dụng
 Dự án này sử dụng các công nghệ sau:
