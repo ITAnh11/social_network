@@ -188,7 +188,7 @@ function createCommentNotificationItem(notification) {
           style="width: 50px; border-radius: 50%"
         />
         <img
-          src="/static/navbar/images/speech-bubble.png"
+          src="${baseUrlNavbar}images/speech-bubble.png"
           class="icon-type-notification"
         />
       </div>
@@ -232,7 +232,7 @@ function createFriendRequestNotificationItem(notification) {
           style="width: 50px; border-radius: 50%"
         />
         <img
-          src="/static/navbar/images/notification-add-friend.png"
+          src="${baseUrlNavbar}images/notification-add-friend.png"
           class="icon-type-notification"
         />
       </div>
