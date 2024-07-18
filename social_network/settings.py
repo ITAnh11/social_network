@@ -103,6 +103,7 @@ ASGI_APPLICATION = "social_network.asgi.application"
 
 REDIS_HOST = env('REDIS_HOST')
 REDIS_PORT = env('REDIS_PORT')
+REDIS_PASSWORD = env('REDIS_PASSWORD')
 
 CHANNEL_LAYERS = {
     "default": {
@@ -121,18 +122,21 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
     },
     "redis": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     },
 }
 
-if CACHES['redis'] is not None:
+try:
+    from django_redis import get_redis_connection
+    redis_conn = get_redis_connection("redis")
+    redis_conn.ping()
     print("Connected to Redis")
-else:
-    print("Not connected to Redis")
+except Exception as e:
+    print(f"Not connected to Redis: {e}")
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
