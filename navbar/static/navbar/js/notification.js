@@ -8,6 +8,8 @@ const api_get_userprofilebasic = "/userprofiles/get_profile_basic/";
 let notificationSocket;
 let reconnectInterval = 5000;  // ms
 
+const baseUrlPosts = document.body.getAttribute("static_url_posts");
+
 function connectNotificationSocket() {
   notificationSocket = new WebSocket(
     'ws://'
@@ -126,19 +128,19 @@ function createReactNotificationItem(notification) {
 
   var srcIconType = "";
   if (notification.type_reaction === "like") {
-    srcIconType = baseUrlNavbar + "images/like.png";
+    srcIconType = baseUrlPosts + "images/like.png";
   } else if (notification.type_reaction === "love") {
-    srcIconType = baseUrlNavbar + "images/love.png";
+    srcIconType = baseUrlPosts + "images/love.png";
   } else if (notification.type_reaction === "haha") {
-    srcIconType = baseUrlNavbar + "images/haha.png";
+    srcIconType = baseUrlPosts + "images/haha.png";
   } else if (notification.type_reaction === "wow") {
-    srcIconType = baseUrlNavbar + "images/wow.png";
+    srcIconType = baseUrlPosts + "images/wow.png";
   } else if (notification.type_reaction === "sad") {
-    srcIconType = baseUrlNavbar + "images/sad.png";
+    srcIconType = baseUrlPosts + "images/sad.png";
   } else if (notification.type_reaction === "angry") {
-    srcIconType = baseUrlNavbar + "images/angry.png";
+    srcIconType = baseUrlPosts + "images/angry.png";
   } else if (notification.type_reaction === "care") {
-    srcIconType = baseUrlNavbar + "images/care.png";
+    srcIconType = baseUrlPosts + "images/care.png";
   }
 
   return `<div class="notify_item" 
