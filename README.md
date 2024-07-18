@@ -161,7 +161,7 @@ Sau khi cài đặt, bạn có thể chạy dự án bằng lệnh sau:
     ```bash
     python .\syncdatabase\syncdatabase.py
     ```
-4. Trải nghiệm trang web [link](http://127.0.0.1:8000/)
+4. Trải nghiệm trang web [link local](http://127.0.0.1:8000/)
 
 ## Thông tin liên hệ
 Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ qua email: [buianhkc112004@gmail.com](mailto:buianhkc112004@gmail.com)
