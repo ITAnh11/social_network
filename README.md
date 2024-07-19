@@ -30,7 +30,7 @@ Dự án web này được tạo ra để giúp mọi người chia sẻ về cu
 - Chỉnh sửa trang cá nhân
 
 ## Điều học hỏi được sau khi phát triển dự án  
-- Cải thiện kỹ năng phát triển web sử dụng ngôn ngữ Python kết hợp framwork Django
+- Cải thiện kỹ năng phát triển web sử dụng ngôn ngữ Python kết hợp framework Django
 - Biết thêm về các loại cơ sở dữ liệu, sử dụng chúng khi nào, vào dự án như nào
 - Áp dụng websocket để phát triển tính năng chat realtime
 - Thêm kỹ thuật sử dụng Docker
@@ -166,7 +166,7 @@ Sau khi cài đặt, bạn có thể chạy dự án bằng lệnh sau:
 4. Trải nghiệm trang web [link local](http://127.0.0.1:8000/)
 
 ## Deploy
-Để biết cách deploy chuyển qua branch "deploy"
+Để biết cách deploy chuyển qua branch `deploy`
 
 ## Thông tin liên hệ
 Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ qua email: [buianhkc112004@gmail.com](mailto:buianhkc112004@gmail.com)
