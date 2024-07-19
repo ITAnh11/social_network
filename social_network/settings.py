@@ -350,3 +350,6 @@ STORAGES = {
 # Add STATIC_URL setting
 STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/"
 MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/"
+
+KAFKA_HOST = env('KAFKA_HOST')
+KAFKA_PORT = env('KAFKA_PORT')

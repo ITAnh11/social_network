@@ -1,6 +1,7 @@
 import os
 import sys
 from pathlib import Path
+from django.conf import settings
 
 # Set the Django settings module
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'social_network.settings')
@@ -90,7 +91,7 @@ def consume_messages_userprofile():
     print("Consuming messages userprofile")
     # Create a Kafka consumer
     c = Consumer({
-        'bootstrap.servers': 'localhost:29092',
+        'bootstrap.servers': f"{settings.KAFKA_HOST}:{settings.KAFKA_PORT}",
         'group.id': 'my_group',
         'auto.offset.reset': 'earliest'
     })
