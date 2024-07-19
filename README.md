@@ -44,13 +44,101 @@ Dự án này sử dụng các công nghệ sau:
   </p>
 
 ## Deploy
-1. S3 
+### Web server
+- tạo ec2 (ubuntu)
+- connect ec2
+- chạy lần lượt các lệnh
+  ```bash
+  sudo apt-get update
+  sudo apt-get upgrade
+
+  sudo apt-get install python3-venv
+  python3 -m venv env
+  source env/bin/activate
+
+  git clone -b deploy https://github.com/ITAnh11/social_network.git
+
+  cd social_network
+
+  pip install -r requirements.txt
+  ```
+- set up database Postgres (hướng dẫn tạo postgres ở dưới)
+  - migrate database
+  ```bash
+  python3 manage.py migrate
+  ```
+  - kết nối tới Postgres, thực thi các lệnh trong file `database/facebook.sql` để tạo các function, trigger....
+- Đẩy các file media, static lên S3
+  ```bash
+  python3 manage.py collecstatic
+  ```
+### .env
+- tạo 1 file .env tương tự file .env.example
+- các thông tin thiếu sẽ điền sau khi tạo các dịch vụ ở dưới
+- lệnh để gửi lên ec2 web server
+  ```bash
+  scp -i path\to\key\.pem path\to\.env ubuntu@:Public IPv4 DNS/home/ubuntu/social_network/
+  ```
+  thay các path\to\key\.pem, path\to\.env, Public IPv4 DNS bằng đường dẫn thực tế
+
+### S3 
 [tutorial](https://www.youtube.com/watch?v=JQVQcNN0cXE)
-2. Mongodb 
+### Mongodb  
 [free](https://www.mongodb.com/products/platform/atlas-database)
-3. Postgres
+### Postgres 
 [tutorial](https://www.youtube.com/watch?v=z_FN0Zu-Z3Q&t=746s) 
-4. Redis [tutorial](https://www.youtube.com/watch?v=dDwGYGUVTdo)
+### Redis  
+[tutorial](https://www.youtube.com/watch?v=dDwGYGUVTdo)
+### Debezium/Kafka 
+1. Tạo ec2 (ubuntu)
+    > [!IMPORTANT]
+    > RAM >= 2GB
+2. Connect ec2 chạy lần lượt các lệnh
+    ```bash
+    sudo apt-get update
+    sudo apt-get upgrade
+
+    sudo apt-get install python3-venv
+    python3 -m venv env
+    source env/bin/activate
+
+    git clone -b deploy https://github.com/ITAnh11/social_network.git
+    ```
+  3. install docker 
+    https://docs.docker.com/engine/install/ubuntu/
+  4. Cài đặt debezium, kafka
+      ```bash
+      cd social_network
+      sudo docker-compose up -d
+      ```
+      check xem có đủ kafka, zookeeper, connect không, nếu không chạy lại lệnh "docker-compose up"
+      ```bash
+      sudo docker ps
+      ```
+  5. Tạo connect config 
+  - thay thế các chỗ '####' trong file `postgres-connector.json`
+  - chạy lệnh 
+    ```
+    curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" \
+      http://localhost:8083/connectors/ -d @postgres-connector.json
+    ```
+
+### Run server
+- Connect ec2 Redis 
+- Connect ec2 Kafka/Debezium:  vào thư mục dự án 
+  ```bash
+  sudo docker-compose up -d
+  ```
+- Connect ec2 web server 1: 
+  vào thư mục dự án 
+  ```bash
+  python3 manage.py runserver 0.0.0.0:8000
+  ```
+- Connect ec2 web server 2: 
+  vào thư mục dự án 
+  ```bash
+  python3 syncdatabase/syncdatabase.py
+  ```
 
 ## Thông tin liên hệ
 Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ qua email: [buianhkc112004@gmail.com](mailto:buianhkc112004@gmail.com)

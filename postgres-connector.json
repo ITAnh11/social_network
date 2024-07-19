@@ -2,10 +2,10 @@
   "name": "postgres-connector",
   "config": {
       "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
-      "database.hostname": "database-1.ctouyquyen0r.ap-northeast-3.rds.amazonaws.com",
+      "database.hostname": "########",
       "database.port": "5432",
-      "database.user": "buianhkc11",
-      "database.password": "mKoIkaHHYn89qA98Nj9t",
+      "database.user": "#######",
+      "database.password": "########",
       "database.dbname": "social_network",
       "table.include.list": "public.users_user,public.userprofiles_userprofile,public.userprofiles_imageprofile",
       "plugin.name": "pgoutput",
