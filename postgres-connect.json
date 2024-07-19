@@ -1,0 +1,16 @@
+{
+    "name": "postgres-connector",
+    "config": {
+      "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+      "database.hostname": "database-1.ctouyquyen0r.ap-northeast-3.rds.amazonaws.com",
+      "database.port": "5432",
+      "database.user": "buianhkc11",
+      "database.password": "mKoIkaHHYn89qA98Nj9t",
+      "database.dbname": "social_network",
+      "database.server.name": "dbserver1",
+      "table.include.list": "public.users_user,public.userprofiles_userprofile,public.userprofiles_imageprofile",
+      "plugin.name": "pgoutput",
+      "database.history.kafka.bootstrap.servers": "kafka:9092",
+      "database.history.kafka.topic": "schema-changes.your-database"
+    }
+}
