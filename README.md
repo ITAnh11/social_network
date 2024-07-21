@@ -109,15 +109,16 @@ Refer to this [tutorial](https://www.youtube.com/watch?v=dDwGYGUVTdo)
     sudo snap install docker
     ```
 4. Set up Debezium and Kafka:
-    ```bash
-    cd social_network
+  -  in file `docker-compose.yml` `KAFKA_ADVERTISED_LISTENERS: EXTERNAL_SAME_HOST://#.#.#.#:29092,INTERNAL://kafka:9092` change `#.#.#.#` equal ip of ec2
+  - ```
+    cd social_network  
     sudo docker-compose up -d
     ```
-    Check if Kafka, Zookeeper, and Connect are running. If not, rerun the `docker-compose up` command:
+  - Check if Kafka, Zookeeper, and Connect are running. If not, rerun the `docker-compose up` command:
     ```bash
     sudo docker ps
     ```
-5. Create the connector configuration:
+6. Create the connector configuration:
   - Replace '####' in the `postgres-connector.json` file.
   - Run the following command:
     ```bash
