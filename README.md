@@ -141,6 +141,24 @@ Refer to this [tutorial](https://www.youtube.com/watch?v=dDwGYGUVTdo)
   ```bash
   python3 syncdatabase/syncdatabase.py
   ```
+5. Here's how to use `screen` to run a web server continuously when disconnecting from an EC2 instance:
+
+```bash
+# Install `screen` (if not already installed):
+sudo apt-get install screen # for Ubuntu/Debian
+
+# Create a new session:
+screen -S web_server
+
+# Run your Django server in the `screen` session:
+python3 manage.py runserver 0.0.0.0:8000
+
+# Detach from the `screen` session (press Ctrl+A followed by D).
+
+# To reattach to the `screen` session:
+screen -r web_server
+```
+Similarly, you can use this process for running the `syncdatabase` terminal command.
 
 ## Contact Information
 If you have any questions, please contact via email: [buianhkc112004@gmail.com](mailto:buianhkc112004@gmail.com)
