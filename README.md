@@ -12,7 +12,8 @@
 - [Contact Information](#contact-information)
 
 ## Demo
-You can view the online demo of the project at: [Demo](https://www.youtube.com/watch?v=CRyd2E1PPxo)
+- You can view the online demo of the project at: [Demo](https://www.youtube.com/watch?v=CRyd2E1PPxo)
+- Link online on desciption
 
 ## Technologies Used
 This project uses the following technologies:
