@@ -102,14 +102,12 @@ Refer to this [tutorial](https://www.youtube.com/watch?v=dDwGYGUVTdo)
     ```bash
     sudo apt-get update
     sudo apt-get upgrade
-
-    sudo apt-get install python3-venv
-    python3 -m venv env
-    source env/bin/activate
-
     git clone -b deploy https://github.com/ITAnh11/social_network.git
     ```
-3. Install Docker: Follow the instructions at [Docker Install](https://docs.docker.com/engine/install/ubuntu/)
+3. Install Docker:
+    ```bash
+    sudo snap install docker
+    ```
 4. Set up Debezium and Kafka:
     ```bash
     cd social_network
