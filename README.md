@@ -166,7 +166,7 @@ After installation, you can run the project with the following commands:
 4. Experience the website [local link](http://127.0.0.1:8000/)
 
 ## Deployment
-To learn how to deploy, switch to the `deploy` branch.
+To learn how to deploy, switch to the [`deploy`](https://github.com/ITAnh11/social_network/tree/deploy) branch.
 
 ## Contact Information
 If you have any questions, please contact via email: [buianhkc112004@gmail.com](mailto:buianhkc112004@gmail.com)
