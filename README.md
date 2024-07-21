@@ -40,7 +40,7 @@ This web project was created to help people share their lives. It provides featu
 
 ## Demo
 You can view the online demo of the project at: [Demo](https://www.youtube.com/watch?v=CRyd2E1PPxo)  
-You can experience it live at [link](http://15.152.41.241:8000/)
+You can experience it live at link on description.
 
 ## Technologies Used
 This project uses the following technologies:
