@@ -78,7 +78,7 @@ def process_message_imageprofile(msg):
             executor.submit(update_data, Comments, {'user.id': user_id}, {'$set': {'user.avatar': new_avatar_path}})
             
             # Delete all notification from the database
-            executor.submit(update_data, Notifications, {'to_user_id': user_id}, {'$set': {'user.avatar': new_avatar_path}})
+            executor.submit(update_data, Notifications, {'user.id': user_id}, {'$set': {'user.avatar': new_avatar_path}})
     
     except KeyboardInterrupt:
         pass

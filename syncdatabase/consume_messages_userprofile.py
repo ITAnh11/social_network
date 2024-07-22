@@ -76,7 +76,7 @@ def process_message_userprofile(msg):
             executor.submit(update_data, Comments, {'user.id': user_id}, {'$set': {'user.name': name}})
             
             # Delete all notification from the database
-            executor.submit(update_data, Notifications, {'to_user_id': user_id}, {'$set': {'user.name': name}})
+            executor.submit(update_data, Notifications, {'user.id': user_id}, {'$set': {'user.name': name}})
             
     except KeyboardInterrupt:
         pass
