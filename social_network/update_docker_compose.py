@@ -1,15 +1,19 @@
 import requests
 
-# Lấy địa chỉ IP công khai của EC2 instance
-response = requests.get('http://169.254.169.254/latest/meta-data/public-ipv4')
-if response.status_code == 200:
+try:
+    # Lấy địa chỉ IP công khai của EC2 instance
+    response = requests.get('http://169.254.169.254/latest/meta-data/public-ipv4')
+    response.raise_for_status()  # Kiểm tra nếu có lỗi HTTP
     ec2_ip = response.text
-else:
-    raise Exception("Không thể lấy địa chỉ IP của EC2 instance")
+except requests.RequestException as e:
+    raise Exception(f"Không thể lấy địa chỉ IP của EC2 instance: {e}")
 
 # Đọc nội dung file docker-compose.yml
-with open('docker-compose.yml', 'r') as file:
-    content = file.read()
+try:
+    with open('docker-compose.yml', 'r') as file:
+        content = file.read()
+except FileNotFoundError:
+    raise Exception("Không tìm thấy file docker-compose.yml")
 
 # Thay thế placeholder <EC2_PUBLIC_IP> bằng địa chỉ IP mới của EC2 instance
 new_content = content.replace('<EC2_PUBLIC_IP>', ec2_ip)
