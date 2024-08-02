@@ -110,7 +110,7 @@ Refer to this [tutorial](https://www.youtube.com/watch?v=dDwGYGUVTdo)
     sudo snap install docker
     ```
 4. Set up Debezium and Kafka:
-  -  in file `docker-compose.yml` `KAFKA_ADVERTISED_LISTENERS: EXTERNAL_SAME_HOST://#.#.#.#:29092,INTERNAL://kafka:9092` change `#.#.#.#` equal ip of ec2
+  -  in file `docker-compose.yml` `KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://<EC2_PUBLIC_IP>:9092` change `<EC2_PUBLIC_IP>` equal ip of ec2
   - ```
     cd social_network  
     sudo docker-compose up -d
